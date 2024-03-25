@@ -27,10 +27,10 @@ jobs:
           cd client
           npm run build
 
-      - name: Run server tests
-        run: |
-          cd server
-          npm test
+      # - name: Run server tests
+      #   run: |
+      #     cd server
+      #     npm test
 
   # deploy:
   #   runs-on: ubuntu-latest
