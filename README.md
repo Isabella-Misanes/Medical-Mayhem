@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# Medical Mayhem
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Medical Mayhem** is an in-development multiplayer 2D top-down game.
 
-## Available Scripts
+You are a recent hire at a hospital, and have to make it through a hectic work day with a constant stream of patients flooding in. You may or may not team up with other employees to diagnose and treat patients in a timely manner.
 
-In the project directory, you can run:
+Your objective is to diagnose and treat all patients that come into the hospital during your busy work day. When patients are brought in, you will have to bring them to a hospital bed, diagnose what is wrong with them, then give them the correct treatment. If you and your fellow doctors cannot save enough patients, your hospital will get shut down!
 
-### `npm start`
+## Setup
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisities
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js and npm (npm comes with Node.js)
+- [MongoDB Community Edition](https://www.mongodb.com/docs/manual/administration/install-community/)
 
-### `npm test`
+### Instructions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. In a terminal, run MongoDB Community Edition.
+```console
+$ "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="c:\data\db"
+```
 
-### `npm run build`
+2. In another terminal, clone this repository:
+```console
+$ git clone https://github.com/Isabella-Misanes/Medical-Mayhem.git
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Navigate to this repository in the terminal.
+```console
+$ cd pmedical-mayhem
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Navigate to the `client` and `server` folders and install dependencies using npm.
+```console
+$ cd client
+$ npm install
+$ cd ../server
+$ npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. While in the `server` folder, initialize the database. The username and password for an admin user must be provided and can be anything.
+```console
+# In the medical-mayhem/server folder
+$ node init.js <username_of_admin> <password_of_admin>
+```
 
-### `npm run eject`
+6. In the `server` folder, start the server. This can be done with either `node` or `nodemon`.
+```console
+$ node server.js
+OR 
+$ nodemon server.js
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+7. In another terminal, navigate to the client folder and run the client.
+```console
+# In the medical-mayhem/client folder
+$ npm start
+```
