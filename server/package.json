@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "npx jest --detectOpenHandles",
+    "test": "npx jest",
     "build": "npx tsc",
     "start": "node dist/index.js"
   },

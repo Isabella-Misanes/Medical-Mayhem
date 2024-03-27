@@ -1,18 +1,23 @@
+import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import mongoose, { ConnectOptions } from 'mongoose';
-import { User } from '../models/user-model';
-dotenv.config();
+import path from 'path'
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 mongoose
-    .connect(process.env.DB_CONNECT as string, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions)
-    .catch((e: Error) => {
+    .connect(process.env.URI as string)
+    .then(() => {
+        console.log('Successfully connected to ' + process.env.URI)
+    })
+    .catch(e => {
         console.error('Connection error', e.message)
     })
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.dropDatabase();
 
-function userCreate(username: String, bio: String) {
+export const db = mongoose.connection
+
+// Import db collections
+import { User } from '../models/user-model';
+
+async function userCreate(username: String, bio: String) {
     const userDetail = {
         username: username,
         bio: bio,
@@ -46,4 +51,5 @@ populate()
         if(db) db.close();
     });
 
-module.exports = db
+
+export default db
