@@ -10,7 +10,6 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 import path from 'path'
 import authRouter from './routes/auth-router'
-import db from './db'
 
 // CREATE OUR SERVER
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
@@ -27,8 +26,5 @@ app.use(cookieParser())
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 app.use('/auth', authRouter)
-
-// INITIALIZE OUR DATABASE OBJECT
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 export default app;
