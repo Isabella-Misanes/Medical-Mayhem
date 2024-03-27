@@ -1,5 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
-import { buttonStyle } from '../App';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import * as Constants from '../constants'
 
 export default function HomeScreen({setCurrScreen}) {
@@ -8,21 +7,66 @@ export default function HomeScreen({setCurrScreen}) {
             <Box
                 sx={{
                     height: '100%',
-                    width: '100%',
+                    width: '50%',
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'space-between',
+                    paddingLeft: '2%',
+                    backgroundColor: 'white',
+                    position: 'absolute',
                 }}>
                 <Typography variant="h2" gutterBottom>Medical Mayhem</Typography>
+                <Typography variant="h5" gutterBottom>Home Screen</Typography>
                 
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        width: '300px',
-                        left: '2%'
-                    }]}
-                    onClick={()=>{setCurrScreen(Constants.WELCOME_SCREEN)}}>
-                    Play
-                </Button>
+                <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.WELCOME_SCREEN)}}>
+                            Play
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.MAP_SEARCH_SCREEN)}}>
+                            Map Search
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.MAP_BUILDER_SCREEN)}}>
+                            Map Editor
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.SOCIAL_SCREEN)}}>
+                            Social
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.FORUM_SCREEN)}}>
+                            Forums
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.PROFILE_SCREEN)}}>
+                            Profile
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.SETTINGS_SCREEN)}}>
+                            Settings
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.ABOUT_SCREEN)}}>
+                            About
+                        </Button>
+                    </Grid>
+                </Grid>
             </Box>
         </div>
     )

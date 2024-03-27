@@ -46,5 +46,5 @@ export default function WelcomeScreen({setCurrScreen}) {
                 </Button>
             </Box>
         </div>
-    )
+    );
 }

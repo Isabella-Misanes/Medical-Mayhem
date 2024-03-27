@@ -1,7 +1,7 @@
 import './App.css';
 import * as Constants from './constants';
 import { useState } from 'react';
-import { HomeScreen, WelcomeScreen } from './components';
+import { HomeScreen, WelcomeScreen, AboutScreen } from './components';
 
 // Styling
 export const modalStyle = {
@@ -26,8 +26,44 @@ function App() {
   switch(currScreen) {
     case Constants.WELCOME_SCREEN:
       return <WelcomeScreen setCurrScreen={setCurrScreen} />
+
     case Constants.HOME_SCREEN:
       return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.ABOUT_SCREEN:
+      return <AboutScreen setCurrScreen={setCurrScreen} />
+    case Constants.SETTINGS_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.SOCIAL_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    
+    case Constants.FORUM_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.VIEW_POSTS_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.POSTS_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.NEW_THREAD_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+
+    case Constants.PROFILE_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.ACHIEVEMENTS_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+
+    case Constants.LEADERBOARD_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    
+    case Constants.MAP_SEARCH_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.MAP_BUILDER_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+
+    case Constants.REPORTS_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+
+    case Constants.GAME_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+
     default:
       return <h1>404 Page Not Found</h1>
   }
