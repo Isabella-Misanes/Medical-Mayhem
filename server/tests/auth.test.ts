@@ -1,11 +1,24 @@
 import request from 'supertest';
 import app from '../index';
-import db from '../db';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+import path from 'path'
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
-const registerUser = jest.fn()
+beforeAll(async () => {
+    mongoose
+        .connect(process.env.TEST_URI as string)
+        .then(() => {
+            console.log('Successfully connected to ' + process.env.URI)
+        })
+        .catch(e => {
+            console.error('Connection error', e.message)
+        })
+})
 
 afterAll(async () => {
-    await db.close()
+    await mongoose.connection.dropDatabase()
+    await mongoose.connection.close()
 })
 
 describe("POST /register", () => {
