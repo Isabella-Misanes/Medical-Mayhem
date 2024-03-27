@@ -1,4 +1,4 @@
-import { auth } from '../auth'
+import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { User } from '../models/user-model'
@@ -74,7 +74,7 @@ export const loginUser = async (req: Request, res: Response) => {
         }
 
         // LOGIN THE USER
-        const token = auth.signToken(existingUser._id);
+        const token = auth.signToken((existingUser._id).toString());
         console.log(token);
 
         res.cookie("token", token, {
@@ -107,6 +107,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
     try {
+        console.log('hello!')
         const { username, email, password, passwordVerify } = req.body;
         console.log("create user: " + username + " " + email + " " + password + " " + passwordVerify);
         if (!username || !email || !password || !passwordVerify) {
@@ -149,13 +150,13 @@ export const registerUser = async (req: Request, res: Response) => {
 
         const newUser = new User({
             // TODO: add rest of user data based on schema if any
-            username, email, passwordHash
+            username, email, password
         });
         const savedUser = await newUser.save();
         console.log("new user saved: " + savedUser._id);
 
         // LOGIN THE USER
-        const token = auth.signToken(savedUser._id);
+        const token = auth.signToken((savedUser._id).toString());
         console.log("token:" + token);
 
         await res.cookie("token", token, {
@@ -165,7 +166,7 @@ export const registerUser = async (req: Request, res: Response) => {
         }).status(200).json({
             success: true,
             user: {
-                // TODO: add rest of user data needed back to client
+                // TODO: add rest of user data needed back to client AND in auth.test.js
                 username: savedUser.username,
                 email: savedUser.email              
             }
