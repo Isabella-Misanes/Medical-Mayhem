@@ -1,5 +1,7 @@
 import './App.css';
-import WelcomeScreen from './components/WelcomeScreen';
+import * as Constants from './constants';
+import { useState } from 'react';
+import { HomeScreen, WelcomeScreen } from './components';
 
 // Styling
 export const modalStyle = {
@@ -19,9 +21,16 @@ export const buttonStyle = {
 }
 
 function App() {
-  return (
-    <WelcomeScreen />
-  );
+  const [currScreen, setCurrScreen] = useState(Constants.WELCOME_SCREEN);
+
+  switch(currScreen) {
+    case Constants.WELCOME_SCREEN:
+      return <WelcomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.HOME_SCREEN:
+      return <HomeScreen setCurrScreen={setCurrScreen} />
+    default:
+      return <h1>404 Page Not Found</h1>
+  }
 }
 
 export default App;

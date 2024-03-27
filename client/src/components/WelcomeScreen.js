@@ -1,7 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
+import * as Constants from '../constants'
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({setCurrScreen}) {
     return (
         <div id="welcome-screen">
             <Box id="title-banner"
@@ -37,7 +38,10 @@ export default function WelcomeScreen() {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{}}>
+                    onClick={()=>{
+                        console.log(setCurrScreen);
+                        setCurrScreen(Constants.HOME_SCREEN);
+                        }}>
                     Continue as Guest
                 </Button>
             </Box>
