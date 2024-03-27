@@ -1,24 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import WelcomeScreen from './components/WelcomeScreen';
+
+// Styling
+export const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'white',
+  boxShadow: 24,
+  p: 3
+};
+export const buttonStyle = {
+  bgcolor: '#3A9158',
+  ":hover": {
+    bgcolor: '#2d7044'},
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <WelcomeScreen />
   );
 }
 
