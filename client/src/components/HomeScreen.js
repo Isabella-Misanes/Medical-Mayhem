@@ -1,9 +1,11 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import * as Constants from '../constants'
+import Sidebar from './Sidebar';
 
 export default function HomeScreen({setCurrScreen}) {
     return (
         <div id="home-screen">
+            <Sidebar />
             <Box
                 sx={{
                     height: '100%',

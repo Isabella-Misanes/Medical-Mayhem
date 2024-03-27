@@ -1,10 +1,12 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
+import Sidebar from './Sidebar';
 
 export default function AboutScreen({setCurrScreen}) {
     return (
         <div id="about-screen">
+            <Sidebar/>
             <Box
                 sx={{
                     height: '90%',

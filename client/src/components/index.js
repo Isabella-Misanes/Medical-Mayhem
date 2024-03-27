@@ -3,6 +3,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import Login from "./Login";
 import Register from "./Register";
 
+import Sidebar from "./Sidebar";
 import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";
 import SettingsScreen from "./SettingsScreen";
@@ -18,6 +19,7 @@ import MapBuilderScreen from "./MapBuilderScreen";
 import GameScreen from "./GameScreen";
 
 export {
+    Sidebar,
     WelcomeScreen,
     Login,
     Register,

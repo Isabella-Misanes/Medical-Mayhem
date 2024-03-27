@@ -1,10 +1,12 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
+import Sidebar from './Sidebar';
 
 export default function SocialScreen({setCurrScreen}) {
     return (
         <div id="social-screen">
+            <Sidebar/>
             <Box
                 sx={{
                     height: '90%',

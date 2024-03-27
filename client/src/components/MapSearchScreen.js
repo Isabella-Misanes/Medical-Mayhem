@@ -1,10 +1,12 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
+import Sidebar from './Sidebar';
 
 export default function MapSearchScreen({setCurrScreen}) {
     return (
         <div id="map-search-screen">
+            <Sidebar/>
             <Box
                 sx={{
                     height: '90%',
