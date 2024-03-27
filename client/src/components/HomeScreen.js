@@ -20,7 +20,7 @@ export default function HomeScreen({setCurrScreen}) {
                 <Grid container spacing={4}>
                     <Grid item xs={12}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.WELCOME_SCREEN)}}>
+                            onClick={()=>{setCurrScreen(Constants.GAME_SCREEN)}}>
                             Play
                         </Button>
                     </Grid>
@@ -33,7 +33,7 @@ export default function HomeScreen({setCurrScreen}) {
                     <Grid item xs={6}>
                         <Button
                             onClick={()=>{setCurrScreen(Constants.MAP_BUILDER_SCREEN)}}>
-                            Map Editor
+                            Map Builder
                         </Button>
                     </Grid>
                     <Grid item xs={6}>

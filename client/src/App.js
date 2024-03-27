@@ -1,7 +1,7 @@
 import './App.css';
 import * as Constants from './constants';
 import { useState } from 'react';
-import { HomeScreen, WelcomeScreen, AboutScreen } from './components';
+import { HomeScreen, WelcomeScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen } from './components';
 
 // Styling
 export const modalStyle = {
@@ -32,12 +32,12 @@ function App() {
     case Constants.ABOUT_SCREEN:
       return <AboutScreen setCurrScreen={setCurrScreen} />
     case Constants.SETTINGS_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <SettingsScreen setCurrScreen={setCurrScreen} />
     case Constants.SOCIAL_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <SocialScreen setCurrScreen={setCurrScreen} />
     
     case Constants.FORUM_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <ForumScreen setCurrScreen={setCurrScreen} />
     case Constants.VIEW_POSTS_SCREEN:
       return <HomeScreen setCurrScreen={setCurrScreen} />
     case Constants.POSTS_SCREEN:
@@ -46,7 +46,7 @@ function App() {
       return <HomeScreen setCurrScreen={setCurrScreen} />
 
     case Constants.PROFILE_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <ProfileScreen setCurrScreen={setCurrScreen} />
     case Constants.ACHIEVEMENTS_SCREEN:
       return <HomeScreen setCurrScreen={setCurrScreen} />
 
@@ -54,15 +54,15 @@ function App() {
       return <HomeScreen setCurrScreen={setCurrScreen} />
     
     case Constants.MAP_SEARCH_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <MapSearchScreen setCurrScreen={setCurrScreen} />
     case Constants.MAP_BUILDER_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <MapBuilderScreen setCurrScreen={setCurrScreen} />
 
     case Constants.REPORTS_SCREEN:
       return <HomeScreen setCurrScreen={setCurrScreen} />
 
     case Constants.GAME_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <GameScreen setCurrScreen={setCurrScreen} />
 
     default:
       return <h1>404 Page Not Found</h1>
