@@ -150,7 +150,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
         const newUser = new User({
             // TODO: add rest of user data based on schema if any
-            username, email, password
+            username, email, passwordHash
         });
         const savedUser = await newUser.save();
         console.log("new user saved: " + savedUser._id);
