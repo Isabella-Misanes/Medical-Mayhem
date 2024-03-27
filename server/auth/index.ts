@@ -68,7 +68,11 @@ function authManager() {
         }, process.env.JWT_SECRET);
     }
 
-    return this;
+    return {
+        verify,
+        verifyUser,
+        signToken
+    };
 }
 
 export const auth = authManager();
