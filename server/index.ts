@@ -1,13 +1,19 @@
+// Creates the express server. Don't run the server from here though!
+// Run the server through ts-node server.ts. The reason for this separation
+// was so that running the tests and running the live server won't conflict
+// with one another.
+
 // THESE ARE NODE APIs WE WISH TO USE
-import express, { Response } from 'express'
+import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
+import path from 'path'
 import authRouter from './routes/auth-router'
+import db from './db'
 
 // CREATE OUR SERVER
-dotenv.config()
-export const PORT = process.env.PORT || 4000;
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 export const app = express()
 
 // SETUP THE MIDDLEWARE
@@ -23,10 +29,6 @@ app.use(cookieParser())
 app.use('/auth', authRouter)
 
 // INITIALIZE OUR DATABASE OBJECT
-// const db = require('./db')
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'))
-
-// PUT THE SERVER IN LISTENING MODE
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 export default app;

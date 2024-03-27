@@ -1,72 +1,132 @@
 import request from 'supertest';
-import {app, PORT} from '../index';
+import app from '../index';
+import db from '../db';
 
-// TODO: Implement tests by tomorrow 3/28
+const registerUser = jest.fn()
+
+afterAll(async () => {
+    await db.close()
+})
 
 describe("POST /register", () => {
 
-    it("given email, username, password", async () => {
+    // After tests are done and the server closes, close the database connection as well.
+
+    it("responds with status 200 given email, username, password", async () => {
         const response = await request(app).post("/auth/register").send({
             username: 'username',
-            email: "john.smith@gmail.com",
+            email: "john.smith@blah.com",
             password: 'password',
             passwordVerify: 'password'
         })
+        .expect(200)
+        .expect('Content-Type', /json/)
 
-        // This is hanging rn bc idk yet how to handle mongoose queries in tests.
-        // For example, if there's a line in a handler that saves a user in the db, 
-        // is it really saved if it's all dummy data?
-        expect(response.statusCode).toBe(200)
+        const cookies = response.header['set-cookie']
+        expect(cookies).toBeDefined()
+        expect(cookies[0]).toContain('token')
 
-    //     const cookies = response.header['set-cookie']
-    //     expect(cookies).toBeDefined()
-    //     expect(cookies[0]).toEqual({
-    //         httpOnly: true,
-    //         secure: true,
-    //         sameSite: "none"
-    //     })
-
-    //     expect(response.body).toEqual({
-    //         success: true,
-    //         user: {
-    //             username: "username",
-    //             email: "john.smith@gmail.com"              
-    //         }
-    //     })
+        expect(response.body).toEqual({
+            success: true,
+            user: {
+                username: "username",
+                email: "john.smith@blah.com"              
+            }
+        })
     })
 
-    // describe("password too short", () => {
+    it("responds with status 201 given password too short", async () => {
+        await request(app).post("/auth/register").send({
+            username: 'username',
+            email: "john.smith@blah.com",
+            password: 'p',
+            passwordVerify: 'p'
+        })
+        .expect(201)
+        .expect('Content-Type', /json/)
+    })
 
-    // })
+    it("responds with status 202 given mismatching password verification", async () => {
+        await request(app).post("/auth/register").send({
+            username: 'username',
+            email: "john.smith@blah.com",
+            password: 'password',
+            passwordVerify: 'passwo'
+        })
+        .expect(202)
+        .expect('Content-Type', /json/)
+    })
 
-    // describe("mismatching password verification", () => {
-
-    // })
-
-    // describe("given an already-registered email", () => {
-
-    // })
+    it("responds with status 203 given an already-registered email", async () => {
+        await request(app).post("/auth/register").send({
+            username: 'username',
+            email: "john.smith@blah.com",
+            password: 'password',
+            passwordVerify: 'password'
+        })
+        .expect(203)
+        .expect('Content-Type', /json/)
+    })
 })
 
-// describe("POST /login", () => {
+describe("POST /login", () => {
 
-//     describe("given email, password", () => {
+    it("responds with status 200 given email, password", async () => {
+        const response = await request(app).post("/auth/login").send({
+            email: "john.smith@blah.com",
+            password: 'password',
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
 
-//     })
+        const cookies = response.header['set-cookie']
+        expect(cookies).toBeDefined()
+        expect(cookies[0]).toContain('token')
 
-//     describe("not given email", () => {
+        expect(response.body).toEqual({
+            success: true,
+            user: {
+                username: "username",
+                email: "john.smith@blah.com"              
+            }
+        })
+    })
 
-//     })
+    it("responds with status 201 given no email", async () => {
+        await request(app).post("/auth/login").send({
+            password: 'password',
+        })
+        .expect(201)
+        .expect('Content-Type', /json/)
+    })
 
-//     describe("not given password", () => {
-        
-//     })
+    it("responds with status 201 given no password", async () => {
+        await request(app).post("/auth/login").send({
+            email: "john.smith@blah.com",
+        })
+        .expect('Content-Type', /json/)
+        .expect(201)
+    })
 
-//     describe("given wrong email", () => {
+    it("responds with status 202 given wrong email", async () => {
+        await request(app).post("/auth/login").send({
+            email: "jane.doe@blah.com",
+            password: 'password',
+        })
+        .expect(202)
+        .expect('Content-Type', /json/)
+    })
 
-//     })
+    it("responds with status 203 given wrong password", async () => {
+        await request(app).post("/auth/login").send({
+            email: "john.smith@blah.com",
+            password: 'passwordy',
+        })
+        .expect(203)
+        .expect('Content-Type', /json/)
+    })
+})
 
-//     describe("given wrong password", () => {
-
-//     })
-// })
+function cleanUpDb() {
+    // TODO: Implement clean up from saving dummy data in database
+}
