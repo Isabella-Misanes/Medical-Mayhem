@@ -1,6 +1,6 @@
 // Creates the express server. Don't run the server from here though!
 // Run the server through ts-node server.ts. The reason for this separation
-// was so that running the tests and running the live server won't conflict
+// was so that running the tests and running the live server wouldn't conflict
 // with one another.
 
 // THESE ARE NODE APIs WE WISH TO USE
