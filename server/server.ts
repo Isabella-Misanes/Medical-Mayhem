@@ -1,6 +1,8 @@
 import app from ".";
 import db from "./db";
 
+// Runs the server
+
 export const PORT = process.env.PORT || 4000;
 
 // INITIALIZE OUR DATABASE OBJECT
