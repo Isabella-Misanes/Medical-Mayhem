@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
 import Sidebar from './Sidebar';
