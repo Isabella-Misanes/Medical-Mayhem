@@ -1,18 +1,33 @@
 import request from 'supertest';
 import app from '../index';
-import db from '../db';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+import path from 'path'
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
-const registerUser = jest.fn()
+// Create test database to store dummy data
+beforeAll(async () => {
+    mongoose
+        .connect(process.env.TEST_URI as string)
+        .then(() => {
+            console.log('Successfully connected to ' + process.env.URI)
+        })
+        .catch(e => {
+            console.error('Connection error', e.message)
+        })
+})
 
+// Tears down test database after tests finish
 afterAll(async () => {
-    await db.close()
+    await mongoose.connection.dropDatabase()
+    await mongoose.connection.close()
 })
 
 describe("POST /register", () => {
 
-    // After tests are done and the server closes, close the database connection as well.
+    // TODO: add test for missing email, username, password, or password verification
 
-    it("responds with status 200 given email, username, password", async () => {
+    it("registers a user successfully", async () => {
         const response = await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
@@ -35,7 +50,7 @@ describe("POST /register", () => {
         })
     })
 
-    it("responds with status 201 given password too short", async () => {
+    it("responds with status 201 & error message given password too short", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
@@ -46,7 +61,7 @@ describe("POST /register", () => {
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 202 given mismatching password verification", async () => {
+    it("responds with status 202 & error message given mismatching password verification", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
@@ -57,7 +72,7 @@ describe("POST /register", () => {
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 203 given an already-registered email", async () => {
+    it("responds with status 203 & error message given an already-registered email", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
@@ -71,7 +86,7 @@ describe("POST /register", () => {
 
 describe("POST /login", () => {
 
-    it("responds with status 200 given email, password", async () => {
+    it("logs a user in successfully", async () => {
         const response = await request(app).post("/auth/login").send({
             email: "john.smith@blah.com",
             password: 'password',
@@ -92,7 +107,7 @@ describe("POST /login", () => {
         })
     })
 
-    it("responds with status 201 given no email", async () => {
+    it("responds with status 201 & error message given no email", async () => {
         await request(app).post("/auth/login").send({
             password: 'password',
         })
@@ -100,7 +115,7 @@ describe("POST /login", () => {
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 201 given no password", async () => {
+    it("responds with status 201 & error message given no password", async () => {
         await request(app).post("/auth/login").send({
             email: "john.smith@blah.com",
         })
@@ -108,7 +123,7 @@ describe("POST /login", () => {
         .expect(201)
     })
 
-    it("responds with status 202 given wrong email", async () => {
+    it("responds with status 202 & error message given wrong email", async () => {
         await request(app).post("/auth/login").send({
             email: "jane.doe@blah.com",
             password: 'password',
@@ -117,7 +132,7 @@ describe("POST /login", () => {
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 203 given wrong password", async () => {
+    it("responds with status 203 & error message given wrong password", async () => {
         await request(app).post("/auth/login").send({
             email: "john.smith@blah.com",
             password: 'passwordy',
@@ -126,7 +141,3 @@ describe("POST /login", () => {
         .expect('Content-Type', /json/)
     })
 })
-
-function cleanUpDb() {
-    // TODO: Implement clean up from saving dummy data in database
-}

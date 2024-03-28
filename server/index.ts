@@ -1,6 +1,6 @@
 // Creates the express server. Don't run the server from here though!
 // Run the server through ts-node server.ts. The reason for this separation
-// was so that running the tests and running the live server won't conflict
+// was so that running the tests and running the live server wouldn't conflict
 // with one another.
 
 // THESE ARE NODE APIs WE WISH TO USE
@@ -10,7 +10,6 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 import path from 'path'
 import authRouter from './routes/auth-router'
-import db from './db'
 
 // CREATE OUR SERVER
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
@@ -27,8 +26,5 @@ app.use(cookieParser())
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 app.use('/auth', authRouter)
-
-// INITIALIZE OUR DATABASE OBJECT
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 export default app;
