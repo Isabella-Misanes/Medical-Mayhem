@@ -62,10 +62,16 @@ export default function HomeScreen({setCurrScreen}) {
                             Settings
                         </Button>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <Button
                             onClick={()=>{setCurrScreen(Constants.ABOUT_SCREEN)}}>
                             About
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                            onClick={()=>{setCurrScreen(Constants.LEADERBOARD_SCREEN)}}>
+                            Leaderboard
                         </Button>
                     </Grid>
                 </Grid>

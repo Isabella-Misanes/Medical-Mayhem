@@ -1,7 +1,7 @@
 import './App.css';
 import * as Constants from './constants';
 import { useState } from 'react';
-import { HomeScreen, WelcomeScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen } from './components';
+import { HomeScreen, WelcomeScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen, PostScreen, NewThreadScreen, LeaderboardScreen, ReportsScreen } from './components';
 
 // Styling
 export const modalStyle = {
@@ -38,20 +38,18 @@ function App() {
     
     case Constants.FORUM_SCREEN:
       return <ForumScreen setCurrScreen={setCurrScreen} />
-    case Constants.VIEW_POSTS_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
-    case Constants.POSTS_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+    case Constants.POST_SCREEN:
+      return <PostScreen setCurrScreen={setCurrScreen} />
     case Constants.NEW_THREAD_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <NewThreadScreen setCurrScreen={setCurrScreen} />
 
     case Constants.PROFILE_SCREEN:
       return <ProfileScreen setCurrScreen={setCurrScreen} />
     case Constants.ACHIEVEMENTS_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <ProfileScreen setCurrScreen={setCurrScreen} />
 
     case Constants.LEADERBOARD_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <LeaderboardScreen setCurrScreen={setCurrScreen} />
     
     case Constants.MAP_SEARCH_SCREEN:
       return <MapSearchScreen setCurrScreen={setCurrScreen} />
@@ -59,7 +57,7 @@ function App() {
       return <MapBuilderScreen setCurrScreen={setCurrScreen} />
 
     case Constants.REPORTS_SCREEN:
-      return <HomeScreen setCurrScreen={setCurrScreen} />
+      return <ReportsScreen setCurrScreen={setCurrScreen} />
 
     case Constants.GAME_SCREEN:
       return <GameScreen setCurrScreen={setCurrScreen} />
