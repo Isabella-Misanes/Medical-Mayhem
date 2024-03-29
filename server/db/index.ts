@@ -13,5 +13,4 @@ mongoose
     })
 
 export const db = mongoose.connection
-
 export default db
