@@ -1,17 +1,16 @@
 import { Box, IconButton} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
 import AuthContext from '../auth';
 import { useContext } from 'react';
+import GlobalStoreContext from '../store';
 
 export default function Sidebar() {
-  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
+  const { store } = useContext(GlobalStoreContext);
 
   function handleLogout() {
-    auth.logoutUser();
-    //TODO implement proper guest logout
-    //navigate("/");
+    if(store.guest) store.logoutGuest();
+    else auth.logoutUser();
   }
 
   return (
