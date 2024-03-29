@@ -1,8 +1,10 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import * as Constants from '../constants'
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomeScreen({setCurrScreen}) {
+    const navigate = useNavigate();
     return (
         <div id="home-screen">
             <Sidebar />
@@ -22,7 +24,7 @@ export default function HomeScreen({setCurrScreen}) {
                 <Grid container spacing={4}>
                     <Grid item xs={12}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.GAME_SCREEN)}}>
+                            onClick={()=>{navigate("/game")}}>
                             Play
                         </Button>
                     </Grid>

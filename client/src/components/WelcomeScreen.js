@@ -1,8 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
+import { useNavigate } from 'react-router-dom';
 
-export default function WelcomeScreen({setCurrScreen}) {
+export default function WelcomeScreen() {
+    const navigate = useNavigate();
+
     return (
         <div id="welcome-screen">
             <Box id="title-banner"
@@ -20,9 +22,7 @@ export default function WelcomeScreen({setCurrScreen}) {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{
-                        setCurrScreen(Constants.REGISTER_SCREEN);
-                    }}>
+                    onClick={() => { navigate("/register") }}>
                     Register as New User
                 </Button>
                 <br />
@@ -31,9 +31,7 @@ export default function WelcomeScreen({setCurrScreen}) {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{
-                        setCurrScreen(Constants.LOGIN_SCREEN);
-                    }}>
+                    onClick={()=>{ navigate("/login") }}>
                     Log In
                 </Button>
                 <br />
@@ -42,9 +40,7 @@ export default function WelcomeScreen({setCurrScreen}) {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{
-                        setCurrScreen(Constants.HOME_SCREEN);
-                        }}>
+                    onClick={()=>{ navigate("/home") }}>
                     Continue as Guest
                 </Button>
             </Box>
