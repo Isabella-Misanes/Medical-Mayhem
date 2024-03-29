@@ -34,6 +34,23 @@ jobs:
           cd server
           npm test
 
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - name: Run tests
+        run: |
+          cd server
+          npm test
+
   deploy:
     name: Deploy
     needs: build
