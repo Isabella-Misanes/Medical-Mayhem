@@ -1,14 +1,14 @@
 describe('template spec', () => {
   it('should continue as guest successfully', () => {
-    cy.visit('http://localhost:3000/')
+    cy.visit('https://medical-mayhem-7429b.firebaseapp.com/')
 
     cy.get('#continue-as-guest').click()
 
-    cy.url().should('eq', 'http://localhost:3000/')
+    cy.url().should('eq', 'https://medical-mayhem-7429b.firebaseapp.com/')
   })
 
   it('should register a new user successfully', () => {
-    cy.visit('http://localhost:3000/')
+    cy.visit('https://medical-mayhem-7429b.firebaseapp.com/')
 
     cy.intercept('POST', '/auth/register', {
       statusCode: 200,
@@ -32,6 +32,6 @@ describe('template spec', () => {
 
     cy.wait('@registration')
 
-    cy.url().should('eq', 'http://localhost:3000/')
+    cy.url().should('eq', 'https://medical-mayhem-7429b.firebaseapp.com//')
   })
 })
