@@ -10,6 +10,7 @@ export default function Sidebar() {
 
   function handleLogout() {
     auth.logoutUser();
+    //TODO implement proper guest logout
     //navigate("/");
   }
 

@@ -44,33 +44,6 @@ export default function WelcomeScreen() {
                     marginTop: '4%',
                 }}>
                 <Typography variant="h2" gutterBottom>Medical Mayhem</Typography>
-                
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        width: '300px',
-                        left: '2%'
-                    }]}
-                    onClick={() => { navigate("/register") }}>
-                    Register as New User
-                </Button>
-                <br />
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        width: '300px',
-                        left: '2%'
-                    }]}
-                    onClick={()=>{ navigate("/login") }}>
-                    Log In
-                </Button>
-                <br />
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        width: '300px',
-                        left: '2%'
-                    }]}
-                    onClick={()=>{ store.loginGuest() }}>
-                    Continue as Guest
-                </Button>
             </Box>
             <Grid container spacing={2} sx={{
                 p: 4,
@@ -104,7 +77,7 @@ export default function WelcomeScreen() {
                             width: '225px',
                             left: '2%'
                         }]}
-                        onClick={()=>{ navigate("/home") }}>
+                        onClick={()=>{ store.loginGuest() }}>
                         Continue as Guest
                     </Button>
                 </Grid>
