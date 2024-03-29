@@ -48,7 +48,7 @@ export default function AboutScreen() {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>

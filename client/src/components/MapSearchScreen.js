@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function MapSearchScreen({setCurrScreen}) {
+export default function MapSearchScreen() {
     const navigate = useNavigate();
     return (
         <div id="map-search-screen">
@@ -29,7 +28,7 @@ export default function MapSearchScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>
