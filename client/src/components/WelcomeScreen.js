@@ -52,6 +52,7 @@ export default function WelcomeScreen() {
             }}>
                 <Grid item xs={12}>
                     <Button variant="contained"
+                        id = "register"
                         sx={[splashButtonStyle, {
                             minWidth: '225px',
                             maxWidth: '40%',
@@ -67,6 +68,7 @@ export default function WelcomeScreen() {
                             width: '225px',
                             left: '2%'
                         }]}
+                        id = "login"
                         onClick={()=>{ navigate("/login") }}>
                         Log In
                     </Button>
@@ -77,6 +79,7 @@ export default function WelcomeScreen() {
                             width: '225px',
                             left: '2%'
                         }]}
+                        id = "continue-as-guest"
                         onClick={()=>{ store.loginGuest() }}>
                         Continue as Guest
                     </Button>
