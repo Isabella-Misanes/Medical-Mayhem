@@ -10,8 +10,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+import { buttonStyle } from '../App';
 
 export default function LoginScreen() {
+    const navigate = useNavigate();
     // const { auth } = useContext(AuthContext);
 
     // const handleSubmit = (event) => {
@@ -104,6 +107,17 @@ export default function LoginScreen() {
                         </Grid>
                     </Box>
                 </Box>
+            </Grid>
+            <Grid item xs={12}>
+                <Button variant="contained"
+                    sx={[buttonStyle, {
+                        left: '2%',
+                        bottom: '2%',
+                        position: 'absolute'
+                    }]}
+                    onClick={()=>{navigate("/")}}>
+                    Back
+                </Button>
             </Grid>
         </Grid>
     );

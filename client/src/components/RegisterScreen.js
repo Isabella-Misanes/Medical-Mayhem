@@ -11,9 +11,12 @@ import Typography from '@mui/material/Typography';
 import * as Constants from '../constants';
 import { useContext } from 'react';
 import AuthContext from '../auth';
+import { buttonStyle } from '../App';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterScreen({setCurrScreen}) {
-    const auth = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -36,6 +39,7 @@ export default function RegisterScreen({setCurrScreen}) {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+                        backgroundColor: 'white'
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -117,6 +121,15 @@ export default function RegisterScreen({setCurrScreen}) {
                         </Grid>
                     </Box>
                 </Box>
+                <Button variant="contained"
+                sx={[buttonStyle, {
+                    left: '2%',
+                    bottom: '2%',
+                    position: 'absolute'
+                }]}
+                onClick={()=>{navigate("/")}}>
+                Back
+            </Button>
             </Container>
     );
 }
