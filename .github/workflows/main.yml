@@ -29,9 +29,22 @@ jobs:
           name: build
           path: client/build
 
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
       - name: Run tests
         run: |
           cd server
+          npm install
           npm test
 
   deploy:
