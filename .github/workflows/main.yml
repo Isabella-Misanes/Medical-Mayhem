@@ -63,7 +63,7 @@ jobs:
         run: |
           cd server
           npm install
-          ts-node server.ts
+          npx ts-node server.ts
 
   deploy:
     name: Deploy
