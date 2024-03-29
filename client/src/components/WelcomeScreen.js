@@ -20,26 +20,29 @@ export default function WelcomeScreen({setCurrScreen}) {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{}}>
+                    onClick={()=>{
+                        setCurrScreen(Constants.REGISTER_SCREEN);
+                    }}>
                     Register as New User
                 </Button>
-                <Button></Button>
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        width: '300px',
-                        left: '2%'
-                    }]}
-                    onClick={()=>{}}>
-                    Log In
-                </Button>
-                <Button></Button>
+                <br />
                 <Button variant="contained"
                     sx={[buttonStyle, {
                         width: '300px',
                         left: '2%'
                     }]}
                     onClick={()=>{
-                        console.log(setCurrScreen);
+                        setCurrScreen(Constants.LOGIN_SCREEN);
+                    }}>
+                    Log In
+                </Button>
+                <br />
+                <Button variant="contained"
+                    sx={[buttonStyle, {
+                        width: '300px',
+                        left: '2%'
+                    }]}
+                    onClick={()=>{
                         setCurrScreen(Constants.HOME_SCREEN);
                         }}>
                     Continue as Guest

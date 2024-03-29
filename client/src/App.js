@@ -1,7 +1,7 @@
 import './App.css';
 import * as Constants from './constants';
 import { useState } from 'react';
-import { HomeScreen, WelcomeScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen, PostScreen, NewThreadScreen, LeaderboardScreen, ReportsScreen } from './components';
+import { HomeScreen, WelcomeScreen, LoginScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen, PostScreen, NewThreadScreen, LeaderboardScreen, ReportsScreen, RegisterScreen } from './components';
 
 // Styling
 export const modalStyle = {
@@ -26,7 +26,10 @@ function App() {
   switch(currScreen) {
     case Constants.WELCOME_SCREEN:
       return <WelcomeScreen setCurrScreen={setCurrScreen} />
-
+    case Constants.REGISTER_SCREEN:
+      return <RegisterScreen setCurrScreen={setCurrScreen} />
+    case Constants.LOGIN_SCREEN:
+      return <LoginScreen setCurrScreen={setCurrScreen} />
     case Constants.HOME_SCREEN:
       return <HomeScreen setCurrScreen={setCurrScreen} />
     case Constants.ABOUT_SCREEN:

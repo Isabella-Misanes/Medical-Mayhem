@@ -1,7 +1,7 @@
 import WelcomeScreen from "./WelcomeScreen";
 
-import Login from "./Login";
-import Register from "./Register";
+import LoginScreen from "./LoginScreen";
+import RegisterScreen from "./RegisterScreen";
 
 import Sidebar from "./Sidebar";
 import HomeScreen from "./HomeScreen";
@@ -26,8 +26,8 @@ import GameScreen from "./GameScreen";
 export {
     Sidebar,
     WelcomeScreen,
-    Login,
-    Register,
+    LoginScreen,
+    RegisterScreen,
 
     HomeScreen,
     AboutScreen,

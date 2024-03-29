@@ -1,4 +1,8 @@
-export default function Register() {
+import { Box, Button, Typography } from '@mui/material';
+import { buttonStyle } from '../App';
+import * as Constants from '../constants'
+
+export default function RegisterScreen({setCurrScreen}) {
     // const [username, setUsername] = useState("")
     // const [usernameError, setUsernameError] = useState("")
     // const [email, setEmail] = useState("")
@@ -94,8 +98,27 @@ export default function Register() {
             <WelcomePageForm idName={"passwordverification"} text={"Verify Password"} /><br />
             <div>
                 {/* <button tabIndex='0' className="welcome-button" onClick={() => setCurrPage(Constants.SPLASH_PAGE)}>Back</button> */}
-                <button tabIndex='0' className="welcome-button">Back</button>
-                <button tabIndex='0' className="welcome-button">Sign Up</button>
+                <Button variant="contained"
+                    sx={[buttonStyle, {
+                        width: '100px',
+                        left: '2%'
+                    }]}
+                    onClick={()=>{
+                        setCurrScreen(Constants.WELCOME_SCREEN);
+                        }}>
+                    Back
+                </Button>
+                <Button variant="contained"
+                    sx={[buttonStyle, {
+                        width: '100px',
+                        left: '2%'
+                    }]}
+                    onClick={()=>{
+                        // console.log(setCurrScreen);
+                        // setCurrScreen(Constants.HOME_SCREEN);
+                        }}>
+                    Register
+                </Button>
             </div>
         </form>
     )
