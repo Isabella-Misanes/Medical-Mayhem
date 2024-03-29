@@ -29,11 +29,6 @@ jobs:
           name: build
           path: client/build
 
-      - name: Run tests
-        run: |
-          cd server
-          npm test
-
   test:
     name: Test
     needs: build
@@ -49,6 +44,7 @@ jobs:
       - name: Run tests
         run: |
           cd server
+          npm install
           npm test
 
   deploy:
