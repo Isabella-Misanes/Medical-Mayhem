@@ -92,7 +92,7 @@ import {
   LeaderboardScreen,
   ReportsScreen,
   RegisterScreen,
-  Sidebar
+  // Sidebar
 } from './components'
 import HomeWrapper from './components/HomeWrapper';
 /*

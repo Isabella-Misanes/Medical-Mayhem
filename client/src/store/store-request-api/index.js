@@ -1,8 +1,8 @@
 import axios from 'axios'
 axios.defaults.withCredentials = true;
-const api = axios.create({
-    baseURL: 'https://medical-mayhem-7429b.web.app/api',
-})
+// const api = axios.create({
+//     baseURL: 'https://medical-mayhem-7429b.web.app/api',
+// })
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A
 // REQUEST METHOD (like get) AND PATH (like /top5list). SOME ALSO

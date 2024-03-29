@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
-import api from './store-request-api'
+// import api from './store-request-api'
 // import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
 // import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 // import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
@@ -88,7 +88,7 @@ function GlobalStoreContextProvider(props) {
         playingList: null,
         playingSong: 0,
     });
-    const history = useNavigate();
+    // const history = useNavigate();
 
     console.log("inside useGlobalStore");
 
