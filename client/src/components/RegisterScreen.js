@@ -110,6 +110,7 @@ export default function RegisterScreen() {
                             </Grid>
                         </Grid>
                         <Button
+                            id="signUp"
                             type="submit"
                             fullWidth
                             variant="contained"
