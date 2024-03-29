@@ -3,7 +3,6 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
 // profilePicture composition taken from https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
-// TODO: ADD DEFAULT VALUES TO EACH
 
 const UserSchema = new Schema(
     {

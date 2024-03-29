@@ -3,12 +3,18 @@ import app from '../index';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import path from 'path'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
+
+let mongoServer: MongoMemoryServer; 
 
 // Create test database to store dummy data
 beforeAll(async () => {
+    mongoServer = await MongoMemoryServer.create()
+    const mongoUri = mongoServer.getUri();
+
     mongoose
-        .connect(process.env.TEST_URI as string)
+        .connect(mongoUri)
         .then(() => {
             console.log('Successfully connected to ' + process.env.URI)
         })
@@ -19,8 +25,8 @@ beforeAll(async () => {
 
 // Tears down test database after tests finish
 afterAll(async () => {
-    await mongoose.connection.dropDatabase()
-    await mongoose.connection.close()
+    await mongoServer.stop()
+    await mongoose.disconnect()
 })
 
 describe("POST /register", () => {

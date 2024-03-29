@@ -18,7 +18,6 @@ jobs:
           cd ../server
           npm install
           cd ..
-
       - name: Build
         run: |
           cd client
