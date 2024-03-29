@@ -2,8 +2,10 @@ import { Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 export default function GameScreen({setCurrScreen}) {
+    const navigate = useNavigate();
     return (
         <div id="about-screen">
             <Sidebar/>
@@ -15,7 +17,7 @@ export default function GameScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{setCurrScreen(Constants.HOME_SCREEN)}}>
+                onClick={()=>{navigate("/home")}}>
                 Back
             </Button>
         </div>

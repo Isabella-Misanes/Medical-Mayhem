@@ -30,49 +30,49 @@ export default function HomeScreen({setCurrScreen}) {
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.MAP_SEARCH_SCREEN)}}>
+                            onClick={()=>{navigate("/mapsearch")}}>
                             Map Search
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.MAP_BUILDER_SCREEN)}}>
+                            onClick={()=>{navigate("/mapbuilder")}}>
                             Map Builder
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.SOCIAL_SCREEN)}}>
+                            onClick={()=>{navigate("/social")}}>
                             Social
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.FORUM_SCREEN)}}>
+                            onClick={()=>{navigate("/forum")}}>
                             Forums
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.PROFILE_SCREEN)}}>
+                            onClick={()=>{navigate("/profile")}}>
                             Profile
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.SETTINGS_SCREEN)}}>
+                            onClick={()=>{navigate("/settings")}}>
                             Settings
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.ABOUT_SCREEN)}}>
+                            onClick={()=>{navigate("/about")}}>
                             About
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
-                            onClick={()=>{setCurrScreen(Constants.LEADERBOARD_SCREEN)}}>
+                            onClick={()=>{navigate("/leaderboard")}}>
                             Leaderboard
                         </Button>
                     </Grid>

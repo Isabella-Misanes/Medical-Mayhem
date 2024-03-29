@@ -2,8 +2,10 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import * as Constants from '../constants'
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 export default function ForumScreen({setCurrScreen}) {
+    const navigate = useNavigate();
     return (
         <div id="forum-screen">
             <Sidebar/>
@@ -25,7 +27,7 @@ export default function ForumScreen({setCurrScreen}) {
                             sx={[buttonStyle, {
                                 left: '2%'
                             }]}
-                            onClick={()=>{setCurrScreen(Constants.NEW_THREAD_SCREEN)}}>
+                            onClick={()=>{navigate("/newthread")}}>
                             Start New Thread
                         </Button>
                     </Grid>
@@ -41,7 +43,7 @@ export default function ForumScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{setCurrScreen(Constants.HOME_SCREEN)}}>
+                onClick={()=>{navigate("/home")}}>
                 Back
             </Button>
         </div>
