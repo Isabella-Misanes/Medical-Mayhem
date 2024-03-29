@@ -8,27 +8,36 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import * as Constants from '../constants';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import AuthContext from '../auth';
-import { buttonStyle } from '../App';
-import { useNavigate } from 'react-router-dom';
+import MUIErrorModal from './MUIErrorModal';
 
-export default function RegisterScreen({setCurrScreen}) {
-    const { auth } = useContext(AuthContext);
-    const navigate = useNavigate();
+export default function RegisterScreen() {
+    const {auth} = useContext(AuthContext);
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        passwordVerify: ''
+    })
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
         auth.registerUser(
-            formData.get('firstName'),
-            formData.get('lastName'),
-            formData.get('email'),
-            formData.get('password'),
-            formData.get('passwordVerify')
+            formData.username,
+            formData.email,
+            formData.password,
+            formData.passwordVerify
         );
     };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value })
+    }
+
+   let modal = "";
+   if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
             <Container component="main" maxWidth="xs">
@@ -39,7 +48,6 @@ export default function RegisterScreen({setCurrScreen}) {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        backgroundColor: 'white'
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -48,27 +56,17 @@ export default function RegisterScreen({setCurrScreen}) {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={console.log("Register")} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="lname"
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="username"
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -79,6 +77,7 @@ export default function RegisterScreen({setCurrScreen}) {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -90,6 +89,7 @@ export default function RegisterScreen({setCurrScreen}) {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,10 +97,11 @@ export default function RegisterScreen({setCurrScreen}) {
                                     required
                                     fullWidth
                                     name="passwordVerify"
-                                    label="Password Verify"
+                                    label="Verify Password"
                                     type="password"
                                     id="passwordVerify"
                                     autoComplete="new-password"
+                                    onChange={handleChange}
                                 />
                             </Grid>
                         </Grid>
@@ -120,16 +121,8 @@ export default function RegisterScreen({setCurrScreen}) {
                             </Grid>
                         </Grid>
                     </Box>
+                    {modal}
                 </Box>
-                <Button variant="contained"
-                sx={[buttonStyle, {
-                    left: '2%',
-                    bottom: '2%',
-                    position: 'absolute'
-                }]}
-                onClick={()=>{navigate("/")}}>
-                Back
-            </Button>
             </Container>
     );
 }

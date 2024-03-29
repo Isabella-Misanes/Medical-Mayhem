@@ -11,23 +11,14 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    INCORRECT_LOGIN: "INCORRECT_LOGIN",
-    INCORRECT_SIGNUP: "INCORRECT_SIGNUP",
-    INCOMPLETE_CREDS: "INCOMPLETE_CREDS"
-}
-
-const CurrentModal = {
-    NONE: "NONE",
-    BAD_LOGIN: "BAD_LOGIN",
-    BAD_SIGNUP: "BAD_SIGNUP",
-    BAD_CREDS: "BAD_CREDS"
+    ERROR: "ERROR"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        currentModal: CurrentModal.NONE
+        errorMessage: ""
     });
     const navigate = useNavigate();
 
@@ -42,56 +33,35 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    currentModal: CurrentModal.NONE
+                    errorMessage: ""
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    currentModal: CurrentModal.NONE
+                    errorMessage: ""
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.NONE
+                    errorMessage: ""
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    currentModal: CurrentModal.NONE
+                    errorMessage: ""
                 })
             }
-            case AuthActionType.INCORRECT_LOGIN: {
+            case AuthActionType.ERROR: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.BAD_LOGIN
-                })
-            }
-            case AuthActionType.INCORRECT_SIGNUP: {
-                return setAuth({
-                    user: null,
-                    loggedIn: false,
-                    currentModal: CurrentModal.BAD_SIGNUP
-                })
-            }
-            case AuthActionType.INCOMPLETE_CREDS: {
-                return setAuth({
-                    user: null,
-                    loggedIn: false,
-                    currentModal: CurrentModal.BAD_CREDS
-                })
-            }
-            case AuthActionType.HIDE_MODAL: {
-                return setAuth({
-                    user: null,
-                    loggedIn: false,
-                    currentModal: CurrentModal.NONE
+                    errorMessage: payload.errorMessage
                 })
             }
             default:
@@ -112,22 +82,24 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        if (response.status === 200) {
+    auth.registerUser = async function(username, email, password, passwordVerify) {
+        try {
+            const response = await api.registerUser(username, email, password, passwordVerify);
+            console.log(response);
+            if (response.status === 200) {
+                console.log("success");
+                authReducer({
+                    type: AuthActionType.ERROR,
+                    payload: { user: response.data.user }
+                })
+                navigate("/");
+            }
+        } catch(error) {
+            console.log(error.response.data.errorMessage);
             authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
-                }
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
             })
-            navigate("/");
-        }
-        else if(response.status === 204) {
-            auth.showBadCredsModal();
-        }
-        else {
-            auth.showBadSignupModal();
         }
     }
 
@@ -162,66 +134,15 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.getUserInitials = function() {
-        let initials = "";
-        if (auth.user) {
-            initials += auth.user.firstName.charAt(0);
-            initials += auth.user.lastName.charAt(0);
-        }
-        console.log("user initials: " + initials);
-        return initials;
-    }
-
-    auth.showBadLoginModal = () => {
+    auth.hideModal = () => {
         authReducer({
-            type: AuthActionType.INCORRECT_LOGIN,
-            payload: {}
-        });  
-    }
-
-    auth.hideBadLoginModal = () => {
-        authReducer({
-            type: AuthActionType.HIDE_MODAL,
-            payload: {}
+            type: AuthActionType.ERROR,
+            payload: { errorMessage: "" }
         });
     }
 
-    auth.showBadSignupModal = () => {
-        authReducer({
-            type: AuthActionType.INCORRECT_SIGNUP,
-            payload: {}
-        });  
-    }
-
-    auth.hideBadSignupModal = () => {
-        authReducer({
-            type: AuthActionType.HIDE_MODAL,
-            payload: {}
-        });
-    }
-
-    auth.showBadCredsModal = () => {
-        authReducer({
-            type: AuthActionType.INCOMPLETE_CREDS,
-            payload: {}
-        });  
-    }
-
-    auth.hideBadCredsModal = () => {
-        authReducer({
-            type: AuthActionType.HIDE_MODAL,
-            payload: {}
-        });
-    }
-
-    auth.isBadLoginModalOpen = () => {
-        return auth.currentModal === CurrentModal.BAD_LOGIN;
-    }
-    auth.isBadSignupModalOpen = () => {
-        return auth.currentModal === CurrentModal.BAD_SIGNUP;
-    }
-    auth.isBadCredsModalOpen = () => {
-        return auth.currentModal === CurrentModal.BAD_CREDS;
+    auth.isErrorModalOpen = () => {
+        return auth.errorMessage !== "";
     }
 
     return (

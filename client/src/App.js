@@ -78,8 +78,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
 import {
-  HomeScreen,
-  WelcomeScreen,
   LoginScreen,
   AboutScreen,
   SettingsScreen,
@@ -96,6 +94,7 @@ import {
   RegisterScreen,
   Sidebar
 } from './components'
+import HomeWrapper from './components/HomeWrapper';
 /*
     This is our application's top-level component.
     
@@ -131,8 +130,7 @@ const App = () => {
             <AuthContextProvider>
                 <GlobalStoreContextProvider>
                     <Routes>
-                        <Route path="/" exact element={<WelcomeScreen />} />
-                        <Route path="/home" exact element={<HomeScreen />} />
+                        <Route path="/" exact element={<HomeWrapper />} />
                         <Route path="/login/" exact element={<LoginScreen />} />
                         <Route path="/register/" exact element={<RegisterScreen />} />
                         <Route path="/about/" exact element={<AboutScreen />} />

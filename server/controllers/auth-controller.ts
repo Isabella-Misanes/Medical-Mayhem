@@ -112,13 +112,15 @@ export const registerUser = async (req: Request, res: Response) => {
         console.log("create user: " + username + " " + email + " " + password + " " + passwordVerify);
         if (!username || !email || !password || !passwordVerify) {
             return res
-                .status(204)
+                .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
         }
         console.log("all fields provided");
+
+        // Password verification
         if (password.length < 8) {
             return res
-                .status(201)
+                .status(400)
                 .json({
                     errorMessage: "Please enter a password of at least 8 characters."
                 });
@@ -126,17 +128,19 @@ export const registerUser = async (req: Request, res: Response) => {
         console.log("password long enough");
         if (password !== passwordVerify) {
             return res
-                .status(202)
+                .status(400)
                 .json({
                     errorMessage: "Please enter the same password twice."
                 })
         }
         console.log("password and password verify match");
+
+        // Existing user
         const existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (existingUser) {
             return res
-                .status(203)
+                .status(400)
                 .json({
                     success: false,
                     errorMessage: "An account with this email address already exists."

@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function LeaderboardScreen({setCurrScreen}) {
+export default function LeaderboardScreen() {
     const navigate = useNavigate();
     return (
         <div id="about-screen">
