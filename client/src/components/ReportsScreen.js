@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function ReportsScreen({setCurrScreen}) {
+export default function ReportsScreen() {
     const navigate = useNavigate();
     return (
         <div id="about-screen">
