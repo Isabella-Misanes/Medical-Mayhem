@@ -2,6 +2,7 @@
 import { db } from './index';
 import { User } from '../models/user-model';
 
+// Creates a user
 async function userCreate(username: String, bio: String) {
     const userDetail = {
         username: username,
