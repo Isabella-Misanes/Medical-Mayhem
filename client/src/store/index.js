@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
 // import api from './store-request-api'
-// import AuthContext from '../auth'
+import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -32,35 +32,35 @@ export const GlobalStoreActionType = {
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 // const tps = new jsTPS();
 
-// const CurrentModal = {
-//     NONE : "NONE",
-//     DELETE_LIST : "DELETE_LIST",
-//     EDIT_SONG : "EDIT_SONG",
-//     REMOVE_SONG : "REMOVE_SONG"
-// }
+const CurrentModal = {
+    NONE : "NONE",
+    DELETE_LIST : "DELETE_LIST",
+    EDIT_SONG : "EDIT_SONG",
+    REMOVE_SONG : "REMOVE_SONG"
+}
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
     // // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
-    // const [store, setStore] = useState({
-    //     currentModal : CurrentModal.NONE,
-    //     idNamePairs: [],
-    //     currentList: null,
-    //     currentSongIndex : -1,
-    //     currentSong : null,
-    //     newListCounter: 0,
-    //     listNameActive: false,
-    //     listIdMarkedForDeletion: null,
-    //     listMarkedForDeletion: null
-    // });
-    // const history = useHistory();
+    const [store, setStore] = useState({
+        currentModal : CurrentModal.NONE,
+        idNamePairs: [],
+        currentList: null,
+        currentSongIndex : -1,
+        currentSong : null,
+        newListCounter: 0,
+        listNameActive: false,
+        listIdMarkedForDeletion: null,
+        listMarkedForDeletion: null
+    });
+    const history = useNavigate();
 
-    // console.log("inside useGlobalStore");
+    console.log("inside useGlobalStore");
 
-    // // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
-    // const { auth } = useContext(AuthContext);
-    // console.log("auth: " + auth);
+    // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
+    const { auth } = useContext(AuthContext);
+    console.log("auth: " + auth);
 
     // // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // // HANDLE EVERY TYPE OF STATE CHANGE
@@ -254,7 +254,7 @@ function GlobalStoreContextProvider(props) {
     //         payload: {}
     //     });
     //     tps.clearAllTransactions();
-    //     history.push("/");
+    //     navigate("/");
     // }
 
     // // THIS FUNCTION CREATES A NEW LIST
@@ -272,7 +272,7 @@ function GlobalStoreContextProvider(props) {
     //         );
 
     //         // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-    //         history.push("/playlist/" + newList._id);
+    //         navigate("/playlist/" + newList._id);
     //     }
     //     else {
     //         console.log("API FAILED TO CREATE A NEW LIST");
@@ -323,7 +323,7 @@ function GlobalStoreContextProvider(props) {
     //         if (response.status === 200) {
     //             console.log("Response was a success");
     //             store.loadIdNamePairs();
-    //             history.push("/");
+    //             navigate("/");
     //         }
     //     }
     //     processDelete(id);
@@ -379,7 +379,7 @@ function GlobalStoreContextProvider(props) {
     //                     type: GlobalStoreActionType.SET_CURRENT_LIST,
     //                     payload: playlist
     //                 });
-    //                 history.push("/playlist/" + playlist._id);
+    //                 navigate("/playlist/" + playlist._id);
     //             }
     //         }
     //     }
@@ -534,13 +534,13 @@ function GlobalStoreContextProvider(props) {
     //     });
     // }
 
-    // return (
-    //     <GlobalStoreContext.Provider value={{
-    //         store
-    //     }}>
-    //         {props.children}
-    //     </GlobalStoreContext.Provider>
-    // );
+    return (
+        <GlobalStoreContext.Provider value={{
+            store
+        }}>
+            {props.children}
+        </GlobalStoreContext.Provider>
+    );
 }
 
 export default GlobalStoreContext;

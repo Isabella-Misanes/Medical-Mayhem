@@ -78,7 +78,22 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
 import {
-  HomeScreen, WelcomeScreen, LoginScreen, AboutScreen, SettingsScreen, SocialScreen, ForumScreen, MapSearchScreen, MapBuilderScreen, ProfileScreen, GameScreen, PostScreen, NewThreadScreen, LeaderboardScreen, ReportsScreen, RegisterScreen
+  HomeScreen,
+  WelcomeScreen,
+  LoginScreen,
+  AboutScreen,
+  SettingsScreen,
+  SocialScreen,
+  ForumScreen,
+  MapSearchScreen,
+  MapBuilderScreen,
+  ProfileScreen,
+  GameScreen,
+  PostScreen,
+  NewThreadScreen,
+  LeaderboardScreen,
+  ReportsScreen,
+  RegisterScreen
 } from './components'
 /*
     This is our application's top-level component.
@@ -109,28 +124,28 @@ export const buttonStyle = {
     bgcolor: '#2d7044'},
 }
 
-const App = () => {   
+const App = () => {
     return (
         <BrowserRouter>
             <AuthContextProvider>
                 <GlobalStoreContextProvider>
                     <Routes>
-                        <Route path="/" exact component={WelcomeScreen} />
-                        <Route path="/home" exact component={HomeScreen} />
-                        <Route path="/login/" exact component={LoginScreen} />
-                        <Route path="/register/" exact component={RegisterScreen} />
-                        <Route path="/about/" exact component={AboutScreen} />
-                        <Route path="/settings/" exact component={SettingsScreen} />
-                        <Route path="/social/" exact component={SocialScreen} />
-                        <Route path="/forum/" exact component={ForumScreen} />
-                        <Route path="/mapsearch/" exact component={MapSearchScreen} />
-                        <Route path="/mapbuilder/" exact component={MapBuilderScreen} />
-                        <Route path="/profile/" exact component={ProfileScreen} />
-                        <Route path="/game/" exact component={GameScreen} />
-                        <Route path="/post/" exact component={PostScreen} />
-                        <Route path="/newthread/" exact component={NewThreadScreen} />
-                        <Route path="/leaderboard/" exact component={LeaderboardScreen} />
-                        <Route path="/reports/" exact component={ReportsScreen} />
+                        <Route path="/" exact element={<WelcomeScreen />} />
+                        <Route path="/home" exact element={<HomeScreen />} />
+                        <Route path="/login/" exact element={<LoginScreen />} />
+                        <Route path="/register/" exact element={<RegisterScreen />} />
+                        <Route path="/about/" exact element={<AboutScreen />} />
+                        <Route path="/settings/" exact element={<SettingsScreen />} />
+                        <Route path="/social/" exact element={<SocialScreen />} />
+                        <Route path="/forum/" exact element={<ForumScreen />} />
+                        <Route path="/mapsearch/" exact element={<MapSearchScreen />} />
+                        <Route path="/mapbuilder/" exact element={<MapBuilderScreen />} />
+                        <Route path="/profile/" exact element={<ProfileScreen />} />
+                        <Route path="/game/" exact element={<GameScreen />} />
+                        <Route path="/post/" exact element={<PostScreen />} />
+                        <Route path="/newthread/" exact element={<NewThreadScreen />} />
+                        <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
+                        <Route path="/reports/" exact element={<ReportsScreen />} />
                     </Routes>
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
