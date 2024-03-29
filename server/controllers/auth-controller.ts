@@ -48,7 +48,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
         if (!email || !password) {
             return res
-                .status(201)
+                .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
         }
 
@@ -56,7 +56,7 @@ export const loginUser = async (req: Request, res: Response) => {
         console.log("existingUser: " + existingUser);
         if (!existingUser) {
             return res
-                .status(202)
+                .status(401)
                 .json({
                     errorMessage: "Wrong email or password provided."
                 })
@@ -67,7 +67,7 @@ export const loginUser = async (req: Request, res: Response) => {
         if (!passwordCorrect) {
             console.log("Incorrect password");
             return res
-                .status(203)
+                .status(401)
                 .json({
                     errorMessage: "Wrong email or password provided."
                 })

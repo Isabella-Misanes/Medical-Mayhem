@@ -1,10 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function SettingsScreen({setCurrScreen}) {
+export default function SettingsScreen() {
     const navigate = useNavigate();
     return (
         <div id="settings-screen">
@@ -29,7 +28,7 @@ export default function SettingsScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>

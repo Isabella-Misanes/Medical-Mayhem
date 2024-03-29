@@ -3,7 +3,7 @@ import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function GameScreen({setCurrScreen}) {
+export default function GameScreen() {
     const navigate = useNavigate();
     return (
         <div id="about-screen">
@@ -16,7 +16,7 @@ export default function GameScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>

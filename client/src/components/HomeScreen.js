@@ -2,7 +2,7 @@ import { Box, Button, Grid, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function HomeScreen({setCurrScreen}) {
+export default function HomeScreen() {
     const navigate = useNavigate();
     return (
         <div id="home-screen">

@@ -26,7 +26,7 @@ export default function ReportsScreen() {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>

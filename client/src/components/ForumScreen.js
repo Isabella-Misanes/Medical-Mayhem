@@ -3,7 +3,7 @@ import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-export default function ForumScreen({setCurrScreen}) {
+export default function ForumScreen() {
     const navigate = useNavigate();
     return (
         <div id="forum-screen">
@@ -42,7 +42,7 @@ export default function ForumScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{navigate("/home")}}>
+                onClick={()=>{navigate("/")}}>
                 Back
             </Button>
         </div>

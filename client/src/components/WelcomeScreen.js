@@ -1,9 +1,12 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import GlobalStoreContext from '../store';
 
 export default function WelcomeScreen() {
     const navigate = useNavigate();
+    const { store } = useContext(GlobalStoreContext);
 
     return (
         <div id="welcome-screen">
@@ -40,7 +43,7 @@ export default function WelcomeScreen() {
                         width: '300px',
                         left: '2%'
                     }]}
-                    onClick={()=>{ navigate("/home") }}>
+                    onClick={()=>{ store.loginGuest() }}>
                     Continue as Guest
                 </Button>
             </Box>

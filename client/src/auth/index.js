@@ -92,7 +92,7 @@ function AuthContextProvider(props) {
                     type: AuthActionType.ERROR,
                     payload: { user: response.data.user }
                 })
-                navigate("/");
+                auth.loginUser(email, password);
             }
         } catch(error) {
             console.log(error.response.data.errorMessage);
@@ -105,21 +105,25 @@ function AuthContextProvider(props) {
 
     auth.loginUser = async function(email, password) {
         console.log("Login user");
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
+        try {
+            const response = await api.loginUser(email, password);
+            console.log(response);
+            if (response.status === 200) {
+                console.log("success");
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                navigate("/");
+            } 
+        } catch(error) {
+            console.log(error.response.data.errorMessage);
             authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
             })
-            navigate("/");
-        }
-        else if(response.status === 201) {
-            auth.showBadCredsModal();
-        }
-        else {
-            auth.showBadLoginModal();
         }
     }
 
