@@ -47,6 +47,24 @@ jobs:
           npm install
           npm test
 
+  run-server:
+    name: Run Server
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - name: Run server
+        run: |
+          cd server
+          npm install
+          ts-node server.ts
+
   deploy:
     name: Deploy
     needs: build
