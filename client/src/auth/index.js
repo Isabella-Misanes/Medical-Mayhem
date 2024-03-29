@@ -89,10 +89,16 @@ function AuthContextProvider(props) {
             if (response.status === 200) {
                 console.log("success");
                 authReducer({
-                    type: AuthActionType.ERROR,
+                    type: AuthActionType.REGISTER_USER,
                     payload: { user: response.data.user }
                 })
-                auth.loginUser(email, password);
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                navigate("/");
             }
         } catch(error) {
             console.log(error.response.data.errorMessage);
