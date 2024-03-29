@@ -8,19 +8,39 @@ export default function AboutScreen() {
     return (
         <div id="about-screen">
             <Sidebar/>
+            <Box sx={{
+                height: '90%',
+                width: '50%',
+                flexDirection: 'column',
+                backgroundColor: '#fffbc3',
+                position: 'absolute',
+                left: '25%',
+                top: '3%',
+                textAlign: 'center',
+                p: 2,
+                boxShadow: 10
+            }}/>
             <Box
                 sx={{
-                    height: '90%',
-                    width: '50%',
-                    display: 'flex',
+                    height: '85%',
+                    width: '40%',
                     flexDirection: 'column',
-                    justifyContent: 'center',
                     backgroundColor: 'white',
                     position: 'absolute',
-                    left: '25%'
+                    left: '30%',
+                    top: '5%',
+                    textAlign: 'center',
+                    p: 2,
+                    boxShadow: 10
                 }}>
-                <Typography variant="h2" gutterBottom>Medical Mayhem</Typography>
                 <Typography variant="h4" gutterBottom>About Screen</Typography>
+                Medical Mayhem is a top down 2-D multiplayer game created by:
+                <p>
+                    Thomas Aloi<br/>
+                    Torin McNally<br/>
+                    Isabella Misanes<br/>
+                    Jared Tjahjadi<br/>
+                </p>
             </Box>
             <Button variant="contained"
                 sx={[buttonStyle, {
