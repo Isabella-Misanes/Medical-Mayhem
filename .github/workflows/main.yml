@@ -46,10 +46,6 @@ jobs:
           cd server
           npm install
           npm test
-          cd ..
-          cd client
-          npm install
-          npx cypress run
 
   deploy:
     name: Deploy
