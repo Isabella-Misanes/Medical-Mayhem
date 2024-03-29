@@ -56,36 +56,36 @@ describe("POST /register", () => {
         })
     })
 
-    it("responds with status 201 & error message given password too short", async () => {
+    it("responds with status 400 & error message given password too short", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
             password: 'p',
             passwordVerify: 'p'
         })
-        .expect(201)
+        .expect(400)
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 202 & error message given mismatching password verification", async () => {
+    it("responds with status 400 & error message given mismatching password verification", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
             password: 'password',
             passwordVerify: 'passwo'
         })
-        .expect(202)
+        .expect(400)
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 203 & error message given an already-registered email", async () => {
+    it("responds with status 400 & error message given an already-registered email", async () => {
         await request(app).post("/auth/register").send({
             username: 'username',
             email: "john.smith@blah.com",
             password: 'password',
             passwordVerify: 'password'
         })
-        .expect(203)
+        .expect(400)
         .expect('Content-Type', /json/)
     })
 })
@@ -113,37 +113,37 @@ describe("POST /login", () => {
         })
     })
 
-    it("responds with status 201 & error message given no email", async () => {
+    it("responds with status 400 & error message given no email", async () => {
         await request(app).post("/auth/login").send({
             password: 'password',
         })
-        .expect(201)
+        .expect(400)
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 201 & error message given no password", async () => {
+    it("responds with status 400 & error message given no password", async () => {
         await request(app).post("/auth/login").send({
             email: "john.smith@blah.com",
         })
         .expect('Content-Type', /json/)
-        .expect(201)
+        .expect(400)
     })
 
-    it("responds with status 202 & error message given wrong email", async () => {
+    it("responds with status 401 & error message given wrong email", async () => {
         await request(app).post("/auth/login").send({
             email: "jane.doe@blah.com",
             password: 'password',
         })
-        .expect(202)
+        .expect(401)
         .expect('Content-Type', /json/)
     })
 
-    it("responds with status 203 & error message given wrong password", async () => {
+    it("responds with status 401 & error message given wrong password", async () => {
         await request(app).post("/auth/login").send({
             email: "john.smith@blah.com",
             password: 'passwordy',
         })
-        .expect(203)
+        .expect(401)
         .expect('Content-Type', /json/)
     })
 })
