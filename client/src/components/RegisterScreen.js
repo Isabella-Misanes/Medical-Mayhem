@@ -13,7 +13,7 @@ import { useContext } from 'react';
 import AuthContext from '../auth';
 
 export default function RegisterScreen({setCurrScreen}) {
-    const { auth } = useContext(AuthContext);
+    const auth = useContext(AuthContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();

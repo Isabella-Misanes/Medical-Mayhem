@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import api from './auth-request-api'
 
 const AuthContext = createContext();
@@ -29,7 +29,7 @@ function AuthContextProvider(props) {
         loggedIn: false,
         currentModal: CurrentModal.NONE
     });
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         auth.getLoggedIn();
@@ -121,7 +121,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/");
+            navigate("/");
         }
         else if(response.status === 204) {
             auth.showBadCredsModal();
@@ -141,7 +141,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/");
+            navigate("/");
         }
         else if(response.status === 201) {
             auth.showBadCredsModal();
@@ -158,7 +158,7 @@ function AuthContextProvider(props) {
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
-            history.push("/");
+            navigate("/");
         }
     }
 
