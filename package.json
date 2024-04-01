@@ -1,8 +1,9 @@
 {
-  "dependencies": {
-    "firebase": "^10.9.0"
-  },
   "scripts": {
-    "start": "cd client && react-scripts start"
+    "start": "ts-node server/server.ts",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+  },
+  "engines": {
+    "node": "10.16.0"
   }
 }
