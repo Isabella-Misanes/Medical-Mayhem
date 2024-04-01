@@ -1,7 +1,10 @@
 {
+  "main": "server/server.ts",
   "scripts": {
     "start": "ts-node server/server.ts",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "client": "cd client && npm start",
+    "server": "nodemon server/server.ts",
+    "build": "cd client && npm run build"
   },
   "engines": {
     "node": "20.9.0"
