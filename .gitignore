@@ -6,8 +6,10 @@ server/node_modules
 /.pnp
 .pnp.js
 
+
 # testing
 /coverage
+client/cypress/screenshots
 
 # production
 /build
