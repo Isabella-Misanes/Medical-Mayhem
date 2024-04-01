@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon server/server.ts",
+    "start": "ts-node server/server.ts",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "engines": {
@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "nodemon": "^3.1.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
   },
   "heroku-run-build-script": true
 }
