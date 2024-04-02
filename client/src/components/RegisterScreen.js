@@ -44,7 +44,17 @@ export default function RegisterScreen() {
    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Box sx={{
+                height: '90%',
+                width: '100%',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                position: 'absolute',
+                textAlign: 'center',
+                top: '5%',
+                p: 2,
+                boxShadow: 10
+            }}>
                 <CssBaseline />
                 <Box
                     sx={{
@@ -65,12 +75,14 @@ export default function RegisterScreen() {
                             <Grid item xs={12}>
                                 <TextField
                                     required
-                                    fullWidth
                                     id="username"
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
-                                    onChange={handleChange}
+                                    onChange={handleChange} 
+                                    sx={{
+                                        width: '50%'
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -82,6 +94,9 @@ export default function RegisterScreen() {
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleChange}
+                                    sx={{
+                                        width: '50%'
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -94,6 +109,9 @@ export default function RegisterScreen() {
                                     id="password"
                                     autoComplete="new-password"
                                     onChange={handleChange}
+                                    sx={{
+                                        width: '50%'
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -106,6 +124,9 @@ export default function RegisterScreen() {
                                     id="passwordVerify"
                                     autoComplete="new-password"
                                     onChange={handleChange}
+                                    sx={{
+                                        width: '50%'
+                                    }}
                                 />
                             </Grid>
                         </Grid>
@@ -114,11 +135,11 @@ export default function RegisterScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2, width: '50%' }}
                         >
                             Sign Up
                         </Button>
-                        <Grid container justifyContent="flex-end">
+                        <Grid container justifyContent="center">
                             <Grid item>
                                 <Link href="/login/" variant="body2">
                                     Already have an account? Sign in
@@ -137,6 +158,6 @@ export default function RegisterScreen() {
                     onClick={()=>{navigate("/")}}>
                     Back
                 </Button>
-            </Container>
+            </Box>
     );
 }
