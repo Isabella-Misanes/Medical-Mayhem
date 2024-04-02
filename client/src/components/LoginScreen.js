@@ -42,7 +42,17 @@ export default function RegisterScreen() {
    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Box sx={{
+                height: '90%',
+                width: '100%',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                position: 'absolute',
+                textAlign: 'center',
+                top: '5%',
+                p: 2,
+                boxShadow: 10
+            }}>
                 <CssBaseline />
                 <Box
                     sx={{
@@ -112,6 +122,6 @@ export default function RegisterScreen() {
                     onClick={()=>{navigate("/")}}>
                     Back
                 </Button>
-            </Container>
+            </Box>
     );
 }
