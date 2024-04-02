@@ -18,7 +18,8 @@ export const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: ["https://medical-mayhem-c0832c3f548e.herokuapp.com/"],
+    origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com/' : 
+        'http://localhost:3000/' ],
     credentials: true
 }))
 app.use(express.json())
