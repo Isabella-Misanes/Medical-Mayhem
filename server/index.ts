@@ -18,7 +18,7 @@ export const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: ["https://medical-mayhem-7429b.firebaseapp.com/"],
+    origin: ["https://medical-mayhem-c0832c3f548e.herokuapp.com/"],
     credentials: true
 }))
 app.use(express.json())
