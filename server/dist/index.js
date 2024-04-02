@@ -28,5 +28,12 @@ exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 exports.app.use('/auth', auth_router_1.default);
+// If the app is in Heroku, use and serve the generated build, and route requests to index.html
+if (process.env.NODE_ENV === 'production') {
+    exports.app.use(express_1.default.static('client/build'));
+    exports.app.get('*', (req, res) => {
+        res.sendFile(path_1.default.join(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 exports.default = exports.app;
 //# sourceMappingURL=index.js.map
