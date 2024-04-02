@@ -27,7 +27,7 @@ app.use(cookieParser())
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 app.use('/auth', authRouter)
 
-// If the app is in Heroku, use and serve the generated build, and route all requests to index.html
+// If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static( 'client/build' ))
     app.get('*', (req, res) => {
