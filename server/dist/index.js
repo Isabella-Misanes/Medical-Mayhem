@@ -18,8 +18,6 @@ const auth_router_1 = __importDefault(require("./routes/auth-router"));
 // CREATE OUR SERVER
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') }); // ty DavidP on SO
 exports.app = (0, express_1.default)();
-console.log(process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com/' :
-    'http://localhost:3000/');
 // SETUP THE MIDDLEWARE
 exports.app.use(express_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cors_1.default)({
