@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "test": "npx jest --detectOpenHandles",
-    "build": "npx tsc",
-    "start": "node dist/server.js"
+    "test": "npm run build && jest --detectOpenHandles --rootDir=dist/tests",
+    "build": "tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
