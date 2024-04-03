@@ -361,6 +361,26 @@ function GlobalStoreContextProvider(props) {
         asyncGuest();
     }
 
+    store.openPrivateMessaging = function (event, id) {
+        console.log("Private messaging in store")
+    }
+
+    store.addFriend = function (event) {
+        console.log("Add friend in store");
+    }
+
+    store.promoteToLeader = function (event) {
+        console.log("Promote to leader in store");
+    }
+
+    store.removeFromParty = function (event) {
+        console.log("Remove from party in store");
+    }
+
+    store.reportPlayer = function (event) {
+        console.log("Report player in store");
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store

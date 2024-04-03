@@ -4,14 +4,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthContext from '../auth';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
-import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +22,31 @@ export default function Sidebar() {
   function handleLogout() {
     if(store.guest) store.logoutGuest();
     else auth.logoutUser();
+  }
+
+  function handlePrivateMessaging(event) {
+    store.openPrivateMessaging(event);
+    handleMenuClose();
+  }
+
+  function handleAddFriend(event) {
+    store.addFriend(event);
+    handleMenuClose();
+  }
+
+  function handlePromoteToLeader(event) {
+    store.promoteToLeader(event);
+    handleMenuClose();
+  }
+
+  function handleRemoveFromParty(event) {
+    store.removeFromParty(event);
+    handleMenuClose();
+  }
+
+  function handleReportPlayer(event) {
+    store.reportPlayer(event);
+    handleMenuClose();
   }
 
   const partyMenu = (
@@ -41,11 +64,29 @@ export default function Sidebar() {
         open={isMenuOpen}
         onClose={handleMenuClose}
     >
-        <MenuItem onClick={handleMenuClose}>Private Message</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Add Friend</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Promote to Leader</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Remove From Party</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Report Player</MenuItem>
+        <MenuItem 
+          onClick={(event) => {
+            handlePrivateMessaging(event)
+          }}>
+          Private Message
+        </MenuItem>
+        <MenuItem 
+          onClick={(event) => {
+            handleAddFriend(event)
+          }}>
+          Add Friend
+        </MenuItem>
+        <MenuItem onClick={(event) => {
+          handlePromoteToLeader(event)
+        }}>
+          Promote to Leader
+        </MenuItem>
+        <MenuItem onClick={(event) => {
+          handleRemoveFromParty(event)
+        }}>Remove From Party</MenuItem>
+        <MenuItem onClick={(event) => {
+          handleReportPlayer(event)
+        }}>Report Player</MenuItem>
     </Menu>
 );
 
