@@ -2,23 +2,46 @@ import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import { buttonStyle, modalStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
-// import GlobalStoreContext from '../store';
-import { useState } from 'react';
-// import { useContext } from 'react';
+import GlobalStoreContext from '../store';
+import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 
 export default function SocialScreen() {
     const navigate = useNavigate();
-    // const { store } = useContext(GlobalStoreContext);
+    const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [activeButton, setActiveButton] = useState(0);
+
+    function handleButtonClick(buttonId) {
+        setActiveButton(buttonId);
+    };
+
+    useEffect(() => {
+        switch(activeButton) {
+            case 0:
+                store.showFriends();
+                break;
+            case 1:
+                store.showRecentPlayers();
+                break;
+            case 2:
+                store.showSentRequests();
+                break;
+            case 3:
+                store.showReceivedRequests();
+                break;
+            default:
+                store.showFriends();
+                break;
+        }
+      }, [activeButton, store]);
 
     function handleFriendModalOpen() {
         setModalOpen(true);
-        console.log("Friend modal open");
     };
 
     function handleFriendModalClose() {
         setModalOpen(false);
-        console.log("Friend modal closed");
     };
 
     return (
@@ -82,14 +105,18 @@ export default function SocialScreen() {
                             width: 'fit-content',
                             position: 'absolute'
                         }}>
-                            <Button sx={{
-                                color: 'red'
+                            <Button 
+                                onClick={() => {handleButtonClick(0)}}
+                                sx={{
+                                    color: activeButton === 0 ? 'red' : 'black'
                             }}>
                                 Friends
                             </Button>
                             /
-                            <Button sx={{
-                                color: 'black'
+                            <Button 
+                                onClick={() => {handleButtonClick(1)}}
+                                sx={{
+                                    color: activeButton === 1 ? 'red' : 'black'
                             }}>
                                 Recent Players
                             </Button>
@@ -107,14 +134,18 @@ export default function SocialScreen() {
                             position: 'absolute',
                             fontSize: '12px',
                         }}>
-                            <Button sx={{
-                                color: 'red'
+                            <Button 
+                                onClick={() => {handleButtonClick(2)}}
+                                sx={{
+                                    color: activeButton === 2 ? 'red' : 'black'
                             }}>
                                 Sent
                             </Button>
                             /
-                            <Button sx={{
-                                color: 'black'
+                            <Button 
+                                onClick={() => {handleButtonClick(3)}}
+                                sx={{
+                                    color: activeButton === 3 ? 'red' : 'black'
                             }}>
                                 Received
                             </Button>
