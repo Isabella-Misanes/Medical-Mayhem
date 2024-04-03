@@ -49,6 +49,7 @@ jobs:
           npm test
           cd ..
           cd client
+          npm install
           npx cypress run
 
   # Deploy to Heroku
