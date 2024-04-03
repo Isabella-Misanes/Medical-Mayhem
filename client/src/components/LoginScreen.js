@@ -1,7 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -42,7 +41,17 @@ export default function RegisterScreen() {
    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Box sx={{
+                height: '90%',
+                width: '100%',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                position: 'absolute',
+                textAlign: 'center',
+                top: '5%',
+                p: 2,
+                boxShadow: 10
+            }}>
                 <CssBaseline />
                 <Box
                     sx={{
@@ -112,6 +121,6 @@ export default function RegisterScreen() {
                     onClick={()=>{navigate("/")}}>
                     Back
                 </Button>
-            </Container>
+            </Box>
     );
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
@@ -10,11 +10,11 @@ export default function AboutScreen() {
             <Sidebar/>
             <Box sx={{
                 height: '90%',
-                width: '50%',
+                width: '45%',
                 flexDirection: 'column',
                 backgroundColor: '#fffbc3',
                 position: 'absolute',
-                left: '25%',
+                left: '27.5%',
                 top: '3%',
                 textAlign: 'center',
                 p: 2,
@@ -34,7 +34,8 @@ export default function AboutScreen() {
                     boxShadow: 10
                 }}>
                 <Typography variant="h4" gutterBottom>About Screen</Typography>
-                Medical Mayhem is a top down 2-D multiplayer game created by:
+                <Divider />
+                <p>Medical Mayhem is a top down 2-D multiplayer game created by:</p>
                 <p>
                     Thomas Aloi<br/>
                     Torin McNally<br/>
