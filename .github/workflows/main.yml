@@ -47,6 +47,9 @@ jobs:
           cd server
           npm install
           npm test
+          cd ..
+          cd client
+          npx cypress run
 
   # Deploy to Heroku
   deploy:
