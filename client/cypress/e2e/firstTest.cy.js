@@ -115,5 +115,4 @@ describe('template spec', () => {
 
     cy.url().should('eq', 'https://medical-mayhem-c0832c3f548e.herokuapp.com/leaderboard')
   })
-  
 })
