@@ -12,45 +12,29 @@ export default function SocialScreen() {
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
 
-    useEffect(() => {
-        switch(activeButton) {
-            case 0:
-                handleFriends();
-                break;
-            case 1:
-                handleRecentPlayers();
-                break;
-            case 2:
-                handleSentRequests();
-                break;
-            case 3:
-                handleReceivedRequests();
-                break;
-            default:
-                handleFriends();
-                break;
-        }
-      }, [activeButton]);
-
     function handleButtonClick(buttonId) {
         setActiveButton(buttonId);
     };
 
-    function handleFriends() {
-        store.showFriends();
-    }
-
-    function handleRecentPlayers() {
-        store.showRecentPlayers();
-    }
-
-    function handleSentRequests() {
-        store.showSentRequests();
-    }
-
-    function handleReceivedRequests() {
-        store.showReceivedRequests();
-    }
+    useEffect(() => {
+        switch(activeButton) {
+            case 0:
+                store.showFriends();
+                break;
+            case 1:
+                store.showRecentPlayers();
+                break;
+            case 2:
+                store.showSentRequests();
+                break;
+            case 3:
+                store.showReceivedRequests();
+                break;
+            default:
+                store.showFriends();
+                break;
+        }
+      }, [activeButton, store]);
 
     function handleFriendModalOpen() {
         setModalOpen(true);
