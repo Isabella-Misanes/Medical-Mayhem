@@ -116,6 +116,54 @@ export default function Sidebar() {
       >
           <AccountCircleIcon/>
       </IconButton>
+
+      <IconButton
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          aria-haspopup="true"
+          onClick={handleProfileMenuOpen}
+          sx={{
+            position: 'absolute',
+            right: '22.5px',
+            marginTop: '60px',
+            color: 'white'
+          }}
+      >
+          <AccountCircleIcon/>
+      </IconButton>
+
+      <IconButton
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          aria-haspopup="true"
+          onClick={handleProfileMenuOpen}
+          sx={{
+            position: 'absolute',
+            right: '22.5px',
+            marginTop: '110px',
+            color: 'white'
+          }}
+      >
+          <AccountCircleIcon/>
+      </IconButton>
+
+      <IconButton
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          aria-haspopup="true"
+          onClick={handleProfileMenuOpen}
+          sx={{
+            position: 'absolute',
+            right: '22.5px',
+            marginTop: '160px',
+            color: 'white'
+          }}
+      >
+          <AccountCircleIcon/>
+      </IconButton>
       
       <IconButton onClick={()=>{handleLogout()}} sx={{
         position: 'fixed',
