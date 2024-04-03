@@ -381,6 +381,24 @@ function GlobalStoreContextProvider(props) {
         console.log("Report player in store");
     }
 
+    // Social Screen
+
+    store.showFriends = function () {
+        console.log("Show friends in store");
+    }
+
+    store.showRecentPlayers = function () {
+        console.log("Show recent players in store");
+    }
+
+    store.showSentRequests = function() {
+        console.log("Show friend requests SENT in store.");
+    }
+
+    store.showReceivedRequests = function () {
+        console.log("Show friends requests RECEIVED in store");
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store
