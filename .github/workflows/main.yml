@@ -13,6 +13,7 @@ jobs:
 
       - name: Install client and server dependencies
         run: |
+          rm -rf server/node_modules
           cd client
           npm install
           cd ../server
