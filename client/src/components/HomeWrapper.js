@@ -9,8 +9,5 @@ export default function HomeWrapper() {
     const { store } = useContext(GlobalStoreContext);
     console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
 
-    if (auth.loggedIn || store.guest)
-        return <HomeScreen />
-    else
-        return <WelcomeScreen />
+    return (auth.loggedIn || store.guest) ? <HomeScreen /> : <WelcomeScreen />;
 }

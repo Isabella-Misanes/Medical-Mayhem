@@ -2,6 +2,7 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
 
 export default function ForumScreen() {
     const navigate = useNavigate();
@@ -23,28 +24,18 @@ export default function ForumScreen() {
                 <Grid container spacing={4}>
                     <Grid item xs={5}>
                         <Button variant="contained"
-                            sx={[buttonStyle, {
-                                left: '2%'
-                            }]}
+                            sx={[buttonStyle, { left: '2%' }]}
                             onClick={()=>{navigate("/newthread")}}>
                             Start New Thread
                         </Button>
                     </Grid>
-                    <Grid item xs={2}/>
+                    <Grid item xs={2} />
                     <Grid item xs={5}>
-                        <TextField label="Search" size="small"></TextField>
+                        <TextField label="Search" size="small" />
                     </Grid>
                 </Grid>
             </Box>
-            <Button variant="contained"
-                sx={[buttonStyle, {
-                    left: '2%',
-                    bottom: '2%',
-                    position: 'absolute'
-                }]}
-                onClick={()=>{navigate("/")}}>
-                Back
-            </Button>
+            <BackButton />
         </div>
     );
 }
