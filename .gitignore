@@ -13,7 +13,7 @@ client/cypress/screenshots
 
 # production
 /build
-dist/
+/dist
 
 # misc
 .DS_Store
