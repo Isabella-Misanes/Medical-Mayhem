@@ -1,9 +1,13 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
+import { buttonStyle } from '../App';
+import InviteModal from './InviteModal';
+import { useState } from 'react';
 
 export default function HomeScreen() {
     const navigate = useNavigate();
+    const [showInviteModal, setShowInviteModal] = useState(false);
 
     const homeButtons = {
         color: 'black',
@@ -11,12 +15,17 @@ export default function HomeScreen() {
         ":hover": {
             bgcolor: '#e5e5e5'},
     }
+    
+    const handleInviteButtonClick = () => {
+        setShowInviteModal(true);
+    }
+
     return (
         <div id="home-screen">
             <Sidebar />
             <Box
                 sx={{
-                    height: '95%',
+                    height: '90%',
                     minWidth: '350px',
                     width: '40%',
                     display: 'flex',
@@ -26,7 +35,7 @@ export default function HomeScreen() {
                     backgroundColor: 'white',
                     position: 'absolute',
                     left: '5%',
-                    top: '5%',
+                    top: '7.5%',
                     boxShadow: '10'
                 }}>
                 <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
@@ -35,7 +44,8 @@ export default function HomeScreen() {
                     <Grid item xs={12} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={[homeButtons, {
+                        <Button id = "play-button" 
+                        sx={[homeButtons, {
                             fontSize: '24pt',
                             marginLeft: '-10%',
                         }]}
@@ -46,13 +56,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "map-search-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/mapsearch")}}>
                             Map Search
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "map-builder-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/mapbuilder")}}>
                             Map Builder
                         </Button>
@@ -60,13 +72,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center'
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "social-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/social")}}>
                             Social
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "forums-button"  
+                        sx={homeButtons}
                             onClick={()=>{navigate("/forum")}}>
                             Forums
                         </Button>
@@ -74,13 +88,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "profile-button"   
+                        sx={homeButtons}
                             onClick={()=>{navigate("/profile")}}>
                             Profile
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "settings-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/settings")}}>
                             Settings
                         </Button>
@@ -88,19 +104,33 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "about-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/about")}}>
                             About
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "leaderboard-button"
+                        sx={homeButtons}
                             onClick={()=>{navigate("/leaderboard")}}>
                             Leaderboard
                         </Button>
                     </Grid>
+                    <Grid item xs={6}>
+                        <Button onClick={handleInviteButtonClick} 
+                            sx={[buttonStyle, {
+                                color: 'white',
+                                width: '25%',
+                        }]}>
+                            Invite
+                        </Button>
+                    </Grid>
                 </Grid>
             </Box>
+            
+            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
+
         </div>
     )
 }

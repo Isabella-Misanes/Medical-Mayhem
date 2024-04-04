@@ -1,21 +1,12 @@
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
-import { buttonStyle } from '../App';
-import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
 
 export default function RegisterScreen() {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         username: '',
@@ -79,9 +70,7 @@ export default function RegisterScreen() {
                                     name="username"
                                     autoComplete="username"
                                     onChange={handleChange} 
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -93,9 +82,7 @@ export default function RegisterScreen() {
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -108,9 +95,7 @@ export default function RegisterScreen() {
                                     id="password"
                                     autoComplete="new-password"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -123,9 +108,7 @@ export default function RegisterScreen() {
                                     id="passwordVerify"
                                     autoComplete="new-password"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                         </Grid>
@@ -148,15 +131,7 @@ export default function RegisterScreen() {
                     </Box>
                     {modal}
                 </Box>
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        left: '2%',
-                        bottom: '2%',
-                        position: 'absolute'
-                    }]}
-                    onClick={()=>{navigate("/")}}>
-                    Back
-                </Button>
+                <BackButton />
             </Box>
     );
 }

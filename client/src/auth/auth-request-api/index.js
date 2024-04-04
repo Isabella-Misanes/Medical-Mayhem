@@ -5,6 +5,9 @@ axios.defaults.withCredentials = true;
 // CHANGE URL AS NEEDED BETWEEN TESTING AND DEVELOPMENT
 // TODO: Find a way to make this change between local host and Heroku 
 const api = axios.create({
+    // Uncomment one, comment out the other as needed
+    
+    // baseURL: 'http://localhost:3000/auth'
     baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/auth'
 })
 

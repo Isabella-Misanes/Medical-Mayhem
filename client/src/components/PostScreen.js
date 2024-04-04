@@ -1,9 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
-import * as Constants from '../constants'
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 export default function PostScreen({setCurrScreen}) {
+    const navigate = useNavigate();
     return (
         <div id="post-screen">
             <Sidebar/>
@@ -27,7 +28,7 @@ export default function PostScreen({setCurrScreen}) {
                     bottom: '2%',
                     position: 'absolute'
                 }]}
-                onClick={()=>{setCurrScreen(Constants.FORUM_SCREEN)}}>
+                onClick={()=>{navigate('/forum')}}>
                 Back
             </Button>
         </div>

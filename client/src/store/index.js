@@ -2,10 +2,6 @@ import { createContext, useContext, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
 // import api from './store-request-api'
-// import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
-// import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
-// import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
-// import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
 import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -361,6 +357,23 @@ function GlobalStoreContextProvider(props) {
         asyncGuest();
     }
 
+    // HomeScreen
+    store.acceptInvite = function (event) {
+        console.log("Invite ACCEPTED in store.");
+    }
+
+    store.rejectInvite = function (event) {
+        console.log("Invite REJECTED in store.");
+    }
+
+    // Profile Screen
+
+    store.submitProfileEdits = function (event) {
+        console.log("In submit profile edits in store.");
+    }
+
+    // Sidebar
+
     store.openPrivateMessaging = function (event, id) {
         console.log("Private messaging in store")
     }
@@ -379,6 +392,30 @@ function GlobalStoreContextProvider(props) {
 
     store.reportPlayer = function (event) {
         console.log("Report player in store");
+    }
+
+    // Social Screen
+
+    store.showFriends = function () {
+        console.log("Show friends in store");
+    }
+
+    store.showRecentPlayers = function () {
+        console.log("Show recent players in store");
+    }
+
+    store.showSentRequests = function() {
+        console.log("Show friend requests SENT in store.");
+    }
+
+    store.showReceivedRequests = function () {
+        console.log("Show friends requests RECEIVED in store");
+    }
+
+    // Report Modal
+
+    store.submitReport = function(event) {
+        console.log("Submit report in store.");
     }
 
     return (
