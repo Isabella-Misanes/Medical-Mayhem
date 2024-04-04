@@ -33,15 +33,9 @@ export default function SocialScreen() {
                 store.showFriends();
                 break;
         }
-      }, [activeButton, store]);
+    }, [activeButton, store]);
 
-    function handleFriendModalOpen() {
-        setModalOpen(true);
-    };
-
-    function handleFriendModalClose() {
-        setModalOpen(false);
-    };
+    function handleFriendModal(open) { setModalOpen(open); }
 
     return (
         <div id="social-screen">
@@ -56,7 +50,7 @@ export default function SocialScreen() {
                 left: '2.5%',
                 p: 2,
                 boxShadow: 10
-            }}></Box>
+            }} />
             <Box
                 sx={{
                     height: '80%',
@@ -81,13 +75,11 @@ export default function SocialScreen() {
                     }}>
                         <Typography variant="h4" gutterBottom>Social</Typography>
                     </Grid>
-                    <Grid item xs={2} sx={{
-                        mt: 2
-                    }}>
+                    <Grid item xs={2} sx={{mt: 2}}>
                         <Button 
                             variant='contained' 
                             sx={buttonStyle}
-                            onClick={handleFriendModalOpen}
+                            onClick={() => {handleFriendModal(true)}}
                         >
                             Add Friend
                         </Button>
@@ -167,7 +159,7 @@ export default function SocialScreen() {
 
             <Modal
                 open={isModalOpen}
-                onClose={handleFriendModalClose}
+                onClose={() => {handleFriendModal(false)}}
             >
                 <Box sx={modalStyle}>
                     Friend list

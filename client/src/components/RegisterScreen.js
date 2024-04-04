@@ -70,9 +70,7 @@ export default function RegisterScreen() {
                                     name="username"
                                     autoComplete="username"
                                     onChange={handleChange} 
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -84,9 +82,7 @@ export default function RegisterScreen() {
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -99,9 +95,7 @@ export default function RegisterScreen() {
                                     id="password"
                                     autoComplete="new-password"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -114,9 +108,7 @@ export default function RegisterScreen() {
                                     id="passwordVerify"
                                     autoComplete="new-password"
                                     onChange={handleChange}
-                                    sx={{
-                                        width: '50%'
-                                    }}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                         </Grid>

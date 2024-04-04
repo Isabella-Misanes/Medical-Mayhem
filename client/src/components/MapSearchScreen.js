@@ -16,7 +16,8 @@ export default function MapSearchScreen() {
                     backgroundColor: 'white',
                     position: 'absolute',
                     left: '25%'
-                }}>
+                }}
+            >
                 <Typography variant="h2" gutterBottom>Medical Mayhem</Typography>
                 <Typography variant="h4" gutterBottom>Map Search Screen</Typography>
             </Box>

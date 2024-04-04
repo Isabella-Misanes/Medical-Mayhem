@@ -29,9 +29,9 @@ export default function ForumScreen() {
                             Start New Thread
                         </Button>
                     </Grid>
-                    <Grid item xs={2}/>
+                    <Grid item xs={2} />
                     <Grid item xs={5}>
-                        <TextField label="Search" size="small"></TextField>
+                        <TextField label="Search" size="small" />
                     </Grid>
                 </Grid>
             </Box>
