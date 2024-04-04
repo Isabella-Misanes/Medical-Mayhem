@@ -23,6 +23,8 @@ import ReportsScreen from "./ReportsScreen";
 
 import GameScreen from "./GameScreen";
 
+import BackButton from "./BackButton";
+
 export {
     Sidebar,
     WelcomeScreen,
@@ -47,4 +49,6 @@ export {
     ReportsScreen,
 
     GameScreen,
+
+    BackButton,
 }
