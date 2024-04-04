@@ -15,6 +15,7 @@ import MapSearchScreen from "./MapSearchScreen";
 import MapBuilderScreen from "./MapBuilderScreen";
 import ReportsScreen from "./ReportsScreen";
 import GameScreen from "./GameScreen";
+import BackButton from "./BackButton";
 
 export {
     Sidebar,
@@ -33,5 +34,6 @@ export {
     MapSearchScreen,
     MapBuilderScreen,
     ReportsScreen,
-    GameScreen
+    GameScreen,
+    BackButton
 }

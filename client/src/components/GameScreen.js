@@ -1,10 +1,8 @@
 import { Typography } from '@mui/material';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
 
 export default function GameScreen() {
-    const navigate = useNavigate();
     return (
         <div id="about-screen">
             <Sidebar/>
