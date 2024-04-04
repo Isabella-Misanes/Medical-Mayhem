@@ -25,6 +25,7 @@ import GameScreen from "./GameScreen";
 
 import BackButton from "./BackButton";
 import InviteModal from "./InviteModal";
+import ReportModal from "./ReportModal";
 
 export {
     Sidebar,
@@ -47,6 +48,7 @@ export {
     MapSearchScreen,
     MapBuilderScreen,
 
+    ReportModal,
     ReportsScreen,
 
     GameScreen,
