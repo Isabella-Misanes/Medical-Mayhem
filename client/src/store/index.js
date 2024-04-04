@@ -412,6 +412,12 @@ function GlobalStoreContextProvider(props) {
         console.log("Show friends requests RECEIVED in store");
     }
 
+    // Report Modal
+
+    store.submitReport = function(event) {
+        console.log("Submit report in store.");
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store
