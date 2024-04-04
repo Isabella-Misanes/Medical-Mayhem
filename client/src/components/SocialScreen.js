@@ -1,5 +1,5 @@
-import { Box, Button, Grid, Modal, Typography } from '@mui/material';
-import { buttonStyle, modalStyle } from '../App';
+import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material';
+import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import GlobalStoreContext from '../store';
@@ -174,16 +174,37 @@ export default function SocialScreen() {
                     onClick={()=>{navigate("/")}}>
                     Back
                 </Button>
-            </Box>
 
-            <Modal
-                open={isModalOpen}
-                onClose={handleFriendModalClose}
-            >
-                <Box sx={modalStyle}>
-                    Friend list
-                </Box>
-            </Modal>
+                <Modal
+                    open={isModalOpen}
+                    onClose={handleFriendModalClose}
+                >
+                    <Box sx={{
+                        width: '30%',
+                        height: '60%',
+                        bgcolor: '#2d7044',
+                        border: 1,
+                        borderColor: 'white',
+                        top: '20%',
+                        left: '30%',
+                        position: 'absolute',
+                        boxShadow: 5,
+                        textAlign: 'center',
+                    }}>
+                        <h1>Friend List</h1>
+                        <Divider />
+                        <Box sx={{
+                            bgcolor: '#e3e3e3',
+                            width: '90%',
+                            height: '70%',
+                            ml: '5%',
+                            mt: '5%',
+                        }}>
+                            Put friend cards here
+                        </Box>
+                    </Box>
+                </Modal>
+            </Box>
 
             <Sidebar/>
         </div>

@@ -16,7 +16,7 @@ export default function HomeScreen() {
             <Sidebar />
             <Box
                 sx={{
-                    height: '95%',
+                    height: '90%',
                     minWidth: '350px',
                     width: '40%',
                     display: 'flex',
@@ -26,7 +26,7 @@ export default function HomeScreen() {
                     backgroundColor: 'white',
                     position: 'absolute',
                     left: '5%',
-                    top: '5%',
+                    top: '7.5%',
                     boxShadow: '10'
                 }}>
                 <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
