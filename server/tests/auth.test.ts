@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import path from 'path'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
+
+dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
 
 let mongoServer: MongoMemoryServer; 
 
