@@ -1,9 +1,15 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
+import { buttonStyle } from '../App';
+import { useState } from 'react';
+import { useContext } from 'react';
+import GlobalStoreContext from '../store';
 
 export default function HomeScreen() {
     const navigate = useNavigate();
+    const { store } = useContext(GlobalStoreContext);
+    const [isModalOpen, setModalOpen] = useState(false);
 
     const homeButtons = {
         color: 'black',
@@ -11,6 +17,25 @@ export default function HomeScreen() {
         ":hover": {
             bgcolor: '#e5e5e5'},
     }
+
+    function handleInviteModalOpen() {
+        setModalOpen(true);
+    };
+
+    function handleInviteModalClose() {
+        setModalOpen(false);
+    };
+
+    function handleAcceptInvite(event) {
+        store.acceptInvite(event);
+        handleInviteModalClose();
+    }
+
+    function handleRejectInvite(event) {
+        store.rejectInvite(event);
+        handleInviteModalClose();
+    }
+
     return (
         <div id="home-screen">
             <Sidebar />
@@ -99,7 +124,64 @@ export default function HomeScreen() {
                             Leaderboard
                         </Button>
                     </Grid>
+                    <Grid item xs={6}>
+                        <Button onClick={handleInviteModalOpen} 
+                            sx={[buttonStyle, {
+                                color: 'white',
+                                width: '25%',
+                        }]}>
+                            Invite
+                        </Button>
+                    </Grid>
                 </Grid>
+
+                <Modal
+                    open={isModalOpen}
+                    onClose={handleInviteModalClose}
+                >
+                    <Box sx={{
+                        width: '30%',
+                        height: '40%',
+                        bgcolor: '#4D9147',
+                        top: '20%',
+                        left: '30%',
+                        position: 'absolute',
+                        boxShadow: 10,
+                        textAlign: 'center',
+                        borderRadius: '16px',
+                        color: 'white'
+                    }}>
+                        <h1>Game Invitation</h1>
+                        <Divider />
+                        <Box sx={{
+                            bgcolor: '#e3e3e3',
+                            width: '100%',
+                            height: '60%',
+                            alignContent: 'center',
+                            textAlign: 'center',
+                            color: 'black'
+                        }}>
+                            <p><strong>McKillaGorilla</strong> has invited you to their party.</p>
+                            <Grid container spacing={0}>
+                                <Grid item xs={6}>
+                                    <Button sx={[buttonStyle, {color: 'white'}]}
+                                        onClick={(event) => {handleAcceptInvite(event)}}>
+                                        Accept
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button sx={{
+                                        bgcolor: 'red',
+                                        color: 'white'
+                                    }}
+                                        onClick={(event) => {handleRejectInvite(event)}}>
+                                        Reject
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Box>
+                </Modal>
             </Box>
         </div>
     )
