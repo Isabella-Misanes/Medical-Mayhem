@@ -60,7 +60,8 @@ export default function HomeScreen() {
                     <Grid item xs={12} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={[homeButtons, {
+                        <Button id = "play-button" 
+                        sx={[homeButtons, {
                             fontSize: '24pt',
                             marginLeft: '-10%',
                         }]}
@@ -71,13 +72,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "map-search-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/mapsearch")}}>
                             Map Search
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "map-builder-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/mapbuilder")}}>
                             Map Builder
                         </Button>
@@ -85,13 +88,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center'
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "social-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/social")}}>
                             Social
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "forums-button"  
+                        sx={homeButtons}
                             onClick={()=>{navigate("/forum")}}>
                             Forums
                         </Button>
@@ -99,13 +104,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "profile-button"   
+                        sx={homeButtons}
                             onClick={()=>{navigate("/profile")}}>
                             Profile
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "settings-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/settings")}}>
                             Settings
                         </Button>
@@ -113,13 +120,15 @@ export default function HomeScreen() {
                     <Grid item xs={6} sx={{
                         textAlign: 'center',
                     }}>
-                        <Button sx={homeButtons}
+                        <Button id = "about-button" 
+                        sx={homeButtons}
                             onClick={()=>{navigate("/about")}}>
                             About
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button sx={homeButtons}
+                        <Button id = "leaderboard-button"
+                        sx={homeButtons}
                             onClick={()=>{navigate("/leaderboard")}}>
                             Leaderboard
                         </Button>

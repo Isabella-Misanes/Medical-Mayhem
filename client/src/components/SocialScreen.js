@@ -1,13 +1,12 @@
 import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
+import BackButton from './BackButton';
 
 export default function SocialScreen() {
-    const navigate = useNavigate();
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
@@ -136,17 +135,15 @@ export default function SocialScreen() {
                         }}>
                             <Button 
                                 onClick={() => {handleButtonClick(2)}}
-                                sx={{
-                                    color: activeButton === 2 ? 'red' : 'black'
-                            }}>
+                                sx={{ color: activeButton === 2 ? 'red' : 'black' }}
+                            >
                                 Sent
                             </Button>
                             /
                             <Button 
                                 onClick={() => {handleButtonClick(3)}}
-                                sx={{
-                                    color: activeButton === 3 ? 'red' : 'black'
-                            }}>
+                                sx={{ color: activeButton === 3 ? 'red' : 'black' }}
+                            >
                                 Received
                             </Button>
                         </Box>
@@ -165,15 +162,7 @@ export default function SocialScreen() {
                     <h1>No Friends</h1>
                 </Box>
                 
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        left: '2%',
-                        bottom: '2%',
-                        position: 'absolute'
-                    }]}
-                    onClick={()=>{navigate("/")}}>
-                    Back
-                </Button>
+                <BackButton />
 
                 <Modal
                     open={isModalOpen}
@@ -206,7 +195,7 @@ export default function SocialScreen() {
                 </Modal>
             </Box>
 
-            <Sidebar/>
+            <Sidebar />
         </div>
     );
 }

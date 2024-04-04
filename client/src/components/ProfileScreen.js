@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
+import BackButton from './BackButton';
 
 export default function ProfileScreen() {
     const navigate = useNavigate();
@@ -280,6 +281,7 @@ export default function ProfileScreen() {
                 onClick={()=>{navigate("/")}}>
                 Back
             </Button>
+            <BackButton />
         </div>
     );
 }

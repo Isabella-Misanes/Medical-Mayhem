@@ -18,7 +18,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongodb_memory_server_1 = require("mongodb-memory-server");
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') }); // ty DavidP on SO
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env') }); // ty DavidP on SO
 let mongoServer;
 // Create test database to store dummy data
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
