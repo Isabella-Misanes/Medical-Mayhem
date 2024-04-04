@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, TextField } from '@mui/material';
+import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +17,15 @@ export default function ProfileScreen() {
         setShowProfileScreen(!showProfileScreen);
     };
 
-    function handleEditProfile() {
+    function handleEditProfile(event) {
+        if(editEnabled) {
+            handleSubmitProfileEdits(event);
+        }
         setEditEnabled(!editEnabled);
-        console.log("Editing profile");
+    }
+
+    function handleSubmitProfileEdits(event) {
+        store.submitProfileEdits(event);
     }
 
     const profileScreen = (
@@ -65,7 +71,7 @@ export default function ProfileScreen() {
                                 <CardMedia
                                     sx={{ height: 140 }}
                                     image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
-                                    title="green iguana"
+                                    title="tbh"
                                 />
                             </Box>
                         </Grid>
@@ -110,7 +116,7 @@ export default function ProfileScreen() {
                         <Grid item xs={12} sx={{
                             bgcolor: '#4D9147',
                         }}>
-                            <IconButton onClick={handleEditProfile} 
+                            <IconButton onClick={(event) => {handleEditProfile(event)}} 
                                 sx={{
                                     color: editEnabled ? 'red' : 'white'
                             }}>
@@ -133,6 +139,7 @@ export default function ProfileScreen() {
             textAlign: 'center',
             borderRadius: '16px',
             color: 'white', 
+            width: '53%'
         }}>
             <CardActionArea 
                 onClick={handleToggleScreen}>
@@ -144,7 +151,7 @@ export default function ProfileScreen() {
                     color: 'black',
                 }}>
                     <Grid container spacing={4} sx={{
-                        textAlign: 'left'
+                        textAlign: 'center'
                     }}>
                         <Grid item xs={12} sx={{
                             bgcolor: '#4D9147',
@@ -153,25 +160,106 @@ export default function ProfileScreen() {
                         }}>
                             <h1>Mayhem Hospital</h1>
                         </Grid>
-                        <Grid item xs={1}/>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <Box sx={{
                                 width: '140px',
                                 height: '140px',
-                                border: 2,
-                                borderColor: 'black',
                                 ml: 2
                             }}>
-                                
+                                <CardMedia
+                                    sx={{ height: 140 }}
+                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    title="medal1"
+                                />
+                            </Box>
+                            
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Box sx={{
+                                width: '140px',
+                                height: '140px',
+                                ml: 2
+                            }}>
+                                <CardMedia
+                                    sx={{ height: 140 }}
+                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    title="medal2"
+                                />
                             </Box>
                         </Grid>
-                        <Grid item xs={6} sx={{
-                            fontSize: '12pt'
-                        }}>
+                        <Grid item xs={3}>
+                            <Box sx={{
+                                width: '140px',
+                                height: '140px',
+                                ml: 2
+                            }}>
+                                <CardMedia
+                                    sx={{ height: 140 }}
+                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    title="medal3"
+                                />
+                            </Box>
                         </Grid>
-                        <Grid item xs={1}/>
-                        <Grid item xs={12}>
-
+                        <Grid item xs={3}>
+                            <Box sx={{
+                                width: '140px',
+                                height: '140px',
+                                ml: 2
+                            }}>
+                                <CardMedia
+                                    sx={{ height: 140 }}
+                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    title="medal4"
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={3} sx={{
+                        }}>
+                            <Box sx={{ width: '80%', ml: '10%'}}>
+                                <LinearProgress variant="determinate" value={32} />
+                            </Box>
+                            <p>
+                                Win/Loss Ratio<br/>
+                                20-9<br/>
+                                Patients Saved<br/>
+                                182
+                            </p>
+                        </Grid>
+                        <Grid item xs={3} sx={{
+                        }}>
+                            <Box sx={{ width: '80%', ml: '10%'}}>
+                                <LinearProgress variant="determinate" value={50} />
+                            </Box>
+                            <p>
+                                Minigames Completed per Game<br/>
+                                109<br/>
+                                Patient Deaths<br/>
+                                36
+                            </p>
+                        </Grid>
+                        <Grid item xs={3} sx={{
+                        }}>
+                            <Box sx={{ width: '80%', ml: '10%'}}>
+                                <LinearProgress variant="determinate" value={20} />
+                            </Box>
+                            <p>
+                                Time Played<br/>
+                                9h 50m 2s<br/>
+                                Favorite Fellow Doctor<br/>
+                                JareBear
+                            </p>
+                        </Grid>
+                        <Grid item xs={3} sx={{
+                        }}>
+                            <Box sx={{ width: '80%', ml: '10%'}}>
+                                <LinearProgress variant="determinate" value={100} />
+                            </Box>
+                            <p>
+                                Longest Win Streak<br/>
+                                3<br/>
+                                Most Played Map<br/>
+                                Healing Havoc
+                            </p>
                         </Grid>
                     </Grid>   
                 </Box>

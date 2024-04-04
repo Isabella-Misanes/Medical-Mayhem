@@ -370,6 +370,12 @@ function GlobalStoreContextProvider(props) {
         console.log("Invite REJECTED in store.");
     }
 
+    // Profile Screen
+
+    store.submitProfileEdits = function (event) {
+        console.log("In submit profile edits in store.");
+    }
+
     // Sidebar
 
     store.openPrivateMessaging = function (event, id) {
