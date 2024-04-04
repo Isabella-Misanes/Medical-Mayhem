@@ -10,6 +10,7 @@ export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
+    const numFriends = useState(0);
 
     function handleButtonClick(buttonId) {
         setActiveButton(buttonId);
@@ -37,6 +38,17 @@ export default function SocialScreen() {
 
     function handleFriendModalOpen() { setModalOpen(true); }
     function handleFriendModalClose() { setModalOpen(false); }
+
+    const renderButton = (buttonNum, str) => {
+        return (
+            <Button 
+                onClick={() => {handleButtonClick(buttonNum)}}
+                sx={{color: activeButton === buttonNum ? 'red' : 'black'}}
+            >
+                {str}
+            </Button>
+        )
+    };
 
     return (
         <div id="social-screen">
@@ -97,21 +109,9 @@ export default function SocialScreen() {
                             width: 'fit-content',
                             position: 'absolute'
                         }}>
-                            <Button 
-                                onClick={() => {handleButtonClick(0)}}
-                                sx={{
-                                    color: activeButton === 0 ? 'red' : 'black'
-                            }}>
-                                Friends
-                            </Button>
+                            {renderButton(0, "Friends")}
                             /
-                            <Button 
-                                onClick={() => {handleButtonClick(1)}}
-                                sx={{
-                                    color: activeButton === 1 ? 'red' : 'black'
-                            }}>
-                                Recent Players
-                            </Button>
+                            {renderButton(1, "Recent Players")}
                         </Box>
                         
                         <br />
@@ -126,19 +126,9 @@ export default function SocialScreen() {
                             position: 'absolute',
                             fontSize: '12px',
                         }}>
-                            <Button 
-                                onClick={() => {handleButtonClick(2)}}
-                                sx={{ color: activeButton === 2 ? 'red' : 'black' }}
-                            >
-                                Sent
-                            </Button>
+                            {renderButton(2, "Sent")}
                             /
-                            <Button 
-                                onClick={() => {handleButtonClick(3)}}
-                                sx={{ color: activeButton === 3 ? 'red' : 'black' }}
-                            >
-                                Received
-                            </Button>
+                            {renderButton(3, "Received")}
                         </Box>
                     </Grid>
                 </Grid>
@@ -187,7 +177,6 @@ export default function SocialScreen() {
                     </Box>
                 </Modal>
             </Box>
-
             <Sidebar />
         </div>
     );
