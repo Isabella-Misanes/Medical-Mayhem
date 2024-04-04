@@ -361,6 +361,23 @@ function GlobalStoreContextProvider(props) {
         asyncGuest();
     }
 
+    // HomeScreen
+    store.acceptInvite = function (event) {
+        console.log("Invite ACCEPTED in store.");
+    }
+
+    store.rejectInvite = function (event) {
+        console.log("Invite REJECTED in store.");
+    }
+
+    // Profile Screen
+
+    store.submitProfileEdits = function (event) {
+        console.log("In submit profile edits in store.");
+    }
+
+    // Sidebar
+
     store.openPrivateMessaging = function (event, id) {
         console.log("Private messaging in store")
     }
