@@ -10,12 +10,17 @@ export default function SocialCard(props) {
             position: 'absolute',
             top: props.top,
             left: props.left,
-            boxShadow: 5
+            boxShadow: 5,
+            cursor: 'pointer'
         }}>
-            <Avatar sx={{ width: 130, height: 130, margin: 'auto', marginTop: '5px' }} />
-            <Grid>
-                <CircleIcon style={{color: 'lime'}} />
-                <h1 style={{marginLeft: '15px'}}>Friend</h1>
+            <Avatar sx={{ width: 150, height: 150, margin: 'auto', marginTop: '5px' }} />
+            <Grid container direction="row" alignItems="center">
+                <Grid item>
+                    <CircleIcon sx={{color: 'lime', marginLeft:'10px'}} />
+                </Grid>
+                <Grid item>
+                    <h2 style={{marginLeft: '10px'}}>Friend</h2>
+                </Grid>
             </Grid>
         </Box>
     );
