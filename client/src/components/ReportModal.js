@@ -11,6 +11,10 @@ export default function ReportModal({open, onClose}) {
         onClose();
     }
 
+    function handleCancelReport() {
+        onClose();
+    }
+
     return (
         <Modal
             open={open}
@@ -42,7 +46,7 @@ export default function ReportModal({open, onClose}) {
                     <Grid container spacing={0}>
                         <Grid item xs={6}>
                             <Button sx={[buttonStyle, {color: 'white'}]}
-                                onClick={onClose()}>
+                                onClick={() => {handleCancelReport()}}>
                                 X
                             </Button>
                         </Grid>
