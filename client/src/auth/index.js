@@ -21,40 +21,12 @@ function AuthContextProvider(props) {
     });
     const navigate = useNavigate();
 
-    const getLoggedIn = async function () {
-        try {
-            const response = await api.getLoggedIn();
-            console.log("getLoggedIn response: " + response.status)
-            console.log(response)
-            if (response.status === 200 && !auth.loggedIn) {
-                authReducer({
-                    type: AuthActionType.GET_LOGGED_IN,
-                    payload: {
-                        loggedIn: response.data.loggedIn,
-                        user: response.data.user
-                    }
-                });
-            }
-        } catch(error) {
-            console.log("LOGGING OUT USER...INVALID TOKEN")
-            
-            // Log the user out if the token or user no longer exists
-            // if not already
-            if (auth.loggedIn)
-                authReducer( {
-                    type: AuthActionType.LOGOUT_USER,
-                    payload: null
-                })
-
-            // Take them back to the welcome screen
-            navigate("/");
-        }
-    }
-
     // TODO: THIS SHOULD RUN WITH EVERY PAGE CHANGE TO VERIFY THAT THE USER IS STILL AUTHORIZED
     // This will be handled once we start backend use cases when dealing with user roles.  - Torin
+
     useEffect(() => {
-        getLoggedIn();
+        auth.getLoggedIn();
+        // eslint-disable-next-line
     }, []);
 
     const authReducer = (action) => {
@@ -97,6 +69,36 @@ function AuthContextProvider(props) {
             }
             default:
                 return auth;
+        }
+    }
+
+    auth.getLoggedIn = async function () {
+        try {
+            const response = await api.getLoggedIn();
+            console.log("getLoggedIn response: " + response.status)
+            console.log(response)
+            if (response.status === 200 && !auth.loggedIn) {
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
+        } catch(error) {
+            console.log("LOGGING OUT USER...INVALID TOKEN")
+            
+            // Log the user out if the token or user no longer exists
+            // if not already
+            if (auth.loggedIn)
+                authReducer( {
+                    type: AuthActionType.LOGOUT_USER,
+                    payload: null
+                })
+
+            // Take them back to the welcome screen
+            navigate("/");
         }
     }
 
