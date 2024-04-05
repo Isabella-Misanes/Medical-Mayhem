@@ -35,6 +35,7 @@ describe('template spec', () => {
   //   cy.url().should('eq', 'https://medical-mayhem-c0832c3f548e.herokuapp.com/')
   // })
 
+  
   it('should continue as guest then navigate to the game screen successfully', () => {
     cy.visit('https://medical-mayhem-c0832c3f548e.herokuapp.com/')
 
