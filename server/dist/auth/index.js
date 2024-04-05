@@ -75,19 +75,11 @@ function authManager() {
         }
     });
     const signToken = (userId) => __awaiter(this, void 0, void 0, function* () {
-        console.log("USERUID: " + userId);
-        // const token = jwt.sign({
-        //     userId: userId 
-        // }, process.env.JWT_SECRET, {
-        //     expiresIn: '7d'
-        // });
         const token = yield jsonwebtoken_1.default.sign({
             userId: userId
         }, process.env.JWT_SECRET, {
             expiresIn: '7d'
         });
-        console.log("TOKEN: " + token);
-        console.log("TYPE " + typeof (token));
         return token;
     });
     return {
