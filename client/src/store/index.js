@@ -418,6 +418,16 @@ function GlobalStoreContextProvider(props) {
         console.log("Submit report in store.");
     }
 
+    // Report Screen
+
+    store.ignoreReport = function(event) {
+        console.log("Ignored report in store.");
+    }
+
+    store.completeReport = function(event) {
+        console.log("Completed report in store.");
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store
