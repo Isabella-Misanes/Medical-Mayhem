@@ -45,9 +45,7 @@ export default function LeaderBoardScreen() {
           sx={{
             paddingTop: '3%',
             margin: 'auto',
-            pl: '7.5%',
             height: '85%',
-            width: '85%',
             display: 'flex',
             flexDirection: 'column',
             textAlign: 'center',
@@ -78,22 +76,19 @@ export default function LeaderBoardScreen() {
                 }}>Username</TableCell>
                 <TableCell sx={{
                     color: 'white'
-                }}>Wins</TableCell>
+                }}>Highest Score</TableCell>
+                <TableCell sx={{
+                    color: 'white'
+                }}>Total Score</TableCell>
                 <TableCell sx={{
                     color: 'white'
                 }}>Games Played</TableCell>
                 <TableCell sx={{
                     color: 'white'
-                }}>Win Percentage</TableCell>
+                }}>Minigames Played</TableCell>
                 <TableCell sx={{
                     color: 'white'
-                }}>Average Number of Words to Guess Correctly</TableCell>
-                <TableCell sx={{
-                    color: 'white'
-                }}>Current Win Streak</TableCell>
-                <TableCell sx={{
-                    color: 'white'
-                }}>Longest Win Streak</TableCell>
+                }}>Favorite Minigame</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{
@@ -102,139 +97,150 @@ export default function LeaderBoardScreen() {
 
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell>McKillaGorilla</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>189,213</TableCell>
+                  <TableCell>1,988,031</TableCell>
+                  <TableCell>47</TableCell>
+                  <TableCell>438</TableCell>
+                  <TableCell>Medicine Matching</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
+                  <TableCell>Player1</TableCell>
+                  <TableCell>999,999</TableCell>
+                  <TableCell>999,999,999</TableCell>
+                  <TableCell>99</TableCell>
+                  <TableCell>999</TableCell>
+                  <TableCell>Heart Beat</TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>McKillaGorilla</TableCell>
-                  <TableCell>89</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>89%</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>24</TableCell>
-                </TableRow>
+                
 
             </TableBody>
           </TableContainer>
