@@ -415,6 +415,11 @@ function GlobalStoreContextProvider(props) {
         console.log("Show friends requests RECEIVED in store");
     }
 
+    // Forums Screen
+    store.openThread = function (event) {
+        console.log("Opening thread in store.");
+    }
+
     // Report Modal
 
     store.submitReport = function(event) {
