@@ -3,7 +3,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 export default function SocialCard(props) {
     return (
-        <Box sx={{
+        <Box onClick={props.handleProfileMenuOpen} sx={{
             width: '15%',
             height: '30%',
             bgcolor: 'yellow',
@@ -17,7 +17,6 @@ export default function SocialCard(props) {
                 <CircleIcon style={{color: 'lime'}} />
                 <h1 style={{marginLeft: '15px'}}>Friend</h1>
             </Grid>
-            
         </Box>
     );
 }

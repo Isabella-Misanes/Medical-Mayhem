@@ -36,13 +36,8 @@ export default function ReportsScreen() {
                 }}>
                     <List sx={{
                     }}>
-                        <ListItem disablePadding sx={{
-                            bgcolor: 'white',
-                            mb: 2,
-                        }}>
-                            <Grid container spacing={2} sx={{
-                                alignItems: 'center'
-                            }}>
+                        <ListItem disablePadding sx={{bgcolor: 'white', mb: 2}}>
+                            <Grid container spacing={2} sx={{alignItems: 'center'}}>
                                 <Grid item xs={10}>
                                     <Typography sx={{
                                         ml: 2
