@@ -22,12 +22,12 @@ function AuthContextProvider(props) {
     const navigate = useNavigate();
 
     // TODO: THIS SHOULD RUN WITH EVERY PAGE CHANGE TO VERIFY THAT THE USER IS STILL AUTHORIZED
-    // This will be handled once we start backend use cases when dealing with user roles. 
-    // The ESLint error should probably be ignored for this, because we know that auth will always
-    // have access to the getLoggedIn function. - Torin
+    // This will be handled once we start backend use cases when dealing with user roles.  - Torin
+
     useEffect(() => {
         auth.getLoggedIn();
-    }, [auth]);
+        // eslint-disable-next-line
+    }, []);
 
     const authReducer = (action) => {
         const { type, payload } = action;
