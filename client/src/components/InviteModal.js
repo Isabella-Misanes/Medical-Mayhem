@@ -26,7 +26,7 @@ export default function InviteModal({open, onClose}) {
                 height: '40%',
                 bgcolor: '#4D9147',
                 top: '20%',
-                left: '30%',
+                left: '35%',
                 position: 'absolute',
                 boxShadow: 10,
                 textAlign: 'center',
