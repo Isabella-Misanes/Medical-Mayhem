@@ -26,9 +26,8 @@ function AuthContextProvider(props) {
     // The ESLint error should probably be ignored for this, because we know that auth will always
     // have access to the getLoggedIn function. - Torin
     useEffect(() => {
-        console.log("USEEFFECT")
         auth.getLoggedIn();
-    }, []);
+    }, [auth]);
 
     const authReducer = (action) => {
         const { type, payload } = action;
