@@ -36,7 +36,7 @@ export default function HomeScreen() {
                     backgroundColor: 'white',
                     position: 'absolute',
                     left: '5%',
-                    top: '7.5%',
+                    top: '7%',
                     boxShadow: '10'
                 }}>
                 <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
@@ -125,6 +125,12 @@ export default function HomeScreen() {
                                 width: '25%',
                         }]}>
                             Invite
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button onClick={() => {navigate("/reports")} } 
+                            sx={[buttonStyle, { color: 'white' }]}>
+                            Reports
                         </Button>
                     </Grid>
                 </Grid>
