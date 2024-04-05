@@ -1,36 +1,80 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
+import GlobalStoreContext from '../store';
+import { useContext } from 'react';
 
-export default function NewThreadScreen() {
-    const navigate = useNavigate();
+export default function ForumScreen() {
+    const {store} = useContext(GlobalStoreContext);
+
+    function handlePostThread(event) {
+        store.postThread(event);
+    }
+
     return (
-        <div id="post-screen">
-            <Sidebar/>
+        <div id="new-thread-screen">
+            <Box sx={{
+                height: '90%',
+                width: '45%',
+                flexDirection: 'column',
+                backgroundColor: '#fffbc3',
+                position: 'absolute',
+                left: '27.5%',
+                top: '3%',
+                textAlign: 'center',
+                p: 2,
+                boxShadow: 10
+            }}/>
             <Box
                 sx={{
-                    height: '90%',
-                    width: '50%',
-                    display: 'flex',
+                    height: '85%',
+                    width: '40%',
                     flexDirection: 'column',
-                    justifyContent: 'center',
                     backgroundColor: 'white',
                     position: 'absolute',
-                    left: '25%'
+                    left: '30%',
+                    top: '5%',
+                    textAlign: 'center',
+                    p: 2,
+                    boxShadow: 10
                 }}>
-                <Typography variant="h2" gutterBottom>Medical Mayhem</Typography>
-                <Typography variant="h4" gutterBottom>New Thread Screen</Typography>
+                <h3>Forums</h3>
+                <Box sx={{
+                }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <h4>Create Post</h4>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField label="Title (100 characters or less)" fullWidth variant="outlined" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField 
+                                id="filled-multiline-static"
+                                multiline
+                                fullWidth
+                                rows={4}
+                                variant="outlined"
+                                label="text">
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField label="Tags" fullWidth variant="outlined" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                onClick={(event) => {handlePostThread(event)}}
+                                sx={[buttonStyle, {color: 'white', }]}>
+                                Post Thread
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    
+                </Box>
             </Box>
-            <Button variant="contained"
-                sx={[buttonStyle, {
-                    left: '2%',
-                    bottom: '2%',
-                    position: 'absolute'
-                }]}
-                onClick={()=>{navigate("/forum")}}>
-                Back
-            </Button>
+            <Sidebar/>
+            <BackButton />
         </div>
     );
 }
