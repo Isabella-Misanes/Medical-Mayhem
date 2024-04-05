@@ -1,8 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
 // import api from './store-request-api'
-import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -89,8 +88,8 @@ function GlobalStoreContextProvider(props) {
     console.log("inside useGlobalStore");
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
-    const { auth } = useContext(AuthContext);
-    console.log("auth: " + auth);
+    // const { auth } = useContext(AuthContext);
+    // console.log("auth: " + auth);
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
