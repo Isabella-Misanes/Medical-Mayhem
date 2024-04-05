@@ -431,6 +431,10 @@ function GlobalStoreContextProvider(props) {
     store.openThread = function (event) {
         console.log("Opening thread in store.");
     }
+    
+    store.postThread = function (event) {
+        console.log("Post thread in store.");
+    }
 
     // Map Search Screen
     store.openMap = function (event) {
