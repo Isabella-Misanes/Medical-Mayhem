@@ -438,6 +438,20 @@ function GlobalStoreContextProvider(props) {
         console.log("Opening map in store.");
     }
 
+    // Leaderboard Screen
+    store.sortHighestScore = function(event) {
+        console.log("Sort by highest score in store.");
+    }
+    store.sortTotalScore = function(event) {
+        console.log("Sort by total score in store.");
+    }
+    store.sortGamesPlayed = function(event) {
+        console.log("Sort by games played in store.");
+    }
+    store.sortMinigamesPlayed = function(event) {
+        console.log("Sort by minigames played in store.");
+    }
+
     // Report Modal
 
     store.submitReport = function(event) {
