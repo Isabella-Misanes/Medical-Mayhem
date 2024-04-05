@@ -431,10 +431,28 @@ function GlobalStoreContextProvider(props) {
     store.openThread = function (event) {
         console.log("Opening thread in store.");
     }
+    
+    store.postThread = function (event) {
+        console.log("Post thread in store.");
+    }
 
     // Map Search Screen
     store.openMap = function (event) {
         console.log("Opening map in store.");
+    }
+
+    // Leaderboard Screen
+    store.sortHighestScore = function(event) {
+        console.log("Sort by highest score in store.");
+    }
+    store.sortTotalScore = function(event) {
+        console.log("Sort by total score in store.");
+    }
+    store.sortGamesPlayed = function(event) {
+        console.log("Sort by games played in store.");
+    }
+    store.sortMinigamesPlayed = function(event) {
+        console.log("Sort by minigames played in store.");
     }
 
     // Report Modal

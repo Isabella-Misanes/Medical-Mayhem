@@ -36,7 +36,7 @@ export default function HomeScreen() {
                     backgroundColor: 'white',
                     position: 'absolute',
                     left: '5%',
-                    top: '7%',
+                    bottom: '0%',
                     boxShadow: '10'
                 }}>
                 <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>

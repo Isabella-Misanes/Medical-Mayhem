@@ -169,7 +169,7 @@ export default function ProfileScreen() {
                             }}>
                                 <CardMedia
                                     sx={{ height: 140 }}
-                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    image="https://upload.wikimedia.org/wikipedia/commons/d/d6/Gold_coin_icon.png"
                                     title="medal1"
                                 />
                             </Box>
@@ -183,7 +183,7 @@ export default function ProfileScreen() {
                             }}>
                                 <CardMedia
                                     sx={{ height: 140 }}
-                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    image="https://upload.wikimedia.org/wikipedia/commons/d/d6/Gold_coin_icon.png"
                                     title="medal2"
                                 />
                             </Box>
@@ -196,7 +196,7 @@ export default function ProfileScreen() {
                             }}>
                                 <CardMedia
                                     sx={{ height: 140 }}
-                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    image="https://upload.wikimedia.org/wikipedia/commons/d/d6/Gold_coin_icon.png"
                                     title="medal3"
                                 />
                             </Box>
@@ -209,7 +209,7 @@ export default function ProfileScreen() {
                             }}>
                                 <CardMedia
                                     sx={{ height: 140 }}
-                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
+                                    image="https://upload.wikimedia.org/wikipedia/commons/d/d6/Gold_coin_icon.png"
                                     title="medal4"
                                 />
                             </Box>
