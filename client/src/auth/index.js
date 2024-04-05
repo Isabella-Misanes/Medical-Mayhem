@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import api from './auth-request-api'
 
 const AuthContext = createContext();
-console.log("create AuthContext: " + AuthContext);
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
@@ -22,9 +21,14 @@ function AuthContextProvider(props) {
     });
     const navigate = useNavigate();
 
+    // TODO: THIS SHOULD RUN WITH EVERY PAGE CHANGE TO VERIFY THAT THE USER IS STILL AUTHORIZED
+    // This will be handled once we start backend use cases when dealing with user roles. 
+    // The ESLint error should probably be ignored for this, because we know that auth will always
+    // have access to the getLoggedIn function. - Torin
     useEffect(() => {
+        console.log("USEEFFECT")
         auth.getLoggedIn();
-    });
+    }, []);
 
     const authReducer = (action) => {
         const { type, payload } = action;
@@ -70,15 +74,32 @@ function AuthContextProvider(props) {
     }
 
     auth.getLoggedIn = async function () {
-        const response = await api.getLoggedIn();
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.SET_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
+        try {
+            const response = await api.getLoggedIn();
+            console.log("getLoggedIn response: " + response.status)
+            console.log(response)
+            if (response.status === 200 && !auth.loggedIn) {
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
+        } catch(error) {
+            console.log("LOGGING OUT USER...INVALID TOKEN")
+            
+            // Log the user out if the token or user no longer exists
+            // if not already
+            if (auth.loggedIn)
+                authReducer( {
+                    type: AuthActionType.LOGOUT_USER,
+                    payload: null
+                })
+
+            // Take them back to the welcome screen
+            navigate("/");
         }
     }
 

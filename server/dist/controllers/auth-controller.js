@@ -42,29 +42,14 @@ const user_model_1 = require("../models/user-model");
 // Determines and returns if the user is logged in or not
 const getLoggedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let userId = index_1.auth.verifyUser(req);
-        if (!userId) {
-            return res.status(200).json({
-                loggedIn: false,
-                user: null,
-                errorMessage: "?"
-            });
-        }
-        const loggedInUser = yield user_model_1.User.findOne({ _id: userId });
-        if (loggedInUser == null) {
-            return res.status(200).json({
-                loggedIn: false,
-                user: null,
-                errorMessage: "?"
-            });
-        }
-        console.log("loggedInUser: " + loggedInUser);
         return res.status(200).json({
             loggedIn: true,
             user: {
-                // TODO: add rest of user data needed back to client
-                username: loggedInUser.username,
-                email: loggedInUser.email
+                loggedIn: true,
+                user: {
+                    username: req.username,
+                    email: req.email
+                }
             }
         });
     }
@@ -103,8 +88,8 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         // LOGIN THE USER
-        const token = index_1.auth.signToken((existingUser._id).toString());
-        console.log(token);
+        const token = yield index_1.auth.signToken((existingUser._id).toString());
+        console.log("token: " + token);
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
@@ -116,7 +101,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 username: existingUser.username,
                 email: existingUser.email
             }
-        });
+        }).send();
     }
     catch (err) {
         console.error(err);
@@ -135,7 +120,6 @@ const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.logoutUser = logoutUser;
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('hello!');
         const { username, email, password, passwordVerify } = req.body;
         console.log("create user: " + username + " " + email + " " + password + " " + passwordVerify);
         if (!username || !email || !password || !passwordVerify) {
@@ -183,20 +167,20 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const savedUser = yield newUser.save();
         console.log("new user saved: " + savedUser._id);
         // LOGIN THE USER
-        const token = index_1.auth.signToken((savedUser._id).toString());
+        const token = yield index_1.auth.signToken((savedUser._id).toString());
         console.log("token:" + token);
-        yield res.cookie("token", token, {
+        console.log("SAVEDUESR USERNAME: " + savedUser.username);
+        res.cookie("token", token, {
             httpOnly: true,
             secure: true,
             sameSite: "none"
         }).status(200).json({
             success: true,
             user: {
-                // TODO: add rest of user data needed back to client AND in auth.test.js
                 username: savedUser.username,
                 email: savedUser.email
             }
-        });
+        }).send();
         console.log("token sent");
     }
     catch (err) {
