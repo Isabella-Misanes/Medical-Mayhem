@@ -394,6 +394,19 @@ function GlobalStoreContextProvider(props) {
         console.log("Report player in store");
     }
 
+    // Messages
+    store.sendPublicMessage = function(event) {
+        console.log("Send public message in store.");
+    }
+
+    store.sendPartyMessage = function(event) {
+        console.log("Send party message in store.");
+    }
+
+    store.sendPrivateMessage = function(event) {
+        console.log("Send private message in store.");
+    }
+
     // Social Screen
     store.removeFriend = function (event) {
         console.log("Remove friend in store");

@@ -5,6 +5,7 @@ import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
 import { useState } from 'react';
 import ReportModal from './ReportModal';
+import MessagesDrawer from './MessagesDrawer';
 
 export default function HomeScreen() {
     const navigate = useNavigate();
@@ -135,6 +136,7 @@ export default function HomeScreen() {
                     </Grid>
                 </Grid>
             </Box>
+            <MessagesDrawer />
             <Sidebar />
             <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
             <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
