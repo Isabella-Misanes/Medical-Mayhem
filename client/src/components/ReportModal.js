@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Modal } from '@mui/material';
+import { Box, Button, Divider, Grid, Modal, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
@@ -8,6 +8,10 @@ export default function ReportModal({open, onClose}) {
 
     function handleSubmitReport(event) {
         store.submitReport(event);
+        onClose();
+    }
+
+    function handleCancelReport() {
         onClose();
     }
 
@@ -21,7 +25,7 @@ export default function ReportModal({open, onClose}) {
                 height: '40%',
                 bgcolor: '#4D9147',
                 top: '20%',
-                left: '30%',
+                left: '35%',
                 position: 'absolute',
                 boxShadow: 10,
                 textAlign: 'center',
@@ -32,18 +36,33 @@ export default function ReportModal({open, onClose}) {
                 <Divider />
                 <Box sx={{
                     bgcolor: '#e3e3e3',
-                    width: '100%',
-                    height: '60%',
                     alignContent: 'center',
                     textAlign: 'center',
-                    color: 'black'
+                    color: 'black',
+                    pl: 2,
+                    pr: 2,
+                    pb: 2,
+                    borderBottomLeftRadius: '16px',
+                    borderBottomRightRadius: '16px'
                 }}>
-                    <p><strong>McKillaGorilla</strong> has invited you to their party.</p>
-                    <Grid container spacing={0}>
+                    <p>Include any additional feedback on McKillaGorilla here.</p>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField 
+                                id="filled-multiline-static"
+                                multiline
+                                fullWidth
+                                rows={4}
+                                variant="filled"
+                                sx={{
+                                }}>
+                                
+                            </TextField>
+                        </Grid>
                         <Grid item xs={6}>
-                            <Button sx={[buttonStyle, {color: 'white'}]}
-                                onClick={onClose()}>
-                                X
+                            <Button sx={[buttonStyle, {color: 'white', bgcolor: 'gray'}]}
+                                onClick={() => {handleCancelReport()}}>
+                                Cancel
                             </Button>
                         </Grid>
                         <Grid item xs={6}>

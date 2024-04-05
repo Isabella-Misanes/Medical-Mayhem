@@ -18,6 +18,7 @@ import GameScreen from "./GameScreen";
 import BackButton from "./BackButton";
 import InviteModal from "./InviteModal";
 import ReportModal from "./ReportModal";
+import MessagesDrawer from "./MessagesDrawer";
 
 export {
     Sidebar,
@@ -40,4 +41,5 @@ export {
     GameScreen,
     BackButton,
     InviteModal,
+    MessagesDrawer
 }

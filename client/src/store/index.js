@@ -393,7 +393,23 @@ function GlobalStoreContextProvider(props) {
         console.log("Report player in store");
     }
 
+    // Messages
+    store.sendPublicMessage = function(event) {
+        console.log("Send public message in store.");
+    }
+
+    store.sendPartyMessage = function(event) {
+        console.log("Send party message in store.");
+    }
+
+    store.sendPrivateMessage = function(event) {
+        console.log("Send private message in store.");
+    }
+
     // Social Screen
+    store.removeFriend = function (event) {
+        console.log("Remove friend in store");
+    }
 
     store.showFriends = function () {
         console.log("Show friends in store");
@@ -411,16 +427,34 @@ function GlobalStoreContextProvider(props) {
         console.log("Show friends requests RECEIVED in store");
     }
 
+    // Forums Screen
+    store.openThread = function (event) {
+        console.log("Opening thread in store.");
+    }
+
+    // Map Search Screen
+    store.openMap = function (event) {
+        console.log("Opening map in store.");
+    }
+
     // Report Modal
 
     store.submitReport = function(event) {
         console.log("Submit report in store.");
     }
 
+    // Report Screen
+
+    store.ignoreReport = function(event) {
+        console.log("Ignored report in store.");
+    }
+
+    store.completeReport = function(event) {
+        console.log("Completed report in store.");
+    }
+
     return (
-        <GlobalStoreContext.Provider value={{
-            store
-        }}>
+        <GlobalStoreContext.Provider value={{store}}>
             {props.children}
         </GlobalStoreContext.Provider>
     );

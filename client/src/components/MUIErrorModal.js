@@ -16,15 +16,13 @@ export default function MUIErrorModal() {
     }
 
     return (
-        <Modal
-            open={auth.errorMessage !== ""}
-        >
+        <Modal open={auth.errorMessage !== ""}>
             <Stack sx={{ width: '40%', marginLeft: '30%', marginTop: '20%' }} spacing={2}>
                 <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
                     {message}
                     <Button color="primary" size="small" onClick={handleCloseModal}>
-                            Close
+                        Close
                     </Button>
                 </Alert>
             </Stack>

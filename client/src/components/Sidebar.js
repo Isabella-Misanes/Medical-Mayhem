@@ -4,12 +4,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthContext from '../auth';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
+import ReportModal from './ReportModal';
 
 export default function Sidebar() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const [showReportModal, setShowReportModal] = useState(false);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -45,22 +47,16 @@ export default function Sidebar() {
     }
 
     function handleReportPlayer(event) {
-        store.reportPlayer(event);
+        setShowReportModal(true);
         handleMenuClose();
     }
 
     const partyMenu = (
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-            }}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            transformOrigin={{vertical: 'top', horizontal: 'right'}}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
@@ -91,71 +87,12 @@ export default function Sidebar() {
                 width: '70px',
                 display: 'flex',
                 flexDirection: 'column',
-                right: '0%',
+                right: '0%'
         }}>
-            <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                sx={{
-                    position: 'absolute',
-                    right: '22.5px',
-                    marginTop: '10px',
-                    color: 'white'
-                }}
-            >
-                <AccountCircleIcon/>
-            </IconButton>
-
-            <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                sx={{
-                    position: 'absolute',
-                    right: '22.5px',
-                    marginTop: '60px',
-                    color: 'white'
-                }}
-            >
-                <AccountCircleIcon/>
-            </IconButton>
-
-            <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                sx={{
-                    position: 'absolute',
-                    right: '22.5px',
-                    marginTop: '110px',
-                    color: 'white'
-                }}
-            >
-                <AccountCircleIcon/>
-            </IconButton>
-
-            <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                sx={{
-                    position: 'absolute',
-                    right: '22.5px',
-                    marginTop: '160px',
-                    color: 'white'
-                }}
-            >
-                <AccountCircleIcon/>
-            </IconButton>
+            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'10px'} />
+            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'60px'} />
+            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'110px'} />
+            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'160px'} />
             
             <IconButton onClick={()=>{handleLogout()}} sx={{
                 position: 'fixed',
@@ -164,9 +101,30 @@ export default function Sidebar() {
                 right: '15px',
                 color: 'white'
             }}>
-                <LogoutIcon/>
+                <LogoutIcon />
             </IconButton>
             {partyMenu}
+            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
         </Box>
+    );
+}
+
+function PartyMember(props) {
+    return (
+        <IconButton
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-haspopup="true"
+            onClick={props.handleProfileMenuOpen}
+            sx={{
+                position: 'absolute',
+                right: '22.5px',
+                marginTop: props.marginTop,
+                color: 'white'
+            }}
+        >
+            <AccountCircleIcon/>
+        </IconButton>
     );
 }
