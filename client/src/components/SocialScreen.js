@@ -5,15 +5,15 @@ import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import BackButton from './BackButton';
+import SocialCard from './SocialCard';
 
 export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
+    const [numFriends] = useState(10);
 
-    function handleButtonClick(buttonId) {
-        setActiveButton(buttonId);
-    };
+    function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
     useEffect(() => {
         switch(activeButton) {
@@ -37,6 +37,42 @@ export default function SocialScreen() {
 
     function handleFriendModalOpen() { setModalOpen(true); }
     function handleFriendModalClose() { setModalOpen(false); }
+
+    const renderButton = (buttonNum, str) => {
+        return (
+            <Button 
+                onClick={() => {handleButtonClick(buttonNum)}}
+                sx={{color: activeButton === buttonNum ? 'red' : 'black'}}
+            >
+                {str}
+            </Button>
+        )
+    };
+
+    const friendRender = () => {
+        const friends = [];
+        if(numFriends !== 0) {
+            for(let i = 0; i < numFriends; i++) {
+                friends.push(<SocialCard key={i} top={`${25 + Math.floor(i / 5) * 32.5}%`} left={`${5 + ((i % 5) * 17.5)}%`} />)
+            }
+        }
+        else {
+            friends.push(
+                <Box key={'no-friends'} sx={{
+                    width: '90%',
+                    height: '50%',
+                    bgcolor: 'white',
+                    position: 'absolute',
+                    top: '30%',
+                    left: '5%',
+                    boxShadow: 5
+                }}>
+                    <h1>No Friends</h1>
+                </Box>
+            )
+        }
+        return friends;
+    }
 
     return (
         <div id="social-screen">
@@ -97,21 +133,9 @@ export default function SocialScreen() {
                             width: 'fit-content',
                             position: 'absolute'
                         }}>
-                            <Button 
-                                onClick={() => {handleButtonClick(0)}}
-                                sx={{
-                                    color: activeButton === 0 ? 'red' : 'black'
-                            }}>
-                                Friends
-                            </Button>
+                            {renderButton(0, "Friends")}
                             /
-                            <Button 
-                                onClick={() => {handleButtonClick(1)}}
-                                sx={{
-                                    color: activeButton === 1 ? 'red' : 'black'
-                            }}>
-                                Recent Players
-                            </Button>
+                            {renderButton(1, "Recent Players")}
                         </Box>
                         
                         <br />
@@ -126,34 +150,14 @@ export default function SocialScreen() {
                             position: 'absolute',
                             fontSize: '12px',
                         }}>
-                            <Button 
-                                onClick={() => {handleButtonClick(2)}}
-                                sx={{ color: activeButton === 2 ? 'red' : 'black' }}
-                            >
-                                Sent
-                            </Button>
+                            {renderButton(2, "Sent")}
                             /
-                            <Button 
-                                onClick={() => {handleButtonClick(3)}}
-                                sx={{ color: activeButton === 3 ? 'red' : 'black' }}
-                            >
-                                Received
-                            </Button>
+                            {renderButton(3, "Received")}
                         </Box>
                     </Grid>
                 </Grid>
 
-                <Box sx={{
-                    width: '90%',
-                    height: '50%',
-                    bgcolor: 'white',
-                    position: 'absolute',
-                    top: '30%',
-                    left: '5%',
-                    boxShadow: 5
-                }}>
-                    <h1>No Friends</h1>
-                </Box>
+                {friendRender()}
                 
                 <BackButton />
 
@@ -187,7 +191,6 @@ export default function SocialScreen() {
                     </Box>
                 </Modal>
             </Box>
-
             <Sidebar />
         </div>
     );
