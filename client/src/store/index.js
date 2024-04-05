@@ -395,6 +395,9 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Social Screen
+    store.removeFriend = function (event) {
+        console.log("Remove friend in store");
+    }
 
     store.showFriends = function () {
         console.log("Show friends in store");
@@ -429,9 +432,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     return (
-        <GlobalStoreContext.Provider value={{
-            store
-        }}>
+        <GlobalStoreContext.Provider value={{store}}>
             {props.children}
         </GlobalStoreContext.Provider>
     );

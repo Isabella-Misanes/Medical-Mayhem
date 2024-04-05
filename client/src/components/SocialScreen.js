@@ -1,17 +1,20 @@
-import { Box, Button, Divider, Grid, Modal, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Menu, MenuItem, Modal, Typography } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
-import BackButton from './BackButton';
+import { ReportModal, BackButton } from '.';
 import SocialCard from './SocialCard';
 
 export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
-    const [numFriends] = useState(10);
+    const [numFriends] = useState(7);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const [showReportModal, setShowReportModal] = useState(false);
 
     function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
@@ -49,11 +52,22 @@ export default function SocialScreen() {
         )
     };
 
+    const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    
     const friendRender = () => {
         const friends = [];
         if(numFriends !== 0) {
             for(let i = 0; i < numFriends; i++) {
-                friends.push(<SocialCard key={i} top={`${25 + Math.floor(i / 5) * 32.5}%`} left={`${5 + ((i % 5) * 17.5)}%`} />)
+                friends.push(
+                    <SocialCard
+                        key={i}
+                        top={`${25 + Math.floor(i / 5) * 32.5}%`}
+                        left={`${5 + ((i % 5) * 17.5)}%`}
+                        handleProfileMenuOpen={handleProfileMenuOpen}
+                    />
+                )
             }
         }
         else {
@@ -74,6 +88,46 @@ export default function SocialScreen() {
         return friends;
     }
 
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    function handlePrivateMessaging(event) {
+        store.openPrivateMessaging(event);
+        handleMenuClose();
+    }
+
+    function handleRemoveFriend(event) {
+        store.removeFriend(event);
+        handleMenuClose();
+    }
+
+    function handleReportPlayer(event) {
+        setShowReportModal(true);
+        handleMenuClose();
+    }
+
+    const partyMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+            keepMounted
+            transformOrigin={{vertical: 'top',horizontal: 'right'}}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
+                Private Message
+            </MenuItem>
+            <MenuItem onClick={(event) => {handleRemoveFriend(event)}}>
+                Remove Friend
+            </MenuItem>
+            <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
+                Report Player
+            </MenuItem>
+        </Menu>
+    );
+    
     return (
         <div id="social-screen">
             <Box sx={{
@@ -190,6 +244,8 @@ export default function SocialScreen() {
                         </Box>
                     </Box>
                 </Modal>
+                {partyMenu}
+                <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
             <Sidebar />
         </div>

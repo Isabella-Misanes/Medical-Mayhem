@@ -54,15 +54,9 @@ export default function Sidebar() {
     const partyMenu = (
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-            }}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            transformOrigin={{vertical: 'top', horizontal: 'right'}}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
@@ -156,7 +150,7 @@ export default function Sidebar() {
                     color: 'white'
                 }}
             >
-                <AccountCircleIcon/>
+                <AccountCircleIcon />
             </IconButton>
             
             <IconButton onClick={()=>{handleLogout()}} sx={{
@@ -166,7 +160,7 @@ export default function Sidebar() {
                 right: '15px',
                 color: 'white'
             }}>
-                <LogoutIcon/>
+                <LogoutIcon />
             </IconButton>
             {partyMenu}
             <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
