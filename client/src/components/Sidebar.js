@@ -4,12 +4,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthContext from '../auth';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
+import ReportModal from './ReportModal';
 
 export default function Sidebar() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const [showReportModal, setShowReportModal] = useState(false);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -45,7 +47,7 @@ export default function Sidebar() {
     }
 
     function handleReportPlayer(event) {
-        store.reportPlayer(event);
+        setShowReportModal(true);
         handleMenuClose();
     }
 
@@ -167,6 +169,7 @@ export default function Sidebar() {
                 <LogoutIcon/>
             </IconButton>
             {partyMenu}
+            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
         </Box>
     );
 }

@@ -1,5 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response, NextFunction} from 'express'
+import { User } from '../models/user-model'
 
 declare global {
     namespace Express {
@@ -47,25 +48,40 @@ function authManager() {
         }
     }
 
-    // Used when the user is logging in
-    const verifyUser = (req: Request) => {
+    // Used when the user is getting logged in (not manually logging in)
+    const verifyUser = async (req: Request) => {
         try {
+
+            // CHANGE: now check if user exists (handling deleting users in the future)
+
             const token = req.cookies.token;
             if (!token) {
                 return null;
             }
 
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            return (decodedToken as JwtPayload).userId;
+            
+            if (typeof decodedToken == 'string')
+                return null
+
+            const userExists = await User.findById(decodedToken.userId)
+
+            if (!userExists)
+                return null
+
+            return decodedToken.userId;
+
         } catch (err) {
             return null;
         }
     }
 
-    const signToken = (userId: string) => {
+    const signToken = async (userId: string) => {
         return jwt.sign({
-            userId: userId
-        }, process.env.JWT_SECRET);
+            userId: userId 
+        }, process.env.JWT_SECRET, {
+            expiresIn: '7d'
+        });
     }
 
     return {

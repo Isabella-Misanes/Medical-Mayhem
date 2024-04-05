@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
 import { useState } from 'react';
+import ReportModal from './ReportModal';
 
 export default function HomeScreen() {
     const navigate = useNavigate();
     const [showInviteModal, setShowInviteModal] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
 
     const homeButtons = {
         color: 'black',
@@ -16,13 +18,12 @@ export default function HomeScreen() {
             bgcolor: '#e5e5e5'},
     }
     
-    const handleInviteButtonClick = () => {
+    function handleInviteButtonClick() {
         setShowInviteModal(true);
     }
 
     return (
         <div id="home-screen">
-            <Sidebar />
             <Box
                 sx={{
                     height: '90%',
@@ -128,9 +129,9 @@ export default function HomeScreen() {
                     </Grid>
                 </Grid>
             </Box>
-            
-            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
-
+            <Sidebar />
+            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
+            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
         </div>
     )
 }
