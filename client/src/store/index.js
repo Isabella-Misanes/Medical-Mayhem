@@ -420,6 +420,11 @@ function GlobalStoreContextProvider(props) {
         console.log("Opening thread in store.");
     }
 
+    // Map Search Screen
+    store.openMap = function (event) {
+        console.log("Opening map in store.");
+    }
+
     // Report Modal
 
     store.submitReport = function(event) {
