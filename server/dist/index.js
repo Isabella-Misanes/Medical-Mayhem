@@ -21,8 +21,8 @@ exports.app = (0, express_1.default)();
 // SETUP THE MIDDLEWARE
 exports.app.use(express_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cors_1.default)({
-    origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com/' :
-            'http://localhost:3000/'],
+    origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com' :
+            'http://localhost:3000'],
     credentials: true
 }));
 exports.app.use(express_1.default.json());

@@ -1,12 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
 // import api from './store-request-api'
-// import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
-// import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
-// import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
-// import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
-import AuthContext from '../auth'
 /*
     This is our global data store. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -93,8 +88,8 @@ function GlobalStoreContextProvider(props) {
     console.log("inside useGlobalStore");
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
-    const { auth } = useContext(AuthContext);
-    console.log("auth: " + auth);
+    // const { auth } = useContext(AuthContext);
+    // console.log("auth: " + auth);
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
@@ -361,6 +356,23 @@ function GlobalStoreContextProvider(props) {
         asyncGuest();
     }
 
+    // HomeScreen
+    store.acceptInvite = function (event) {
+        console.log("Invite ACCEPTED in store.");
+    }
+
+    store.rejectInvite = function (event) {
+        console.log("Invite REJECTED in store.");
+    }
+
+    // Profile Screen
+
+    store.submitProfileEdits = function (event) {
+        console.log("In submit profile edits in store.");
+    }
+
+    // Sidebar
+
     store.openPrivateMessaging = function (event, id) {
         console.log("Private messaging in store")
     }
@@ -381,10 +393,86 @@ function GlobalStoreContextProvider(props) {
         console.log("Report player in store");
     }
 
+    // Messages
+    store.sendPublicMessage = function(event) {
+        console.log("Send public message in store.");
+    }
+
+    store.sendPartyMessage = function(event) {
+        console.log("Send party message in store.");
+    }
+
+    store.sendPrivateMessage = function(event) {
+        console.log("Send private message in store.");
+    }
+
+    // Social Screen
+    store.removeFriend = function (event) {
+        console.log("Remove friend in store");
+    }
+
+    store.showFriends = function () {
+        console.log("Show friends in store");
+    }
+
+    store.showRecentPlayers = function () {
+        console.log("Show recent players in store");
+    }
+
+    store.showSentRequests = function() {
+        console.log("Show friend requests SENT in store.");
+    }
+
+    store.showReceivedRequests = function () {
+        console.log("Show friends requests RECEIVED in store");
+    }
+
+    // Forums Screen
+    store.openThread = function (event) {
+        console.log("Opening thread in store.");
+    }
+    
+    store.postThread = function (event) {
+        console.log("Post thread in store.");
+    }
+
+    // Map Search Screen
+    store.openMap = function (event) {
+        console.log("Opening map in store.");
+    }
+
+    // Leaderboard Screen
+    store.sortHighestScore = function(event) {
+        console.log("Sort by highest score in store.");
+    }
+    store.sortTotalScore = function(event) {
+        console.log("Sort by total score in store.");
+    }
+    store.sortGamesPlayed = function(event) {
+        console.log("Sort by games played in store.");
+    }
+    store.sortMinigamesPlayed = function(event) {
+        console.log("Sort by minigames played in store.");
+    }
+
+    // Report Modal
+
+    store.submitReport = function(event) {
+        console.log("Submit report in store.");
+    }
+
+    // Report Screen
+
+    store.ignoreReport = function(event) {
+        console.log("Ignored report in store.");
+    }
+
+    store.completeReport = function(event) {
+        console.log("Completed report in store.");
+    }
+
     return (
-        <GlobalStoreContext.Provider value={{
-            store
-        }}>
+        <GlobalStoreContext.Provider value={{store}}>
             {props.children}
         </GlobalStoreContext.Provider>
     );

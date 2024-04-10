@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 import path from 'path'
 import authRouter from './routes/auth-router'
+import { auth } from './auth';
 
 // CREATE OUR SERVER
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
@@ -18,8 +19,8 @@ export const app = express()
 // SETUP THE MIDDLEWARE
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({
-    origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com/' : 
-        'http://localhost:3000/' ],
+    origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com' : 
+        'http://localhost:3000' ],
     credentials: true
 }))
 app.use(express.json())
