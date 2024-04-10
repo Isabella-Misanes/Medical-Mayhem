@@ -116,6 +116,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
+                //console.log("IN GET: " + payload.bio)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -124,6 +125,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
+                console.log("IN UPDATE PROFILE: " + payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -167,23 +169,31 @@ function GlobalStoreContextProvider(props) {
 
     // Profile Screen
 
-    store.getProfile = async function() {
-        let response = await apis.getProfile()
-        console.log(response)
-        storeReducer({
-            type: GlobalStoreActionType.GET_PROFILE,
-            payload: response.data
-        })
+    store.getProfile = function() {
+        async function asyncGetProfile() {
+            let response = await apis.getProfile()
+            storeReducer({
+                type: GlobalStoreActionType.GET_PROFILE,
+                payload: response.data
+            })
+        }
+
+        asyncGetProfile()
     }
 
     // TODO: INCLUDE TRY CATCH
-    store.updateProfile = async function (bio) {
-        let response = await apis.updateProfile(bio)
-        console.log(response)
-        storeReducer({
-            type: GlobalStoreActionType.UPDATE_PROFILE,
-            payload: bio
-        })
+    store.updateProfile = function (bio) {
+
+        async function asyncUpdateProfile() {
+            let response = await apis.updateProfile(bio)
+            console.log(response)
+            storeReducer({
+                type: GlobalStoreActionType.UPDATE_PROFILE,
+                payload: bio
+            })
+        }
+
+        asyncUpdateProfile()
     }
 
     // Sidebar

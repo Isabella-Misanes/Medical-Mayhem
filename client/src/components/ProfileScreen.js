@@ -18,7 +18,7 @@ export default function ProfileScreen() {
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
     const [username, setUsername] = useState(auth.user.username)
-    const [bio, setBio] = useState("")
+    const [bio, setBio] = useState(store.profileInfo.bio)
     // TODO: Add pfp
 
     // Handles switching between Profile screen and Achievements screen
@@ -27,9 +27,9 @@ export default function ProfileScreen() {
     };
 
     function handleEditProfile(event) {
+
         if(editEnabled)
             store.updateProfile(bio)
-
         setEditEnabled(!editEnabled);
     }
 
@@ -37,20 +37,10 @@ export default function ProfileScreen() {
         setBio(event.target.value)
     }
 
-    // Fetches initial profile info before user can edit...
+    // Fetches initial profile info before user can edit
     useEffect(() => {
-        const asyncGetProfile = async () => { 
-            await store.getProfile()
-            setBio(store.profileInfo.bio)
-        }
-        
-        asyncGetProfile()
-    }, [store.profileInfo.bio])
-
-    // Then change the displayed bio whenever the profile info in the store changes
-    // useEffect(() => {
-    //     setBio(store.profileInfo.bio)
-    // }, [store])
+        store.getProfile() // TODO: add error response
+    }, [])
 
     const profileScreen = (
         <Card sx={{
@@ -129,7 +119,7 @@ export default function ProfileScreen() {
                                 multiline
                                 fullWidth
                                 rows={4}
-                                defaultValue={bio}
+                                defaultValue={store.profileInfo.bio}
                                 onChange={handleBioChange}
                                 variant="filled"
                                 disabled={!editEnabled}

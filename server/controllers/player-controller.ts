@@ -49,7 +49,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         }
 
         // TODO: Return a modified cookie if the user changes their username
-        return res.status(200)
+        return res.status(200).send()
 
     } catch (err) {
         console.error(err);
