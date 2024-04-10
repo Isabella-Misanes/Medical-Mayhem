@@ -78,6 +78,7 @@ function AuthContextProvider(props) {
             console.log("getLoggedIn response: " + response.status)
             console.log(response)
             if (response.status === 200 && !auth.loggedIn) {
+                console.log("LOGGING IN")
                 authReducer({
                     type: AuthActionType.GET_LOGGED_IN,
                     payload: {

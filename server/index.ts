@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 import path from 'path'
 import authRouter from './routes/auth-router'
-import { auth } from './auth';
+import mainRouter from './routes/main-router'
 
 // CREATE OUR SERVER
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
@@ -28,6 +28,7 @@ app.use(cookieParser())
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 app.use('/auth', authRouter)
+app.use('/api', mainRouter)
 
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {

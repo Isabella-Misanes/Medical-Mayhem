@@ -15,6 +15,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const auth_router_1 = __importDefault(require("./routes/auth-router"));
+const main_router_1 = __importDefault(require("./routes/main-router"));
 // CREATE OUR SERVER
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') }); // ty DavidP on SO
 exports.app = (0, express_1.default)();
@@ -29,6 +30,7 @@ exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 exports.app.use('/auth', auth_router_1.default);
+exports.app.use('/api', main_router_1.default);
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {
     exports.app.use(express_1.default.static('client/build'));

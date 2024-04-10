@@ -2,32 +2,55 @@ import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, Gri
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from './BackButton';
+import apis from '../store/store-request-api';
+import AuthContext from '../auth';
 
 export default function ProfileScreen() {
     const navigate = useNavigate();
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
+    const [username, setUsername] = useState(auth.user.username)
+    const [bio, setBio] = useState("")
+    // TODO: Add pfp
 
+    // Handles switching between Profile screen and Achievements screen
     const handleToggleScreen = () => {
         setShowProfileScreen(!showProfileScreen);
     };
 
     function handleEditProfile(event) {
-        if(editEnabled) {
-            handleSubmitProfileEdits(event);
-        }
+        if(editEnabled)
+            store.updateProfile(bio)
+
         setEditEnabled(!editEnabled);
     }
 
-    function handleSubmitProfileEdits(event) {
-        store.submitProfileEdits(event);
+    function handleBioChange(event) {
+        setBio(event.target.value)
     }
+
+    // Fetches initial profile info before user can edit...
+    useEffect(() => {
+        const asyncGetProfile = async () => { 
+            await store.getProfile()
+            setBio(store.profileInfo.bio)
+        }
+        
+        asyncGetProfile()
+    }, [store.profileInfo.bio])
+
+    // Then change the displayed bio whenever the profile info in the store changes
+    // useEffect(() => {
+    //     setBio(store.profileInfo.bio)
+    // }, [store])
 
     const profileScreen = (
         <Card sx={{
@@ -80,7 +103,7 @@ export default function ProfileScreen() {
                             fontSize: '12pt'
                         }}>
                             <p>
-                                CoolDoge<br/>
+                                {username}<br/>
                                 Last Seen: Now<br/>
                                 Registered Since: Jan 22, 2024
                             </p>
@@ -106,7 +129,8 @@ export default function ProfileScreen() {
                                 multiline
                                 fullWidth
                                 rows={4}
-                                defaultValue="Hello everyone! Send me an invite whenever you're down to play!"
+                                defaultValue={bio}
+                                onChange={handleBioChange}
                                 variant="filled"
                                 disabled={!editEnabled}
                                 sx={{

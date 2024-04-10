@@ -9,12 +9,8 @@ export const getLoggedIn = async (req: Request, res: Response) => {
         return res.status(200).json({
             loggedIn: true,
             user: {
-                loggedIn: true,
-                user: {
-                    username: req.username,
-                    email: req.email
-                }
-
+                username: req.username,
+                email: req.email
             }
         })
     } catch (err) {
