@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import { Engine } from "excalibur";
 import React from "react";
-import { intializeGame } from "../game/breakout";
+import { initializeGame } from "../game/breakout";
 
 export default function GameScreen() {
 
@@ -12,7 +12,7 @@ export default function GameScreen() {
 
 	React.useEffect(() => {
 		if (!gameRef.current && gameCanvas.current) {
-			intializeGame(gameRef, gameCanvas);
+			initializeGame(gameRef, gameCanvas);
 		}
 	}, []);
 

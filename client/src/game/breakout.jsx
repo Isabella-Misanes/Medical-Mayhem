@@ -40,7 +40,7 @@ const initializeBall = (game) => {
     color: Color.Red,
   });
   // Start the serve after a second
-  const ballSpeed = vec(1000, 1000);
+  const ballSpeed = vec(500, 500);
   setTimeout(() => {
     // Set the velocity in pixels per second
     ball.vel = ballSpeed;
@@ -119,7 +119,7 @@ const initializeBricks = (game) => {
   return bricks;
 };
 
-export const intializeGame = (
+export const initializeGame = (
   gameRef,
   gameCanvasRef,
 ) => {
