@@ -1,5 +1,4 @@
 import { Engine, Actor, Color, CollisionType, vec } from "excalibur";
-import React from "react";
 
 const initializePaddle = (game) => {
   // Create an actor with x position of 150px,
@@ -119,10 +118,7 @@ const initializeBricks = (game) => {
   return bricks;
 };
 
-export const initializeGame = (
-  gameRef,
-  gameCanvasRef,
-) => {
+export const initBreakout = (gameRef, gameCanvasRef) => {
   if (!gameCanvasRef.current) return;
 
   gameRef.current = new Engine({
@@ -132,7 +128,7 @@ export const initializeGame = (
   });
   const game = gameRef.current;
 
-  const paddle = initializePaddle(game);
+  initializePaddle(game);
   const ball = initializeBall(game);
   const bricks = initializeBricks(game);
 
@@ -171,7 +167,7 @@ export const initializeGame = (
 
   // Loss condition
   ball.on("exitviewport", () => {
-    // alert("You lose!");
+    alert("You lose!");
   });
 
   game?.start().catch((e) => console.error(e));
