@@ -2,9 +2,11 @@ import { Box, Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
+import AuthContext from '../auth';
 
 export default function WelcomeScreen() {
     const navigate = useNavigate();
+    const {auth} = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
     const splashButtonStyle = {
@@ -72,7 +74,7 @@ export default function WelcomeScreen() {
                             left: '2%'
                         }]}
                         id = "continue-as-guest"
-                        onClick={()=>{ store.loginGuest() }}>
+                        onClick={()=>{ auth.loginGuest() }}>
                         Continue as Guest
                     </Button>
                 </Grid>

@@ -30,6 +30,9 @@ export const loginUser = async (email, password) => {
 export const logoutUser = async () => { 
     return await api.get(`/logout/`) 
 }
+export const deleteUser = async () => { 
+    return await api.get(`/deleteUser/`) 
+}
 export const registerUser = async (username, email, password, passwordVerify) => {
     return await api.post(`/register/`, {
         username : username,
@@ -42,7 +45,8 @@ const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    deleteUser
 }
 
 export default apis

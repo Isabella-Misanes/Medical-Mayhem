@@ -9,13 +9,22 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
+    LOGIN_GUEST: "LOGIN_GUEST",
+    LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
     ERROR: "ERROR"
 }
 
+export const UserRoleType = {
+    USER: "USER",
+    ADMIN: "ADMIN",
+    GUEST: "GUEST",
+}
+
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
-        user: null,
+        user: null, // {username, email}
+        role: null,
         loggedIn: false,
         errorMessage: ""
     });
@@ -35,13 +44,23 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: payload.loggedIn,
                     errorMessage: ""
                 });
             }
+            case AuthActionType.REGISTER_USER: {
+                return setAuth({
+                    user: payload.user,
+                    role: UserRoleType.USER,
+                    loggedIn: true,
+                    errorMessage: ""
+                })
+            }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: true,
                     errorMessage: ""
                 })
@@ -49,20 +68,39 @@ function AuthContextProvider(props) {
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
+                    role: null,
                     loggedIn: false,
                     errorMessage: ""
                 })
             }
-            case AuthActionType.REGISTER_USER: {
+            case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: payload.user,
+                    user: null,
+                    role: UserRoleType.GUEST,
                     loggedIn: true,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.LOGOUT_GUEST: {
+                return setAuth({
+                    user: null,
+                    role: null,
+                    loggedIn: false,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.DELETE_USER: {
+                return setAuth({
+                    user: null,
+                    role: null,
+                    loggedIn: false,
                     errorMessage: ""
                 })
             }
             case AuthActionType.ERROR: {
                 return setAuth({
                     user: null,
+                    role: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
                 })
@@ -162,6 +200,41 @@ function AuthContextProvider(props) {
                 payload: null
             })
             navigate("/");
+        }
+    }
+
+    auth.loginGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGIN_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.logoutGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGOUT_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.deleteUser = async function() {
+        try {
+            const response = await api.deleteUser();
+            if (response.status === 200) {
+                authReducer( {
+                    type: AuthActionType.DELETE_USER,
+                    payload: null
+                })
+                navigate("/");
+            } 
+        } catch(error) {
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
         }
     }
 

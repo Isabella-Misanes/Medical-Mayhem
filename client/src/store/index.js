@@ -32,7 +32,6 @@ export const GlobalStoreActionType = {
     CHANGE_SORT_TYPE: "CHANGE_SORT_TYPE",
     PUBLISH_LIST: "PUBLISH_LIST",
     CHANGE_SEARCH_BAR: "CHANGE_SEARCH_BAR",
-    VIEW_AS_GUEST: "VIEW_AS_GUEST",
     SET_PLAYING_LIST: "SET_PLAYING_LIST",
     LIKE_DISLIKE: "LIKE_DISLIKE",
     PLAY_SONG: "PLAY_SONG",
@@ -41,7 +40,8 @@ export const GlobalStoreActionType = {
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY TORIN
     GET_PROFILE: "GET_PROFILE",
-    UPDATE_PROFILE: "UPDATE_PROFILE"
+    UPDATE_PROFILE: "UPDATE_PROFILE",
+    RESET: "RESET"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -81,7 +81,6 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
-        guest: false,
         profileInfo: {}
     });
 
@@ -103,14 +102,6 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    guest: store.guest,
-                });
-            }
-            case GlobalStoreActionType.VIEW_AS_GUEST: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    currentHomeScreen: payload.screen,
-                    guest: payload.guest,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -118,7 +109,6 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    guest: store.guest,
                     profileInfo: payload
                 });
             }
@@ -127,8 +117,14 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    guest: store.guest,
                     profileInfo: payload
+                });
+            }
+            case GlobalStoreActionType.RESET: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: CurrentHomeScreen.HOME,
+                    profileInfo: {}
                 });
             }
             default:
@@ -136,24 +132,11 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.loginGuest = function () {
-        async function asyncGuest() {
-            storeReducer({
-                type: GlobalStoreActionType.VIEW_AS_GUEST,
-                payload: { guest: true, screen: CurrentHomeScreen.ALL_LISTS }
-            });
-        }
-        asyncGuest();
-    }
-
-    store.logoutGuest = function () {
-        async function asyncGuest() {
-            storeReducer({
-                type: GlobalStoreActionType.VIEW_AS_GUEST,
-                payload: { guest: false, screen: CurrentHomeScreen.HOME }
-            });
-        }
-        asyncGuest();
+    store.reset = function() {
+        storeReducer({
+            type: GlobalStoreActionType.RESET,
+            payload: {}
+        });
     }
 
     // HomeScreen
