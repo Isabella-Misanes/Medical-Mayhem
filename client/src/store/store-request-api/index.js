@@ -20,11 +20,11 @@ const api = axios.create({
 
 export const getProfile = async () => { return await api.get(`/getProfile/`) }
 
-export const updateProfile = async (bio) => {
-    console.log(bio)
+export const updateProfile = async (bio, pfp) => {
     return api.post(`/updateProfile/`, {
         // SPECIFY THE PAYLOAD
-        bio: bio
+        bio: bio,
+        pfp: pfp
     })
 }
 

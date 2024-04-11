@@ -52,6 +52,7 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             .status(200)
             .json({
             bio: existingUser.bio,
+            pfp: existingUser.profilePicture
         });
     }
     catch (err) {
@@ -61,11 +62,16 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getProfile = getProfile;
 const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("IN UPDATE");
     try {
-        console.log(req.userId);
-        console.log("BODY IN UPDATE: " + req.body.bio);
-        const updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: req.body.bio } });
+        const { bio, pfp } = req.body;
+        let updatedUser;
+        if (pfp) {
+            console.log("HERHERHERHER");
+            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: bio, profilePicture: pfp } });
+        }
+        else {
+            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: bio } });
+        }
         console.log("updatedUser: " + updatedUser);
         if (!updatedUser) {
             return res

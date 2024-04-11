@@ -82,9 +82,7 @@ function GlobalStoreContextProvider(props) {
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
         guest: false,
-        profileInfo: {
-            bio: ""
-        }
+        profileInfo: {}
     });
 
     // const history = useNavigate();
@@ -172,6 +170,7 @@ function GlobalStoreContextProvider(props) {
     store.getProfile = function() {
         async function asyncGetProfile() {
             let response = await apis.getProfile()
+            console.log("RESPONSE DATA: " + JSON.stringify(response.data))
             storeReducer({
                 type: GlobalStoreActionType.GET_PROFILE,
                 payload: response.data
@@ -182,14 +181,17 @@ function GlobalStoreContextProvider(props) {
     }
 
     // TODO: INCLUDE TRY CATCH
-    store.updateProfile = function (bio) {
+    store.updateProfile = function (bio, pfp) {
 
         async function asyncUpdateProfile() {
-            let response = await apis.updateProfile(bio)
+            let response = await apis.updateProfile(bio, pfp)
             console.log(response)
             storeReducer({
                 type: GlobalStoreActionType.UPDATE_PROFILE,
-                payload: bio
+                payload: {
+                    bio: bio,
+                    pfp: pfp
+                }
             })
         }
 

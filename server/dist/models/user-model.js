@@ -7,14 +7,10 @@ exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const ObjectId = Schema.Types.ObjectId;
-// profilePicture composition taken from https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 const UserSchema = new Schema({
     username: { type: String, required: true },
     bio: { type: String, default: "" },
-    profilePicture: {
-        data: Buffer,
-        contentType: String
-    },
+    profilePicture: { type: String, default: "" },
     email: { type: String, required: true },
     passwordHash: { type: String, required: true },
     keybinds: { type: Map, default: new Map([

@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from './BackButton';
-import apis from '../store/store-request-api';
+import avatar from '../assets/clodsire.png'
 import AuthContext from '../auth';
 
 export default function ProfileScreen() {
@@ -18,130 +18,178 @@ export default function ProfileScreen() {
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
     const [username, setUsername] = useState(auth.user.username)
-    const [bio, setBio] = useState(store.profileInfo.bio)
-    // TODO: Add pfp
+    const [bio, setBio] = useState("")
+    const [postImage, setPostImage] = useState("")
 
     // Handles switching between Profile screen and Achievements screen
     const handleToggleScreen = () => {
         setShowProfileScreen(!showProfileScreen);
     };
 
+    // Handles submitting the profile info once editing is turned off
     function handleEditProfile(event) {
 
         if(editEnabled)
-            store.updateProfile(bio)
+            store.updateProfile(bio, postImage)
+
         setEditEnabled(!editEnabled);
     }
 
+    // Handles changing the bio state value
     function handleBioChange(event) {
         setBio(event.target.value)
     }
 
+    // When a pfp is uploaded, it's converted to base 64 and sent to the server
+    async function handleFileUpload(event) {
+        const file = event.target.files[0]
+        
+        // If the user actually uploaded a file instead of cancelling
+        if (file) {
+            const base64 = await convertToBase64(file)
+            setPostImage(base64)
+        }
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault()
+    }
+
+    // Helper function to convert a file into base 64
+    function convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file) // read contents of file
+            fileReader.onload = () => { // when read is successful, return contents of the file
+                resolve(fileReader.result)
+            }
+        })
+    }
+
     // Fetches initial profile info before user can edit
     useEffect(() => {
-        store.getProfile() // TODO: add error response
-    }, [])
+        if (Object.keys(store.profileInfo).length === 0)
+            store.getProfile() // TODO: add error response
+        
+        setBio(store.profileInfo.bio)
+        setPostImage(store.profileInfo.pfp)
+    }, [store.profileInfo])
+
+    console.log(bio)
+    console.log(postImage)
 
     const profileScreen = (
-        <Card sx={{
-            bgcolor: '#4D9147',
-            top: '20%',
-            left: '25%',
-            position: 'absolute',
-            boxShadow: 10,
-            textAlign: 'center',
-            borderRadius: '16px',
-            color: 'white', 
-        }}>
-            <CardActionArea 
-                onClick={handleToggleScreen}
-                disabled={editEnabled}>
-                <Divider />
-                <Box sx={{
-                    bgcolor: '#e3e3e3',
-                    width: '100%',
-                    height: '70%',
-                    color: 'black',
-                }}>
-                    <Grid container spacing={4} sx={{
-                        textAlign: 'left'
+            <Card sx={{
+                bgcolor: '#4D9147',
+                top: '20%',
+                left: '25%',
+                position: 'absolute',
+                boxShadow: 10,
+                textAlign: 'center',
+                borderRadius: '16px',
+                color: 'white', 
+            }}>
+                <CardActionArea 
+                    disabled={editEnabled}>
+                    <Divider />
+                    <Box sx={{
+                        bgcolor: '#e3e3e3',
+                        width: '100%',
+                        height: '70%',
+                        color: 'black',
                     }}>
-                        <Grid item xs={12} sx={{
-                            bgcolor: '#4D9147',
-                            color: 'white',
-                            textAlign: 'center'
+                        <Grid container spacing={4} sx={{
+                            textAlign: 'left'
                         }}>
-                            <h1>Mayhem Hospital</h1>
-                        </Grid>
-                        <Grid item xs={1}/>
-                        <Grid item xs={4}>
-                            <Box sx={{
-                                width: '140px',
-                                height: '140px',
-                                border: 2,
-                                borderColor: 'black',
-                                ml: 2
+                            <Grid item xs={12} onClick={handleToggleScreen} sx={{
+                                bgcolor: '#4D9147',
+                                color: 'white',
+                                textAlign: 'center'
                             }}>
-                                <CardMedia
-                                    sx={{ height: 140 }}
-                                    image="https://lh4.googleusercontent.com/-K7jvRKlNIJsgPxiouSy6jimwEU8LSStZpPurx6Z3UCIUOybtX6QQLiLMo2Nwtnn_a1gCSCjH8g28tTmHXjrTD5Hga3TNYPJT6SZoaOpoShr8zvWPeBG_V32B6irCZaz_fSNxU3xMhYipRLCpnoPIVs"
-                                    title="tbh"
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={6} sx={{
-                            fontSize: '12pt'
-                        }}>
-                            <p>
-                                {username}<br/>
-                                Last Seen: Now<br/>
-                                Registered Since: Jan 22, 2024
-                            </p>
-                        </Grid>
-                        <Grid item xs={1}/>
-                        <Grid item xs={12}>
-
-                        </Grid>
-                    </Grid>   
-                </Box>
-            </CardActionArea>
-            <CardActions>
-                <Box sx={{
-                    width: '100%',
-                    height: '100%',
-                    bgcolor: 'white'
-                }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField 
-                                id="filled-multiline-static"
-                                label="Bio"
-                                multiline
-                                fullWidth
-                                rows={4}
-                                defaultValue={store.profileInfo.bio}
-                                onChange={handleBioChange}
-                                variant="filled"
-                                disabled={!editEnabled}
-                                sx={{
+                                <h1>Mayhem Hospital</h1>
+                            </Grid>
+                            <Grid item xs={1}/>
+                            <Grid item xs={4}>
+                                <Box sx={{
+                                    width: '140px',
+                                    height: '140px',
+                                    border: 2,
+                                    borderColor: 'black',
+                                    ml: 2
                                 }}>
-                                
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} sx={{
-                            bgcolor: '#4D9147',
-                        }}>
-                            <IconButton onClick={(event) => {handleEditProfile(event)}} 
-                                sx={{
-                                    color: editEnabled ? 'red' : 'white'
+                                    <form
+                                        onSubmit={handleSubmit}>
+                                        <label htmlFor="file-upload">
+                                            <img 
+                                                src={postImage || avatar}
+                                                width={140}
+                                                height={140}/>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            label="Image"
+                                            name="myFile"
+                                            id='file-upload'
+                                            accept='.jpeg, .png, .jpg'
+                                            style={{display: "none"}}
+                                            onChange={(event) => handleFileUpload(event)}>
+                                        </input>
+                                    </form>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={6} sx={{
+                                fontSize: '12pt'
                             }}>
-                                <EditIcon />
-                            </IconButton>
+                                <p>
+                                    {username}<br/>
+                                    Last Seen: Now<br/>
+                                    Registered Since: Jan 22, 2024
+                                </p>
+                            </Grid>
+                            <Grid item xs={1}/>
+                            <Grid item xs={12}>
+
+                            </Grid>
+                        </Grid>   
+                    </Box>
+                </CardActionArea>
+                <CardActions>
+                    <Box sx={{
+                        width: '100%',
+                        height: '100%',
+                        bgcolor: 'white'
+                    }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField 
+                                    id="filled-multiline-static"
+                                    label="Bio"
+                                    multiline
+                                    fullWidth
+                                    rows={4}
+                                    defaultValue={store.profileInfo.bio}
+                                    onChange={handleBioChange}
+                                    variant="filled"
+                                    disabled={!editEnabled}
+                                    sx={{
+                                    }}>
+                                    
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} sx={{
+                                bgcolor: '#4D9147',
+                            }}>
+                                <IconButton onClick={(event) => {handleEditProfile(event)}} 
+                                    sx={{
+                                        color: editEnabled ? 'red' : 'white'
+                                }}>
+                                    <EditIcon />
+                                </IconButton>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Box>
-            </CardActions>            
-        </Card>
+                    </Box>
+                </CardActions>            
+            </Card>
     );
 
     const achievementsScreen = (
