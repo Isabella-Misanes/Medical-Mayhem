@@ -161,4 +161,16 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.userId)
+        console.log(req.userId)
+        console.log(deletedUser)
+        res.status(200).send()
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 export * as AuthController from './auth-controller'

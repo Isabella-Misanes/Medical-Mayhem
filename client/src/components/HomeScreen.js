@@ -3,9 +3,10 @@ import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
+import AuthContext, { UserRoleType } from '../auth';
 
 const homeButtons = {
     color: 'black',
@@ -15,6 +16,8 @@ const homeButtons = {
 
 export default function HomeScreen() {
     const navigate = useNavigate();
+    const { auth } = useContext(AuthContext);
+
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     
@@ -55,16 +58,22 @@ export default function HomeScreen() {
                         onClick={() => navigate('/mapsearch')}
                         text='Map Search'
                     />
+                    
                     <HomeButton
                         id='map-builder-button'
                         onClick={() => navigate('/mapbuilder')}
+                        backgroundColor='transparent'
+                        buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                         text='Map Builder'
+                        disable={auth.role === UserRoleType.GUEST}
                     />
                     <HomeButton
                         gridSx={{textAlign: 'center'}}
                         id='social-button'
                         onClick={() => navigate('/social')}
+                        buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                         text='Social'
+                        disable={auth.role === UserRoleType.GUEST}
                     />
                     <HomeButton
                         id='forums-button'
@@ -75,7 +84,9 @@ export default function HomeScreen() {
                         gridSx={{textAlign: 'center'}}
                         id='profile-button'
                         onClick={() => navigate('/profile')}
+                        buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                         text='Profile'
+                        disable={auth.role === UserRoleType.GUEST}
                     />
                     <HomeButton
                         id='settings-button'
@@ -107,7 +118,7 @@ export default function HomeScreen() {
                 </Grid>
             </Box>
             <MessagesDrawer />
-            <Sidebar />
+            {auth.role === UserRoleType.USER && <Sidebar />}
             <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
             <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
         </div>
@@ -115,9 +126,14 @@ export default function HomeScreen() {
 }
 
 function HomeButton(props) {
+    const { auth } = useContext(AuthContext);
+    console.log(auth.role)
+    console.log(props.id)
+    console.log(props.disable)
+    console.log('------------------')
     return (
         <Grid item xs={props.xs} sx={props.gridSx}>
-            <Button id={props.id} onClick={props.onClick} sx={props.buttonSx}>
+            <Button id={props.id} onClick={props.onClick} sx={props.buttonSx} disabled={props.disable}>
                 {props.text}
             </Button>
         </Grid>

@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from './BackButton';
-import avatar from '../assets/clodsire.png'
+import avatar from '../assets/default-avatar.jpg'
 import AuthContext from '../auth';
 
 export default function ProfileScreen() {
@@ -74,9 +74,6 @@ export default function ProfileScreen() {
         setBio(store.profileInfo.bio)
         setPostImage(store.profileInfo.pfp)
     }, [store.profileInfo])
-
-    console.log(bio)
-    console.log(postImage)
 
     const profileScreen = (
             <Card sx={{

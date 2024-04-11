@@ -7,33 +7,33 @@ describe('template spec', () => {
     cy.url().should('eq', 'https://medical-mayhem-c0832c3f548e.herokuapp.com/')
   })
 
-  // it('should register a new user successfully', () => {
-  //   cy.visit('https://medical-mayhem-c0832c3f548e.herokuapp.com/')
+  it('should register a new user successfully', () => {
+    cy.visit('https://medical-mayhem-c0832c3f548e.herokuapp.com/')
 
-  //   cy.intercept('POST', '/auth/register', {
-  //     statusCode: 200,
-  //     body: {
-  //       success: true,
-  //       user: {
-  //           username : 'JohnSmith123',
-  //           email : 'john.smith@gmail.com',
-  //       }
-  //     }
-  //   }).as('registration')
+    cy.intercept('POST', '/auth/register', {
+      statusCode: 200,
+      body: {
+        success: true,
+        user: {
+            username : 'JohnSmith123',
+            email : 'john.smith@gmail.com',
+        }
+      }
+    }).as('registration')
 
-  //   cy.get('#register').click()
+    cy.get('#register').click()
 
-  //   cy.get('#username').type('JohnSmith123')
-  //   cy.get('#email').type('john.smith@gmail.com')
-  //   cy.get('#password').type('password')
-  //   cy.get('#passwordVerify').type('password')
+    cy.get('#username').type('JohnSmith123')
+    cy.get('#email').type('john.smith@gmail.com')
+    cy.get('#password').type('password')
+    cy.get('#passwordVerify').type('password')
 
-  //   cy.get('#signUp').click()
+    cy.get('#signUp').click()
 
-  //   cy.wait('@registration')
+    cy.wait('@registration')
 
-  //   cy.url().should('eq', 'https://medical-mayhem-c0832c3f548e.herokuapp.com/')
-  // })
+    cy.url().should('eq', 'https://medical-mayhem-c0832c3f548e.herokuapp.com/')
+  })
 
   
   it('should continue as guest then navigate to the game screen successfully', () => {

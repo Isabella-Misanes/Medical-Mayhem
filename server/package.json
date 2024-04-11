@@ -2,7 +2,7 @@
   "scripts": {
     "test": "npm run build && jest --detectOpenHandles --rootDir=dist/tests",
     "build": "tsc",
-    "start": "npm run build && nodemon dist/server.js"
+    "start": "npx nodemon server.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

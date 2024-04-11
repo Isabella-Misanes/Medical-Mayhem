@@ -1,7 +1,7 @@
 import { Box, IconButton, Menu, MenuItem} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AuthContext from '../auth';
+import AuthContext, { UserRoleType } from '../auth';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
 import ReportModal from './ReportModal';
@@ -22,8 +22,11 @@ export default function Sidebar() {
     };
 
     function handleLogout() {
-        if(store.guest) store.logoutGuest();
-        else auth.logoutUser();
+        if(auth.role == UserRoleType.GUEST) auth.logoutGuest();
+        else {
+            store.reset()
+            auth.logoutUser();
+        }
     }
 
     function handlePrivateMessaging(event) {

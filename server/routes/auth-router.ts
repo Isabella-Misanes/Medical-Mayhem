@@ -5,10 +5,13 @@ import { auth } from '../auth'
 
 router.use('/loggedIn', auth.verifyToken)
 router.use('/loggedIn', auth.verifyUserExists)
+router.use('/deleteUser', auth.verifyToken)
+router.use('/deleteUser', auth.verifyUserExists)
 
 router.post('/register', AuthController.registerUser)
 router.post('/login', AuthController.loginUser)
 router.get('/logout', AuthController.logoutUser)
 router.get('/loggedIn', AuthController.getLoggedIn)
+router.get('/deleteUser', AuthController.deleteUser)
 
 export default router

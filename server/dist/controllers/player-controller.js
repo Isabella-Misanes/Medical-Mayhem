@@ -66,7 +66,6 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const { bio, pfp } = req.body;
         let updatedUser;
         if (pfp) {
-            console.log("HERHERHERHER");
             updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: bio, profilePicture: pfp } });
         }
         else {
