@@ -7,7 +7,7 @@
  * the patient’s box. Incorrect matching will result in that patient dying. 
  */
 
-import { Engine, Actor, Color, CollisionType, Input, vec, Keys } from "excalibur";
+import { Engine, Actor, Color, CollisionType, vec, Keys } from "excalibur";
 
 const initializeMeds = (game) => {
   // Padding between medicines
@@ -17,7 +17,7 @@ const initializeMeds = (game) => {
   const columns = 5;
   const rows = 3;
 
-  const brickColor = [Color.Violet, Color.Orange, Color.Yellow];
+  const brickColor = [Color.Violet, Color.Orange, Color.Yellow, Color.Red, Color.Viridian, Color.Magenta, Color.Green];
 
   // Individual medicine width with padding factored in
   const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
@@ -30,7 +30,7 @@ const initializeMeds = (game) => {
         y: yoffset + j * (brickHeight + padding) + padding,
         width: brickWidth,
         height: brickHeight,
-        color: brickColor[j % brickColor.length],
+        color: brickColor[Math.floor(Math.random() * brickColor.length)],
       }));
     }
   }
