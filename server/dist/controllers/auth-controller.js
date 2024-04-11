@@ -45,11 +45,8 @@ const getLoggedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(200).json({
             loggedIn: true,
             user: {
-                loggedIn: true,
-                user: {
-                    username: req.username,
-                    email: req.email
-                }
+                username: req.username,
+                email: req.email
             }
         });
     }

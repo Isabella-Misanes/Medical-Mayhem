@@ -53,8 +53,8 @@ export const buttonStyle = {
 const App = () => {
     return (
         <BrowserRouter>
-            <GlobalStoreContextProvider>
-                <AuthContextProvider>
+              <AuthContextProvider>
+                  <GlobalStoreContextProvider>
                     <Routes>
                         <Route path="/" exact element={<HomeWrapper />} />
                         <Route path="/login/" exact element={<LoginScreen />} />
@@ -72,8 +72,8 @@ const App = () => {
                         <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                         <Route path="/reports/" exact element={<ReportsScreen />} />
                     </Routes>
-                </AuthContextProvider>
-            </GlobalStoreContextProvider>
+                  </GlobalStoreContextProvider>
+              </AuthContextProvider>
         </BrowserRouter>
     )
 }
