@@ -7,7 +7,7 @@
  * the patient’s box. Incorrect matching will result in that patient dying. 
  */
 
-import { Engine, Actor, Color, CollisionType, Input } from "excalibur";
+import { Engine, Actor, Color, CollisionType, Input, vec, Keys } from "excalibur";
 
 const initializeMeds = (game) => {
   // Padding between medicines
@@ -51,7 +51,7 @@ const initializeSelector = (game) => {
   const xoffset = 65; // x-offset
   const yoffset = 60; // y-offset
   const columns = 5;
-  // const rows = 3;
+  const rows = 3;
   const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
   const brickHeight = game.drawWidth / columns - padding - padding / columns; // px
   const selectorSides = [];
@@ -59,7 +59,7 @@ const initializeSelector = (game) => {
   for(let i = 0; i < 4; i++) {
     selectorSides.push(new Actor({
       x: (i % 2 === 0) ? xoffset + padding : (i === 1 ? padding : 2 * xoffset + padding),
-      y: (i % 2 === 0) ? (padding - 7 + (i === 2 ? brickHeight - 5 : 0)) : padding + yoffset,
+      y: (i % 2 === 0) ? (padding - 7 + (i === 2 ? brickHeight - 4 : 0)) : padding + yoffset,
       width: (i % 2 === 0) ? brickWidth : 5,
       height: (i % 2 === 0) ? 5 : brickHeight,
       color: Color.Red
@@ -68,19 +68,42 @@ const initializeSelector = (game) => {
 
   selectorSides.forEach(side => { game.add(side); })
 
+  // Move up/left/down/right
+  let row = 0;
+  let col = 0;
   game.input.keyboard.on('press', (event) => {
     switch(event.key) {
-      case Input.W:
-        // TODO: Code to move up
+      case Keys.W:
+        if(row !== 0) {
+          selectorSides.forEach(side => {
+            side.actions.moveBy(vec(0, ((brickHeight + padding) * -1)), 1000);
+          })
+          row--;
+      }
         break;
-      case Input.A:
-        // TODO: Code to move left
+      case Keys.A:
+        if(col !== 0) {
+          selectorSides.forEach(side => {
+            side.actions.moveBy(vec((brickHeight + padding) * -1, 0), 1000);
+          })
+          col--;
+        }
         break;
-      case Input.S:
-        // TODO: Code to move down
+      case Keys.S:
+        if(row !== rows - 1) {
+          selectorSides.forEach(side => {
+            side.actions.moveBy(vec(0, brickHeight + padding), 1000);
+          })
+          row++;
+        }
         break;
-      case Input.D:
-        // TODO: Code to move right
+      case Keys.D:
+        if(col !== columns - 1) {
+          selectorSides.forEach(side => {
+            side.actions.moveBy(vec(brickHeight + padding, 0), 1000);
+          })
+          col++;
+        }
         break;
       default:
         return;
