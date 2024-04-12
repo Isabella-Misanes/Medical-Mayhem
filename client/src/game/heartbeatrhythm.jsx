@@ -18,13 +18,44 @@ const initializeBar = (game) => {
 
     bar.body.collisionType = CollisionType.Fixed;
 
+    let tapped = false;
+    let isColliding = false;
+    var ball = null;
+
     game.add(bar);
 
     game.input.keyboard.on('press', (event) => {
         if(event.key === Keys.Space) {
             bar.color = Color.Green;
+            tapped = true;
+            setTimeout(() => {
+                tapped = false; 
+            }, 100);
         }
     });
+
+    bar.on('collisionstart', (evt) => {
+        ball = evt.other;
+        isColliding = true;
+    });
+
+    bar.on('collisionend', (evt) => {
+        isColliding = false;
+    });
+
+    game.on('postupdate', () => {
+        if(isColliding && tapped) {
+            if(ball) {
+                ball.kill();
+            }
+        }
+    })
+
+    // Timer
+    setInterval(() => {
+        tapped = false;
+        bar.color = Color.Red;
+    }, 300);
 }
 
 const initProjectile = (game) => {
@@ -37,9 +68,8 @@ const initProjectile = (game) => {
 
     const projectileSpeed = vec(-500, 0);
     setTimeout(() => {
-        // Set the velocity in pixels per second
         projectile.vel = projectileSpeed;
-    }, 500);
+    }, 2000);
 
     projectile.body.collisionType = CollisionType.Passive;
 
@@ -47,7 +77,7 @@ const initProjectile = (game) => {
 
     projectile.on("postupdate", () => {
         if(projectile.pos.x < -50 || projectile.pos.y < 0 || projectile.pos.x > game.drawWidth || projectile.pos.y > game.drawHeight) {
-            this.kill();
+            projectile.kill();
         }
     });
 
@@ -55,14 +85,14 @@ const initProjectile = (game) => {
 }
 
 const initializeText = (game) => {
-  const actor = new Actor({pos: vec(gameWidth/2, 30)});
-  const instrText = new Text({
-    text: 'Press the Space bar when the circle reaches the vertical line.',
-    color: Color.White,
-    font: new Font({size: 24, textAlign: TextAlign.Left})
-  });
-  actor.graphics.use(instrText);
-  game.currentScene.add(actor);
+    const actor = new Actor({pos: vec(gameWidth/2, 30)});
+    const instrText = new Text({
+        text: 'Press the Space bar when the circle reaches the vertical line.',
+        color: Color.White,
+        font: new Font({size: 24, textAlign: TextAlign.Left})
+    });
+    actor.graphics.use(instrText);
+    game.currentScene.add(actor);
 }
 
 export const initHeartbeat = (gameRef, gameCanvasRef) => {
@@ -78,22 +108,10 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
     const projectile = initProjectile(game);
     initializeBar(game);
     initializeText(game);
-
-    projectile.on("collisionstart", function (ev) {
-        // kill removes an actor from the current scene
-        // therefore it will no longer be drawn or updated
-        console.log("collision start");
-        
-    });
-
-    projectile.on("collisionend", () => {
-        // ball has separated from whatever object it was colliding with
-        
-    });
     
-      // Loss condition
+    // Loss condition
     projectile.on("exitviewport", () => {
-        projectile.kill();
+        
     });
 
     game?.start().catch((e) => console.error(e));
