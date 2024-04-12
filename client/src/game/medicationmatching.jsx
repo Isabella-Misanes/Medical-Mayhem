@@ -7,13 +7,27 @@
  * the patient’s box. Incorrect matching will result in that patient dying. 
  */
 
-import { Engine, Actor, Color, vec, Keys, Text, Font, TextAlign } from "excalibur";
+import { Engine, Actor, Color, vec, Keys, Text, Font, TextAlign, Timer } from "excalibur";
 
 let points = 0;
 const pointText = new Text({
   text: "Points: " + points,
   color: Color.White,
   font: new Font({size: 24, textAlign: TextAlign.Left})
+})
+let timerSec = 15;
+const timerText = new Text({
+  text: "Timer: " + timerSec,
+  color: Color.White,
+  font: new Font({size: 24, textAlign: TextAlign.Left})
+})
+const timer = new Timer({
+  interval: 1000,
+  fcn: () => {
+    timerSec--;
+    timerText.text = "Timer: " + timerSec;
+  },
+  repeats: true
 })
 let row = 0;
 let col = 0;
@@ -168,6 +182,10 @@ const initializeCurrColor = (game) => {
       currColorCircle.actions.moveTo(vec(gameWidth - 100, gameHeight - 70), 2000).callMethod(() => {
         currColor = randomColors[Math.floor(Math.random() * randomColors.length)];
         currColorCircle.color = currColor;
+        if(points === 10) {
+          alert("You win!");
+          game.stop();
+        }
       });
     }
   })
@@ -181,10 +199,13 @@ const initializeText = (game) => {
     font: new Font({size: 24, textAlign: TextAlign.Left})
   });
   const actor2 = new Actor({pos: vec(53, gameHeight - 70)})
+  const timeActor = new Actor({pos: vec(55, gameHeight - 95)});
   actor1.graphics.use(instrText);
   actor2.graphics.use(pointText);
+  timeActor.graphics.use(timerText);
   game.currentScene.add(actor1);
   game.currentScene.add(actor2);
+  game.currentScene.add(timeActor);
 }
 
 export const initMedicationMatching = (gameRef, gameCanvasRef) => {
@@ -201,6 +222,12 @@ export const initMedicationMatching = (gameRef, gameCanvasRef) => {
   initializeSelector(game);
   initializeCurrColor(game);
   initializeText(game);
+  game.currentScene.add(timer);
+  timer.start();
+  game.clock.schedule(() => {
+    alert("Time's up!");
+    game.stop();
+  }, 15000);
 
   game?.start().catch((e) => console.error(e));
 };
