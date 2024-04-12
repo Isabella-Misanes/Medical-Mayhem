@@ -5,9 +5,11 @@ import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { buttonStyle } from '../App';
 import SendIcon from '@mui/icons-material/Send';
+import AuthContext, { UserRoleType } from '../auth';
 
 export default function MessagesDrawer() {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [value, setValue] = useState('1');
     const [state, setState] = useState('bottom');
 
@@ -80,8 +82,8 @@ export default function MessagesDrawer() {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                                     <Tab label="Public" value="1" sx={tabButton}/>
-                                    <Tab label="Party" value="2" sx={tabButton}/>
-                                    <Tab label="Private" value="3" sx={tabButton}/>
+                                    {auth.role === UserRoleType.USER && <Tab label="Party" value="2" sx={tabButton}/>}
+                                    {auth.role === UserRoleType.USER && <Tab label="Private" value="3" sx={tabButton}/>}
                                 </TabList>
                             </Box>
                             <TabPanel value="1">

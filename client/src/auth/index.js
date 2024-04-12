@@ -9,20 +9,30 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
+    LOGIN_GUEST: "LOGIN_GUEST",
+    LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
+    DELETE_USER: "DELETE_USER",
     ERROR: "ERROR"
+}
+
+export const UserRoleType = {
+    USER: "USER",
+    ADMIN: "ADMIN",
+    GUEST: "GUEST",
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
-        user: null,
+        user: {
+            username: "",
+            email: ""
+        },
+        role: null,
         loggedIn: false,
         errorMessage: ""
     });
     const navigate = useNavigate();
-
-    // TODO: THIS SHOULD RUN WITH EVERY PAGE CHANGE TO VERIFY THAT THE USER IS STILL AUTHORIZED
-    // This will be handled once we start backend use cases when dealing with user roles.  - Torin
 
     useEffect(() => {
         auth.getLoggedIn();
@@ -35,34 +45,78 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: payload.loggedIn,
                     errorMessage: ""
                 });
             }
+            case AuthActionType.REGISTER_USER: {
+                return setAuth({
+                    user: payload.user,
+                    role: UserRoleType.USER,
+                    loggedIn: true,
+                    errorMessage: ""
+                })
+            }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: true,
                     errorMessage: ""
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
                     loggedIn: false,
                     errorMessage: ""
                 })
             }
-            case AuthActionType.REGISTER_USER: {
+            case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: payload.user,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: UserRoleType.GUEST,
                     loggedIn: true,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.LOGOUT_GUEST: {
+                return setAuth({
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
+                    loggedIn: false,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.DELETE_USER: {
+                return setAuth({
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
+                    loggedIn: false,
                     errorMessage: ""
                 })
             }
             case AuthActionType.ERROR: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
                 })
@@ -78,6 +132,7 @@ function AuthContextProvider(props) {
             console.log("getLoggedIn response: " + response.status)
             console.log(response)
             if (response.status === 200 && !auth.loggedIn) {
+                console.log("LOGGING IN")
                 authReducer({
                     type: AuthActionType.GET_LOGGED_IN,
                     payload: {
@@ -164,6 +219,41 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGIN_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.logoutGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGOUT_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.deleteUser = async function() {
+        try {
+            const response = await api.deleteUser();
+            if (response.status === 200) {
+                authReducer( {
+                    type: AuthActionType.DELETE_USER,
+                    payload: null
+                })
+                navigate("/");
+            } 
+        } catch(error) {
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
+        }
+    }
+
     auth.hideModal = () => {
         authReducer({
             type: AuthActionType.ERROR,
@@ -173,6 +263,14 @@ function AuthContextProvider(props) {
 
     auth.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
+    }
+
+    auth.error = async function(errorMessage) {
+        console.log("error");
+        authReducer({
+            type: AuthActionType.ERROR,
+            payload: { errorMessage: errorMessage }
+        });
     }
 
     return (

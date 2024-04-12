@@ -9,12 +9,8 @@ export const getLoggedIn = async (req: Request, res: Response) => {
         return res.status(200).json({
             loggedIn: true,
             user: {
-                loggedIn: true,
-                user: {
-                    username: req.username,
-                    email: req.email
-                }
-
+                username: req.username,
+                email: req.email
             }
         })
     } catch (err) {
@@ -159,6 +155,18 @@ export const registerUser = async (req: Request, res: Response) => {
 
         console.log("token sent");
 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.userId)
+        console.log(req.userId)
+        console.log(deletedUser)
+        res.status(200).send()
     } catch (err) {
         console.error(err);
         res.status(500).send();

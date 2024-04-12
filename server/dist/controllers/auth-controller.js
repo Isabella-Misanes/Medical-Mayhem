@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = exports.registerUser = exports.logoutUser = exports.loginUser = exports.getLoggedIn = void 0;
+exports.AuthController = exports.deleteUser = exports.registerUser = exports.logoutUser = exports.loginUser = exports.getLoggedIn = void 0;
 const index_1 = require("../auth/index");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_model_1 = require("../models/user-model");
@@ -45,11 +45,8 @@ const getLoggedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(200).json({
             loggedIn: true,
             user: {
-                loggedIn: true,
-                user: {
-                    username: req.username,
-                    email: req.email
-                }
+                username: req.username,
+                email: req.email
             }
         });
     }
@@ -189,5 +186,17 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.registerUser = registerUser;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log("HALO REACHED");
+        // const deletedUser = await User.findByIdAndDelete(req.userId)
+        // res.status(200).send()
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+});
+exports.deleteUser = deleteUser;
 exports.AuthController = __importStar(require("./auth-controller"));
 //# sourceMappingURL=auth-controller.js.map

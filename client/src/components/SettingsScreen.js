@@ -1,14 +1,17 @@
-import { Box, Button, Divider, Grid, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, LinearProgress, Typography, ToggleButton } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox'
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import { buttonStyle } from '../App';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
-import AuthContext from '../auth';
+import AuthContext, { UserRoleType } from '../auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingsScreen() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const resetButton = {
         mt: 1,
@@ -29,8 +32,22 @@ export default function SettingsScreen() {
     }
 
     function handleLogout() {
-        if(store.guest) store.logoutGuest();
-        else auth.logoutUser();
+        store.reset()
+        auth.logoutUser();
+    }
+
+    function handleDeleteAcc() {
+        store.reset()
+        auth.deleteUser()
+        auth.logoutUser();
+    }
+
+    function handleLogin() {
+        navigate('/login')
+    }
+
+    function handleRegister() {
+        navigate('/register')
     }
 
     function handleResetAudio() {
@@ -173,9 +190,47 @@ export default function SettingsScreen() {
                     </Grid>
                 </Grid>
                 <Divider />
-                <Button onClick={() => {handleLogout()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
-                    Log Out
-                </Button>
+
+                { auth.role === UserRoleType.USER && 
+                <>
+                    <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
+                        <ToggleButton size='small'>
+                            Private Profile
+                            <Checkbox />
+                        </ToggleButton>
+
+                        <ToggleButton size='small'>
+                            Messages
+                            <Checkbox />
+                        </ToggleButton>
+
+                        <ToggleButton size='small'>
+                            Party
+                            <Checkbox />
+                        </ToggleButton>
+                    </Box>
+                </>}
+               
+                <Box display="flex" justifyContent={'center'} gap={5}>
+                    { auth.role === UserRoleType.USER ?
+                        <>
+                            <Button onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
+                                Log Out
+                            </Button>
+                            <Button onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
+                                Delete Account
+                            </Button> 
+                        </> :
+                        <>
+                            <Button onClick={() => {handleLogin()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                                Log In
+                            </Button>
+                            <Button onClick={() => {handleRegister()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                                Register
+                            </Button> 
+                        </>}
+                    
+                </Box>
             </Box>
             <Sidebar/>
             <BackButton />
