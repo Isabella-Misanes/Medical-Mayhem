@@ -66,10 +66,8 @@ const initProjectile = (game) => {
         color: Color.Yellow,
     });
 
-    const projectileSpeed = vec(-500, 0);
-    setTimeout(() => {
-        projectile.vel = projectileSpeed;
-    }, 2000);
+    const projectileSpeed = vec(-600, 0);
+    projectile.vel = projectileSpeed;
 
     projectile.body.collisionType = CollisionType.Passive;
 
@@ -80,8 +78,6 @@ const initProjectile = (game) => {
             projectile.kill();
         }
     });
-
-    return projectile;
 }
 
 const initializeText = (game) => {
@@ -105,14 +101,19 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
     });
     const game = gameRef.current;
 
-    const projectile = initProjectile(game);
     initializeBar(game);
     initializeText(game);
-    
-    // Loss condition
-    projectile.on("exitviewport", () => {
-        
-    });
+
+    const createRandomProjectile = () => {
+        const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
+        setTimeout(() => {
+            initProjectile(game);
+            createRandomProjectile();
+        }, interval);
+    };
+
+    // Start creating projectiles with a random interval
+    createRandomProjectile();
 
     game?.start().catch((e) => console.error(e));
 };
