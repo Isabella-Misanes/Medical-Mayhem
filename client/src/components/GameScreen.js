@@ -5,6 +5,7 @@ import BackButton from './BackButton';
 import React, { useState } from "react";
 import { initBreakout } from "../game/breakout";
 import { initMedicationMatching } from '../game/medicationmatching';
+import { initHeartbeat } from '../game/heartbeatrhythm';
 
 export default function GameScreen() {
     const [selectedGame, setSelectedGame] = useState(0);
@@ -19,6 +20,9 @@ export default function GameScreen() {
                     break;
                 case 2:
                     initMedicationMatching(gameRef, gameCanvas);
+                    break;
+                case 3:
+                    initHeartbeat(gameRef, gameCanvas);
                     break;
                 default:
                     return;
@@ -36,6 +40,7 @@ export default function GameScreen() {
             }}>
                 <button onClick={() =>  setSelectedGame(1)}>Breakout</button>
                 <button onClick={() =>  setSelectedGame(2)}>Medication Matching</button>
+                <button onClick={() =>  setSelectedGame(3)}>Heartbeat Rhythm</button>
                 <br />
                 <canvas ref={gameCanvas} id="gameCanvas"></canvas>
                 {/* <Box sx={{
