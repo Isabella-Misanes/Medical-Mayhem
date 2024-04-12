@@ -7,8 +7,8 @@ axios.defaults.withCredentials = true;
 const api = axios.create({
     // Uncomment one, comment out the other as needed
     
-    // baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/auth'
-    baseURL: 'http://localhost:4000/auth'
+    baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/auth'
+    //baseURL: 'http://localhost:4000/auth'
 })
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A

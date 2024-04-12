@@ -17,7 +17,7 @@ export default function ProfileScreen() {
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    //const [username, setUsername] = useState(auth.user.username) CHANGE LATER
+    const [username, setUsername] = useState(auth.user.username)
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
 
@@ -30,14 +30,20 @@ export default function ProfileScreen() {
     function handleEditProfile(event) {
 
         if(editEnabled)
-            store.updateProfile(bio, postImage)
+            store.updateProfile(username, bio, postImage)
 
+        auth.updateUsername(username)
         setEditEnabled(!editEnabled);
     }
 
     // Handles changing the bio state value
     function handleBioChange(event) {
         setBio(event.target.value)
+    }
+
+    // Handles changing the username state value
+    function handleUsernameChange(event) {
+        setUsername(event.target.value)
     }
 
     // When a pfp is uploaded, it's converted to base 64 and sent to the server
@@ -66,15 +72,9 @@ export default function ProfileScreen() {
         })
     }
 
-    // Fetches initial profile info before user can edit
-    // TODO: This is the best way that I can find that refetches the profile info AND rerenders without
-    // causing an infinite loop. The problem is that if a user is not authenticated, a user can hypothetically
-    // go back into their profile and view it because it's using an old store.
-    // IDEA: Split into two useEffects, test in the future
-
     useEffect(() => {
         store.getProfile()
-
+        console.log(auth.user.username)
         // eslint-disable-next-line
     }, [])
 
@@ -150,11 +150,27 @@ export default function ProfileScreen() {
                             <Grid item xs={6} sx={{
                                 fontSize: '12pt'
                             }}>
-                                <p>
-                                    {auth.user.username}<br/>
-                                    Last Seen: Now<br/>
-                                    Registered Since: Jan 22, 2024
-                                </p>
+                                {editEnabled ?
+                                    <>
+                                        <TextField
+                                            size='small'
+                                            value={username}
+                                            fullWidth
+                                            variant="outlined"
+                                            onChange={handleUsernameChange}
+                                        />
+                                        <p>
+                                            Last Seen: Now<br/>
+                                            Registered Since: Jan 22, 2024
+                                        </p>
+                                    </>
+                                    :
+                                    <p>
+                                        {username}<br/>
+                                        Last Seen: Now<br/>
+                                        Registered Since: Jan 22, 2024
+                                    </p>
+                                }
                             </Grid>
                             <Grid item xs={1}/>
                             <Grid item xs={12}>

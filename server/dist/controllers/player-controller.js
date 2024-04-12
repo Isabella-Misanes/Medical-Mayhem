@@ -63,13 +63,13 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getProfile = getProfile;
 const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { bio, pfp } = req.body;
+        const { username, bio, pfp } = req.body;
         let updatedUser;
         if (pfp) {
-            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: bio, profilePicture: pfp } });
+            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { username: username, bio: bio, profilePicture: pfp } });
         }
         else {
-            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { bio: bio } });
+            updatedUser = yield user_model_1.User.updateOne({ _id: req.userId }, { $set: { username: username, bio: bio } });
         }
         console.log("updatedUser: " + updatedUser);
         if (!updatedUser) {
@@ -79,7 +79,6 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 errorMessage: "User cannot be updated."
             });
         }
-        // TODO: Return a modified cookie if the user changes their username
         return res.status(200).send();
     }
     catch (err) {

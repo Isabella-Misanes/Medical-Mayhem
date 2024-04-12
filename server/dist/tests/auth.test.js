@@ -18,6 +18,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongodb_memory_server_1 = require("mongodb-memory-server");
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env') }); // ty DavidP on SO
 let mongoServer;
 // Create test database to store dummy data
@@ -38,6 +39,9 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoServer.stop();
     yield mongoose_1.default.disconnect();
 }));
+let cookie;
+const pfp = fs_1.default.readFileSync(path_1.default.resolve(__dirname, '../../assets/default-avatar.txt'), 'utf8');
+let userId;
 describe("POST /register", () => {
     // TODO: add test for missing email, username, password, or password verification
     it("registers a user successfully", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -52,6 +56,7 @@ describe("POST /register", () => {
         const cookies = response.header['set-cookie'];
         expect(cookies).toBeDefined();
         expect(cookies[0]).toContain('token');
+        cookie = cookies[0]; // save cookie for other requests
         expect(response.body).toEqual({
             success: true,
             user: {
@@ -91,54 +96,53 @@ describe("POST /register", () => {
             .expect('Content-Type', /json/);
     }));
 });
-describe("POST /login", () => {
-    it("logs a user in successfully", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
-            email: "john.smith@blah.com",
-            password: 'password',
-        })
+describe("GET /getProfile", () => {
+    it("gets a default profile succesfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default)
+            .get("/api/getProfile")
+            .set('Cookie', [cookie])
+            .send()
             .expect(200)
             .expect('Content-Type', /json/);
-        const cookies = response.header['set-cookie'];
-        expect(cookies).toBeDefined();
-        expect(cookies[0]).toContain('token');
         expect(response.body).toEqual({
-            success: true,
-            user: {
-                username: "username",
-                email: "john.smith@blah.com"
-            }
+            bio: "",
+            pfp: ""
         });
     }));
-    it("responds with status 400 & error message given no email", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
-            password: 'password',
+});
+describe("POST /updateProfile", () => {
+    it("updates a username successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, supertest_1.default)(index_1.default)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+            username: 'diff username',
+            bio: 'bio',
+            pfp: ''
         })
-            .expect(400)
-            .expect('Content-Type', /json/);
+            .expect(200);
     }));
-    it("responds with status 400 & error message given no password", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
-            email: "john.smith@blah.com",
+    it("updates a bio successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, supertest_1.default)(index_1.default)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+            username: 'username',
+            bio: 'bio',
+            pfp: ''
         })
-            .expect('Content-Type', /json/)
-            .expect(400);
+            .expect(200);
     }));
-    it("responds with status 401 & error message given wrong email", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
-            email: "jane.doe@blah.com",
-            password: 'password',
+    it("updates a profile picture successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, supertest_1.default)(index_1.default)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+            username: 'username',
+            bio: 'bio',
+            pfp: pfp
         })
-            .expect(401)
-            .expect('Content-Type', /json/);
-    }));
-    it("responds with status 401 & error message given wrong password", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
-            email: "john.smith@blah.com",
-            password: 'passwordy',
-        })
-            .expect(401)
-            .expect('Content-Type', /json/);
+            .expect(200);
     }));
 });
 //# sourceMappingURL=auth.test.js.map

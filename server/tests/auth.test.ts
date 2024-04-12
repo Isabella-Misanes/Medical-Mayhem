@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import path from 'path'
 import { MongoMemoryServer } from 'mongodb-memory-server'
+import Cookies from 'js-cookie'
+import fs from 'fs'
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
 
@@ -30,6 +32,9 @@ afterAll(async () => {
     await mongoose.disconnect()
 })
 
+let cookie: string
+const pfp = fs.readFileSync(path.resolve(__dirname, '../../assets/default-avatar.txt'), 'utf8')
+
 describe("POST /register", () => {
 
     // TODO: add test for missing email, username, password, or password verification
@@ -47,6 +52,8 @@ describe("POST /register", () => {
         const cookies = response.header['set-cookie']
         expect(cookies).toBeDefined()
         expect(cookies[0]).toContain('token')
+
+        cookie = cookies[0] // save cookie for other requests
 
         expect(response.body).toEqual({
             success: true,
@@ -91,60 +98,58 @@ describe("POST /register", () => {
     })
 })
 
-describe("POST /login", () => {
+describe("GET /getProfile", () => {
 
-    it("logs a user in successfully", async () => {
-        const response = await request(app).post("/auth/login").send({
-            email: "john.smith@blah.com",
-            password: 'password',
-        })
-        .expect(200)
-        .expect('Content-Type', /json/)
+    it("gets a default profile succesfully", async () => {
+        const response = await request(app)
+            .get("/api/getProfile")
+            .set('Cookie', [cookie])
+            .send()
+            .expect(200)
+            .expect('Content-Type', /json/)
+        
+            expect(response.body).toEqual({
+                bio: "",
+                pfp: "" 
+            })             
+    })
+})
 
-        const cookies = response.header['set-cookie']
-        expect(cookies).toBeDefined()
-        expect(cookies[0]).toContain('token')
+describe("POST /updateProfile", () => {
 
-        expect(response.body).toEqual({
-            success: true,
-            user: {
-                username: "username",
-                email: "john.smith@blah.com"              
-            }
-        })
+    it("updates a username successfully", async () => {
+        await request(app)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+                username: 'diff username',
+                bio: 'bio',
+                pfp: ''
+            })
+            .expect(200)
     })
 
-    it("responds with status 400 & error message given no email", async () => {
-        await request(app).post("/auth/login").send({
-            password: 'password',
-        })
-        .expect(400)
-        .expect('Content-Type', /json/)
+    it("updates a bio successfully", async () => {
+        await request(app)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+                username: 'username',
+                bio: 'bio',
+                pfp: ''
+            })
+            .expect(200)
     })
 
-    it("responds with status 400 & error message given no password", async () => {
-        await request(app).post("/auth/login").send({
-            email: "john.smith@blah.com",
-        })
-        .expect('Content-Type', /json/)
-        .expect(400)
-    })
-
-    it("responds with status 401 & error message given wrong email", async () => {
-        await request(app).post("/auth/login").send({
-            email: "jane.doe@blah.com",
-            password: 'password',
-        })
-        .expect(401)
-        .expect('Content-Type', /json/)
-    })
-
-    it("responds with status 401 & error message given wrong password", async () => {
-        await request(app).post("/auth/login").send({
-            email: "john.smith@blah.com",
-            password: 'passwordy',
-        })
-        .expect(401)
-        .expect('Content-Type', /json/)
+    it("updates a profile picture successfully", async () => {
+        await request(app)
+            .post("/api/updateProfile")
+            .set('Cookie', [cookie])
+            .send({
+                username: 'username',
+                bio: 'bio',
+                pfp: pfp
+            })
+            .expect(200)
     })
 })

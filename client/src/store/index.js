@@ -157,15 +157,16 @@ function GlobalStoreContextProvider(props) {
     }
 
     // TODO: INCLUDE TRY CATCH
-    store.updateProfile = function (bio, pfp) {
+    store.updateProfile = function (username, bio, pfp) {
 
         async function asyncUpdateProfile() {
             try{
-                let response = await apis.updateProfile(bio, pfp)
+                let response = await apis.updateProfile(username, bio, pfp)
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_PROFILE,
                     payload: {
+                        username: username,
                         bio: bio,
                         pfp: pfp
                     }

@@ -24,17 +24,18 @@ function authManager() {
         try {
             const token = req.cookies.token;
             if (!token) {
+                console.log("TOKEN DOESNT EXIST");
                 return res.status(401).json({
                     loggedIn: false,
                     user: null,
                     errorMessage: "Unauthorized"
                 });
             }
-            console.log("TYPE AFTER " + typeof (token));
             const verified = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
             console.log("VERIFIED: " + verified);
             console.log("verified.userId: " + verified.userId);
             req.userId = verified.userId;
+            console.log("PASSED");
             next();
         }
         catch (err) {
@@ -61,7 +62,7 @@ function authManager() {
                 }).status(404).json({
                     loggedIn: false,
                     user: null,
-                    errorMessage: "?"
+                    errorMessage: "User no longer exists."
                 }).send();
                 return;
             }

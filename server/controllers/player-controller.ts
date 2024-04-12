@@ -33,21 +33,21 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
-        const {bio, pfp} = req.body
+        const {username, bio, pfp} = req.body
 
         let updatedUser
 
         if (pfp) {
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {bio: bio, profilePicture: pfp}}
+                {$set: {username: username, bio: bio, profilePicture: pfp}}
             );
         }
 
         else {
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {bio: bio}}
+                {$set: {username: username, bio: bio}}
             );
         }
 
@@ -60,7 +60,6 @@ export const updateProfile = async (req: Request, res: Response) => {
                 })
         }
 
-        // TODO: Return a modified cookie if the user changes their username
         return res.status(200).send()
 
     } catch (err) {

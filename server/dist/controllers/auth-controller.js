@@ -188,9 +188,10 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.registerUser = registerUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("HALO REACHED");
-        // const deletedUser = await User.findByIdAndDelete(req.userId)
-        // res.status(200).send()
+        const deletedUser = yield user_model_1.User.findByIdAndDelete(req.userId);
+        console.log(req.userId);
+        console.log(deletedUser);
+        res.status(200).send();
     }
     catch (err) {
         console.error(err);

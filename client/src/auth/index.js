@@ -13,6 +13,7 @@ export const AuthActionType = {
     LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
     DELETE_USER: "DELETE_USER",
+    UPDATE_USERNAME: "UPDATE_USERNAME",
     ERROR: "ERROR"
 }
 
@@ -107,6 +108,18 @@ function AuthContextProvider(props) {
                     },
                     role: null,
                     loggedIn: false,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.UPDATE_USERNAME: {
+                console.log("UPDATING USERNAME")
+                return setAuth({
+                    user: {
+                        username: payload.username,
+                        email: auth.user.email
+                    },
+                    role: auth.role,
+                    loggedIn: auth.loggedIn,
                     errorMessage: ""
                 })
             }
@@ -252,6 +265,13 @@ function AuthContextProvider(props) {
                 payload: { errorMessage: error.response.data.errorMessage }
             })
         }
+    }
+
+    auth.updateUsername = (username) => {
+        authReducer({
+            type: AuthActionType.UPDATE_USERNAME,
+            payload: { username: username}
+        })
     }
 
     auth.hideModal = () => {
