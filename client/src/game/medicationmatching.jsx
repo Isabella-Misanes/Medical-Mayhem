@@ -7,15 +7,24 @@
  * the patient’s box. Incorrect matching will result in that patient dying. 
  */
 
-import { Engine, Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign } from "excalibur";
+import { Engine, Actor, Color, vec, Keys, Text, Font, TextAlign } from "excalibur";
 
+let points = 0;
+const pointText = new Text({
+  text: "Points: " + points,
+  color: Color.White,
+  font: new Font({size: 24, textAlign: TextAlign.Left})
+})
+let row = 0;
+let col = 0;
 const gameWidth = 800;
 const gameHeight = 600;
-const brickColor = [Color.Violet, Color.Orange, Color.Yellow, Color.Viridian, Color.Magenta, Color.Green, Color.Gray, Color.Vermilion, Color.Viridian];
-const randomColors = [];
-const boxCoordinates = [];
+// Pool of possible box colors
+const boxColor = [Color.Violet, Color.Orange, Color.Yellow, Color.Viridian, Color.Magenta, Color.Green, Color.Gray, Color.Vermilion, Color.Viridian];
+const randomColors = []; // Pool of random colors in the current round
+const boxesInfo = [];
 let currCoords = {};
-let currColor = brickColor[Math.floor(Math.random() * brickColor.length)];
+let currColor = boxColor[Math.floor(Math.random() * boxColor.length)];
 
 const initializeMeds = (game) => {
   // Padding between medicines
@@ -26,37 +35,34 @@ const initializeMeds = (game) => {
   const rows = 3;
 
   // Individual medicine width with padding factored in
-  const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
-  const brickHeight = game.drawWidth / columns - padding - padding / columns; // px
-  const bricks = [];
+  const boxWidth = game.drawWidth / columns - padding - padding / columns; // px
+  const boxHeight = game.drawWidth / columns - padding - padding / columns; // px
+  const boxes = [];
   for (let j = 0; j < rows; j++) {
     const colCoords = [];
     for (let i = 0; i < columns; i++) {
-      let randomColor = brickColor[Math.floor(Math.random() * brickColor.length)];
-      randomColors.push(randomColor);
+      let randomColor = boxColor[Math.floor(Math.random() * boxColor.length)];
+      if(!randomColors.includes(randomColor)) randomColors.push(randomColor);
       colCoords.push({
-        x: xoffset + i * (brickWidth + padding) + padding,
-        y: yoffset + j * (brickHeight + padding) + padding
+        x: xoffset + i * (boxWidth + padding) + padding,
+        y: yoffset + j * (boxHeight + padding) + padding,
+        color: randomColor
       });
-      bricks.push(new Actor({
+      boxes.push(new Actor({
         x: colCoords[i].x,
         y: colCoords[i].y,
-        width: brickWidth,
-        height: brickHeight,
+        width: boxWidth,
+        height: boxHeight,
         color: randomColor
       }));
     }
-    boxCoordinates.push(colCoords);
+    boxesInfo.push(colCoords);
   }
 
-  bricks.forEach(function (brick) {
-    // Make sure that bricks can participate in collisions
-    brick.body.collisionType = CollisionType.Active;
-
-    // Add the brick to the current scene to be drawn
-    game.add(brick);
+  boxes.forEach(function (box) {
+    game.add(box); // Draw on current scene
   });
-  return bricks;
+  return boxes;
 };
 
 // 
@@ -66,66 +72,63 @@ const initializeSelector = (game) => {
   const yoffset = 60; // y-offset
   const columns = 5;
   const rows = 3;
-  const brickWidth = game.drawWidth / columns - padding - padding / columns; // px
-  const brickHeight = game.drawWidth / columns - padding - padding / columns; // px
+  const boxWidth = game.drawWidth / columns - padding - padding / columns; // px
+  const boxHeight = game.drawWidth / columns - padding - padding / columns; // px
   const selectorSides = [];
   // selectorSides[0] and [2] are horizontal sides, [1] and [3] are vertical
   for(let i = 0; i < 4; i++) {
     selectorSides.push(new Actor({
       x: (i % 2 === 0) ? xoffset + padding : (i === 1 ? padding : 2 * xoffset + padding),
-      y: (i % 2 === 0) ? (padding - 7 + (i === 2 ? brickHeight - 4 : 0)) : padding + yoffset,
-      width: (i % 2 === 0) ? brickWidth : 5,
-      height: (i % 2 === 0) ? 5 : brickHeight,
+      y: (i % 2 === 0) ? (padding - 7 + (i === 2 ? boxHeight - 4 : 0)) : padding + yoffset,
+      width: (i % 2 === 0) ? boxWidth : 5,
+      height: (i % 2 === 0) ? 5 : boxHeight,
       color: Color.Red
     }));
   }
 
   selectorSides.forEach(side => { game.add(side); })
-
-  let row = 0;
-  let col = 0;
-  currCoords.x = xoffset + col * (brickWidth + padding) + padding;
-  currCoords.y = yoffset + row * (brickHeight + padding) + padding;
+  currCoords.x = xoffset + col * (boxWidth + padding) + padding;
+  currCoords.y = yoffset + row * (boxHeight + padding) + padding;
   game.input.keyboard.on('press', (event) => {
     switch(event.key) {
       case Keys.W:
         if(row !== 0) {
           selectorSides.forEach(side => {
-            side.actions.moveBy(vec(0, ((brickHeight + padding) * -1)), 1500);
+            side.actions.moveBy(vec(0, ((boxHeight + padding) * -1)), 1500);
           })
           row--;
-          currCoords.x = xoffset + col * (brickWidth + padding) + padding;
-          currCoords.y = yoffset + row * (brickHeight + padding) + padding;
+          currCoords.x = xoffset + col * (boxWidth + padding) + padding;
+          currCoords.y = yoffset + row * (boxHeight + padding) + padding;
         }
         break;
       case Keys.A:
         if(col !== 0) {
           selectorSides.forEach(side => {
-            side.actions.moveBy(vec((brickHeight + padding) * -1, 0), 1500);
+            side.actions.moveBy(vec((boxHeight + padding) * -1, 0), 1500);
           })
           col--;
-          currCoords.x = xoffset + col * (brickWidth + padding) + padding;
-          currCoords.y = yoffset + row * (brickHeight + padding) + padding;
+          currCoords.x = xoffset + col * (boxWidth + padding) + padding;
+          currCoords.y = yoffset + row * (boxHeight + padding) + padding;
         }
         break;
       case Keys.S:
         if(row !== rows - 1) {
           selectorSides.forEach(side => {
-            side.actions.moveBy(vec(0, brickHeight + padding), 1500);
+            side.actions.moveBy(vec(0, boxHeight + padding), 1500);
           })
           row++;
-          currCoords.x = xoffset + col * (brickWidth + padding) + padding;
-          currCoords.y = yoffset + row * (brickHeight + padding) + padding;
+          currCoords.x = xoffset + col * (boxWidth + padding) + padding;
+          currCoords.y = yoffset + row * (boxHeight + padding) + padding;
         }
         break;
       case Keys.D:
         if(col !== columns - 1) {
           selectorSides.forEach(side => {
-            side.actions.moveBy(vec(brickHeight + padding, 0), 1500);
+            side.actions.moveBy(vec(boxHeight + padding, 0), 1500);
           })
           col++;
-          currCoords.x = xoffset + col * (brickWidth + padding) + padding;
-          currCoords.y = yoffset + row * (brickHeight + padding) + padding;
+          currCoords.x = xoffset + col * (boxWidth + padding) + padding;
+          currCoords.y = yoffset + row * (boxHeight + padding) + padding;
         }
         break;
       default:
@@ -157,9 +160,13 @@ const initializeCurrColor = (game) => {
     if(event.key === Keys.E) {
       currColorBorder.actions.moveTo(vec(currCoords.x, currCoords.y), 2000);
       currColorCircle.actions.moveTo(vec(currCoords.x, currCoords.y), 2000);
+      if(currColor === boxesInfo[row][col].color) {
+        points++;
+        pointText.text = "Points: " + points;
+      }
       currColorBorder.actions.moveTo(vec(gameWidth - 100, gameHeight - 70), 2000);
       currColorCircle.actions.moveTo(vec(gameWidth - 100, gameHeight - 70), 2000).callMethod(() => {
-        currColor = randomColors[Math.floor(Math.random() * brickColor.length)];
+        currColor = randomColors[Math.floor(Math.random() * randomColors.length)];
         currColorCircle.color = currColor;
       });
     }
@@ -167,14 +174,17 @@ const initializeCurrColor = (game) => {
 }
 
 const initializeText = (game) => {
-  const actor = new Actor({pos: vec(170, gameHeight - 30)});
+  const actor1 = new Actor({pos: vec(170, gameHeight - 30)});
   const instrText = new Text({
     text: 'WASD keys to select box\nE key to place medicine in box',
     color: Color.White,
     font: new Font({size: 24, textAlign: TextAlign.Left})
   });
-  actor.graphics.use(instrText);
-  game.currentScene.add(actor);
+  const actor2 = new Actor({pos: vec(53, gameHeight - 70)})
+  actor1.graphics.use(instrText);
+  actor2.graphics.use(pointText);
+  game.currentScene.add(actor1);
+  game.currentScene.add(actor2);
 }
 
 export const initMedicationMatching = (gameRef, gameCanvasRef) => {
