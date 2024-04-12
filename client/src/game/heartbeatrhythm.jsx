@@ -61,7 +61,7 @@ const initializeBar = (game) => {
 const initProjectile = (game) => {
     const projectile = new Actor({
         x: gameWidth,
-        y: Math.max(200, Math.round(Math.random() * 700)),
+        y: Math.max(200, Math.round(Math.random() * 600)),
         radius: 55,
         color: Color.Yellow,
     });
@@ -81,7 +81,7 @@ const initProjectile = (game) => {
 }
 
 const initializeText = (game) => {
-    const actor = new Actor({pos: vec(gameWidth/2, 30)});
+    const actor = new Actor({pos: vec(gameWidth/2, gameHeight-125)});
     const instrText = new Text({
         text: 'Press the Space bar when the circle reaches the vertical line.',
         color: Color.White,
@@ -89,6 +89,17 @@ const initializeText = (game) => {
     });
     actor.graphics.use(instrText);
     game.currentScene.add(actor);
+}
+
+const initializeScore = (game) => {
+    const score = new Actor({pos: vec(gameWidth/2, 30)});
+    const scoreText = new Text({
+        text: 'Score: ',
+        color: Color.White,
+        font: new Font({size: 24, textAlign: TextAlign.Left})
+    });
+    score.graphics.use(scoreText);
+    game.currentScene.add(score);
 }
 
 export const initHeartbeat = (gameRef, gameCanvasRef) => {
@@ -103,6 +114,7 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
 
     initializeBar(game);
     initializeText(game);
+    initializeScore(game);
 
     const createRandomProjectile = () => {
         const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
