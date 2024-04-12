@@ -3,7 +3,6 @@ import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
 import React, { useState } from "react";
-import { initBreakout } from "../game/breakout";
 import { initMedicationMatching } from '../game/medicationmatching';
 import { initHeartbeat } from '../game/heartbeatrhythm';
 
@@ -16,12 +15,9 @@ export default function GameScreen() {
 		if (!gameRef.current && gameCanvas.current) {
             switch(selectedGame) {
                 case 1:
-                    initBreakout(gameRef, gameCanvas);
-                    break;
-                case 2:
                     initMedicationMatching(gameRef, gameCanvas);
                     break;
-                case 3:
+                case 2:
                     initHeartbeat(gameRef, gameCanvas);
                     break;
                 default:
@@ -38,9 +34,8 @@ export default function GameScreen() {
                 height: '100%',
                 position: 'absolute'
             }}>
-                <button onClick={() =>  setSelectedGame(1)}>Breakout</button>
-                <button onClick={() =>  setSelectedGame(2)}>Medication Matching</button>
-                <button onClick={() =>  setSelectedGame(3)}>Heartbeat Rhythm</button>
+                <button onClick={() =>  setSelectedGame(1)}>Medication Matching</button>
+                <button onClick={() =>  setSelectedGame(2)}>Heartbeat Rhythm</button>
                 <br />
                 <canvas ref={gameCanvas} id="gameCanvas"></canvas>
                 {/* <Box sx={{

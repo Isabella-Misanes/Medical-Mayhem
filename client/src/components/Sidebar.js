@@ -22,7 +22,7 @@ export default function Sidebar() {
     };
 
     function handleLogout() {
-        if(auth.role == UserRoleType.GUEST) auth.logoutGuest();
+        if(auth.role === UserRoleType.GUEST) auth.logoutGuest();
         else {
             store.reset()
             auth.logoutUser();
