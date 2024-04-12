@@ -67,13 +67,18 @@ export default function ProfileScreen() {
     }
 
     // Fetches initial profile info before user can edit
+    // TODO: This is the best way that I can find that refetches the profile info AND rerenders without
+    // causing an infinite loop. The problem is that if a user is not authenticated, a user can hypothetically
+    // go back into their profile and view it because it's using an old store.
+    // IDEA: Split into two useEffects, test in the future
+
     useEffect(() => {
-        console.log(store.profileInfo)
-        if (Object.keys(store.profileInfo).length === 0){
-            console.log("GETTING PROF")
-            store.getProfile()
-        }
-        
+        store.getProfile()
+
+        // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {     
         setBio(store.profileInfo.bio)
         setPostImage(store.profileInfo.pfp)
 
