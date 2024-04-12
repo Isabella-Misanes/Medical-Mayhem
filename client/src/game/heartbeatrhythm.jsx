@@ -97,6 +97,25 @@ const initializeText = (game) => {
     game.currentScene.add(actor);
 }
 
+const initializeTimeText = (game) => {
+    const timeText = new Actor({pos: vec(gameWidth-100, 30)});
+    timeText.time = 30;
+    timeText.text = new Text({
+        text: 'Time left: ' + timeText.time + ' sec',
+        color: Color.White,
+        font: new Font({size: 14, textAlign: TextAlign.Left})
+    });
+    timeText.graphics.use(timeText.text);
+    game.currentScene.add(timeText);
+
+    setInterval(() => {
+        timeText.time -= 1;
+        if(timeText.time >= 0) {
+            timeText.text.text = 'Time left: ' + timeText.time + ' sec';
+        }
+    }, 1000);
+}
+
 const initializeScore = (game) => {
     const score = new Actor({pos: vec(gameWidth/2, 30)});
     score.val = 0;
@@ -123,6 +142,7 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
     initializeText(game);
     const score = initializeScore(game);
     initializeBar(game, score);
+    initializeTimeText(game);
 
     const createRandomProjectile = () => {
         const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
@@ -132,8 +152,11 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
         }, interval);
     };
 
-    // Start creating projectiles with a random interval
     createRandomProjectile();
+
+    setTimeout(() => {
+        game.stop();
+    }, 30000);
 
     game?.start().catch((e) => console.error(e));
 };
