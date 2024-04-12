@@ -7,7 +7,7 @@ import { Engine, Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign }
 const gameWidth = 1000;
 const gameHeight = 750;
 
-const initializeBar = (game) => {
+const initializeBar = (game, score) => {
     const bar = new Actor({
         x: 100,
         y: gameHeight/2,
@@ -47,6 +47,8 @@ const initializeBar = (game) => {
         if(isColliding && tapped) {
             if(ball) {
                 ball.kill();
+                score.val += 100;
+                score.text.text = 'Score: ' + score.val;
             }
         }
     })
@@ -58,7 +60,7 @@ const initializeBar = (game) => {
     }, 300);
 }
 
-const initProjectile = (game) => {
+const initProjectile = (game, score) => {
     const projectile = new Actor({
         x: gameWidth,
         y: Math.max(200, Math.round(Math.random() * 600)),
@@ -76,12 +78,16 @@ const initProjectile = (game) => {
     projectile.on("postupdate", () => {
         if(projectile.pos.x < -50 || projectile.pos.y < 0 || projectile.pos.x > game.drawWidth || projectile.pos.y > game.drawHeight) {
             projectile.kill();
+            if(score.val > 0) {
+                score.val -= 50
+                score.text.text = 'Score: ' + score.val;
+            }
         }
     });
 }
 
 const initializeText = (game) => {
-    const actor = new Actor({pos: vec(gameWidth/2, gameHeight-125)});
+    const actor = new Actor({pos: vec(gameWidth/2, gameHeight-30)});
     const instrText = new Text({
         text: 'Press the Space bar when the circle reaches the vertical line.',
         color: Color.White,
@@ -93,13 +99,15 @@ const initializeText = (game) => {
 
 const initializeScore = (game) => {
     const score = new Actor({pos: vec(gameWidth/2, 30)});
-    const scoreText = new Text({
-        text: 'Score: ',
+    score.val = 0;
+    score.text = new Text({
+        text: 'Score: ' + score.val,
         color: Color.White,
         font: new Font({size: 24, textAlign: TextAlign.Left})
     });
-    score.graphics.use(scoreText);
+    score.graphics.use(score.text);
     game.currentScene.add(score);
+    return score;
 }
 
 export const initHeartbeat = (gameRef, gameCanvasRef) => {
@@ -112,14 +120,14 @@ export const initHeartbeat = (gameRef, gameCanvasRef) => {
     });
     const game = gameRef.current;
 
-    initializeBar(game);
     initializeText(game);
-    initializeScore(game);
+    const score = initializeScore(game);
+    initializeBar(game, score);
 
     const createRandomProjectile = () => {
         const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
         setTimeout(() => {
-            initProjectile(game);
+            initProjectile(game, score);
             createRandomProjectile();
         }, interval);
     };
