@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
 import GlobalStoreContext from '../store';
 import { useContext } from 'react';
+import AuthContext, { UserRoleType } from '../auth';
 
 export default function ForumScreen() {
     const navigate = useNavigate();
     const {store} = useContext(GlobalStoreContext);
+    const {auth} = useContext(AuthContext);
 
     function handleOpenThread(event) {
         store.openThread(event);
@@ -44,11 +46,13 @@ export default function ForumScreen() {
                 <h3>Forums</h3>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <Button variant="contained"
-                            sx={[buttonStyle, { left: '2%', mb: 1, fontSize: '12px' }]}
-                            onClick={()=>{navigate("/newthread")}}>
-                            Start New Thread
-                        </Button>
+                        {auth.role === UserRoleType.USER && (
+                            <Button variant="contained"
+                                sx={[buttonStyle, { left: '2%', mb: 1, fontSize: '12px' }]}
+                                onClick={()=>{navigate("/newthread")}}>
+                                Start New Thread
+                            </Button>
+                        )}
                     </Grid>
                     <Grid item xs={4} />
                     <Grid item xs={4}>

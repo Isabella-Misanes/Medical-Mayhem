@@ -40,7 +40,6 @@ export default function SettingsScreen() {
         store.reset()
         auth.deleteUser()
         auth.logoutUser();
-        //TODO: implement auth.deleteUser
     }
 
     function handleLogin() {
@@ -192,7 +191,7 @@ export default function SettingsScreen() {
                 </Grid>
                 <Divider />
 
-                { auth.role == UserRoleType.USER && 
+                { auth.role === UserRoleType.USER && 
                 <>
                     <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
                         <ToggleButton size='small'>
@@ -212,9 +211,8 @@ export default function SettingsScreen() {
                     </Box>
                 </>}
                
-
                 <Box display="flex" justifyContent={'center'} gap={5}>
-                    { auth.role == UserRoleType.USER ?
+                    { auth.role === UserRoleType.USER ?
                         <>
                             <Button onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
                                 Log Out

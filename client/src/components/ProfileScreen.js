@@ -17,7 +17,7 @@ export default function ProfileScreen() {
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [username, setUsername] = useState(auth.user.username)
+    //const [username, setUsername] = useState(auth.user.username) CHANGE LATER
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
 
@@ -68,13 +68,20 @@ export default function ProfileScreen() {
 
     // Fetches initial profile info before user can edit
     useEffect(() => {
-        if (Object.keys(store.profileInfo).length === 0)
-            store.getProfile() // TODO: add error response
+        console.log(store.profileInfo)
+        if (Object.keys(store.profileInfo).length === 0){
+            console.log("GETTING PROF")
+            store.getProfile()
+        }
         
         setBio(store.profileInfo.bio)
         setPostImage(store.profileInfo.pfp)
+
+        // eslint-disable-next-line
     }, [store.profileInfo])
 
+
+    console.log('editEnabled: '+ editEnabled)
     const profileScreen = (
             <Card sx={{
                 bgcolor: '#4D9147',
@@ -86,8 +93,7 @@ export default function ProfileScreen() {
                 borderRadius: '16px',
                 color: 'white', 
             }}>
-                <CardActionArea 
-                    disabled={editEnabled}>
+                <CardActionArea>
                     <Divider />
                     <Box sx={{
                         bgcolor: '#e3e3e3',
@@ -114,31 +120,33 @@ export default function ProfileScreen() {
                                     borderColor: 'black',
                                     ml: 2
                                 }}>
-                                    <form
-                                        onSubmit={handleSubmit}>
-                                        <label htmlFor="file-upload">
-                                            <img 
-                                                src={postImage || avatar}
-                                                width={140}
-                                                height={140}/>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            label="Image"
-                                            name="myFile"
-                                            id='file-upload'
-                                            accept='.jpeg, .png, .jpg'
-                                            style={{display: "none"}}
-                                            onChange={(event) => handleFileUpload(event)}>
-                                        </input>
-                                    </form>
+                                <form
+                                    onSubmit={handleSubmit}>
+                                    <label htmlFor="file-upload">
+                                        <img 
+                                            src={postImage || avatar}
+                                            width={140}
+                                            height={140}
+                                            alt=''/>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        label="Image"
+                                        name="myFile"
+                                        id='file-upload'
+                                        accept='.jpeg, .png, .jpg'
+                                        style={{display: "none"}}
+                                        disabled={!editEnabled}
+                                        onChange={(event) => handleFileUpload(event)}>
+                                    </input>
+                                </form>
                                 </Box>
                             </Grid>
                             <Grid item xs={6} sx={{
                                 fontSize: '12pt'
                             }}>
                                 <p>
-                                    {username}<br/>
+                                    {auth.user.username}<br/>
                                     Last Seen: Now<br/>
                                     Registered Since: Jan 22, 2024
                                 </p>
@@ -164,7 +172,7 @@ export default function ProfileScreen() {
                                     multiline
                                     fullWidth
                                     rows={4}
-                                    defaultValue={store.profileInfo.bio}
+                                    defaultValue={bio}
                                     onChange={handleBioChange}
                                     variant="filled"
                                     disabled={!editEnabled}
