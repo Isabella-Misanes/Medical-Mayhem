@@ -126,11 +126,6 @@ export default function HomeScreen() {
 }
 
 function HomeButton(props) {
-    const { auth } = useContext(AuthContext);
-    console.log(auth.role)
-    console.log(props.id)
-    console.log(props.disable)
-    console.log('------------------')
     return (
         <Grid item xs={props.xs} sx={props.gridSx}>
             <Button id={props.id} onClick={props.onClick} sx={props.buttonSx} disabled={props.disable}>

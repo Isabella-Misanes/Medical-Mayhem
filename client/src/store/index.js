@@ -60,15 +60,6 @@ const CurrentHomeScreen = {
     USERS: "USERS"
 }
 
-const SortType = {
-    NAME: "NAME",
-    PUBLISH_DATE: "PUBLISH_DATE",
-    EDIT_DATE: "EDIT_DATE",
-    LISTENS: "LISTENS",
-    LIKES: "LIKES",
-    DISLIKES: "DISLIKES"
-}
-
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
@@ -83,8 +74,6 @@ function GlobalStoreContextProvider(props) {
         currentHomeScreen: CurrentHomeScreen.HOME,
         profileInfo: {}
     });
-
-    // const history = useNavigate();
 
     console.log("inside useGlobalStore");
 
@@ -105,7 +94,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
-                //console.log("IN GET: " + payload.bio)
+                console.log("IN GET: " + payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -152,12 +141,16 @@ function GlobalStoreContextProvider(props) {
 
     store.getProfile = function() {
         async function asyncGetProfile() {
-            let response = await apis.getProfile()
-            console.log("RESPONSE DATA: " + JSON.stringify(response.data))
-            storeReducer({
-                type: GlobalStoreActionType.GET_PROFILE,
-                payload: response.data
-            })
+            try {
+                let response = await apis.getProfile()
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.GET_PROFILE,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         asyncGetProfile()
@@ -167,15 +160,19 @@ function GlobalStoreContextProvider(props) {
     store.updateProfile = function (bio, pfp) {
 
         async function asyncUpdateProfile() {
-            let response = await apis.updateProfile(bio, pfp)
-            console.log(response)
-            storeReducer({
-                type: GlobalStoreActionType.UPDATE_PROFILE,
-                payload: {
-                    bio: bio,
-                    pfp: pfp
-                }
-            })
+            try{
+                let response = await apis.updateProfile(bio, pfp)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_PROFILE,
+                    payload: {
+                        bio: bio,
+                        pfp: pfp
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         asyncUpdateProfile()

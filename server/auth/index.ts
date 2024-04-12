@@ -29,6 +29,7 @@ function authManager() {
         try {
             const token = req.cookies.token;
             if (!token) {
+                console.log("TOKEN DOESNT EXIST")
                 return res.status(401).json({
                     loggedIn: false,
                     user: null,
@@ -36,13 +37,11 @@ function authManager() {
                 })
             }
 
-            console.log("TYPE AFTER " + typeof(token))
-
             const verified = jwt.verify(token, process.env.JWT_SECRET)
             console.log("VERIFIED: " + verified)
             console.log("verified.userId: " + (verified as JwtPayload).userId);
             req.userId = (verified as JwtPayload).userId;
-
+            console.log("PASSED")
             next();
         } catch (err) {
             console.error(err);
@@ -70,7 +69,7 @@ function authManager() {
                 }).status(404).json({
                     loggedIn: false,
                     user: null,
-                    errorMessage: "?"
+                    errorMessage: "User no longer exists."
                 }).send();
                 return
             }

@@ -12,6 +12,7 @@ export const AuthActionType = {
     LOGIN_GUEST: "LOGIN_GUEST",
     LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
+    DELETE_USER: "DELETE_USER",
     ERROR: "ERROR"
 }
 
@@ -23,15 +24,15 @@ export const UserRoleType = {
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
-        user: null, // {username, email}
+        user: {
+            username: "",
+            email: ""
+        },
         role: null,
         loggedIn: false,
         errorMessage: ""
     });
     const navigate = useNavigate();
-
-    // TODO: THIS SHOULD RUN WITH EVERY PAGE CHANGE TO VERIFY THAT THE USER IS STILL AUTHORIZED
-    // This will be handled once we start backend use cases when dealing with user roles.  - Torin
 
     useEffect(() => {
         auth.getLoggedIn();
@@ -67,7 +68,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -75,7 +79,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
                     role: UserRoleType.GUEST,
                     loggedIn: true,
                     errorMessage: ""
@@ -83,7 +90,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGOUT_GUEST: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -91,7 +101,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.DELETE_USER: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -99,7 +112,10 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.ERROR: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
                     role: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
@@ -247,6 +263,14 @@ function AuthContextProvider(props) {
 
     auth.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
+    }
+
+    auth.error = async function(errorMessage) {
+        console.log("error");
+        authReducer({
+            type: AuthActionType.ERROR,
+            payload: { errorMessage: errorMessage }
+        });
     }
 
     return (

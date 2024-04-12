@@ -20,6 +20,7 @@ import {
   RegisterScreen,
 } from './components'
 import HomeWrapper from './components/HomeWrapper';
+import ErrorHandler from './components/ErrorHandler';
 
 /*
     This is our application's top-level component.
@@ -55,23 +56,25 @@ const App = () => {
         <BrowserRouter>
               <AuthContextProvider>
                   <GlobalStoreContextProvider>
-                    <Routes>
-                        <Route path="/" exact element={<HomeWrapper />} />
-                        <Route path="/login/" exact element={<LoginScreen />} />
-                        <Route path="/register/" exact element={<RegisterScreen />} />
-                        <Route path="/about/" exact element={<AboutScreen />} />
-                        <Route path="/settings/" exact element={<SettingsScreen />} />
-                        <Route path="/social/" exact element={<SocialScreen />} />
-                        <Route path="/forum/" exact element={<ForumScreen />} />
-                        <Route path="/mapsearch/" exact element={<MapSearchScreen />} />
-                        <Route path="/mapbuilder/" exact element={<MapBuilderScreen />} />
-                        <Route path="/profile/" exact element={<ProfileScreen />} />
-                        <Route path="/game/" exact element={<GameScreen />} />
-                        <Route path="/post/" exact element={<PostScreen />} />
-                        <Route path="/newthread/" exact element={<NewThreadScreen />} />
-                        <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
-                        <Route path="/reports/" exact element={<ReportsScreen />} />
-                    </Routes>
+                      <ErrorHandler>
+                          <Routes>
+                            <Route path="/" exact element={<HomeWrapper />} />
+                            <Route path="/login/" exact element={<LoginScreen />} />
+                            <Route path="/register/" exact element={<RegisterScreen />} />
+                            <Route path="/about/" exact element={<AboutScreen />} />
+                            <Route path="/settings/" exact element={<SettingsScreen />} />
+                            <Route path="/social/" exact element={<SocialScreen />} />
+                            <Route path="/forum/" exact element={<ForumScreen />} />
+                            <Route path="/mapsearch/" exact element={<MapSearchScreen />} />
+                            <Route path="/mapbuilder/" exact element={<MapBuilderScreen />} />
+                            <Route path="/profile/" exact element={<ProfileScreen />} />
+                            <Route path="/game/" exact element={<GameScreen />} />
+                            <Route path="/post/" exact element={<PostScreen />} />
+                            <Route path="/newthread/" exact element={<NewThreadScreen />} />
+                            <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
+                            <Route path="/reports/" exact element={<ReportsScreen />} />
+                        </Routes>
+                      </ErrorHandler>
                   </GlobalStoreContextProvider>
               </AuthContextProvider>
         </BrowserRouter>

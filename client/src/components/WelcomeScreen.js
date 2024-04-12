@@ -1,19 +1,21 @@
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
+import MUIErrorModal from './MUIErrorModal';
 
 export default function WelcomeScreen() {
     const navigate = useNavigate();
-    const {auth} = useContext(AuthContext);
-    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     const splashButtonStyle = {
         bgcolor: 'black',
         ":hover": {
           bgcolor: 'black'},
-      }
+    }
+
+    let modal = "";
+    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
         <div id="welcome-screen">
@@ -79,6 +81,7 @@ export default function WelcomeScreen() {
                     </Button>
                 </Grid>
             </Grid>
+            {modal}
         </div>
     );
 }
