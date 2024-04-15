@@ -1,10 +1,14 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response, NextFunction} from 'express'
+import { User } from '../models/user'
+import bcrypt from 'bcrypt';
 
 declare global {
     namespace Express {
         interface Request {
-            userId?: string
+            userId: string
+            username: string,
+            email: string
         }
     }
 
@@ -17,14 +21,15 @@ declare global {
 
 function authManager() {
 
-    // Middleware used in subsequent requests after the user is logged in
-    const verify = (req: Request, res: Response, next: NextFunction) => {
-        console.log("req: " + req);        
+    // THIS IS MIDDLEWARE THAT RUNS WITH EVERY REQUEST TO CHECK IF THE TOKEN STILL EXISTS
+    const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+        console.log("req: " + req);
         console.log("next: " + next);
         console.log("Who called verify?");
         try {
             const token = req.cookies.token;
             if (!token) {
+                console.log("TOKEN DOESNT EXIST")
                 return res.status(401).json({
                     loggedIn: false,
                     user: null,
@@ -33,9 +38,10 @@ function authManager() {
             }
 
             const verified = jwt.verify(token, process.env.JWT_SECRET)
+            console.log("VERIFIED: " + verified)
             console.log("verified.userId: " + (verified as JwtPayload).userId);
             req.userId = (verified as JwtPayload).userId;
-
+            console.log("PASSED")
             next();
         } catch (err) {
             console.error(err);
@@ -47,30 +53,52 @@ function authManager() {
         }
     }
 
-    // Used when the user is logging in
-    const verifyUser = (req: Request) => {
+    // CHECKS IF THE USER STILL EXISTS IN THE DB
+    const verifyUserExists = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const token = req.cookies.token;
-            if (!token) {
-                return null;
+            // Check that the user still exists given id in token
+            const loggedInUser = await User.findById(req.userId);
+
+            // If they don't exist, invalidate their cookie and send back error message
+            if (loggedInUser == null) {
+                res.cookie("token", "", {
+                    httpOnly: true,
+                    expires: new Date(0),
+                    secure: true,
+                    sameSite: "none"
+                }).status(404).json({
+                    loggedIn: false,
+                    user: null,
+                    errorMessage: "User no longer exists."
+                }).send();
+                return
             }
 
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            return (decodedToken as JwtPayload).userId;
+            // Insert data of user into request otherwise
+            req.username = loggedInUser.username
+            req.email = loggedInUser.email
+
+            next()
+
         } catch (err) {
             return null;
         }
     }
 
-    const signToken = (userId: string) => {
-        return jwt.sign({
-            userId: userId
-        }, process.env.JWT_SECRET);
+    const signToken = async (userId: string) => {
+
+        const token = await jwt.sign({
+            userId: userId 
+        }, process.env.JWT_SECRET, {
+            expiresIn: '7d'
+        });
+
+        return token
     }
 
     return {
-        verify,
-        verifyUser,
+        verifyToken,
+        verifyUserExists,
         signToken
     };
 }

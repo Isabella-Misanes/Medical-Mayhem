@@ -3,20 +3,33 @@ import { useNavigate } from 'react-router-dom'
 import api from './auth-request-api'
 
 const AuthContext = createContext();
-console.log("create AuthContext: " + AuthContext);
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
+    LOGIN_GUEST: "LOGIN_GUEST",
+    LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
+    DELETE_USER: "DELETE_USER",
+    UPDATE_USERNAME: "UPDATE_USERNAME",
     ERROR: "ERROR"
+}
+
+export const UserRoleType = {
+    USER: "USER",
+    ADMIN: "ADMIN",
+    GUEST: "GUEST",
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
-        user: null,
+        user: {
+            username: "",
+            email: ""
+        },
+        role: null,
         loggedIn: false,
         errorMessage: ""
     });
@@ -24,7 +37,8 @@ function AuthContextProvider(props) {
 
     useEffect(() => {
         auth.getLoggedIn();
-    });
+        // eslint-disable-next-line
+    }, []);
 
     const authReducer = (action) => {
         const { type, payload } = action;
@@ -32,34 +46,90 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: payload.loggedIn,
                     errorMessage: ""
                 });
             }
+            case AuthActionType.REGISTER_USER: {
+                return setAuth({
+                    user: payload.user,
+                    role: UserRoleType.USER,
+                    loggedIn: true,
+                    errorMessage: ""
+                })
+            }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
+                    role: UserRoleType.USER,
                     loggedIn: true,
                     errorMessage: ""
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
                     loggedIn: false,
                     errorMessage: ""
                 })
             }
-            case AuthActionType.REGISTER_USER: {
+            case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: payload.user,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: UserRoleType.GUEST,
                     loggedIn: true,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.LOGOUT_GUEST: {
+                return setAuth({
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
+                    loggedIn: false,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.DELETE_USER: {
+                return setAuth({
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
+                    loggedIn: false,
+                    errorMessage: ""
+                })
+            }
+            case AuthActionType.UPDATE_USERNAME: {
+                console.log("UPDATING USERNAME")
+                return setAuth({
+                    user: {
+                        username: payload.username,
+                        email: auth.user.email
+                    },
+                    role: auth.role,
+                    loggedIn: auth.loggedIn,
                     errorMessage: ""
                 })
             }
             case AuthActionType.ERROR: {
                 return setAuth({
-                    user: null,
+                    user: {
+                        username: "",
+                        email: ""
+                    },
+                    role: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
                 })
@@ -70,15 +140,33 @@ function AuthContextProvider(props) {
     }
 
     auth.getLoggedIn = async function () {
-        const response = await api.getLoggedIn();
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.SET_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
+        try {
+            const response = await api.getLoggedIn();
+            console.log("getLoggedIn response: " + response.status)
+            console.log(response)
+            if (response.status === 200 && !auth.loggedIn) {
+                console.log("LOGGING IN")
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
+        } catch(error) {
+            console.log("LOGGING OUT USER...INVALID TOKEN")
+            
+            // Log the user out if the token or user no longer exists
+            // if not already
+            if (auth.loggedIn)
+                authReducer( {
+                    type: AuthActionType.LOGOUT_USER,
+                    payload: null
+                })
+
+            // Take them back to the welcome screen
+            navigate("/");
         }
     }
 
@@ -144,6 +232,48 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGIN_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.logoutGuest = function() {
+        authReducer( {
+            type: AuthActionType.LOGOUT_GUEST,
+            payload: null
+        })
+        navigate("/");
+    }
+
+    auth.deleteUser = async function() {
+        try {
+            const response = await api.deleteUser();
+            if (response.status === 200) {
+                authReducer( {
+                    type: AuthActionType.DELETE_USER,
+                    payload: null
+                })
+                navigate("/");
+            } 
+        } catch(error) {
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
+        }
+    }
+
+    auth.updateUsername = (username) => {
+        authReducer({
+            type: AuthActionType.UPDATE_USERNAME,
+            payload: { username: username}
+        })
+    }
+
     auth.hideModal = () => {
         authReducer({
             type: AuthActionType.ERROR,
@@ -153,6 +283,14 @@ function AuthContextProvider(props) {
 
     auth.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
+    }
+
+    auth.error = async function(errorMessage) {
+        console.log("error");
+        authReducer({
+            type: AuthActionType.ERROR,
+            payload: { errorMessage: errorMessage }
+        });
     }
 
     return (

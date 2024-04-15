@@ -16,43 +16,46 @@ Your objective is to diagnose and treat all patients that come into the hospital
 ### Instructions
 
 1. In a terminal, run MongoDB Community Edition.
-```console
+```shell
+# Windows
 $ "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="c:\data\db"
+
+# Mac
+$ brew services start mongodb-community@7.0
 ```
 
 2. In another terminal, clone this repository:
-```console
+```shell
 $ git clone https://github.com/Isabella-Misanes/Medical-Mayhem.git
 ```
 
 3. Navigate to this repository in the terminal.
-```console
-$ cd pmedical-mayhem
+```shell
+$ cd medical-mayhem
 ```
 
-4. Navigate to the `client` and `server` folders and install dependencies using npm.
-```console
+4. Install dependencies in the root, client, and server folders using npm.
+```shell
+$ npm install
 $ cd client
 $ npm install
 $ cd ../server
 $ npm install
 ```
 
-5. While in the `server` folder, initialize the database. The username and password for an admin user must be provided and can be anything.
-```console
+5. While in the `server` folder, initialize the database and populate it with dummy data.
+```shell
 # In the medical-mayhem/server folder
-$ node init.js <username_of_admin> <password_of_admin>
+$ ts-node db/populate.ts
 ```
 
-6. In the `server` folder, start the server. This can be done with either `node` or `nodemon`.
-```console
-$ node server.js
-OR 
-$ nodemon server.js
+6. In the `server` folder, start the server.
+```shell
+$ ts-node server.ts
 ```
 
 7. In another terminal, navigate to the client folder and run the client.
-```console
+```shell
 # In the medical-mayhem/client folder
 $ npm start
 ```

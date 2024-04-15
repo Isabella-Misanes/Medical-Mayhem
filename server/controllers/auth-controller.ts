@@ -1,38 +1,16 @@
 import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
-import { User } from '../models/user-model'
+import { User } from '../models/user'
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {
     try {
-        let userId = auth.verifyUser(req);
-        if (!userId) {
-            return res.status(200).json({
-                loggedIn: false,
-                user: null,
-                errorMessage: "?"
-            })
-        }
-
-        const loggedInUser = await User.findOne({ _id: userId });
-
-        if (loggedInUser == null) {
-            return res.status(200).json({
-                loggedIn: false,
-                user: null,
-                errorMessage: "?"
-            })
-        }
-
-        console.log("loggedInUser: " + loggedInUser);
-
         return res.status(200).json({
             loggedIn: true,
             user: {
-                // TODO: add rest of user data needed back to client
-                username: loggedInUser.username,
-                email: loggedInUser.email
+                username: req.username,
+                email: req.email
             }
         })
     } catch (err) {
@@ -74,8 +52,8 @@ export const loginUser = async (req: Request, res: Response) => {
         }
 
         // LOGIN THE USER
-        const token = auth.signToken((existingUser._id).toString());
-        console.log(token);
+        const token = await auth.signToken((existingUser._id).toString());
+        console.log("token: " + token);
 
         res.cookie("token", token, {
             httpOnly: true,
@@ -88,7 +66,7 @@ export const loginUser = async (req: Request, res: Response) => {
                 username: existingUser.username,
                 email: existingUser.email              
             }
-        })
+        }).send()
 
     } catch (err) {
         console.error(err);
@@ -107,7 +85,6 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        console.log('hello!')
         const { username, email, password, passwordVerify } = req.body;
         console.log("create user: " + username + " " + email + " " + password + " " + passwordVerify);
         if (!username || !email || !password || !passwordVerify) {
@@ -160,24 +137,36 @@ export const registerUser = async (req: Request, res: Response) => {
         console.log("new user saved: " + savedUser._id);
 
         // LOGIN THE USER
-        const token = auth.signToken((savedUser._id).toString());
+        const token = await auth.signToken((savedUser._id).toString());
         console.log("token:" + token);
+        console.log("SAVEDUESR USERNAME: " + savedUser.username)
 
-        await res.cookie("token", token, {
+        res.cookie("token", token, {
             httpOnly: true,
             secure: true,
             sameSite: "none"
         }).status(200).json({
             success: true,
             user: {
-                // TODO: add rest of user data needed back to client AND in auth.test.js
                 username: savedUser.username,
                 email: savedUser.email              
             }
-        })
+        }).send()
 
         console.log("token sent");
 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.userId)
+        console.log(req.userId)
+        console.log(deletedUser)
+        res.status(200).send()
     } catch (err) {
         console.error(err);
         res.status(500).send();

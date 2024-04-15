@@ -1,22 +1,12 @@
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
-import { buttonStyle } from '../App';
-import { useNavigate } from 'react-router-dom';
+import BackButton from './BackButton';
 
 export default function RegisterScreen() {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         username: '',
@@ -42,7 +32,17 @@ export default function RegisterScreen() {
    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Box sx={{
+                height: '90%',
+                width: '100%',
+                flexDirection: 'column',
+                backgroundColor: 'white',
+                position: 'absolute',
+                textAlign: 'center',
+                top: '5%',
+                p: 2,
+                boxShadow: 10
+            }}>
                 <CssBaseline />
                 <Box
                     sx={{
@@ -103,15 +103,7 @@ export default function RegisterScreen() {
                     </Box>
                     {modal}
                 </Box>
-                <Button variant="contained"
-                    sx={[buttonStyle, {
-                        left: '2%',
-                        bottom: '2%',
-                        position: 'absolute'
-                    }]}
-                    onClick={()=>{navigate("/")}}>
-                    Back
-                </Button>
-            </Container>
+                <BackButton />
+            </Box>
     );
 }

@@ -1,6 +1,6 @@
 // Import db collections
 import { db } from './index';
-import { User } from '../models/user-model';
+import { User } from '../models/user';
 
 // Creates a user
 async function userCreate(username: String, bio: String) {
