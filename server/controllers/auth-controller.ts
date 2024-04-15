@@ -1,7 +1,7 @@
 import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
-import { User } from '../models/user-model'
+import { User } from '../models/user'
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {

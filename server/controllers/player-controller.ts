@@ -1,7 +1,7 @@
 import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
-import { User } from '../models/user-model'
+import { User } from '../models/user'
 
 //TODO: might have to add additional middleware that check if the user still exists
 

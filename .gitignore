@@ -12,8 +12,8 @@ server/node_modules
 client/cypress/screenshots
 
 # production
-/build
-/dist
+/client/build
+/server/dist
 
 # misc
 .DS_Store
