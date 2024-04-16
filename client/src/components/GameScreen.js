@@ -2,16 +2,16 @@ import { Box } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
-import React, { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { initMedicationMatching } from '../game/medicationmatching';
 import { initHeartbeat } from '../game/heartbeatrhythm';
 
 export default function GameScreen() {
     const [selectedGame, setSelectedGame] = useState(0);
-    const gameCanvas = React.useRef(null);
-	const gameRef = React.useRef();
+    const gameCanvas = useRef(null);
+	const gameRef = useRef();
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!gameRef.current && gameCanvas.current) {
             switch(selectedGame) {
                 case 1:

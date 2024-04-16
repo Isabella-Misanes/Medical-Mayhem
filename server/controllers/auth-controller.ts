@@ -8,10 +8,8 @@ export const getLoggedIn = async (req: Request, res: Response) => {
     try {
         return res.status(200).json({
             loggedIn: true,
-            user: {
-                username: req.username,
-                email: req.email
-            }
+            username: req.username,
+            email: req.email
         })
     } catch (err) {
         console.log("err: " + err);
@@ -61,11 +59,8 @@ export const loginUser = async (req: Request, res: Response) => {
             sameSite: true
         }).status(200).json({
             success: true,
-            user: {
-                // TODO: add rest of user data needed back to client
-                username: existingUser.username,
-                email: existingUser.email              
-            }
+            username: existingUser.username,
+            email: existingUser.email              
         }).send()
 
     } catch (err) {
@@ -147,10 +142,8 @@ export const registerUser = async (req: Request, res: Response) => {
             sameSite: "none"
         }).status(200).json({
             success: true,
-            user: {
-                username: savedUser.username,
-                email: savedUser.email              
-            }
+            username: savedUser.username,
+            email: savedUser.email              
         }).send()
 
         console.log("token sent");

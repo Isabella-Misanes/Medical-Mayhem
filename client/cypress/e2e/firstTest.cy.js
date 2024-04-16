@@ -37,7 +37,6 @@ describe('template spec', () => {
 
   //   cy.url().should('eq', `${path}/`)
   // })
-
   
   it('should continue as guest then navigate to the game screen successfully', () => {
     cy.visit(path)
@@ -57,24 +56,6 @@ describe('template spec', () => {
     cy.url().should('eq', `${path}/mapsearch`)
   })
 
-  // it('should continue as guest then navigate to the map builder screen successfully', () => {
-  //   cy.visit(path)
-
-  //   cy.get('#continue-as-guest').click()
-  //   cy.get('#map-builder-button').click()
-
-  //   cy.url().should('eq', `${path}/mapbuilder`)
-  // })
-
-  // it('should continue as guest then navigate to the social screen successfully', () => {
-  //   cy.visit(path)
-
-  //   cy.get('#continue-as-guest').click()
-  //   cy.get('#social-button').click()
-
-  //   cy.url().should('eq', `${path}/social`)
-  // })
-
   it('should continue as guest then navigate to the forums screen successfully', () => {
     cy.visit(path)
 
@@ -83,15 +64,6 @@ describe('template spec', () => {
 
     cy.url().should('eq', `${path}/forum`)
   })
-
-  // it('should continue as guest then navigate to the profile screen successfully', () => {
-  //   cy.visit(path)
-
-  //   cy.get('#continue-as-guest').click()
-  //   cy.get('#profile-button').click()
-
-  //   cy.url().should('eq', `${path}/profile`)
-  // })
 
   it('should continue as guest then navigate to the settings screen successfully', () => {
     cy.visit(path)

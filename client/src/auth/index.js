@@ -25,10 +25,8 @@ export const UserRoleType = {
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
-        user: {
-            username: "",
-            email: ""
-        },
+        username: "",
+        email: "",
         role: null,
         loggedIn: false,
         errorMessage: ""
@@ -45,7 +43,8 @@ function AuthContextProvider(props) {
         switch (type) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
-                    user: payload.user,
+                    username: payload.username,
+                    email: payload.email,
                     role: UserRoleType.USER,
                     loggedIn: payload.loggedIn,
                     errorMessage: ""
@@ -53,7 +52,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
-                    user: payload.user,
+                    username: payload.username,
+                    email: payload.email,
                     role: UserRoleType.USER,
                     loggedIn: true,
                     errorMessage: ""
@@ -61,7 +61,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
-                    user: payload.user,
+                    username: payload.username,
+                    email: payload.email,
                     role: UserRoleType.USER,
                     loggedIn: true,
                     errorMessage: ""
@@ -69,10 +70,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
-                    user: {
-                        username: "",
-                        email: ""
-                    },
+                    username: '',
+                    email: '',
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -80,10 +79,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGIN_GUEST: {
                 return setAuth({
-                    user: {
-                        username: "",
-                        email: ""
-                    },
+                    username: '',
+                    email: '',
                     role: UserRoleType.GUEST,
                     loggedIn: true,
                     errorMessage: ""
@@ -91,10 +88,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.LOGOUT_GUEST: {
                 return setAuth({
-                    user: {
-                        username: "",
-                        email: ""
-                    },
+                    username: '',
+                    email: '',
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -102,10 +97,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.DELETE_USER: {
                 return setAuth({
-                    user: {
-                        username: "",
-                        email: ""
-                    },
+                    username: '',
+                    email: '',
                     role: null,
                     loggedIn: false,
                     errorMessage: ""
@@ -114,10 +107,8 @@ function AuthContextProvider(props) {
             case AuthActionType.UPDATE_USERNAME: {
                 console.log("UPDATING USERNAME")
                 return setAuth({
-                    user: {
-                        username: payload.username,
-                        email: auth.user.email
-                    },
+                    username: '',
+                    email: '',
                     role: auth.role,
                     loggedIn: auth.loggedIn,
                     errorMessage: ""
@@ -125,10 +116,8 @@ function AuthContextProvider(props) {
             }
             case AuthActionType.ERROR: {
                 return setAuth({
-                    user: {
-                        username: "",
-                        email: ""
-                    },
+                    username: '',
+                    email: '',
                     role: null,
                     loggedIn: false,
                     errorMessage: payload.errorMessage
@@ -150,7 +139,8 @@ function AuthContextProvider(props) {
                     type: AuthActionType.GET_LOGGED_IN,
                     payload: {
                         loggedIn: response.data.loggedIn,
-                        user: response.data.user
+                        username: response.data.username,
+                        email: response.data.email
                     }
                 });
             }
@@ -183,7 +173,8 @@ function AuthContextProvider(props) {
                 authReducer({
                     type: AuthActionType.LOGIN_USER,
                     payload: {
-                        user: response.data.user
+                        username: response.data.username,
+                        email: response.data.email
                     }
                 })
                 navigate("/");
@@ -207,7 +198,8 @@ function AuthContextProvider(props) {
                 authReducer({
                     type: AuthActionType.LOGIN_USER,
                     payload: {
-                        user: response.data.user
+                        username: response.data.username,
+                        email: response.data.email
                     }
                 })
                 navigate("/");

@@ -82,7 +82,8 @@ export default function Sidebar() {
     );
 
     return (
-        <Box sx={{ 
+        auth.role === UserRoleType.USER && 
+            <Box sx={{ 
                 backgroundColor: '#104c00',
                 position: 'fixed',
                 flexGrow: 1,
@@ -91,24 +92,24 @@ export default function Sidebar() {
                 display: 'flex',
                 flexDirection: 'column',
                 right: '0%'
-        }}>
-            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'10px'} />
-            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'60px'} />
-            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'110px'} />
-            <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'160px'} />
-            
-            <IconButton onClick={()=>{handleLogout()}} sx={{
-                position: 'fixed',
-                alignContent: 'center',
-                bottom: '2%',
-                right: '15px',
-                color: 'white'
             }}>
-                <LogoutIcon />
-            </IconButton>
-            {partyMenu}
-            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
-        </Box>
+                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'10px'} />
+                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'60px'} />
+                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'110px'} />
+                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'160px'} />
+                
+                <IconButton onClick={()=>{handleLogout()}} sx={{
+                    position: 'fixed',
+                    alignContent: 'center',
+                    bottom: '2%',
+                    right: '15px',
+                    color: 'white'
+                }}>
+                    <LogoutIcon />
+                </IconButton>
+                {partyMenu}
+                <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
+            </Box>
     );
 }
 

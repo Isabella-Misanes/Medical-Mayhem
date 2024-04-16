@@ -1,13 +1,10 @@
 import axios from 'axios'
+import rootDomain from '../../constants/baseURL';
 
 axios.defaults.withCredentials = true;
-// CHANGE URL AS NEEDED BETWEEN TESTING AND DEVELOPMENT
-// TODO: Find a way to make this change between local host and Heroku 
+
 export const api = axios.create({
-    // Uncomment one, comment out the other as needed
-    
-    baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/api'
-    //baseURL: 'http://localhost:4000/api'
+    baseURL: `${rootDomain}/api`
 })
 
 export const getProfile = async () => { return await api.get(`/getProfile/`) }

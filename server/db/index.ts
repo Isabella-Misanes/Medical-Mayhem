@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import path from 'path'
-dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 mongoose
     .connect(process.env.URI as string)

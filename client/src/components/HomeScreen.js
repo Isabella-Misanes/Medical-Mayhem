@@ -1,18 +1,36 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
+import io from 'socket.io-client'
+import SocketEvents from '../constants/socketEvents'
+import loading from '../assets/loading.gif'
+import rootDomain from '../constants/baseURL';
 
+// Styling
 const homeButtons = {
     color: 'black',
     bgcolor: 'white',
     ":hover": {bgcolor: '#e5e5e5'}
 }
+
+export const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'white',
+    boxShadow: 24,
+    p: 3
+};
+
+export const socket = io.connect(rootDomain)
 
 export default function HomeScreen() {
     const navigate = useNavigate();
@@ -20,10 +38,24 @@ export default function HomeScreen() {
 
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
+    const [queueingUp, setQueueingUp] = useState(false)
     
     function handleInviteButtonClick() {
         setShowInviteModal(true);
     }
+
+    function handlePlayButtonClick() {
+        setQueueingUp(true)
+        socket.emit(SocketEvents.QUEUE_UP, {email : auth.user.email})
+    }
+
+    useEffect(() => {
+        socket.on(SocketEvents.MATCH_FOUND, () => {
+            //console.log("GAME FOUND")
+            navigate('/game')
+        })
+
+    }, [])
 
     return (
         <div id="home-screen">
@@ -49,7 +81,8 @@ export default function HomeScreen() {
                         xs={12} id='play-button'
                         gridSx={{textAlign: 'center'}}
                         buttonSx={[homeButtons, {fontSize: '24pt', marginLeft: '-10%'}]}
-                        onClick={() => navigate('/game')}
+                        // onClick={() => navigate('/game')}
+                        onClick={handlePlayButtonClick}
                         text='Play'
                     />
                     <HomeButton
@@ -118,7 +151,8 @@ export default function HomeScreen() {
                 </Grid>
             </Box>
             <MessagesDrawer />
-            {auth.role === UserRoleType.USER && <Sidebar />}
+            <Sidebar />
+            {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
             <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
             <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
         </div>
@@ -134,6 +168,50 @@ function HomeButton(props) {
         </Grid>
     )
 }
+
+function QueueModal(props) {
+    const { auth } = useContext(AuthContext);
+
+    const [modalText, setModalText] = useState("Waiting for another player...")
+    const [matchFound, setMatchFound] = useState(false)
+
+    function handleXButtonClick() {
+        props.setQueueingUp(false)
+        socket.emit(SocketEvents.LEAVE_QUEUE, {email : auth.user.email})
+    }
+
+    return (
+        <Modal
+            open={props.queuingUp}
+            aria-labelledby="modal-find-game"
+        >
+            <Box
+                sx={modalStyle}>
+                <Button 
+                    sx={{
+                    color: 'black',
+                    ":hover":{
+                        bgcolor: '#f1f9f4'
+                        }
+                    }}
+                    onClick={handleXButtonClick}
+                >
+                    X
+                </Button>
+                <br></br>
+                <Typography id="modal-find-game" variant="h6" component="h2">
+                    {modalText}
+                </Typography>
+                {/* {matchFound ? (
+                    countdownModal
+                ) : ( */}
+                    <img src={loading} alt='loading-gif' className="image"></img>
+                {/* )} */}
+            </Box>
+        </Modal>
+    )
+}
+
 
 // Default params for the xs and buttonSx properties of the HomeButton
 HomeButton.defaultProps = { xs: 6, buttonSx: homeButtons }
