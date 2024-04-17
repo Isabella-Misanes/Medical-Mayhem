@@ -42,14 +42,11 @@ export const sendFriend = async (req: Request, res: Response) => {
 
 export const removeFriend = async (req: Request, res: Response) => {
     try {
-        console.log('removeFriend')
         const currentUser = await User.findById(req.userId);
         if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
         const {targetUsername} = req.body;
-        console.log(targetUsername);
         const targetUser = await User.findOne({username: targetUsername});
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
-        console.log(targetUser);
         await User.updateOne({_id: currentUser._id}, { $pull: { friendsIds: targetUser._id }});
 
     } catch(err) {

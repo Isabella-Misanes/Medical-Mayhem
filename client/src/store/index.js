@@ -211,12 +211,11 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.sendFriend = function(targetUsername, handleFriendModalClose) {
-        console.log("Add friend in store:", targetUsername);
         async function asyncSendFriend() {
             try {
                 let response = await apis.sendFriendRequest(targetUsername)
-                console.log(response);
                 if(response.status === 200) handleFriendModalClose();
+                console.log("Sent a friend request to user", targetUsername);
             } catch(error) {
                 console.error(error.response.data.errorMessage);
                 storeReducer({
@@ -255,10 +254,8 @@ function GlobalStoreContextProvider(props) {
 
     // Social Screen
     store.removeFriend = (targetUsername) => {
-        console.log("Remove friend in store");
         async function asyncRemoveFriend() {
             try {
-                console.log(targetUsername);
                 let response = await apis.removeFriend(targetUsername);
                 storeReducer({
                     type: GlobalStoreActionType.REMOVE_FRIEND,

@@ -6,7 +6,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 export default function SocialCard(props) {
     const friendName = props.friendName;
     const friendOnlineStatus = props.friendOnlineStatus;
-    const friendPfp = convertDataUrl(props.friendPfp);
+    const friendPfp = props.friendPfp !== '' ? convertDataUrl(props.friendPfp) : '';
 
     // Converts profile picture from Base 64 data to readable URL string
     // shoutout to chatgpt for this 🙏
