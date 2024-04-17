@@ -30,7 +30,7 @@ export default function HomeScreen() {
             <Box
                 sx={{
                     height: '90%',
-                    minWidth: '350px',
+                    minWidth: '400px',
                     width: '40%',
                     display: 'flex',
                     flexDirection: 'column',
@@ -64,7 +64,7 @@ export default function HomeScreen() {
                         onClick={() => navigate('/mapbuilder')}
                         backgroundColor='transparent'
                         buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
-                        text='Map Builder'
+                        text='Character Builder'
                         disable={auth.role === UserRoleType.GUEST}
                     />
                     <HomeButton
