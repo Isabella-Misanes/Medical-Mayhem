@@ -42,7 +42,9 @@ export const GlobalStoreActionType = {
     RESET: "RESET",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
-    VIEW_FRIENDS: "VIEW_FRIENDS"
+    VIEW_FRIENDS: "VIEW_FRIENDS",
+    REMOVE_FRIEND: "REMOVE_FRIENDS",
+    ERROR: "ERROR"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -73,7 +75,8 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
-        profileInfo: {}
+        profileInfo: {},
+        errorMessage: ""
     });
 
     console.log("inside useGlobalStore");
@@ -92,6 +95,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -99,7 +103,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -107,14 +112,16 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.RESET: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: CurrentHomeScreen.HOME,
-                    profileInfo: {}
+                    profileInfo: {},
+                    errorMessage: ""
                 });
             }
 
@@ -123,9 +130,20 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
+
+            case GlobalStoreActionType.ERROR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: payload.errorMessage
+                })
+            }
+
             default:
                 return store;
         }
@@ -167,7 +185,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     // TODO: INCLUDE TRY CATCH
-    store.updateProfile = function (username, bio, pfp) {
+    store.updateProfile = function(username, bio, pfp) {
         async function asyncUpdateProfile() {
             try{
                 let response = await apis.updateProfile(username, bio, pfp)
@@ -192,8 +210,21 @@ function GlobalStoreContextProvider(props) {
         console.log("Private messaging in store")
     }
 
-    store.addFriend = function (event) {
-        console.log("Add friend in store");
+    store.sendFriend = function(targetUsername, handleFriendModalClose) {
+        async function asyncSendFriend() {
+            try {
+                let response = await apis.sendFriendRequest(targetUsername)
+                if(response.status === 200) handleFriendModalClose();
+                console.log("Sent a friend request to user", targetUsername);
+            } catch(error) {
+                console.error(error.response.data.errorMessage);
+                storeReducer({
+                    type: GlobalStoreActionType.ERROR,
+                    payload: { errorMessage: error.response.data.errorMessage }
+                })
+            }
+        }
+        asyncSendFriend();
     }
 
     store.promoteToLeader = function (event) {
@@ -222,14 +253,24 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Social Screen
-    store.removeFriend = function (event) {
-        console.log("Remove friend in store");
+    store.removeFriend = (targetUsername) => {
+        async function asyncRemoveFriend() {
+            try {
+                let response = await apis.removeFriend(targetUsername);
+                storeReducer({
+                    type: GlobalStoreActionType.REMOVE_FRIEND,
+                    payload: response.data
+                })
+            } catch(err) { console.error(err) }
+        }
+        asyncRemoveFriend();
     }
 
     store.viewFriends = function () {
         async function asyncViewFriends() {
             try {
                 let response = await apis.viewFriends()
+                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
@@ -250,18 +291,6 @@ function GlobalStoreContextProvider(props) {
     store.showReceivedRequests = function () {
         console.log("Show friends requests RECEIVED in store");
     }
-
-    // Helper method
-    // store.getFriendById = function (friendId) {
-    //     async function asyncGetFriendById() {
-    //         try {
-    //             console.log(friendId);
-    //             let response = await apis.getFriendById(friendId);
-    //             console.log("asyncGetFriendById:", response);
-    //         } catch(error) { console.error(error); }
-    //     }
-    //     asyncGetFriendById();
-    // }
 
     // Forums Screen
     store.openThread = function (event) {
@@ -305,6 +334,17 @@ function GlobalStoreContextProvider(props) {
 
     store.completeReport = function(event) {
         console.log("Completed report in store.");
+    }
+
+    store.hideModal = () => {
+        storeReducer({
+            type: GlobalStoreActionType.ERROR,
+            payload: { errorMessage: "" }
+        })
+    }
+
+    store.isErrorModalOpen = () => {
+        return auth.errorMessage !== "";
     }
 
     return (

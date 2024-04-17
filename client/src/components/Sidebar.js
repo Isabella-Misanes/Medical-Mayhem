@@ -35,7 +35,7 @@ export default function Sidebar() {
     }
 
     function handleAddFriend(event) {
-        store.addFriend(event);
+        store.sendFriend(event);
         handleMenuClose();
     }
 

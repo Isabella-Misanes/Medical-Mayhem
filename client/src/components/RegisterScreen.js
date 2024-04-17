@@ -31,7 +31,7 @@ export default function RegisterScreen() {
     }
 
    let modal = "";
-   if(auth.errorMessage !== "") modal = <MUIErrorModal />;
+   if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
 
     return (
             <Box sx={{
