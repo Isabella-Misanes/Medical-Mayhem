@@ -7,7 +7,7 @@ export const api = axios.create({
     // Uncomment one, comment out the other as needed
     
     baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/api'
-    //baseURL: 'http://localhost:4000/api'
+    // baseURL: 'http://localhost:4000/api'
 })
 
 export const getProfile = async () => { return await api.get(`/getProfile/`) }
@@ -20,10 +20,12 @@ export const updateProfile = async (username, bio, pfp) => {
         pfp: pfp
     })
 }
+export const viewFriends = async() => { return await api.get('/friends/'); }
 
 const apis = {
     getProfile,
-    updateProfile
+    updateProfile,
+    viewFriends
 }
 
 export default apis

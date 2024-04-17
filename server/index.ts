@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import path from 'path'
 import authRouter from './routes/auth-router'
 import mainRouter from './routes/main-router'
+import socialRouter from './routes/social-router'
 
 // CREATE OUR SERVER
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
@@ -29,6 +30,7 @@ app.use(cookieParser())
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 app.use('/auth', authRouter)
 app.use('/api', mainRouter)
+app.use('/api', socialRouter)
 
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {

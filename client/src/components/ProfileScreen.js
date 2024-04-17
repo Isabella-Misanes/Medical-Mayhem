@@ -1,7 +1,5 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
-import { buttonStyle } from '../App';
+import { Box, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
@@ -11,7 +9,6 @@ import avatar from '../assets/default-avatar.jpg'
 import AuthContext from '../auth';
 
 export default function ProfileScreen() {
-    const navigate = useNavigate();
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
@@ -106,9 +103,7 @@ export default function ProfileScreen() {
                         height: '70%',
                         color: 'black',
                     }}>
-                        <Grid container spacing={4} sx={{
-                            textAlign: 'left'
-                        }}>
+                        <Grid container spacing={4} sx={{textAlign: 'left'}}>
                             <Grid item xs={12} onClick={handleToggleScreen} sx={{
                                 bgcolor: '#4D9147',
                                 color: 'white',
@@ -125,31 +120,29 @@ export default function ProfileScreen() {
                                     borderColor: 'black',
                                     ml: 2
                                 }}>
-                                <form
-                                    onSubmit={handleSubmit}>
-                                    <label htmlFor="file-upload">
-                                        <img 
-                                            src={postImage || avatar}
-                                            width={140}
-                                            height={140}
-                                            alt=''/>
-                                    </label>
-                                    <input
-                                        type="file"
-                                        label="Image"
-                                        name="myFile"
-                                        id='file-upload'
-                                        accept='.jpeg, .png, .jpg'
-                                        style={{display: "none"}}
-                                        disabled={!editEnabled}
-                                        onChange={(event) => handleFileUpload(event)}>
-                                    </input>
-                                </form>
+                                    <form
+                                        onSubmit={handleSubmit}>
+                                        <label htmlFor="file-upload">
+                                            <img 
+                                                src={postImage || avatar}
+                                                width={140}
+                                                height={140}
+                                                alt=''/>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            label="Image"
+                                            name="myFile"
+                                            id='file-upload'
+                                            accept='.jpeg, .png, .jpg'
+                                            style={{display: "none"}}
+                                            disabled={!editEnabled}
+                                            onChange={(event) => handleFileUpload(event)}>
+                                        </input>
+                                    </form>
                                 </Box>
                             </Grid>
-                            <Grid item xs={6} sx={{
-                                fontSize: '12pt'
-                            }}>
+                            <Grid item xs={6} sx={{fontSize: '12pt'}}>
                                 {editEnabled ?
                                     <>
                                         <TextField
@@ -172,10 +165,8 @@ export default function ProfileScreen() {
                                     </p>
                                 }
                             </Grid>
-                            <Grid item xs={1}/>
-                            <Grid item xs={12}>
-
-                            </Grid>
+                            <Grid item xs={1} />
+                            <Grid item xs={12} />
                         </Grid>   
                     </Box>
                 </CardActionArea>
@@ -197,18 +188,12 @@ export default function ProfileScreen() {
                                     onChange={handleBioChange}
                                     variant="filled"
                                     disabled={!editEnabled}
-                                    sx={{
-                                    }}>
-                                    
-                                </TextField>
+                                />
                             </Grid>
-                            <Grid item xs={12} sx={{
-                                bgcolor: '#4D9147',
-                            }}>
+                            <Grid item xs={12} sx={{bgcolor: '#4D9147'}}>
                                 <IconButton onClick={(event) => {handleEditProfile(event)}} 
-                                    sx={{
-                                        color: editEnabled ? 'red' : 'white'
-                                }}>
+                                    sx={{color: editEnabled ? 'red' : 'white'}}
+                                >
                                     <EditIcon />
                                 </IconButton>
                             </Grid>
@@ -360,15 +345,6 @@ export default function ProfileScreen() {
         <div id="profile-screen">
             {showProfileScreen ? profileScreen : achievementsScreen}
             <Sidebar />
-            <Button variant="contained"
-                sx={[buttonStyle, {
-                    left: '2%',
-                    bottom: '2%',
-                    position: 'absolute'
-                }]}
-                onClick={()=>{navigate("/")}}>
-                Back
-            </Button>
             <BackButton />
         </div>
     );

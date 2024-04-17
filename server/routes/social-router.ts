@@ -1,12 +1,12 @@
 import express from 'express'
 const router = express.Router()
+import { FriendController } from '../controllers/friend-controller'
 import { auth } from '../auth'
-import { PlayerController } from '../controllers/player-controller'
 
 // Check if the user is logged in before fulfilling any authorized request
 router.use(auth.verifyToken)
 
-router.get('/getProfile', PlayerController.getProfile)
-router.post('/updateProfile', PlayerController.updateProfile)
+router.get('/friends', FriendController.viewFriends)
+// router.get('/friend', FriendController.getFriendById)
 
 export default router

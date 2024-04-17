@@ -36,12 +36,13 @@ export const GlobalStoreActionType = {
     LIKE_DISLIKE: "LIKE_DISLIKE",
     PLAY_SONG: "PLAY_SONG",
 
-
-
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY TORIN
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
-    RESET: "RESET"
+    RESET: "RESET",
+
+    // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
+    VIEW_FRIENDS: "VIEW_FRIENDS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -66,7 +67,7 @@ function GlobalStoreContextProvider(props) {
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
-    console.log("auth: " + auth);
+    console.log("auth:", auth);
 
     // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
     const [store, setStore] = useState({
@@ -94,7 +95,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
-                console.log("IN GET: " + payload)
+                console.log("IN GET:", payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -102,7 +103,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
-                console.log("IN UPDATE PROFILE: " + payload)
+                console.log("IN UPDATE PROFILE:", payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -114,6 +115,15 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: CurrentHomeScreen.HOME,
                     profileInfo: {}
+                });
+            }
+
+            case GlobalStoreActionType.VIEW_FRIENDS: {
+                console.log("IN VIEW FRIENDS:", payload)
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: payload
                 });
             }
             default:
@@ -158,7 +168,6 @@ function GlobalStoreContextProvider(props) {
 
     // TODO: INCLUDE TRY CATCH
     store.updateProfile = function (username, bio, pfp) {
-
         async function asyncUpdateProfile() {
             try{
                 let response = await apis.updateProfile(username, bio, pfp)
@@ -171,9 +180,7 @@ function GlobalStoreContextProvider(props) {
                         pfp: pfp
                     }
                 })
-            } catch (error) {
-                console.log(error)
-            }
+            } catch (error) { console.error(error) }
         }
 
         asyncUpdateProfile()
@@ -219,8 +226,17 @@ function GlobalStoreContextProvider(props) {
         console.log("Remove friend in store");
     }
 
-    store.showFriends = function () {
-        console.log("Show friends in store");
+    store.viewFriends = function () {
+        async function asyncViewFriends() {
+            try {
+                let response = await apis.viewFriends()
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.log(error) }
+        }
+        asyncViewFriends();
     }
 
     store.showRecentPlayers = function () {
@@ -234,6 +250,18 @@ function GlobalStoreContextProvider(props) {
     store.showReceivedRequests = function () {
         console.log("Show friends requests RECEIVED in store");
     }
+
+    // Helper method
+    // store.getFriendById = function (friendId) {
+    //     async function asyncGetFriendById() {
+    //         try {
+    //             console.log(friendId);
+    //             let response = await apis.getFriendById(friendId);
+    //             console.log("asyncGetFriendById:", response);
+    //         } catch(error) { console.error(error); }
+    //     }
+    //     asyncGetFriendById();
+    // }
 
     // Forums Screen
     store.openThread = function (event) {

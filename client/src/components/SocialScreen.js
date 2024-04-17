@@ -11,7 +11,10 @@ export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
-    const [numFriends] = useState(7);
+    const [friends, setFriends] = useState([]);
+    const [friendNames, setFriendNames] = useState([]);
+    const [friendOnlineStatuses, setFriendOnlineStatuses] = useState([]);
+    const [friendPfps, setFriendPfps] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -21,7 +24,7 @@ export default function SocialScreen() {
     useEffect(() => {
         switch(activeButton) {
             case 0:
-                store.showFriends();
+                store.viewFriends();
                 break;
             case 1:
                 store.showRecentPlayers();
@@ -33,10 +36,21 @@ export default function SocialScreen() {
                 store.showReceivedRequests();
                 break;
             default:
-                store.showFriends();
-                break;
+                // store.viewFriends();
+                // break;
         }
-    }, [activeButton, store]);
+        // Having the below dependency as [activeButton, store] causes it to spam
+        // eslint-disable-next-line
+    }, [activeButton]);
+
+    useEffect(() => {
+        // Checking if store.profileInfo.friends fixes the error of the friends state being undefined upon load
+        setFriends(store.profileInfo.friends ? store.profileInfo.friends : [])
+        setFriendNames(store.profileInfo.friendNames ? store.profileInfo.friendNames : [])
+        setFriendOnlineStatuses(store.profileInfo.friendOnlineStatuses ? store.profileInfo.friendOnlineStatuses : [])
+        setFriendPfps(store.profileInfo.friendPfps ? store.profileInfo.friendPfps : [])
+        // eslint-disable-next-line
+    }, [store.profileInfo])
 
     function handleFriendModalOpen() { setModalOpen(true); }
     function handleFriendModalClose() { setModalOpen(false); }
@@ -57,21 +71,27 @@ export default function SocialScreen() {
     };
     
     const friendRender = () => {
-        const friends = [];
-        if(numFriends !== 0) {
-            for(let i = 0; i < numFriends; i++) {
-                friends.push(
+        const friendCards = [];
+        console.log(friends);
+        console.log(friendNames);
+        if(friends.length !== 0) {
+            for(let i = 0; i < friends.length; i++) {
+                friendCards.push(
                     <SocialCard
                         key={i}
                         top={`${25 + Math.floor(i / 5) * 32.5}%`}
                         left={`${5 + ((i % 5) * 17.5)}%`}
                         handleProfileMenuOpen={handleProfileMenuOpen}
+                        friend={friends[i]}
+                        friendName={friendNames[i]}
+                        friendOnlineStatus={friendOnlineStatuses[i]}
+                        friendPfp={friendPfps[i]}
                     />
                 )
             }
         }
         else {
-            friends.push(
+            friendCards.push(
                 <Box key={'no-friends'} sx={{
                     width: '90%',
                     height: '50%',
@@ -85,7 +105,7 @@ export default function SocialScreen() {
                 </Box>
             )
         }
-        return friends;
+        return friendCards;
     }
 
     const handleMenuClose = () => {
