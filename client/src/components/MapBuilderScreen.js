@@ -1,4 +1,5 @@
 import { Grid, Paper } from '@mui/material';
+import { useState } from 'react';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import player1 from '../assets/Player-1.png.png'
@@ -9,6 +10,8 @@ import player5 from '../assets/Player-5.png.png'
 import player6 from '../assets/Player-6.png.png'
 
 export default function MapBuilderScreen() {
+    const [selectedCharacter, setCharacter] = useState(null);
+
     const players = [
         player1,
         player2,
@@ -18,8 +21,9 @@ export default function MapBuilderScreen() {
         player6
     ];
 
-    function handleCharacterClick() {
-        console.log("image gotten");
+    function handleCharacterClick(index) {
+        console.log(`CLicked on character ${index+1}`);
+        setCharacter(index);
     }
     return (
         <div id="map-builder-screen">
@@ -39,9 +43,9 @@ export default function MapBuilderScreen() {
                                 width: '100%',
                                 m: 2,
                                 textAlign: 'center', 
-                                backgroundColor: '#f0f0f0' 
+                                backgroundColor: selectedCharacter === index ? 'lightblue' : '#f0f0f0' 
                                 }}
-                                onClick={() => handleCharacterClick()}
+                                onClick={() => handleCharacterClick(index)}
                             >
                                 <img
                                 src={image}
