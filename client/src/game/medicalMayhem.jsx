@@ -1,4 +1,4 @@
-import { Engine, Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
+import { Engine } from "excalibur";
 import { medicationmatchingScene } from "./medicationmatchingScene";
 import { heartbeatrhythmScene } from "./heartbeatrhythmScene";
 
@@ -35,7 +35,7 @@ export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
 
     engine.add("game-scene", new heartbeatrhythmScene());
     engine.add("game-scene-2", new medicationmatchingScene())
-    engine.goToScene("game-scene");
+    engine.goToScene("game-scene", {sceneActivationData: {score: 0, time: 120}});
 
     engine.start();
     

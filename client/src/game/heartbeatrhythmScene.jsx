@@ -11,7 +11,11 @@ export class heartbeatrhythmScene extends Scene {
     score;
 
     onInitialize(engine) {
-
+        console.log("STARTING HEARTBEAT GAME");
+        this.initializeText(engine);
+        this.initializeTimeText(engine);
+        this.score = this.initializeScore(this.engine);
+        this.initializeBar(engine, this.score);
         const createRandomProjectile = () => {
             const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
             setTimeout(() => {
@@ -22,19 +26,15 @@ export class heartbeatrhythmScene extends Scene {
             }, interval);
         };
         createRandomProjectile();
-        console.log("STARTING HEARTBEAT GAME");
-        this.initializeText(engine);
-        this.initializeTimeText(engine);
-        this.score = this.initializeScore(this.engine);
-        this.initializeBar(engine, this.score);
         this.engine = engine;
     }
 
-    onActivate() {
+    onActivate(context) {
         this.timeText.time = 30;
+        this.score.val = context.data.score;
   
         setTimeout(() => {
-            this.engine.goToScene("game-scene-2");
+            this.engine.goToScene("game-scene-2", {sceneActivationData: {score: this.score.val, time: context.data.time-30}});
         }, 30000);
   
       //   engine?.start().catch((e) => console.error(e));
@@ -87,8 +87,8 @@ export class heartbeatrhythmScene extends Scene {
             if(isColliding && tapped) {
                 if(ball) {
                     ball.kill();
-                    score.val += 100;
-                    score.text.text = 'Score: ' + score.val;
+                    this.score.val += 100;
+                    this.score.text.text = 'Score: ' + this.score.val;
                 }
             }
         })
@@ -118,9 +118,9 @@ export class heartbeatrhythmScene extends Scene {
         projectile.on("postupdate", () => {
             if(projectile.pos.x < -50 || projectile.pos.y < 0 || projectile.pos.x > game.drawWidth || projectile.pos.y > game.drawHeight) {
                 projectile.kill();
-                if(score.val > 0) {
-                    score.val -= 50
-                    score.text.text = 'Score: ' + score.val;
+                if(this.score.val > 0) {
+                    this.score.val -= 50
+                    this.score.text.text = 'Score: ' + this.score.val;
                 }
             }
         });
@@ -151,7 +151,7 @@ export class heartbeatrhythmScene extends Scene {
         setInterval(() => {
             this.timeText.time -= 1;
             if(this.timeText.time >= 0) {
-                this.timeText.text.text = 'Time left: ' + this.timeText.time + ' sec';
+                this.timeText.text.text= 'Time left: ' + this.timeText.time + ' sec';
             }
         }, 1000);
     }

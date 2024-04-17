@@ -23,12 +23,15 @@ export class medicationmatchingScene extends Scene {
     // game?.start().catch((e) => console.error(e));
   }
 
-  onActivate() {
+  points;
+
+  onActivate(context) {
     this.timerSec = 15;
-    this.points = 0;
+    this.points = context.data.score;
+    this.pointText.text = "Points: " + this.points;
 
     setTimeout(() => {
-      this.engine.goToScene("game-scene");
+      this.engine.goToScene("game-scene", {sceneActivationData: {score: this.points, time: context.data.time-15}});
     }, 15000);
   }
 
@@ -36,7 +39,7 @@ export class medicationmatchingScene extends Scene {
 
   }
 
-  points;
+
   pointText = new Text({
     text: "Points: " + this.points,
     color: Color.White,
