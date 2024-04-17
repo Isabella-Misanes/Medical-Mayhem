@@ -30,12 +30,17 @@ export const removeFriend = async(targetUsername) => { return await api.post('/f
     targetUsername: targetUsername
 }); }
 
+export const getRecentPlayers = async(targetUsername) => { return await api.get('/recentPlayers', {
+    targetUsername: targetUsername
+}); }
+
 const apis = {
     getProfile,
     updateProfile,
     removeFriend,
     viewFriends,
-    sendFriendRequest
+    sendFriendRequest,
+    getRecentPlayers
 }
 
 export default apis

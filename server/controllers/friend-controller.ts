@@ -57,25 +57,22 @@ export const removeFriend = async (req: Request, res: Response) => {
 
 export const viewFriends = async (req: Request, res: Response) => {
     try {
+        console.log("test");
         const currentUser = await User.findById(req.userId);
         if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
-        const friendNames : string[] = [];
-        const friendOnlineStatuses : boolean[] = [];
-        const friendPfps : string[] = [];
+        const friends: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
         await Promise.all(currentUser.friendsIds.map(async (friendId) => {
             const friend = await User.findById(friendId);
             if(friend) {
-                friendNames.push(friend.username);
-                friendOnlineStatuses.push(friend.onlineStatus);
-                friendPfps.push(friend.profilePicture);
+                console.log(friend);
+                friends.push({
+                    username: friend.username,
+                    profilePicture: friend.profilePicture,
+                    onlineStatus: friend.onlineStatus
+                })
             }
         }));
-        return res.status(200).json({
-            friends: currentUser.friendsIds,
-            friendNames: friendNames,
-            friendOnlineStatuses: friendOnlineStatuses,
-            friendPfps: friendPfps
-        })
+        return res.status(200).json({players: friends})
     } catch(err) {
         console.error(err);
         res.status(500).send();

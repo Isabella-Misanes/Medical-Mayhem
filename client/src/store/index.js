@@ -282,6 +282,17 @@ function GlobalStoreContextProvider(props) {
 
     store.showRecentPlayers = function () {
         console.log("Show recent players in store");
+        async function asyncViewFriends() {
+            try {
+                let response = await apis.getRecentPlayers()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.log(error) }
+        }
+        asyncViewFriends();
     }
 
     store.showSentRequests = function() {

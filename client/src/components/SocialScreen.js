@@ -12,10 +12,7 @@ export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
-    const [friends, setFriends] = useState([]);
-    const [friendNames, setFriendNames] = useState([]);
-    const [friendOnlineStatuses, setFriendOnlineStatuses] = useState([]);
-    const [friendPfps, setFriendPfps] = useState([]);
+    const [playerList, setPlayerList] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -49,10 +46,7 @@ export default function SocialScreen() {
 
     useEffect(() => {
         // Checking if store.profileInfo.friends exists fixes the error of the friends state being undefined upon load
-        setFriends(store.profileInfo.friends ? store.profileInfo.friends : [])
-        setFriendNames(store.profileInfo.friendNames ? store.profileInfo.friendNames : [])
-        setFriendOnlineStatuses(store.profileInfo.friendOnlineStatuses ? store.profileInfo.friendOnlineStatuses : [])
-        setFriendPfps(store.profileInfo.friendPfps ? store.profileInfo.friendPfps : [])
+        setPlayerList(store.profileInfo.players ? store.profileInfo.players : [])
         // eslint-disable-next-line
     }, [store.profileInfo])
 
@@ -74,30 +68,33 @@ export default function SocialScreen() {
         setAnchorEl(event.currentTarget);
     };
     
-    const friendRender = () => {
-        const friendCards = [];
-        if(friends.length !== 0) {
-            for(let i = 0; i < friends.length; i++) {
-                friendCards.push(
+    // TODO: Handle having more than 10 players on the page
+    const playerRender = () => {
+        const playerCards = [];
+        let str = 'No ';
+        if(activeButton === 0) str += 'Friends';
+        else if(activeButton === 1) str += 'Recent Players';
+        else str += 'Friend Requests';
+        
+        if(playerList.length !== 0) {
+            for(let i = 0; i < playerList.length; i++) {
+                playerCards.push(
                     <SocialCard
                         key={i}
                         top={`${25 + Math.floor(i / 5) * 32.5}%`}
                         left={`${5 + ((i % 5) * 17.5)}%`}
-                        friend={friends[i]}
-                        friendName={friendNames[i]}
-                        friendOnlineStatus={friendOnlineStatuses[i]}
-                        friendPfp={friendPfps[i]}
+                        friend={playerList[i]}
                         onClick={(event) => {
                             handleProfileMenuOpen(event);
-                            setCurrFriend(friendNames[i]);
+                            setCurrFriend(playerList[i]);
                         }}
                     />
                 )
             }
         }
         else {
-            friendCards.push(
-                <Box key={'no-friends'} sx={{
+            playerCards.push(
+                <Box key={'no-players'} sx={{
                     width: '90%',
                     height: '50%',
                     bgcolor: 'white',
@@ -106,11 +103,11 @@ export default function SocialScreen() {
                     left: '5%',
                     boxShadow: 5
                 }}>
-                    <h1>No Friends</h1>
+                    <h1>{str}</h1>
                 </Box>
             )
         }
-        return friendCards;
+        return playerCards;
     }
 
     const handleMenuClose = () => {
@@ -253,7 +250,7 @@ export default function SocialScreen() {
                     </Grid>
                 </Grid>
 
-                {friendRender()}
+                {playerRender()}
                 
                 <BackButton />
 

@@ -4,9 +4,10 @@ import CircleIcon from '@mui/icons-material/Circle';
 // import GlobalStoreContext from '../store';
 
 export default function SocialCard(props) {
-    const friendName = props.friendName;
-    const friendOnlineStatus = props.friendOnlineStatus;
-    const friendPfp = props.friendPfp !== '' ? convertDataUrl(props.friendPfp) : '';
+    const friendName = props.friend.username;
+    console.log(props.friend);
+    const friendOnlineStatus = props.friend.onlineStatus;
+    const friendPfp = props.friend.profilePicture !== '' ? convertDataUrl(props.friend.profilePicture) : '';
 
     // Converts profile picture from Base 64 data to readable URL string
     // shoutout to chatgpt for this 🙏

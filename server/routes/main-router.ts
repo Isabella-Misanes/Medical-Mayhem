@@ -8,5 +8,6 @@ router.use(auth.verifyToken)
 
 router.get('/getProfile', PlayerController.getProfile)
 router.post('/updateProfile', PlayerController.updateProfile)
+router.get('/recentPlayers', PlayerController.getRecentPlayers)
 
 export default router
