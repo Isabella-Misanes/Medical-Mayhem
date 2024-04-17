@@ -5,29 +5,43 @@
 import { Engine, Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
 
 export class heartbeatrhythmScene extends Scene {
+
+    engine;
+    timeText;
+    score;
+
     onInitialize(engine) {
-      console.log("STARTING HEARTBEAT GAME");
 
-      this.initializeText(engine);
-      const score = this.initializeScore(engine);
-      this.initializeBar(engine, score);
-      this.initializeTimeText(engine);
+        const createRandomProjectile = () => {
+            const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
+            setTimeout(() => {
+                if (this.timeText.time > 0) {
+                    this.initProjectile(this.engine, this.score);   
+                }
+                createRandomProjectile();
+            }, interval);
+        };
+        createRandomProjectile();
+        console.log("STARTING HEARTBEAT GAME");
+        this.initializeText(engine);
+        this.initializeTimeText(engine);
+        this.score = this.initializeScore(this.engine);
+        this.initializeBar(engine, this.score);
+        this.engine = engine;
+    }
 
-      const createRandomProjectile = () => {
-          const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
-          setTimeout(() => {
-              this.initProjectile(engine, score);
-              createRandomProjectile();
-          }, interval);
-      };
+    onActivate() {
+        this.timeText.time = 30;
+  
+        setTimeout(() => {
+            this.engine.goToScene("game-scene-2");
+        }, 30000);
+  
+      //   engine?.start().catch((e) => console.error(e));
+    }
 
-      createRandomProjectile();
-
-      setTimeout(() => {
-        engine.goToScene("game-scene-2");
-      }, 30000);
-
-    //   engine?.start().catch((e) => console.error(e));
+    onDeactivate() {
+        
     }
 
     gameHeight = 750;
@@ -124,20 +138,20 @@ export class heartbeatrhythmScene extends Scene {
     }
 
     initializeTimeText (game) {
-        const timeText = new Actor({pos: vec(this.gameWidth-100, 30)});
-        timeText.time = 30;
-        timeText.text = new Text({
-            text: 'Time left: ' + timeText.time + ' sec',
+        this.timeText = new Actor({pos: vec(this.gameWidth-100, 30)});
+        this.timeText.time = 30;
+        this.timeText.text = new Text({
+            text: 'Time left: ' + this.timeText.time + ' sec',
             color: Color.White,
             font: new Font({size: 14, textAlign: TextAlign.Left})
         });
-        timeText.graphics.use(timeText.text);
-        game.currentScene.add(timeText);
+        this.timeText.graphics.use(this.timeText.text);
+        game.currentScene.add(this.timeText);
 
         setInterval(() => {
-            timeText.time -= 1;
-            if(timeText.time >= 0) {
-                timeText.text.text = 'Time left: ' + timeText.time + ' sec';
+            this.timeText.time -= 1;
+            if(this.timeText.time >= 0) {
+                this.timeText.text.text = 'Time left: ' + this.timeText.time + ' sec';
             }
         }, 1000);
     }

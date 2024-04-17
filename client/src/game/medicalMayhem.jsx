@@ -1,6 +1,4 @@
 import { Engine, Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
-import { initHeartbeat } from "./heartbeatrhythm";
-import { initMedicationMatching } from "./medicationmatching";
 import { medicationmatchingScene } from "./medicationmatchingScene";
 import { heartbeatrhythmScene } from "./heartbeatrhythmScene";
 
