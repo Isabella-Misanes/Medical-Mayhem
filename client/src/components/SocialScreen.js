@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Menu, MenuItem, Modal, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Menu, MenuItem, Modal, Typography, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import GlobalStoreContext from '../store';
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { ReportModal, BackButton } from '.';
 import SocialCard from './SocialCard';
+import MUIErrorModal from './MUIErrorModal';
 
 export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
@@ -18,6 +19,9 @@ export default function SocialScreen() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
+
+    // Add friend modal functionality
+    const [addFriendUsername, setAddFriendUsername] = useState('');
 
     function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
@@ -44,7 +48,7 @@ export default function SocialScreen() {
     }, [activeButton]);
 
     useEffect(() => {
-        // Checking if store.profileInfo.friends fixes the error of the friends state being undefined upon load
+        // Checking if store.profileInfo.friends exists fixes the error of the friends state being undefined upon load
         setFriends(store.profileInfo.friends ? store.profileInfo.friends : [])
         setFriendNames(store.profileInfo.friendNames ? store.profileInfo.friendNames : [])
         setFriendOnlineStatuses(store.profileInfo.friendOnlineStatuses ? store.profileInfo.friendOnlineStatuses : [])
@@ -72,8 +76,6 @@ export default function SocialScreen() {
     
     const friendRender = () => {
         const friendCards = [];
-        console.log(friends);
-        console.log(friendNames);
         if(friends.length !== 0) {
             for(let i = 0; i < friends.length; i++) {
                 friendCards.push(
@@ -147,6 +149,20 @@ export default function SocialScreen() {
             </MenuItem>
         </Menu>
     );
+
+    // Add friend
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        store.addFriend(addFriendUsername, handleFriendModalClose);
+        // TODO: Handle module change to confirm that a friend request was sent
+    };
+
+    const handleAddFriendUsernameChange = (event) => {
+        event.preventDefault();
+        setAddFriendUsername(event.target.value);
+    }
+
+    let modal = store.errorMessage !== "" ? <MUIErrorModal store={store} /> : "";
     
     return (
         <div id="social-screen">
@@ -235,13 +251,10 @@ export default function SocialScreen() {
                 
                 <BackButton />
 
-                <Modal
-                    open={isModalOpen}
-                    onClose={handleFriendModalClose}
-                >
+                <Modal open={isModalOpen} onClose={handleFriendModalClose}>
                     <Box sx={{
                         width: '30%',
-                        height: '60%',
+                        height: '27%',
                         bgcolor: '#2d7044',
                         border: 1,
                         borderColor: 'white',
@@ -251,9 +264,9 @@ export default function SocialScreen() {
                         boxShadow: 5,
                         textAlign: 'center',
                     }}>
-                        <h1>Friend List</h1>
+                        <h1>Add Friend</h1>
                         <Divider />
-                        <Box sx={{
+                        {/* <Box sx={{
                             bgcolor: '#e3e3e3',
                             width: '90%',
                             height: '70%',
@@ -261,7 +274,28 @@ export default function SocialScreen() {
                             mt: '5%',
                         }}>
                             Put friend cards here
+                        </Box> */}
+                        <Box component='form' noValidate onSubmit={handleSubmit}>
+                            <TextField
+                                size='small'
+                                // value={username}
+                                fullWidth
+                                label='Enter Username'
+                                variant="filled"
+                                sx={{bgcolor: '#e3e3e3', width: '90%', mt: '5%'}}
+                                onChange={handleAddFriendUsernameChange}
+                            />
+                            <Button
+                                id="signUp"
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2, width: '50%' }}
+                            >
+                                Add Friend
+                            </Button>
                         </Box>
+                        {modal}
                     </Box>
                 </Modal>
                 {partyMenu}

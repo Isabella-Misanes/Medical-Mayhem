@@ -7,6 +7,6 @@ import { auth } from '../auth'
 router.use(auth.verifyToken)
 
 router.get('/friends', FriendController.viewFriends)
-// router.get('/friend', FriendController.getFriendById)
+router.post('/friendRequest/:username', FriendController.sendFriend)
 
 export default router

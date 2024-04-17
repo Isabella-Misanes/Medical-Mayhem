@@ -1,22 +1,14 @@
-import { useContext } from 'react'
-import AuthContext from '../auth';
 import * as React from 'react';
-import Modal from '@mui/material/Modal';
-import Stack from '@mui/material/Stack';
-import { Alert } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
-import Button from '@mui/material/Button';
+import { Alert, AlertTitle, Button, Modal, Stack } from '@mui/material';
 
-
-export default function MUIErrorModal() {
-    const { auth } = useContext(AuthContext);
-    let message = auth.errorMessage;
-    function handleCloseModal(event) {
-        auth.hideModal();
-    }
+export default function MUIErrorModal(props) {
+    const auth = props.auth;
+    const store = props.store;
+    let message = auth ? auth.errorMessage : store.errorMessage;
+    function handleCloseModal() { auth ? auth.hideModal() : store.hideModal(); }
 
     return (
-        <Modal open={auth.errorMessage !== ""}>
+        <Modal open={auth ? (auth.errorMessage !== "") : (store.errorMessage !== "")}>
             <Stack sx={{ width: '40%', marginLeft: '30%', marginTop: '20%' }} spacing={2}>
                 <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>

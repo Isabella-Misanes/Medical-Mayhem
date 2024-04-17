@@ -6,20 +6,12 @@ import CircleIcon from '@mui/icons-material/Circle';
 export default function SocialCard(props) {
     const friendName = props.friendName;
     const friendOnlineStatus = props.friendOnlineStatus;
-    const friendPfp = dataURLtoBinaryString(props.friendPfp);
-    // const { store } = useContext(GlobalStoreContext);
-    // const [name, setName] = useState('');
-    // useEffect(() => {
-    //     store.getFriendById(friend);
-    //     //eslint-disable-next-line
-    // }, [])
+    const friendPfp = convertDataUrl(props.friendPfp);
 
-    // useEffect(() => {
-    //     setName(store.profileInfo.friendName)
-    // }, [store.profileInfo])
-
-    function dataURLtoBinaryString(dataurl) {
-        var arr = dataurl.split(','),
+    // Converts profile picture from Base 64 data to readable URL string
+    // shoutout to chatgpt for this 🙏
+    function convertDataUrl(dataUrl) {
+        var arr = dataUrl.split(','),
         bstr = atob(arr[arr.length - 1]),
         mime = arr[0].match(/:(.*?);/)[1];
         return 'data:' + mime + ';base64,' + btoa(bstr);

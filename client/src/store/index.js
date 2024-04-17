@@ -42,7 +42,8 @@ export const GlobalStoreActionType = {
     RESET: "RESET",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
-    VIEW_FRIENDS: "VIEW_FRIENDS"
+    VIEW_FRIENDS: "VIEW_FRIENDS",
+    ERROR: "ERROR"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -73,7 +74,8 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
-        profileInfo: {}
+        profileInfo: {},
+        errorMessage: ""
     });
 
     console.log("inside useGlobalStore");
@@ -92,6 +94,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -99,7 +102,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -107,14 +111,16 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
             case GlobalStoreActionType.RESET: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: CurrentHomeScreen.HOME,
-                    profileInfo: {}
+                    profileInfo: {},
+                    errorMessage: ""
                 });
             }
 
@@ -123,9 +129,20 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload
+                    profileInfo: payload,
+                    errorMessage: ""
                 });
             }
+
+            case GlobalStoreActionType.ERROR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: payload.errorMessage
+                })
+            }
+
             default:
                 return store;
         }
@@ -167,7 +184,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     // TODO: INCLUDE TRY CATCH
-    store.updateProfile = function (username, bio, pfp) {
+    store.updateProfile = function(username, bio, pfp) {
         async function asyncUpdateProfile() {
             try{
                 let response = await apis.updateProfile(username, bio, pfp)
@@ -192,8 +209,22 @@ function GlobalStoreContextProvider(props) {
         console.log("Private messaging in store")
     }
 
-    store.addFriend = function (event) {
-        console.log("Add friend in store");
+    store.addFriend = function(username, handleFriendModalClose) {
+        console.log("Add friend in store:", username);
+        async function asyncAddFriend() {
+            try {
+                let response = await apis.sendFriendRequest(username)
+                console.log(response);
+                if(response.status === 200) handleFriendModalClose();
+            } catch(error) {
+                console.error(error.response.data.errorMessage);
+                storeReducer({
+                    type: GlobalStoreActionType.ERROR,
+                    payload: { errorMessage: error.response.data.errorMessage }
+                })
+            }
+        }
+        asyncAddFriend();
     }
 
     store.promoteToLeader = function (event) {
@@ -251,18 +282,6 @@ function GlobalStoreContextProvider(props) {
         console.log("Show friends requests RECEIVED in store");
     }
 
-    // Helper method
-    // store.getFriendById = function (friendId) {
-    //     async function asyncGetFriendById() {
-    //         try {
-    //             console.log(friendId);
-    //             let response = await apis.getFriendById(friendId);
-    //             console.log("asyncGetFriendById:", response);
-    //         } catch(error) { console.error(error); }
-    //     }
-    //     asyncGetFriendById();
-    // }
-
     // Forums Screen
     store.openThread = function (event) {
         console.log("Opening thread in store.");
@@ -305,6 +324,17 @@ function GlobalStoreContextProvider(props) {
 
     store.completeReport = function(event) {
         console.log("Completed report in store.");
+    }
+
+    store.hideModal = () => {
+        storeReducer({
+            type: GlobalStoreActionType.ERROR,
+            payload: { errorMessage: "" }
+        })
+    }
+
+    auth.isErrorModalOpen = () => {
+        return auth.errorMessage !== "";
     }
 
     return (

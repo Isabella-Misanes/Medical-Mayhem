@@ -22,10 +22,15 @@ export const updateProfile = async (username, bio, pfp) => {
 }
 export const viewFriends = async() => { return await api.get('/friends/'); }
 
+export const sendFriendRequest = async(username) => { return await api.post('/friendRequest/:username', {
+    username: username
+}); }
+
 const apis = {
     getProfile,
     updateProfile,
-    viewFriends
+    viewFriends,
+    sendFriendRequest
 }
 
 export default apis

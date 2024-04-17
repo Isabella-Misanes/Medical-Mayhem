@@ -15,7 +15,7 @@ export default function WelcomeScreen() {
     }
 
     let modal = "";
-    if(auth.errorMessage !== "") modal = <MUIErrorModal />;
+    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
 
     return (
         <div id="welcome-screen">
