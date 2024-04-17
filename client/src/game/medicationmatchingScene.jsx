@@ -19,16 +19,24 @@ export class medicationmatchingScene extends Scene {
     this.initializeText(engine);
     engine.currentScene.add(this.timer);
     this.timer.start();
-    engine.clock.schedule(() => {
-      alert("Time's up!");
-      // game.stop();
-      engine.goToScene("game-scene");
-    }, 15000);
 
     // game?.start().catch((e) => console.error(e));
   }
 
-  points = 0;
+  onActivate() {
+    this.timerSec = 15;
+    this.points = 0;
+
+    setTimeout(() => {
+      this.engine.goToScene("game-scene");
+    }, 15000);
+  }
+
+  onDeactivate() {
+
+  }
+
+  points;
   pointText = new Text({
     text: "Points: " + this.points,
     color: Color.White,
@@ -202,7 +210,7 @@ export class medicationmatchingScene extends Scene {
           this.currColor = this.randomColors[Math.floor(Math.random() * this.randomColors.length)];
           currColorCircle.color = this.currColor;
           if(this.points === 10) {
-            alert("You win!");
+            // alert("You win!");
             // game.stop();
           }
         });
