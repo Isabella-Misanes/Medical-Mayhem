@@ -30,12 +30,26 @@ export const removeFriend = async(targetUsername) => { return await api.post('/f
     targetUsername: targetUsername
 }); }
 
+export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
+
+export const updateAvatar = async (pic, speed, strength, defense, favoredMinigame) => {
+    return api.post(`/updateProfile/`, {
+        pic: pic,
+        speed: speed,
+        strength: strength,
+        defense: defense,
+        favoredMinigame: favoredMinigame,
+    });
+}
+
 const apis = {
     getProfile,
     updateProfile,
     removeFriend,
     viewFriends,
-    sendFriendRequest
+    sendFriendRequest,
+    getAvatar,
+    updateAvatar,
 }
 
 export default apis

@@ -1,5 +1,7 @@
 import { Grid, Paper } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import GlobalStoreContext from '../store';
+import AuthContext from '../auth';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import player1 from '../assets/Player-1.png.png'
@@ -10,6 +12,8 @@ import player5 from '../assets/Player-5.png.png'
 import player6 from '../assets/Player-6.png.png'
 
 export default function MapBuilderScreen() {
+    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [selectedCharacter, setCharacter] = useState(null);
 
     const players = [
@@ -21,8 +25,7 @@ export default function MapBuilderScreen() {
         player6
     ];
 
-    function handleCharacterClick(index) {
-        console.log(`CLicked on character ${index+1}`);
+    function handleCharacterClick(image, index) {
         setCharacter(index);
     }
     return (
@@ -45,7 +48,7 @@ export default function MapBuilderScreen() {
                                 textAlign: 'center', 
                                 backgroundColor: selectedCharacter === index ? 'lightblue' : '#f0f0f0' 
                                 }}
-                                onClick={() => handleCharacterClick(index)}
+                                onClick={() => handleCharacterClick(image, index)}
                             >
                                 <img
                                 src={image}

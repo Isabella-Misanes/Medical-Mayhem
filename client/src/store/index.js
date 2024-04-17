@@ -44,7 +44,11 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
     REMOVE_FRIEND: "REMOVE_FRIENDS",
-    ERROR: "ERROR"
+    ERROR: "ERROR",
+
+    // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
+    GET_AVATAR: "GET_AVATAR",
+    UPDATE_AVATAR: "UPDATE_AVATAR",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -75,8 +79,19 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
-        profileInfo: {},
-        errorMessage: ""
+        profileInfo: {
+            username: "",
+            bio: "",
+            pfp: ""
+        },
+        errorMessage: "",
+        avatar: {
+            pic: "",
+            speed: 0,
+            strength: 0,
+            defense: 0,
+            favoredMinigame: "",
+        },
     });
 
     console.log("inside useGlobalStore");
@@ -90,12 +105,14 @@ function GlobalStoreContextProvider(props) {
         console.log(payload);
         console.log(store);
         switch (type) {
-            // LIST UPDATE OF ITS NAME
+            // UPDATES
             case GlobalStoreActionType.CHANGE_SEARCH_BAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    errorMessage: ""
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -104,7 +121,8 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: payload,
-                    errorMessage: ""
+                    errorMessage: "",
+                    avatar: store.avatar,
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -113,7 +131,8 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: payload,
-                    errorMessage: ""
+                    errorMessage: "",
+                    avatar: store.avatar,
                 });
             }
             case GlobalStoreActionType.RESET: {
@@ -121,7 +140,14 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: CurrentHomeScreen.HOME,
                     profileInfo: {},
-                    errorMessage: ""
+                    errorMessage: "",
+                    avatar: {
+                        pic: "",
+                        speed: 0,
+                        strength: 0,
+                        defense: 0,
+                        favoredMinigame: "",
+                    }
                 });
             }
 
@@ -131,7 +157,8 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: payload,
-                    errorMessage: ""
+                    errorMessage: "",
+                    avatar: store.avatar,
                 });
             }
 
@@ -140,10 +167,30 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: store.profileInfo,
-                    errorMessage: payload.errorMessage
+                    errorMessage: payload.errorMessage,
+                    avatar: store.avatar
                 })
             }
 
+            case GlobalStoreActionType.GET_AVATAR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                });
+            }
+
+            case GlobalStoreActionType.UPDATE_AVATAR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: payload,
+                });
+            }
             default:
                 return store;
         }
@@ -304,6 +351,43 @@ function GlobalStoreContextProvider(props) {
     // Map Search Screen
     store.openMap = function (event) {
         console.log("Opening map in store.");
+    }
+
+    // Character Select Screen
+    store.getAvatar = function() {
+        async function asyncGetAvatar() {
+            try {
+                let response = await apis.getAvatar()
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.GET_AVATAR,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncGetAvatar();
+    }
+
+    store.updateAvatar = function(pic, speed, strength, defense, favoredMinigame) {
+        async function asyncUpdateProfile() {
+            try{
+                let response = await apis.updateAvatar(pic, speed, strength, defense, favoredMinigame);
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_AVATAR,
+                    payload: {
+                        pic: pic,
+                        speed: speed,
+                        strength: strength,
+                        defense: defense,
+                        favoredMinigame: favoredMinigame,
+                    }
+                })
+            } catch (error) { console.error(error) }
+        }
+        asyncUpdateProfile();
     }
 
     // Leaderboard Screen
