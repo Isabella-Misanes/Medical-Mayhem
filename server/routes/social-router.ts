@@ -8,5 +8,6 @@ router.use(auth.verifyToken)
 
 router.get('/friends', FriendController.viewFriends)
 router.post('/friendRequest/:username', FriendController.sendFriend)
+router.post('/friend/remove/:username', FriendController.removeFriend)
 
 export default router

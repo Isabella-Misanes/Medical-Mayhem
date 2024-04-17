@@ -18,7 +18,7 @@ export default function SocialCard(props) {
     }
     
     return (
-        <Box onClick={props.handleProfileMenuOpen} sx={{
+        <Box onClick={props.onClick} sx={{
             width: '15%',
             height: '30%',
             bgcolor: 'yellow',

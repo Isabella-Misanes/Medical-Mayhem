@@ -19,7 +19,7 @@ export default function SocialScreen() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
-
+    const [currFriend, setCurrFriend] = useState('');
     // Add friend modal functionality
     const [addFriendUsername, setAddFriendUsername] = useState('');
 
@@ -83,11 +83,14 @@ export default function SocialScreen() {
                         key={i}
                         top={`${25 + Math.floor(i / 5) * 32.5}%`}
                         left={`${5 + ((i % 5) * 17.5)}%`}
-                        handleProfileMenuOpen={handleProfileMenuOpen}
                         friend={friends[i]}
                         friendName={friendNames[i]}
                         friendOnlineStatus={friendOnlineStatuses[i]}
                         friendPfp={friendPfps[i]}
+                        onClick={(event) => {
+                            handleProfileMenuOpen(event);
+                            setCurrFriend(friendNames[i]);
+                        }}
                     />
                 )
             }
@@ -119,8 +122,11 @@ export default function SocialScreen() {
         handleMenuClose();
     }
 
-    function handleRemoveFriend(event) {
-        store.removeFriend(event);
+    // TODO: Display modal to confirm user wants to remove friend
+    // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
+    function handleRemoveFriend(event, targetUsername) {
+        console.log(targetUsername);
+        store.removeFriend(targetUsername);
         handleMenuClose();
     }
 
@@ -141,7 +147,7 @@ export default function SocialScreen() {
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
-            <MenuItem onClick={(event) => {handleRemoveFriend(event)}}>
+            <MenuItem onClick={(event) => {handleRemoveFriend(event, currFriend)}}>
                 Remove Friend
             </MenuItem>
             <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
@@ -153,7 +159,7 @@ export default function SocialScreen() {
     // Add friend
     const handleSubmit = (event) => {
         event.preventDefault();
-        store.addFriend(addFriendUsername, handleFriendModalClose);
+        store.sendFriend(addFriendUsername, handleFriendModalClose);
         // TODO: Handle module change to confirm that a friend request was sent
     };
 
@@ -266,15 +272,6 @@ export default function SocialScreen() {
                     }}>
                         <h1>Add Friend</h1>
                         <Divider />
-                        {/* <Box sx={{
-                            bgcolor: '#e3e3e3',
-                            width: '90%',
-                            height: '70%',
-                            ml: '5%',
-                            mt: '5%',
-                        }}>
-                            Put friend cards here
-                        </Box> */}
                         <Box component='form' noValidate onSubmit={handleSubmit}>
                             <TextField
                                 size='small'

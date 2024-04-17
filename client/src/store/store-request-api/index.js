@@ -22,13 +22,18 @@ export const updateProfile = async (username, bio, pfp) => {
 }
 export const viewFriends = async() => { return await api.get('/friends/'); }
 
-export const sendFriendRequest = async(username) => { return await api.post('/friendRequest/:username', {
-    username: username
+export const sendFriendRequest = async(targetUsername) => { return await api.post('/friendRequest/:targetUsername', {
+    targetUsername: targetUsername
+}); }
+
+export const removeFriend = async(targetUsername) => { return await api.post('/friend/remove/:username', {
+    targetUsername: targetUsername
 }); }
 
 const apis = {
     getProfile,
     updateProfile,
+    removeFriend,
     viewFriends,
     sendFriendRequest
 }

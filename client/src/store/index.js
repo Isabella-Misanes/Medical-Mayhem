@@ -43,6 +43,7 @@ export const GlobalStoreActionType = {
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
+    REMOVE_FRIEND: "REMOVE_FRIENDS",
     ERROR: "ERROR"
 }
 
@@ -209,11 +210,11 @@ function GlobalStoreContextProvider(props) {
         console.log("Private messaging in store")
     }
 
-    store.addFriend = function(username, handleFriendModalClose) {
-        console.log("Add friend in store:", username);
-        async function asyncAddFriend() {
+    store.sendFriend = function(targetUsername, handleFriendModalClose) {
+        console.log("Add friend in store:", targetUsername);
+        async function asyncSendFriend() {
             try {
-                let response = await apis.sendFriendRequest(username)
+                let response = await apis.sendFriendRequest(targetUsername)
                 console.log(response);
                 if(response.status === 200) handleFriendModalClose();
             } catch(error) {
@@ -224,7 +225,7 @@ function GlobalStoreContextProvider(props) {
                 })
             }
         }
-        asyncAddFriend();
+        asyncSendFriend();
     }
 
     store.promoteToLeader = function (event) {
@@ -253,14 +254,26 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Social Screen
-    store.removeFriend = function (event) {
+    store.removeFriend = (targetUsername) => {
         console.log("Remove friend in store");
+        async function asyncRemoveFriend() {
+            try {
+                console.log(targetUsername);
+                let response = await apis.removeFriend(targetUsername);
+                storeReducer({
+                    type: GlobalStoreActionType.REMOVE_FRIEND,
+                    payload: response.data
+                })
+            } catch(err) { console.error(err) }
+        }
+        asyncRemoveFriend();
     }
 
     store.viewFriends = function () {
         async function asyncViewFriends() {
             try {
                 let response = await apis.viewFriends()
+                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
@@ -333,7 +346,7 @@ function GlobalStoreContextProvider(props) {
         })
     }
 
-    auth.isErrorModalOpen = () => {
+    store.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
     }
 
