@@ -205,7 +205,10 @@ export class medicationmatchingScene extends Scene {
         currColorBorder.actions.moveTo(vec(this.currCoords.x, this.currCoords.y), 2000);
         currColorCircle.actions.moveTo(vec(this.currCoords.x, this.currCoords.y), 2000);
         if(this.currColor === this.boxesInfo[this.row][this.col].color) {
-          this.points++;
+          this.points += 100;
+          this.pointText.text = "Points: " + this.points;
+        } else {
+          this.points -= 50;
           this.pointText.text = "Points: " + this.points;
         }
         currColorBorder.actions.moveTo(vec(this.gameWidth - 100, this.gameHeight - 70), 2000);
