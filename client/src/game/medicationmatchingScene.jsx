@@ -71,8 +71,8 @@ export class medicationmatchingScene extends Scene {
   })
   row = 0;
   col = 0;
-  gameWidth = 800;
-  gameHeight = 600;
+  gameWidth = 1000;
+  gameHeight = 750;
   // Pool of possible box colors
   boxColor = [Color.Violet, Color.Orange, Color.Yellow, Color.Viridian, Color.Magenta, Color.Green, Color.Gray, Color.Vermilion, Color.Viridian];
   randomColors = []; // Pool of random colors in the current round

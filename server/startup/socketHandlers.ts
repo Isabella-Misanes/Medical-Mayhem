@@ -57,7 +57,7 @@ export function handleConnection(socket: Socket) {
 
     socket.on(SocketEvents.MY_SCORE_CHANGE, (data) => {
         io.to(socketRooms.get(socket.id).get('game'))
-            .emit(SocketEvents.OPPONENT_SCORE_CHANGE, data.score)
+            .emit(SocketEvents.OPPONENT_SCORE_CHANGE, data)
     })
 }
 
