@@ -17,7 +17,13 @@ export default function GameScreen() {
 		}
 
         socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
-            console.log(data);
+
+            // gameRef.current.opponentScore = data
+            // gameRef.current.opponentScore.text = 'Opponent Score: ' + data
+
+
+            gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
+                "Opponent Score: " + data
         })
 	}, []);
 

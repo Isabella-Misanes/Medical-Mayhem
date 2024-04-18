@@ -39,7 +39,7 @@ export class heartbeatrhythmScene extends Scene {
         this.opponentScore.val = context.data.opponentScore;
   
         setTimeout(() => {
-            this.engine.goToScene("game-scene-2", {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, time: context.data.time-30}});
+            this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, time: context.data.time-30}});
         }, 30000);
   
       //   engine?.start().catch((e) => console.error(e));
