@@ -3,6 +3,8 @@
  */
 
 import { Engine, Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
+import { socket } from "../components/HomeScreen";
+import SocketEvents from "../constants/socketEvents";
 
 export class heartbeatrhythmScene extends Scene {
 
@@ -16,7 +18,7 @@ export class heartbeatrhythmScene extends Scene {
         this.initializeText(engine);
         this.initializeTimeText(engine);
         this.yourScore = this.initializeScore(this.engine);
-        // TODO: initialize opponent score text
+        this.opponentScore = this.initializeOpponentScore(this.engine);
         this.initializeBar(engine, this.yourScore);
         const createRandomProjectile = () => {
             const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
@@ -34,10 +36,10 @@ export class heartbeatrhythmScene extends Scene {
     onActivate(context) {
         this.timeText.time = 30;
         this.yourScore.val = context.data.yourScore;
-        // TODO: initialize opponent score
+        this.opponentScore.val = context.data.opponentScore;
   
         setTimeout(() => {
-            this.engine.goToScene("game-scene-2", {sceneActivationData: {score: this.yourScore.val, time: context.data.time-30}});
+            this.engine.goToScene("game-scene-2", {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, time: context.data.time-30}});
         }, 30000);
   
       //   engine?.start().catch((e) => console.error(e));
@@ -91,7 +93,7 @@ export class heartbeatrhythmScene extends Scene {
                 if(ball) {
                     ball.kill();
                     this.yourScore.val += 100;
-                    // TODO: socket.emit(...)
+                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
                     this.yourScore.text.text = 'Score: ' + this.yourScore.val;
                 }
             }
@@ -124,6 +126,7 @@ export class heartbeatrhythmScene extends Scene {
                 projectile.kill();
                 if(this.yourScore.val > 0) {
                     this.yourScore.val -= 50
+                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
                     this.yourScore.text.text = 'Score: ' + this.yourScore.val;
                 }
             }
@@ -171,5 +174,18 @@ export class heartbeatrhythmScene extends Scene {
         score.graphics.use(score.text);
         game.currentScene.add(score);
         return score;
+    }
+
+    initializeOpponentScore = (game) => {
+        const opponentScore = new Actor({pos: vec(this.gameWidth/2, 60)});
+        opponentScore.val = 0;
+        opponentScore.text = new Text({
+            text: 'Opponent Score: ' + opponentScore.val,
+            color: Color.White,
+            font: new Font({size: 24, textAlign: TextAlign.Left})
+        });
+        opponentScore.graphics.use(opponentScore.text);
+        game.currentScene.add(opponentScore);
+        return opponentScore;
     }
 }

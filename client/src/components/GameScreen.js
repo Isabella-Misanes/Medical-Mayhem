@@ -16,9 +16,9 @@ export default function GameScreen() {
 			initMedicalMayhem(gameRef, gameCanvas);
 		}
 
-        // socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
-        //     ...
-        // })
+        socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
+            console.log(data);
+        })
 	}, []);
 
     return (

@@ -8,6 +8,7 @@
  */
 
 import { Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
+import { socket } from "../components/HomeScreen";
 
 export class medicationmatchingScene extends Scene {
   onInitialize(engine) {
@@ -27,11 +28,11 @@ export class medicationmatchingScene extends Scene {
 
   onActivate(context) {
     this.timerSec = 15;
-    this.points = context.data.score;
+    this.points = context.data.yourScore;
     this.pointText.text = "Points: " + this.points;
 
     setTimeout(() => {
-      this.engine.goToScene("game-scene", {sceneActivationData: {score: this.points, time: context.data.time-15}});
+      this.engine.goToScene("game-scene", {sceneActivationData: {yourScore: this.points, time: context.data.time-15}});
     }, 15000);
   }
 
