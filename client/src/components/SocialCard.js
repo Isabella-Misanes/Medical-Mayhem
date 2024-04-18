@@ -5,7 +5,6 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 export default function SocialCard(props) {
     const friendName = props.friend.username;
-    console.log(props.friend);
     const friendOnlineStatus = props.friend.onlineStatus;
     const friendPfp = props.friend.profilePicture !== '' ? convertDataUrl(props.friend.profilePicture) : '';
 

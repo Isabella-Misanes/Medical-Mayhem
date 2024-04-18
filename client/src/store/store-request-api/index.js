@@ -26,8 +26,8 @@ export const sendFriendRequest = async(targetUsername) => { return await api.pos
     targetUsername: targetUsername
 }); }
 
-export const removeFriend = async(targetUsername) => { return await api.post('/friend/remove/:username', {
-    targetUsername: targetUsername
+export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:targetUser', {
+    targetUser: targetUser
 }); }
 
 export const getRecentPlayers = async() => { return await api.get('/recentPlayers') }
@@ -35,6 +35,18 @@ export const getRecentPlayers = async() => { return await api.get('/recentPlayer
 export const viewSentRequests = async() => { return await api.get('/friendRequests/sent'); }
 
 export const viewReceivedRequests = async() => { return await api.get('/friendRequests/received'); }
+
+export const cancelFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/cancel', {
+    targetUser: targetUser
+}); }
+
+export const ignoreFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/ignore', {
+    targetUser: targetUser
+}); }
+
+export const acceptFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/accept', {
+    targetUser: targetUser
+}); }
 
 const apis = {
     getProfile,
@@ -44,7 +56,10 @@ const apis = {
     sendFriendRequest,
     getRecentPlayers,
     viewSentRequests,
-    viewReceivedRequests
+    viewReceivedRequests,
+    cancelFriendRequest,
+    ignoreFriendRequest,
+    acceptFriendRequest
 }
 
 export default apis

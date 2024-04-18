@@ -121,9 +121,24 @@ export default function SocialScreen() {
 
     // TODO: Display modal to confirm user wants to remove friend
     // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
-    function handleRemoveFriend(event, targetUsername) {
+    function handleRemoveFriend(targetUsername) {
         console.log(targetUsername);
         store.removeFriend(targetUsername);
+        handleMenuClose();
+    }
+
+    function handleCancelRequest() {
+        store.cancelFriendRequest();
+        handleMenuClose();
+    }
+
+    function handleIgnoreRequest() {
+        store.ignoreFriendRequest();
+        handleMenuClose();
+    }
+
+    function handleAcceptRequest() {
+        store.acceptFriendRequest(currFriend);
         handleMenuClose();
     }
 
@@ -132,6 +147,17 @@ export default function SocialScreen() {
         handleMenuClose();
     }
 
+    let optionStr = () => {
+        if(activeButton === 0) return 'Remove Friend';
+        else if(activeButton === 2) return 'Cancel Friend Request';
+        else return 'Ignore Friend Request';
+    }
+
+    const acceptRequestItem = (
+        <MenuItem onClick={() => handleAcceptRequest(currFriend)}>
+            Accept Friend Request
+        </MenuItem>
+    )
     const partyMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -144,12 +170,19 @@ export default function SocialScreen() {
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
-            <MenuItem onClick={(event) => {handleRemoveFriend(event, currFriend)}}>
-                Remove Friend
+            {activeButton === 3 && acceptRequestItem}
+            <MenuItem onClick={() => {
+                if(activeButton === 0) handleRemoveFriend(currFriend);
+                else if(activeButton === 1) handleMenuClose();
+                else if(activeButton === 2) handleCancelRequest(currFriend);
+                else handleIgnoreRequest(currFriend);
+            }}>
+                {optionStr()}
             </MenuItem>
             <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
                 Report Player
             </MenuItem>
+            
         </Menu>
     );
 

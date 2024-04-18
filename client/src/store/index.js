@@ -210,12 +210,13 @@ function GlobalStoreContextProvider(props) {
         console.log("Private messaging in store")
     }
 
-    store.sendFriend = function(targetUsername, handleFriendModalClose) {
+    store.sendFriend = function(targetUser, handleFriendModalClose) {
+        console.log("Sending friend request to user", targetUser, "in store");
         async function asyncSendFriend() {
             try {
-                let response = await apis.sendFriendRequest(targetUsername)
+                let response = await apis.sendFriendRequest(targetUser)
                 if(response.status === 200) handleFriendModalClose();
-                console.log("Sent a friend request to user", targetUsername);
+                console.log("Sent a friend request to user", targetUser);
             } catch(error) {
                 console.error(error.response.data.errorMessage);
                 storeReducer({
@@ -253,10 +254,10 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Social Screen
-    store.removeFriend = (targetUsername) => {
+    store.removeFriend = (targetUser) => {
         async function asyncRemoveFriend() {
             try {
-                let response = await apis.removeFriend(targetUsername);
+                let response = await apis.removeFriend(targetUser);
                 storeReducer({
                     type: GlobalStoreActionType.REMOVE_FRIEND,
                     payload: response.data
@@ -325,6 +326,49 @@ function GlobalStoreContextProvider(props) {
         asyncViewReceivedRequests();
     }
 
+    store.cancelFriendRequest = function(targetUser) {
+        console.log("Cancel friend request in store");
+        async function asyncCancelFriendRequest() {
+            // try {
+            //     let response = await apis.cancelFriendRequest(targetUser)
+            //     console.log(response);
+            //     storeReducer({
+            //         type: GlobalStoreActionType.VIEW_FRIENDS,
+            //         payload: response.data
+            //     })
+            // } catch (error) { console.error(error) }
+        }
+        asyncCancelFriendRequest();
+    }
+
+    store.ignoreFriendRequest = function(targetUser) {
+        console.log("Ignore friend request in store");
+        async function asyncIgnoreFriendRequest() {
+            // try {
+            //     let response = await apis.ignoreFriendRequest(targetUser)
+            //     console.log(response);
+            //     storeReducer({
+            //         type: GlobalStoreActionType.VIEW_FRIENDS,
+            //         payload: response.data
+            //     })
+            // } catch (error) { console.error(error) }
+        }
+        asyncIgnoreFriendRequest();
+    }
+    store.acceptFriendRequest = function(targetUser) {
+        console.log("Accept friend request in store");
+        async function asyncAcceptFriendRequest() {
+            try {
+                let response = await apis.acceptFriendRequest(targetUser)
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.error(error) }
+        }
+        asyncAcceptFriendRequest();
+    }
     // Forums Screen
     store.openThread = function (event) {
         console.log("Opening thread in store.");
