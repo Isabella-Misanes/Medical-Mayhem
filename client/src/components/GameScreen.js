@@ -24,6 +24,8 @@ export default function GameScreen() {
 
             gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
                 "Opponent Score: " + data
+            gameRef.current.scenes.medicationmatching.opponentPointText.text = 
+                "Opponent Score: " + data
         })
 	}, []);
 
