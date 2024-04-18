@@ -1,4 +1,5 @@
-import { Button, Grid, Paper, Slider } from '@mui/material';
+import { Button, Grid, InputLabel, MenuItem, Paper, Select, Slider } from '@mui/material';
+import {FormControl} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import Sidebar from './Sidebar';
@@ -111,7 +112,10 @@ export default function MapBuilderScreen() {
     return (
         <div id="map-builder-screen">
             <Grid container spacing={2}>
-                <Grid item xs={11}>
+                <Grid item xs={11} sx={{
+                    bgcolor: '#3A9158',
+                    color: 'white',
+                }}>
                     <h1>Build your character!</h1>
                 </Grid>
                 <Grid item xs={1}>
@@ -119,13 +123,20 @@ export default function MapBuilderScreen() {
                 </Grid>
                 <Grid item xs={4}>
                     <Grid container spacing={3}>
+                        <Grid item xs={12} sx={{
+                            textAlign: 'center',
+                            ml: 3
+                        }}>
+                            <strong>Select a premade character or upload your own sprite!</strong>
+                        </Grid>
                         {players.map((image, index) => (
                             <Grid key={index} item xs={4}>
                                 <Paper elevation={3} sx={{ 
                                     height: '100%',
                                     width: '100%',
-                                    m: 2,
-                                    backgroundColor: selectedCharacter === index ? 'lightblue' : '#f0f0f0',
+                                    mb: 2,
+                                    ml: 3,
+                                    backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
                                     border: selectedCharacter === index ? 1 : 0,
                                     }}
                                     onClick={() => handleCharacterClick(index)}
@@ -147,7 +158,8 @@ export default function MapBuilderScreen() {
                                 height: '100%',
                                 width: '100%',
                                 maxHeight: '50vh',
-                                m: 2,
+                                mb: 2,
+                                ml: 3,
                                 alignContent: 'center', 
                                 backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
                                 border: selectedCharacter === 6 ? 1 : 0,
@@ -158,7 +170,7 @@ export default function MapBuilderScreen() {
                                     onSubmit={handleSubmit}>
                                     <label htmlFor="file-upload">
                                         <img 
-                                            src={postSprite || addPlayer}
+                                            src={addPlayer}
                                             alt=''
                                             style={{
                                                 width: '100%',
@@ -185,6 +197,10 @@ export default function MapBuilderScreen() {
                 <Grid item xs={6}>
                     <Grid container spacing={2} sx={{
                         alignItems: 'center',
+                        backgroundColor: 'white',
+                        p: 2,
+                        mt: 1,
+                        boxShadow: 4
                     }}>
                         <Grid item xs={12}>
                             <img
@@ -192,7 +208,7 @@ export default function MapBuilderScreen() {
                                 alt=''
                                 style={{
                                     maxWidth: '40vw',
-                                    maxHeight: '40vh',
+                                    maxHeight: '30vh',
                                     objectFit: 'cover',
                             }}/>
                         </Grid>
@@ -218,7 +234,10 @@ export default function MapBuilderScreen() {
                                 max={3}
                                 onChange={(event) => {setSpeed(event.target.value)}}
                                 sx={{
-                                    width: '80%'
+                                    width: '80%',
+                                    '& .MuiSlider-thumb': {
+                                        backgroundColor: '#3A915'
+                                    }
                                 }}
                             />
                         </Grid>
@@ -282,6 +301,19 @@ export default function MapBuilderScreen() {
                             3
                         </Grid>
                         <Grid item xs={1}/>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Favorite Minigame</InputLabel>
+                                <Select
+                                value={favoredMinigame}
+                                label="Favorite Minigame"
+                                onChange={(event) => {setMinigame(event.target.value)}}
+                                >
+                                <MenuItem value={"Medication Matching"}>Medication Matching</MenuItem>
+                                <MenuItem value={"Heartbeat Rhythm"}>Heartbeat Rhythm</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         
                         <Grid item xs={12}>
                             <Button sx={[buttonStyle, {color: 'white'}]}

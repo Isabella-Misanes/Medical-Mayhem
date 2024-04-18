@@ -385,7 +385,7 @@ function GlobalStoreContextProvider(props) {
                         favoredMinigame: favoredMinigame,
                     }
                 })
-            } catch (error) { console.error(error) }
+            } catch (error) { alert("Please choose an image below 50 KB.") }
         }
         asyncUpdateProfile();
     }
