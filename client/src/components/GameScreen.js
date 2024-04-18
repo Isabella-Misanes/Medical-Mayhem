@@ -2,17 +2,29 @@ import { Box } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
-import React, { useState } from "react";
+import { useEffect, useRef } from "react";
 import { initMedicalMayhem } from '../game/medicalMayhem';
+import { socket } from '../components/HomeScreen'
+import SocketEvents from '../constants/socketEvents';
 
 export default function GameScreen() {
-    const gameCanvas = React.useRef(null);
-	const gameRef = React.useRef();
+    const gameCanvas = useRef(null);
+	const gameRef = useRef();
 
-    React.useEffect(() => {
+    useEffect(() => {
 		if (!gameRef.current && gameCanvas.current) {
 			initMedicalMayhem(gameRef, gameCanvas);
 		}
+
+        socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
+
+            // gameRef.current.opponentScore = data
+            // gameRef.current.opponentScore.text = 'Opponent Score: ' + data
+
+
+            gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
+                "Opponent Score: " + data
+        })
 	}, []);
 
     return (

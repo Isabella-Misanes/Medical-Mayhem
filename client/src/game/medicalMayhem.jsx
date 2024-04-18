@@ -33,10 +33,10 @@ export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
     // initHeartbeat(gameRef, gameCanvasRef);
     // initMedicationMatching(gameRef, gameCanvasRef);
 
-    engine.add("game-scene", new heartbeatrhythmScene());
-    engine.add("game-scene-2", new medicationmatchingScene())
-    engine.goToScene("game-scene", {sceneActivationData: {score: 0, time: 120}});
+    engine.add("heartbeatrhythm", new heartbeatrhythmScene());
+    engine.add("medicationmatching", new medicationmatchingScene())
+    engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, opponentScore: 0, time: 120}});
 
     engine.start();
-    
+
   };
