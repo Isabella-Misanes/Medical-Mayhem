@@ -1,5 +1,5 @@
-import app from ".";
-import db from "./db";
+import server from ".";
+import db from "../db";
 
 // Runs the server
 
@@ -9,4 +9,4 @@ export const PORT = process.env.PORT || 4000;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 // PUT THE SERVER IN LISTENING MODE
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`))

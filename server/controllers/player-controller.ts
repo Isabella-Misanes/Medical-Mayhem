@@ -68,6 +68,28 @@ export const updateProfile = async (req: Request, res: Response) => {
     }
 }
 
+export const getRecentPlayers = async (req: Request, res: Response) => {
+    try {
+        const currentUser = await User.findById(req.userId);
+        if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
+        const recentPlayers: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
+        await Promise.all(currentUser.recentPlayers.map(async (recentPlayerId) => {
+            const recentPlayer = await User.findById(recentPlayerId);
+            if(recentPlayer) {
+                recentPlayers.push({
+                    username: recentPlayer.username,
+                    profilePicture: recentPlayer.profilePicture,
+                    onlineStatus: recentPlayer.onlineStatus
+                })
+            }
+        }));
+        return res.status(200).json({players: recentPlayers})
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 export const getAvatar = async (req: Request, res: Response) => {
     console.log("getAvatar")
     try {

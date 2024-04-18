@@ -12,10 +12,7 @@ export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
-    const [friends, setFriends] = useState([]);
-    const [friendNames, setFriendNames] = useState([]);
-    const [friendOnlineStatuses, setFriendOnlineStatuses] = useState([]);
-    const [friendPfps, setFriendPfps] = useState([]);
+    const [playerList, setPlayerList] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -49,10 +46,7 @@ export default function SocialScreen() {
 
     useEffect(() => {
         // Checking if store.profileInfo.friends exists fixes the error of the friends state being undefined upon load
-        setFriends(store.profileInfo.friends ? store.profileInfo.friends : [])
-        setFriendNames(store.profileInfo.friendNames ? store.profileInfo.friendNames : [])
-        setFriendOnlineStatuses(store.profileInfo.friendOnlineStatuses ? store.profileInfo.friendOnlineStatuses : [])
-        setFriendPfps(store.profileInfo.friendPfps ? store.profileInfo.friendPfps : [])
+        setPlayerList(store.profileInfo.players ? store.profileInfo.players : [])
         // eslint-disable-next-line
     }, [store.profileInfo])
 
@@ -74,43 +68,46 @@ export default function SocialScreen() {
         setAnchorEl(event.currentTarget);
     };
     
-    const friendRender = () => {
-        const friendCards = [];
-        if(friends.length !== 0) {
-            for(let i = 0; i < friends.length; i++) {
-                friendCards.push(
+    // TODO: Handle having more than 10 players on the page
+    const playerRender = () => {
+        const playerCards = [];
+        let str = 'No ';
+        if(activeButton === 0) str += 'Friends';
+        else if(activeButton === 1) str += 'Recent Players';
+        else str += 'Friend Requests';
+        
+        if(playerList.length !== 0) {
+            for(let i = 0; i < playerList.length; i++) {
+                playerCards.push(
                     <SocialCard
                         key={i}
                         top={`${25 + Math.floor(i / 5) * 32.5}%`}
                         left={`${5 + ((i % 5) * 17.5)}%`}
-                        friend={friends[i]}
-                        friendName={friendNames[i]}
-                        friendOnlineStatus={friendOnlineStatuses[i]}
-                        friendPfp={friendPfps[i]}
+                        friend={playerList[i]}
                         onClick={(event) => {
                             handleProfileMenuOpen(event);
-                            setCurrFriend(friendNames[i]);
+                            setCurrFriend(playerList[i]);
                         }}
                     />
                 )
             }
         }
         else {
-            friendCards.push(
-                <Box key={'no-friends'} sx={{
+            playerCards.push(
+                <Box key={'no-players'} sx={{
                     width: '90%',
-                    height: '50%',
+                    height: '40%',
                     bgcolor: 'white',
                     position: 'absolute',
                     top: '30%',
                     left: '5%',
                     boxShadow: 5
                 }}>
-                    <h1>No Friends</h1>
+                    <h1>{str}</h1>
                 </Box>
             )
         }
-        return friendCards;
+        return playerCards;
     }
 
     const handleMenuClose = () => {
@@ -124,9 +121,23 @@ export default function SocialScreen() {
 
     // TODO: Display modal to confirm user wants to remove friend
     // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
-    function handleRemoveFriend(event, targetUsername) {
-        console.log(targetUsername);
-        store.removeFriend(targetUsername);
+    function handleRemoveFriend() {
+        store.removeFriend(currFriend);
+        handleMenuClose();
+    }
+
+    function handleCancelRequest() {
+        store.cancelFriendRequest(currFriend);
+        handleMenuClose();
+    }
+
+    function handleIgnoreRequest() {
+        store.ignoreFriendRequest(currFriend);
+        handleMenuClose();
+    }
+
+    function handleAcceptRequest() {
+        store.acceptFriendRequest(currFriend);
         handleMenuClose();
     }
 
@@ -135,6 +146,17 @@ export default function SocialScreen() {
         handleMenuClose();
     }
 
+    let optionStr = () => {
+        if(activeButton === 0) return 'Remove Friend';
+        else if(activeButton === 2) return 'Cancel Friend Request';
+        else return 'Ignore Friend Request';
+    }
+
+    const acceptRequestItem = (
+        <MenuItem onClick={() => handleAcceptRequest(currFriend)}>
+            Accept Friend Request
+        </MenuItem>
+    )
     const partyMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -147,12 +169,19 @@ export default function SocialScreen() {
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
-            <MenuItem onClick={(event) => {handleRemoveFriend(event, currFriend)}}>
-                Remove Friend
+            {activeButton === 3 && acceptRequestItem}
+            <MenuItem onClick={() => {
+                if(activeButton === 0) handleRemoveFriend();
+                else if(activeButton === 1) handleMenuClose();
+                else if(activeButton === 2) handleCancelRequest();
+                else handleIgnoreRequest(currFriend);
+            }}>
+                {optionStr()}
             </MenuItem>
             <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
                 Report Player
             </MenuItem>
+            
         </Menu>
     );
 
@@ -253,7 +282,7 @@ export default function SocialScreen() {
                     </Grid>
                 </Grid>
 
-                {friendRender()}
+                {playerRender()}
                 
                 <BackButton />
 

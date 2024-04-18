@@ -8,6 +8,7 @@ router.use(auth.verifyToken)
 
 router.get('/getProfile', PlayerController.getProfile)
 router.post('/updateProfile', PlayerController.updateProfile)
+router.get('/recentPlayers', PlayerController.getRecentPlayers)
 router.get('/getAvatar', PlayerController.getAvatar)
 router.post('/updateAvatar', PlayerController.updateAvatar)
 

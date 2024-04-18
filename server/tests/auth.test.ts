@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../index';
+import app from '../startup/index';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import path from 'path'
@@ -7,7 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import Cookies from 'js-cookie'
 import fs from 'fs'
 
-dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 let mongoServer: MongoMemoryServer; 
 

@@ -1,13 +1,10 @@
 import axios from 'axios'
+import rootDomain from '../../constants/baseURL';
 
 axios.defaults.withCredentials = true;
-// CHANGE URL AS NEEDED BETWEEN TESTING AND DEVELOPMENT
-// TODO: Find a way to make this change between local host and Heroku 
+
 export const api = axios.create({
-    // Uncomment one, comment out the other as needed
-    
-    baseURL: 'https://medical-mayhem-c0832c3f548e.herokuapp.com/api'
-    // baseURL: 'http://localhost:4000/api'
+    baseURL: `${rootDomain}/api`
 })
 
 export const getProfile = async () => { return await api.get(`/getProfile/`) }
@@ -26,8 +23,26 @@ export const sendFriendRequest = async(targetUsername) => { return await api.pos
     targetUsername: targetUsername
 }); }
 
-export const removeFriend = async(targetUsername) => { return await api.post('/friend/remove/:username', {
-    targetUsername: targetUsername
+export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:username', {
+    username: targetUser.username
+}); }
+
+export const getRecentPlayers = async() => { return await api.get('/recentPlayers') }
+
+export const viewSentRequests = async() => { return await api.get('/friendRequests/sent'); }
+
+export const viewReceivedRequests = async() => { return await api.get('/friendRequests/received'); }
+
+export const cancelFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/cancel', {
+    targetUser: targetUser
+}); }
+
+export const ignoreFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/ignore', {
+    targetUser: targetUser
+}); }
+
+export const acceptFriendRequest = async(targetUser) => { return await api.post('/friendRequest/:targetUser/accept', {
+    targetUser: targetUser
 }); }
 
 export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
@@ -48,6 +63,12 @@ const apis = {
     removeFriend,
     viewFriends,
     sendFriendRequest,
+    getRecentPlayers,
+    viewSentRequests,
+    viewReceivedRequests,
+    cancelFriendRequest,
+    ignoreFriendRequest,
+    acceptFriendRequest,
     getAvatar,
     updateAvatar,
 }

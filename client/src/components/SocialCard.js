@@ -4,9 +4,9 @@ import CircleIcon from '@mui/icons-material/Circle';
 // import GlobalStoreContext from '../store';
 
 export default function SocialCard(props) {
-    const friendName = props.friendName;
-    const friendOnlineStatus = props.friendOnlineStatus;
-    const friendPfp = props.friendPfp !== '' ? convertDataUrl(props.friendPfp) : '';
+    const friendName = props.friend.username;
+    const friendOnlineStatus = props.friend.onlineStatus;
+    const friendPfp = props.friend.profilePicture !== '' ? convertDataUrl(props.friend.profilePicture) : '';
 
     // Converts profile picture from Base 64 data to readable URL string
     // shoutout to chatgpt for this 🙏
@@ -37,7 +37,7 @@ export default function SocialCard(props) {
                     <CircleIcon sx={{color: friendOnlineStatus ? 'lime' : 'lightgray', marginLeft:'10px'}} />
                 </Grid>
                 <Grid item>
-                    <h2 style={{marginLeft: '10px'}}>{friendName}</h2>
+                    <h3 style={{marginLeft: '5px'}}>{friendName}</h3>
                 </Grid>
             </Grid>
         </Box>

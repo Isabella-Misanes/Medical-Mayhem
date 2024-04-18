@@ -9,12 +9,16 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 import path from 'path'
-import authRouter from './routes/auth-router'
-import mainRouter from './routes/main-router'
-import socialRouter from './routes/social-router'
+import authRouter from '../routes/auth-router'
+import mainRouter from '../routes/main-router'
+import socialRouter from '../routes/social-router'
+import http from 'http'
+import { Server, Socket } from 'socket.io'
+import { handleConnection } from './socketHandlers';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 // CREATE OUR SERVER
-dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 export const app = express()
 
 // SETUP THE MIDDLEWARE
@@ -32,6 +36,20 @@ app.use('/auth', authRouter)
 app.use('/api', mainRouter)
 app.use('/api', socialRouter)
 
+// Creates the HTTP server with Express handling requests and responses
+export const server = http.createServer(app)
+
+// Wrapper that adds socket functionality
+export const io = new Server(server, {
+    cors: {
+        origin: [process.env.NODE_ENV === 'production' ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com' : 
+            'http://localhost:3000' ],
+        methods: ["GET", "POST"],
+    }
+})
+
+io.on('connection', handleConnection)
+
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static( 'client/build' ))
@@ -40,5 +58,4 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-
-export default app;
+export default server;

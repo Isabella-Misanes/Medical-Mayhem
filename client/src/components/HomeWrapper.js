@@ -7,7 +7,9 @@ import { GlobalStoreContext } from '../store'
 export default function HomeWrapper() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
-    const [isAuthorized, setIsAuthorized] = useState(false)
+    const [isAuthorized, setIsAuthorized] = useState(undefined)
+
+    console.log(isAuthorized)
 
     useEffect(() => {
         console.log("HomeWrapper useEffect")
@@ -19,5 +21,8 @@ export default function HomeWrapper() {
             setIsAuthorized(false)
     }, [auth.loggedIn])
 
-    return (isAuthorized || store.guest) ? <HomeScreen /> : <WelcomeScreen />;
+    if (isAuthorized === undefined)
+        return null
+
+    return (isAuthorized) ? <HomeScreen /> : <WelcomeScreen />;
 }
