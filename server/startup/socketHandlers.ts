@@ -23,6 +23,8 @@ export function handleConnection(socket: Socket) {
 
         if (queue.includes(socket))
             queue.splice(queue.indexOf(socket), 1)
+
+        socketRooms.delete(socket.id)
     })
 
     socket.on(SocketEvents.QUEUE_UP, (data) => {
@@ -41,9 +43,11 @@ export function handleConnection(socket: Socket) {
             io.to(room).emit(SocketEvents.MATCH_FOUND)
         }
         else {
+            console.log('PUSH')
             queue.push(socket)
         }
 
+        console.log("SOCKET ROOMS")
         console.log(socketRooms)
     })
 
@@ -56,7 +60,7 @@ export function handleConnection(socket: Socket) {
     // GAMEPLAY SCORE KEEPING
 
     socket.on(SocketEvents.MY_SCORE_CHANGE, (data) => {
-        io.to(socketRooms.get(socket.id).get('game'))
+        socket.to(socketRooms.get(socket.id).get('game'))
             .emit(SocketEvents.OPPONENT_SCORE_CHANGE, data)
     })
 }

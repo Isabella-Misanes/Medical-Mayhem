@@ -36,7 +36,7 @@ export class medicationmatchingScene extends Scene {
     this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
 
     setTimeout(() => {
-      this.engine.goToScene("game-scene", {sceneActivationData: {yourScore: this.points, time: context.data.time-15}});
+      this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: this.points, time: context.data.time-15}});
     }, 15000);
   }
 
