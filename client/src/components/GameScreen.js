@@ -2,29 +2,18 @@ import { Box } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
-import { useState, useEffect, useRef } from "react";
-import { initMedicationMatching } from '../game/medicationmatching';
-import { initHeartbeat } from '../game/heartbeatrhythm';
+import React, { useState } from "react";
+import { initMedicalMayhem } from '../game/medicalMayhem';
 
 export default function GameScreen() {
-    const [selectedGame, setSelectedGame] = useState(0);
-    const gameCanvas = useRef(null);
-	const gameRef = useRef();
+    const gameCanvas = React.useRef(null);
+	const gameRef = React.useRef();
 
-	useEffect(() => {
+    React.useEffect(() => {
 		if (!gameRef.current && gameCanvas.current) {
-            switch(selectedGame) {
-                case 1:
-                    initMedicationMatching(gameRef, gameCanvas);
-                    break;
-                case 2:
-                    initHeartbeat(gameRef, gameCanvas);
-                    break;
-                default:
-                    return;
-            }
+			initMedicalMayhem(gameRef, gameCanvas);
 		}
-	}, [selectedGame]);
+	}, []);
 
     return (
         <div id="about-screen">
@@ -34,9 +23,6 @@ export default function GameScreen() {
                 height: '100%',
                 position: 'absolute'
             }}>
-                <button onClick={() =>  setSelectedGame(1)}>Medication Matching</button>
-                <button onClick={() =>  setSelectedGame(2)}>Heartbeat Rhythm</button>
-                <br />
                 <canvas ref={gameCanvas} id="gameCanvas"></canvas>
                 {/* <Box sx={{
                     top: '5%',
