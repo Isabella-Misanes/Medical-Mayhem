@@ -1,8 +1,9 @@
-import { Grid, Paper, Slider } from '@mui/material';
-import { useContext, useState } from 'react';
+import { Button, Grid, Paper, Slider } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
+import { buttonStyle } from '../App';
 import player1 from '../assets/Player-1.png.png';
 import player2 from '../assets/Player-2.png.png';
 import player3 from '../assets/Player-3.png.png';
@@ -20,8 +21,6 @@ export default function MapBuilderScreen() {
     const [strength, setStrength] = useState(0);
     const [defense, setDefense] = useState(0);
     const [favoredMinigame, setMinigame] = useState("");
-
-    const totalPoints = 3;
 
     const players = [
         player1,
@@ -61,6 +60,20 @@ export default function MapBuilderScreen() {
         })
     }
 
+    useEffect(() => {
+        store.getAvatar();
+        console.log(store.avatar);
+    }, [])
+
+    useEffect(() => {     
+        setSelectedSprite(store.avatar.pic);
+        setSprite(store.avatar.pic);
+        setSpeed(store.avatar.speed);
+        setStrength(store.avatar.strength);
+        setDefense(store.avatar.defense);
+        setMinigame(store.avatar.favoredMinigame);
+    }, [store.avatar])
+
     function handleCharacterClick(index) {
         switch(index) {
             case 0:
@@ -82,7 +95,7 @@ export default function MapBuilderScreen() {
                 setSelectedSprite(player6);
                 break;
             case 6:
-                setSelectedSprite(postSprite);
+                setSelectedSprite(store.avatar.pic);
                 break;
             default:
                 break;
@@ -137,6 +150,7 @@ export default function MapBuilderScreen() {
                             <Paper elevation={3} sx={{
                                 height: '100%',
                                 width: '100%',
+                                maxHeight: '50vh',
                                 m: 2,
                                 alignContent: 'center', 
                                 backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
@@ -181,8 +195,8 @@ export default function MapBuilderScreen() {
                                 src={selectedSprite}
                                 alt=''
                                 style={{
-                                    maxWidth: '50%',
-                                    maxHeight: '50%',
+                                    maxWidth: '40vw',
+                                    maxHeight: '40vh',
                                     objectFit: 'cover',
                             }}/>
                         </Grid>
@@ -198,7 +212,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
-                                defaultValue={0}
+                                value={speed}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
                                 shiftStep={3}
@@ -226,7 +240,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
-                                defaultValue={0}
+                                value={strength}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
                                 shiftStep={3}
@@ -254,7 +268,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
-                                defaultValue={0}
+                                value={defense}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
                                 shiftStep={3}
@@ -272,7 +286,13 @@ export default function MapBuilderScreen() {
                             3
                         </Grid>
                         <Grid item xs={1}/>
-
+                        
+                        <Grid item xs={12}>
+                            <Button sx={[buttonStyle, {color: 'white'}]}
+                            onClick={() => {handleUpdateCharacter()}}>
+                                Confirm Changes
+                            </Button>
+                        </Grid>
 
                     </Grid>
                 </Grid>
