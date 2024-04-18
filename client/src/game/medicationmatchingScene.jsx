@@ -9,6 +9,7 @@
 
 import { Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
 import { socket } from "../components/HomeScreen";
+import SocketEvents from "../constants/socketEvents";
 
 export class medicationmatchingScene extends Scene {
   onInitialize(engine) {
@@ -25,11 +26,14 @@ export class medicationmatchingScene extends Scene {
   }
 
   points;
+  opponentPoints;
 
   onActivate(context) {
     this.timerSec = 15;
     this.points = context.data.yourScore;
-    this.pointText.text = "Points: " + this.points;
+    this.pointText.text = "Score: " + this.points;
+    this.opponentPoints = context.data.opponentScore;
+    this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
 
     setTimeout(() => {
       this.engine.goToScene("game-scene", {sceneActivationData: {yourScore: this.points, time: context.data.time-15}});
@@ -42,7 +46,12 @@ export class medicationmatchingScene extends Scene {
 
 
   pointText = new Text({
-    text: "Points: " + this.points,
+    text: "Score: " + this.points,
+    color: Color.White,
+    font: new Font({size: 24, textAlign: TextAlign.Left})
+  })
+  opponentPointText = new Text({
+    text: "Opponent Score: " + this.opponentPoints,
     color: Color.White,
     font: new Font({size: 24, textAlign: TextAlign.Left})
   })
@@ -207,10 +216,12 @@ export class medicationmatchingScene extends Scene {
         currColorCircle.actions.moveTo(vec(this.currCoords.x, this.currCoords.y), 2000);
         if(this.currColor === this.boxesInfo[this.row][this.col].color) {
           this.points += 100;
-          this.pointText.text = "Points: " + this.points;
+          this.pointText.text = "Score: " + this.points;
+          socket.emit(SocketEvents.MY_SCORE_CHANGE, this.points)
         } else {
           this.points -= 50;
-          this.pointText.text = "Points: " + this.points;
+          this.pointText.text = "Score: " + this.points;
+          socket.emit(SocketEvents.MY_SCORE_CHANGE, this.points)
         }
         currColorBorder.actions.moveTo(vec(this.gameWidth - 100, this.gameHeight - 70), 2000);
         currColorCircle.actions.moveTo(vec(this.gameWidth - 100, this.gameHeight - 70), 2000).callMethod(() => {
@@ -233,9 +244,11 @@ export class medicationmatchingScene extends Scene {
       font: new Font({size: 24, textAlign: TextAlign.Left})
     });
     const actor2 = new Actor({pos: vec(53, this.gameHeight - 70)})
-    const timeActor = new Actor({pos: vec(55, this.gameHeight - 95)});
+    const actor3 = new Actor({pos: vec(53, this.gameHeight - 95)})
+    const timeActor = new Actor({pos: vec(55, this.gameHeight - 120)});
     actor1.graphics.use(instrText);
     actor2.graphics.use(this.pointText);
+    actor3.graphics.use(this.opponentPointText);
     timeActor.graphics.use(this.timerText);
     game.currentScene.add(actor1);
     game.currentScene.add(actor2);
