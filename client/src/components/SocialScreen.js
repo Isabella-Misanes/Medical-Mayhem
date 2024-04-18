@@ -121,19 +121,18 @@ export default function SocialScreen() {
 
     // TODO: Display modal to confirm user wants to remove friend
     // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
-    function handleRemoveFriend(targetUsername) {
-        console.log(targetUsername);
-        store.removeFriend(targetUsername);
+    function handleRemoveFriend() {
+        store.removeFriend(currFriend);
         handleMenuClose();
     }
 
     function handleCancelRequest() {
-        store.cancelFriendRequest();
+        store.cancelFriendRequest(currFriend);
         handleMenuClose();
     }
 
     function handleIgnoreRequest() {
-        store.ignoreFriendRequest();
+        store.ignoreFriendRequest(currFriend);
         handleMenuClose();
     }
 
@@ -172,9 +171,9 @@ export default function SocialScreen() {
             </MenuItem>
             {activeButton === 3 && acceptRequestItem}
             <MenuItem onClick={() => {
-                if(activeButton === 0) handleRemoveFriend(currFriend);
+                if(activeButton === 0) handleRemoveFriend();
                 else if(activeButton === 1) handleMenuClose();
-                else if(activeButton === 2) handleCancelRequest(currFriend);
+                else if(activeButton === 2) handleCancelRequest();
                 else handleIgnoreRequest(currFriend);
             }}>
                 {optionStr()}

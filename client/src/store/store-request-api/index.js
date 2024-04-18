@@ -26,8 +26,8 @@ export const sendFriendRequest = async(targetUsername) => { return await api.pos
     targetUsername: targetUsername
 }); }
 
-export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:targetUser', {
-    targetUser: targetUser
+export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:username', {
+    username: targetUser.username
 }); }
 
 export const getRecentPlayers = async() => { return await api.get('/recentPlayers') }

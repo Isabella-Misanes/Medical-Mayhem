@@ -256,6 +256,7 @@ function GlobalStoreContextProvider(props) {
     // Social Screen
     store.removeFriend = (targetUser) => {
         async function asyncRemoveFriend() {
+            console.log(targetUser);
             try {
                 let response = await apis.removeFriend(targetUser);
                 storeReducer({
@@ -329,14 +330,15 @@ function GlobalStoreContextProvider(props) {
     store.cancelFriendRequest = function(targetUser) {
         console.log("Cancel friend request in store");
         async function asyncCancelFriendRequest() {
-            // try {
-            //     let response = await apis.cancelFriendRequest(targetUser)
-            //     console.log(response);
-            //     storeReducer({
-            //         type: GlobalStoreActionType.VIEW_FRIENDS,
-            //         payload: response.data
-            //     })
-            // } catch (error) { console.error(error) }
+            try {
+                console.log(targetUser);
+                let response = await apis.cancelFriendRequest(targetUser)
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.error(error) }
         }
         asyncCancelFriendRequest();
     }
@@ -344,14 +346,14 @@ function GlobalStoreContextProvider(props) {
     store.ignoreFriendRequest = function(targetUser) {
         console.log("Ignore friend request in store");
         async function asyncIgnoreFriendRequest() {
-            // try {
-            //     let response = await apis.ignoreFriendRequest(targetUser)
-            //     console.log(response);
-            //     storeReducer({
-            //         type: GlobalStoreActionType.VIEW_FRIENDS,
-            //         payload: response.data
-            //     })
-            // } catch (error) { console.error(error) }
+            try {
+                let response = await apis.ignoreFriendRequest(targetUser)
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.error(error) }
         }
         asyncIgnoreFriendRequest();
     }
