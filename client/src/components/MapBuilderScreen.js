@@ -47,7 +47,7 @@ export default function MapBuilderScreen() {
             const base64 = await convertToBase64(file);
             setSprite(base64);
             setCharacter(6);
-            setSelectedSprite(postSprite);
+            setSelectedSprite(base64);
         }
     }
     function convertToBase64(file) {
@@ -95,7 +95,7 @@ export default function MapBuilderScreen() {
                 setSelectedSprite(player6);
                 break;
             case 6:
-                setSelectedSprite(store.avatar.pic);
+                setSelectedSprite(postSprite);
                 break;
             default:
                 break;
@@ -104,12 +104,8 @@ export default function MapBuilderScreen() {
     }
 
     function handleUpdateCharacter() {
-        if(postSprite !== "") {
-            store.updateAvatar(postSprite, speed, strength, defense, favoredMinigame);
-        }
-        else {
-            store.updateAvatar(player1, speed, strength, defense, favoredMinigame);
-        }
+        console.log(selectedSprite);
+        store.updateAvatar(selectedSprite, speed, strength, defense, favoredMinigame);
     }
 
     return (
