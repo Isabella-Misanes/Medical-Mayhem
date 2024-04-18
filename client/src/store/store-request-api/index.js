@@ -33,7 +33,7 @@ export const removeFriend = async(targetUsername) => { return await api.post('/f
 export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
 
 export const updateAvatar = async (pic, speed, strength, defense, favoredMinigame) => {
-    return api.post(`/updateProfile/`, {
+    return api.post(`/updateAvatar/`, {
         pic: pic,
         speed: speed,
         strength: strength,

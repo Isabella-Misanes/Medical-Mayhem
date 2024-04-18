@@ -178,7 +178,7 @@ function GlobalStoreContextProvider(props) {
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
-                    avatar: store.avatar,
+                    avatar: payload,
                 });
             }
 

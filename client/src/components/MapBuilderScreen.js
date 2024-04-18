@@ -1,20 +1,20 @@
 import { Grid, Paper, Slider } from '@mui/material';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
-import AuthContext from '../auth';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import player1 from '../assets/Player-1.png.png'
-import player2 from '../assets/Player-2.png.png'
-import player3 from '../assets/Player-3.png.png'
-import player4 from '../assets/Player-4.png.png'
-import player5 from '../assets/Player-5.png.png'
-import player6 from '../assets/Player-6.png.png'
+import player1 from '../assets/Player-1.png.png';
+import player2 from '../assets/Player-2.png.png';
+import player3 from '../assets/Player-3.png.png';
+import player4 from '../assets/Player-4.png.png';
+import player5 from '../assets/Player-5.png.png';
+import player6 from '../assets/Player-6.png.png';
+import addPlayer from '../assets/Add-Player.png.png';
 
 export default function MapBuilderScreen() {
     const { store } = useContext(GlobalStoreContext);
-    const { auth } = useContext(AuthContext);
     const [selectedCharacter, setCharacter] = useState(0);
+    const [selectedSprite, setSelectedSprite] = useState("");
     const [postSprite, setSprite] = useState("");
     const [speed, setSpeed] = useState(0);
     const [strength, setStrength] = useState(0);
@@ -29,14 +29,64 @@ export default function MapBuilderScreen() {
         player3,
         player4,
         player5,
-        player6
+        player6,
     ];
 
     function valuetext(value) {
         return `${value}°C`;
     }
+    function handleSubmit(event) {
+        event.preventDefault();
+    }
 
-    function handleCharacterClick(image, index) {
+    async function handleFileUpload(event) {
+        // event.preventDefault();
+        const file = event.target.files[0]
+        
+        // If the user actually uploaded a file instead of cancelling
+        if (file) {
+            const base64 = await convertToBase64(file);
+            setSprite(base64);
+            setCharacter(6);
+            setSelectedSprite(postSprite);
+        }
+    }
+    function convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader()
+            fileReader.readAsDataURL(file) // read contents of file
+            fileReader.onload = () => { // when read is successful, return contents of the file
+                resolve(fileReader.result)
+            }
+        })
+    }
+
+    function handleCharacterClick(index) {
+        switch(index) {
+            case 0:
+                setSelectedSprite(player1);
+                break;
+            case 1:
+                setSelectedSprite(player2);
+                break;
+            case 2:
+                setSelectedSprite(player3);
+                break;
+            case 3:
+                setSelectedSprite(player4);
+                break;
+            case 4:
+                setSelectedSprite(player5);
+                break;
+            case 5:
+                setSelectedSprite(player6);
+                break;
+            case 6:
+                setSelectedSprite(postSprite);
+                break;
+            default:
+                break;
+        }
         setCharacter(index);
     }
 
@@ -61,29 +111,63 @@ export default function MapBuilderScreen() {
                 <Grid item xs={4}>
                     <Grid container spacing={3}>
                         {players.map((image, index) => (
-                        <Grid key={index} item xs={4}>
-                            <Paper elevation={3} sx={{ 
+                            <Grid key={index} item xs={4}>
+                                <Paper elevation={3} sx={{ 
+                                    height: '100%',
+                                    width: '100%',
+                                    m: 2,
+                                    backgroundColor: selectedCharacter === index ? 'lightblue' : '#f0f0f0',
+                                    border: selectedCharacter === index ? 1 : 0,
+                                    }}
+                                    onClick={() => handleCharacterClick(index)}
+                                >
+                                    <img
+                                    src={image}
+                                    alt={`${index+1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover'
+                                    }}
+                                    />
+                                </Paper>
+                            </Grid>
+                        ))}
+                        <Grid item xs={4}>
+                            <Paper elevation={3} sx={{
                                 height: '100%',
                                 width: '100%',
                                 m: 2,
-                                textAlign: 'center', 
-                                backgroundColor: selectedCharacter === index ? 'lightblue' : '#f0f0f0',
-                                border: selectedCharacter === index ? 1 : 0,
-                                }}
-                                onClick={() => handleCharacterClick(image, index)}
+                                alignContent: 'center', 
+                                backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
+                                border: selectedCharacter === 6 ? 1 : 0,
+                            }}
+                                onClick={() => {handleCharacterClick(6)}}
                             >
-                                <img
-                                src={image}
-                                alt={`${index+1}`}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover'
-                                }}
-                                />
+                                <form
+                                    onSubmit={handleSubmit}>
+                                    <label htmlFor="file-upload">
+                                        <img 
+                                            src={postSprite || addPlayer}
+                                            alt=''
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                            }}/>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        label="Image"
+                                        name="myFile"
+                                        id='file-upload'
+                                        accept='.jpeg, .png, .jpg'
+                                        style={{display: "none"}}
+                                        onChange={(event) => handleFileUpload(event)}>
+                                    </input>
+                                </form>
                             </Paper>
                         </Grid>
-                    ))}
                     </Grid>
                 </Grid>
                 <Grid item xs={1}/>
@@ -92,6 +176,16 @@ export default function MapBuilderScreen() {
                     <Grid container spacing={2} sx={{
                         alignItems: 'center',
                     }}>
+                        <Grid item xs={12}>
+                            <img
+                                src={selectedSprite}
+                                alt=''
+                                style={{
+                                    maxWidth: '50%',
+                                    maxHeight: '50%',
+                                    objectFit: 'cover',
+                            }}/>
+                        </Grid>
                         <Grid item xs={12}>
                             <h3>Character Stats</h3>
                         </Grid>

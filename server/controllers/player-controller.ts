@@ -68,4 +68,71 @@ export const updateProfile = async (req: Request, res: Response) => {
     }
 }
 
+export const getAvatar = async (req: Request, res: Response) => {
+    console.log("getAvatar")
+    try {
+        console.log(req.userId)
+        const existingUser = await User.findById(req.userId);
+        console.log("existingUser: " + existingUser);
+        if (!existingUser) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "User does not exist."
+                })
+        }
+
+        return res
+            .status(200)
+            .json({
+                pic: existingUser.avatarSprite,
+                speed: existingUser.speed,
+                strength: existingUser.strength,
+                defense: existingUser.defense,
+                favoredMinigame: existingUser.favoredMinigame
+            })
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const updateAvatar = async (req: Request, res: Response) => {
+    try {
+        const {pic, speed, strength, defense, favoredMinigame} = req.body
+
+        let updatedUser
+
+        if (pic) {
+            updatedUser = await User.updateOne(
+                {_id: req.userId},
+                {$set: {avatarSprite: pic, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame}}
+            );
+        }
+
+        else {
+            updatedUser = await User.updateOne(
+                {_id: req.userId},
+                {$set: {speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame}}
+            );
+        }
+
+        console.log("updatedUser: " + updatedUser);
+        if (!updatedUser) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "User cannot be updated."
+                })
+        }
+
+        return res.status(200).send()
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+
 export * as PlayerController from './player-controller'
