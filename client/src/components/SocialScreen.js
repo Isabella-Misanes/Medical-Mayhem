@@ -96,7 +96,7 @@ export default function SocialScreen() {
             playerCards.push(
                 <Box key={'no-players'} sx={{
                     width: '90%',
-                    height: '50%',
+                    height: '40%',
                     bgcolor: 'white',
                     position: 'absolute',
                     top: '30%',

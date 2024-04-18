@@ -282,7 +282,7 @@ function GlobalStoreContextProvider(props) {
 
     store.showRecentPlayers = function () {
         console.log("Show recent players in store");
-        async function asyncViewFriends() {
+        async function asyncViewRecentPlayers() {
             try {
                 let response = await apis.getRecentPlayers()
                 console.log(response);
@@ -290,17 +290,39 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
                 })
-            } catch (error) { console.log(error) }
+            } catch (error) { console.error(error) }
         }
-        asyncViewFriends();
+        asyncViewRecentPlayers();
     }
 
     store.showSentRequests = function() {
         console.log("Show friend requests SENT in store.");
+        async function asyncViewSentRequests() {
+            try {
+                let response = await apis.viewSentRequests()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.error(error) }
+        }
+        asyncViewSentRequests();
     }
 
     store.showReceivedRequests = function () {
         console.log("Show friends requests RECEIVED in store");
+        async function asyncViewReceivedRequests() {
+            try {
+                let response = await apis.viewReceivedRequests()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch (error) { console.error(error) }
+        }
+        asyncViewReceivedRequests();
     }
 
     // Forums Screen

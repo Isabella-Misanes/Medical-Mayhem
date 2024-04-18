@@ -57,7 +57,6 @@ export const removeFriend = async (req: Request, res: Response) => {
 
 export const viewFriends = async (req: Request, res: Response) => {
     try {
-        console.log("test");
         const currentUser = await User.findById(req.userId);
         if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
         const friends: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
@@ -80,11 +79,53 @@ export const viewFriends = async (req: Request, res: Response) => {
 }
 
 export const viewSentFriendRequests = async (req: Request, res: Response) => {
-    
+    try {
+        console.log("test");
+        const sentFriendReqs = await FriendRequest.find({sender: req.userId});
+        if(!sentFriendReqs) return res.status(400).json({errorMessage: 'Current user not found.'});
+        console.log(sentFriendReqs);
+        const receivers: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
+        await Promise.all(sentFriendReqs.map(async (friendReq) => {
+            const receiver = await User.findById(friendReq.receiver);
+            console.log(receiver);
+            if(receiver) {
+                receivers.push({
+                    username: receiver.username,
+                    profilePicture: receiver.profilePicture,
+                    onlineStatus: receiver.onlineStatus
+                })
+            }
+        }));
+        return res.status(200).json({players: receivers})
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
 }
 
 export const viewReceivedFriendRequests = async (req: Request, res: Response) => {
-    
+    try {
+        console.log("test");
+        const receivedFriendReqs = await FriendRequest.find({receiver: req.userId});
+        if(!receivedFriendReqs) return res.status(400).json({errorMessage: 'Current user not found.'});
+        console.log(receivedFriendReqs);
+        const senders: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
+        await Promise.all(receivedFriendReqs.map(async (friendReq) => {
+            const sender = await User.findById(friendReq.sender);
+            console.log(sender);
+            if(sender) {
+                senders.push({
+                    username: sender.username,
+                    profilePicture: sender.profilePicture,
+                    onlineStatus: sender.onlineStatus
+                })
+            }
+        }));
+        return res.status(200).json({players: senders})
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
 }
 
 export const deleteFriendRequest = async (req: Request, res: Response) => {

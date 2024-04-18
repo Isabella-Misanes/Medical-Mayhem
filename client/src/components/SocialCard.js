@@ -38,7 +38,7 @@ export default function SocialCard(props) {
                     <CircleIcon sx={{color: friendOnlineStatus ? 'lime' : 'lightgray', marginLeft:'10px'}} />
                 </Grid>
                 <Grid item>
-                    <h2 style={{marginLeft: '10px'}}>{friendName}</h2>
+                    <h3 style={{marginLeft: '5px'}}>{friendName}</h3>
                 </Grid>
             </Grid>
         </Box>

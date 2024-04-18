@@ -30,9 +30,11 @@ export const removeFriend = async(targetUsername) => { return await api.post('/f
     targetUsername: targetUsername
 }); }
 
-export const getRecentPlayers = async(targetUsername) => { return await api.get('/recentPlayers', {
-    targetUsername: targetUsername
-}); }
+export const getRecentPlayers = async() => { return await api.get('/recentPlayers') }
+
+export const viewSentRequests = async() => { return await api.get('/friendRequests/sent'); }
+
+export const viewReceivedRequests = async() => { return await api.get('/friendRequests/received'); }
 
 const apis = {
     getProfile,
@@ -40,7 +42,9 @@ const apis = {
     removeFriend,
     viewFriends,
     sendFriendRequest,
-    getRecentPlayers
+    getRecentPlayers,
+    viewSentRequests,
+    viewReceivedRequests
 }
 
 export default apis
