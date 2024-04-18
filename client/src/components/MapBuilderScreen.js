@@ -64,6 +64,7 @@ export default function MapBuilderScreen() {
     useEffect(() => {
         store.getAvatar();
         console.log(store.avatar);
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {     

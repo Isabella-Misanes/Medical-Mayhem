@@ -2,7 +2,7 @@
  * Heartbeat Rhythm
  */
 
-import { Engine, Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
+import { Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
 import { socket } from "../components/HomeScreen";
 import SocketEvents from "../constants/socketEvents";
 

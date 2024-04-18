@@ -57,6 +57,7 @@ export default function HomeScreen() {
             socket.off(SocketEvents.MATCH_FOUND)
             navigate('/game')
         })
+        // eslint-disable-next-line
     }, [])
 
     return (
@@ -172,10 +173,11 @@ function HomeButton(props) {
 }
 
 function QueueModal(props) {
-    const { auth } = useContext(AuthContext);
+    // const { auth } = useContext(AuthContext);
 
-    const [modalText, setModalText] = useState("Waiting for another player...")
-    const [matchFound, setMatchFound] = useState(false)
+    const modalText = "Waiting for another player..."
+    // const [modalText, setModalText] = useState("Waiting for another player...")
+    // const [matchFound, setMatchFound] = useState(false)
 
     function handleXButtonClick() {
         props.setQueueingUp(false)
