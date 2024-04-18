@@ -48,6 +48,18 @@ export const acceptFriendRequest = async(targetUser) => { return await api.post(
     targetUser: targetUser
 }); }
 
+export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
+
+export const updateAvatar = async (pic, speed, strength, defense, favoredMinigame) => {
+    return api.post(`/updateAvatar/`, {
+        pic: pic,
+        speed: speed,
+        strength: strength,
+        defense: defense,
+        favoredMinigame: favoredMinigame,
+    });
+}
+
 const apis = {
     getProfile,
     updateProfile,
@@ -59,7 +71,9 @@ const apis = {
     viewReceivedRequests,
     cancelFriendRequest,
     ignoreFriendRequest,
-    acceptFriendRequest
+    acceptFriendRequest,
+    getAvatar,
+    updateAvatar,
 }
 
 export default apis

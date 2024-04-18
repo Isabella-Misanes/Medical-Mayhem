@@ -32,7 +32,13 @@ const UserSchema = new Schema(
         appearAsOffline: {type: Boolean, default: false},
         dateSinceOnline: {type: Date, default: new Date()},
         dateRegistered: {type: Date, default: new Date()},
-        isAdmin: {type: Boolean, default: false}
+        isAdmin: {type: Boolean, default: false},
+        // Pertaining to sprites and gameplay
+        avatarSprite: {type: String, default: ""},
+        speed: {type: Number, default: 0},
+        strength: {type: Number, default: 0},
+        defense: {type: Number, default: 0},
+        favoredMinigame: {type: String, default: ""},
     },
     { timestamps: true },
 )

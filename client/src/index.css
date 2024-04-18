@@ -13,3 +13,7 @@ code {
 :root {
   background-color: #AFD9AE;
 }
+
+#map-builder-screen {
+  text-align: center;
+}
