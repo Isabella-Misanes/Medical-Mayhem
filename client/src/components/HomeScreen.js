@@ -46,15 +46,17 @@ export default function HomeScreen() {
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP, {email : auth.user.email})
+        socket.emit(SocketEvents.QUEUE_UP)
     }
 
     useEffect(() => {
         socket.on(SocketEvents.MATCH_FOUND, () => {
-            //console.log("GAME FOUND")
+            
+            // Make sure to turn off event listeners before navigating to different
+            // screens in order to avoid unexpected behaviors
+            socket.off(SocketEvents.MATCH_FOUND)
             navigate('/game')
         })
-
     }, [])
 
     return (
@@ -177,13 +179,14 @@ function QueueModal(props) {
 
     function handleXButtonClick() {
         props.setQueueingUp(false)
-        socket.emit(SocketEvents.LEAVE_QUEUE, {email : auth.user.email})
+        socket.emit(SocketEvents.LEAVE_QUEUE)
     }
 
     return (
         <Modal
             open={props.queuingUp}
             aria-labelledby="modal-find-game"
+            id="queue-modal"
         >
             <Box
                 sx={modalStyle}>

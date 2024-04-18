@@ -17,7 +17,7 @@ export default function ProfileScreen() {
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [username, setUsername] = useState(auth.user.username)
+    const [username, setUsername] = useState(auth.username)
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
 
@@ -74,7 +74,6 @@ export default function ProfileScreen() {
 
     useEffect(() => {
         store.getProfile()
-        console.log(auth.user.username)
         // eslint-disable-next-line
     }, [])
 

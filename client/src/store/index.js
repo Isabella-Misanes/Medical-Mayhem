@@ -72,7 +72,11 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         currentHomeScreen: CurrentHomeScreen.HOME,
-        profileInfo: {}
+        profileInfo: {
+            username: "",
+            bio: "",
+            pfp: ""
+        }
     });
 
     console.log("inside useGlobalStore");

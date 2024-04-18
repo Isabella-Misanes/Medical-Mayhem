@@ -46,9 +46,6 @@ export const io = new Server(server, {
     }
 })
 
-// The queue that will hold all players currently queueing for a game by email
-export const queue : Socket[] = []
-
 io.on('connection', handleConnection)
 
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
