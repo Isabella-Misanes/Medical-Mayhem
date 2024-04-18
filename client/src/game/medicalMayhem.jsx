@@ -17,9 +17,9 @@ export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
     if (!gameCanvasRef.current) return;
   
     gameRef.current = new Engine({
-      canvasElement: gameCanvasRef.current,
-      width: gameWidth,
-      height: gameHeight,
+        canvasElement: gameCanvasRef.current,
+        width: gameWidth,
+        height: gameHeight,
     });
     const engine = gameRef.current;
   
