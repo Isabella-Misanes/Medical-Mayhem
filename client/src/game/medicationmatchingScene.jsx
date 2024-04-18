@@ -132,8 +132,8 @@ export class medicationmatchingScene extends Scene {
     // selectorSides[0] and [2] are horizontal sides, [1] and [3] are vertical
     for(let i = 0; i < 4; i++) {
       selectorSides.push(new Actor({
-        x: (i % 2 === 0) ? xoffset + padding : (i === 1 ? padding : 2 * xoffset + padding),
-        y: (i % 2 === 0) ? (padding - 7 + (i === 2 ? boxHeight - 4 : 0)) : padding + yoffset,
+        x: (i % 2 === 0) ? xoffset + padding : ((i === 1 ? 0 : boxWidth - 6)),
+        y: (i % 2 === 0) ? (-7 + (i === 2 ? boxHeight - 4 : 0)) : padding + yoffset,
         width: (i % 2 === 0) ? boxWidth : 5,
         height: (i % 2 === 0) ? 5 : boxHeight,
         color: Color.Red
@@ -243,8 +243,8 @@ export class medicationmatchingScene extends Scene {
       color: Color.White,
       font: new Font({size: 24, textAlign: TextAlign.Left})
     });
-    const actor2 = new Actor({pos: vec(53, this.gameHeight - 70)})
-    const actor3 = new Actor({pos: vec(53, this.gameHeight - 95)})
+    const actor2 = new Actor({pos: vec(60, this.gameHeight - 70)})
+    const actor3 = new Actor({pos: vec(110, this.gameHeight - 95)})
     const timeActor = new Actor({pos: vec(55, this.gameHeight - 120)});
     actor1.graphics.use(instrText);
     actor2.graphics.use(this.pointText);
@@ -252,6 +252,7 @@ export class medicationmatchingScene extends Scene {
     timeActor.graphics.use(this.timerText);
     game.currentScene.add(actor1);
     game.currentScene.add(actor2);
+    game.currentScene.add(actor3);
     game.currentScene.add(timeActor);
   }
 }
