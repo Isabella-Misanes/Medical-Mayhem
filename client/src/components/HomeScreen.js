@@ -45,9 +45,8 @@ export default function HomeScreen() {
     }
 
     function handlePlayButtonClick() {
-        navigate('/game')
-        // setQueueingUp(true)
-        // socket.emit(SocketEvents.QUEUE_UP)
+        setQueueingUp(true)
+        socket.emit(SocketEvents.QUEUE_UP)
     }
 
     useEffect(() => {
@@ -93,7 +92,7 @@ export default function HomeScreen() {
                         gridSx={{textAlign: 'center'}}
                         id='map-search-button'
                         onClick={() => navigate('/mapsearch')}
-                        text='Character Search'
+                        text='Map Search'
                     />
                     
                     <HomeButton
