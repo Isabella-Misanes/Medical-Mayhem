@@ -37,8 +37,6 @@ const pfp = fs.readFileSync(path.resolve(__dirname, '../../assets/default-avatar
 
 describe("POST /register", () => {
 
-    // TODO: add test for missing email, username, password, or password verification
-
     it("registers a user successfully", async () => {
         const response = await request(app).post("/auth/register").send({
             username: 'username',
@@ -100,7 +98,7 @@ describe("POST /register", () => {
 
 describe("GET /getProfile", () => {
 
-    it("gets a default profile succesfully", async () => {
+    it("gets a default profile successfully", async () => {
         const response = await request(app)
             .get("/api/getProfile")
             .set('Cookie', [cookie])
@@ -123,7 +121,7 @@ describe("POST /updateProfile", () => {
             .set('Cookie', [cookie])
             .send({
                 username: 'diff username',
-                bio: 'bio',
+                bio: '',
                 pfp: ''
             })
             .expect(200)

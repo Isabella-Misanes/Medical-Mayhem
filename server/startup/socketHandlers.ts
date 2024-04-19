@@ -43,11 +43,9 @@ export function handleConnection(socket: Socket) {
             io.to(room).emit(SocketEvents.MATCH_FOUND)
         }
         else {
-            console.log('PUSH')
             queue.push(socket)
         }
 
-        console.log("SOCKET ROOMS")
         console.log(socketRooms)
     })
 

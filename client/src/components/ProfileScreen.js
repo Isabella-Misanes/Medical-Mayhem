@@ -14,7 +14,7 @@ export default function ProfileScreen() {
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [username, setUsername] = useState(auth.username)
+    const [username, setUsername] = useState("")
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
 
@@ -74,12 +74,13 @@ export default function ProfileScreen() {
         // eslint-disable-next-line
     }, [])
 
-    useEffect(() => {     
+    useEffect(() => {
+        setUsername(auth.username)     
         setBio(store.profileInfo.bio)
         setPostImage(store.profileInfo.pfp)
 
         // eslint-disable-next-line
-    }, [store.profileInfo])
+    }, [auth, store.profileInfo])
 
 
     console.log('editEnabled: '+ editEnabled)
