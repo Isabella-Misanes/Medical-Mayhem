@@ -34,15 +34,17 @@ export class heartbeatrhythmScene extends Scene {
     }
 
     onActivate(context) {
+        console.log("CONTEXT");
+        console.log(context);
         this.timeText.time = 30;
         this.yourScore.val = context.data.yourScore;
         this.opponentScore.val = context.data.opponentScore;
   
         setTimeout(() => {
-            this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, time: context.data.time-30}});
+            context.data.games.splice(0,1);
+            let games = context.data.games;
+            this.engine.goToScene(context.data.games[0], {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, games: games}});
         }, 30000);
-  
-      //   engine?.start().catch((e) => console.error(e));
     }
 
     onDeactivate() {

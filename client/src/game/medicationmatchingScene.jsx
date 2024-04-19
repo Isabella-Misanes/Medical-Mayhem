@@ -12,6 +12,7 @@ import { socket } from "../components/HomeScreen";
 import SocketEvents from "../constants/socketEvents";
 
 export class medicationmatchingScene extends Scene {
+
     onInitialize(engine) {
         console.log("INIT MEDICATION MATCHING");
 
@@ -29,6 +30,8 @@ export class medicationmatchingScene extends Scene {
     opponentPoints;
 
     onActivate(context) {
+        console.log("CONTEXT");
+        console.log(context);
         this.timerSec = 15;
         this.points = context.data.yourScore;
         this.pointText.text = "Score: " + this.points;
@@ -36,7 +39,9 @@ export class medicationmatchingScene extends Scene {
         this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
 
         setTimeout(() => {
-            this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: this.points, time: context.data.time-15}});
+            context.data.games.splice(0,1);
+            let games = context.data.games;
+            this.engine.goToScene(context.data.games[0], {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, games: games}});
         }, 15000);
     }
 

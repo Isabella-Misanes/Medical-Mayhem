@@ -1,6 +1,7 @@
 import { Engine } from "excalibur";
 import { medicationmatchingScene } from "./medicationmatchingScene";
 import { heartbeatrhythmScene } from "./heartbeatrhythmScene";
+import { gameResultsScene } from "./gameResultsScene";
 
 const gameWidth = 1000;
 const gameHeight = 750;
@@ -22,20 +23,14 @@ export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
         height: gameHeight,
     });
     const engine = gameRef.current;
-  
-    // game.currentScene.add(timer);
-    // timer.start();
-    // game.clock.schedule(() => {
-    //   alert("Time's up!");
-    //   game.stop();
-    // }, 15000);
-  
-    // initHeartbeat(gameRef, gameCanvasRef);
-    // initMedicationMatching(gameRef, gameCanvasRef);
 
     engine.add("heartbeatrhythm", new heartbeatrhythmScene());
     engine.add("medicationmatching", new medicationmatchingScene());
-    engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: 0, opponentScore: 0, time: 120}});
+    engine.add("gameresults", new gameResultsScene());
+
+    let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
+
+    engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
 
     engine.start();
 
