@@ -14,6 +14,8 @@ describe('Authentication', () => {
       }
     }).as('registration')
 
+    cy.wait(3000);
+    
     cy.get('#register').click()
 
     cy.get('#username').type('JohnSmith123')
