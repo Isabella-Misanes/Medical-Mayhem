@@ -26,10 +26,18 @@ export default function ProfileScreen() {
     // Handles submitting the profile info once editing is turned off
     function handleEditProfile(event) {
 
-        if(editEnabled)
-            store.updateProfile(username, bio, postImage)
+        if(username.length === 0) {
+            setUsername(auth.username)
+            console.log(auth.username)
+            console.log(username)
+            store.updateProfile(auth.username, bio, postImage)
+        }
 
-        auth.updateUsername(username)
+        else if(editEnabled) {
+            auth.updateUsername(username)
+            store.updateProfile(username, bio, postImage)
+        }
+
         setEditEnabled(!editEnabled);
     }
 
@@ -146,6 +154,7 @@ export default function ProfileScreen() {
                                 {editEnabled ?
                                     <>
                                         <TextField
+                                            id='username-input'
                                             size='small'
                                             value={username}
                                             fullWidth
@@ -158,11 +167,15 @@ export default function ProfileScreen() {
                                         </p>
                                     </>
                                     :
-                                    <p>
-                                        {username}<br/>
-                                        Last Seen: Now<br/>
-                                        Registered Since: Jan 22, 2024
-                                    </p>
+                                    <>
+                                        <p id='username-text'>
+                                            {username}
+                                        </p>
+                                        <p>
+                                            Last Seen: Now<br/>
+                                            Registered Since: Jan 22, 2024
+                                        </p>
+                                    </>
                                 }
                             </Grid>
                             <Grid item xs={1} />
@@ -179,7 +192,7 @@ export default function ProfileScreen() {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField 
-                                    id="filled-multiline-static"
+                                    id="bio"
                                     label="Bio"
                                     multiline
                                     fullWidth
@@ -190,10 +203,13 @@ export default function ProfileScreen() {
                                     disabled={!editEnabled}
                                 />
                             </Grid>
-                            <Grid item xs={12} sx={{bgcolor: '#4D9147'}}>
-                                <IconButton onClick={(event) => {handleEditProfile(event)}} 
-                                    sx={{color: editEnabled ? 'red' : 'white'}}
-                                >
+                            <Grid item xs={12} sx={{
+                                bgcolor: '#4D9147',
+                            }}>
+                                <IconButton id='edit-button' onClick={(event) => {handleEditProfile(event)}} 
+                                    sx={{
+                                        color: editEnabled ? 'red' : 'white'
+                                }}>
                                     <EditIcon />
                                 </IconButton>
                             </Grid>
