@@ -22,19 +22,24 @@ export default function SocialScreen() {
 
     function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
+    const [id, setId] = useState('');
     useEffect(() => {
         switch(activeButton) {
             case 0:
                 store.viewFriends();
+                setId('friends');
                 break;
             case 1:
                 store.showRecentPlayers();
+                setId('recent-players');
                 break;
             case 2:
                 store.showSentRequests();
+                setId('sent-requests');
                 break;
             case 3:
                 store.showReceivedRequests();
+                setId('received-requests');
                 break;
             default:
                 // store.viewFriends();
@@ -55,7 +60,8 @@ export default function SocialScreen() {
 
     const renderButton = (buttonNum, str) => {
         return (
-            <Button 
+            <Button
+                id={str.toLowerCase().replace(/\s+/g, '-') + '-button'}
                 onClick={() => {handleButtonClick(buttonNum)}}
                 sx={{color: activeButton === buttonNum ? 'red' : 'black'}}
             >
@@ -74,7 +80,8 @@ export default function SocialScreen() {
         let str = 'No ';
         if(activeButton === 0) str += 'Friends';
         else if(activeButton === 1) str += 'Recent Players';
-        else str += 'Friend Requests';
+        else if(activeButton === 2) str += 'Sent Friend Requests';
+        else str += 'Received Friend Requests';
         
         if(playerList.length !== 0) {
             for(let i = 0; i < playerList.length; i++) {
@@ -94,15 +101,19 @@ export default function SocialScreen() {
         }
         else {
             playerCards.push(
-                <Box key={'no-players'} sx={{
-                    width: '90%',
-                    height: '40%',
-                    bgcolor: 'white',
-                    position: 'absolute',
-                    top: '30%',
-                    left: '5%',
-                    boxShadow: 5
-                }}>
+                <Box
+                    id={str.toLowerCase().replace(/\s+/g, '-')}
+                    key={'no-players'}
+                    sx={{
+                        width: '90%',
+                        height: '40%',
+                        bgcolor: 'white',
+                        position: 'absolute',
+                        top: '30%',
+                        left: '5%',
+                        boxShadow: 5
+                    }}
+                >
                     <h1>{str}</h1>
                 </Box>
             )
@@ -197,7 +208,7 @@ export default function SocialScreen() {
         setAddFriendUsername(event.target.value);
     }
 
-    let modal = store.errorMessage !== "" ? <MUIErrorModal store={store} /> : "";
+    let modal = store.errorMessage !== "" ? <MUIErrorModal id={'error'} store={store} /> : "";
     
     return (
         <div id="social-screen">
@@ -238,7 +249,8 @@ export default function SocialScreen() {
                         <Typography variant="h4" gutterBottom>Social</Typography>
                     </Grid>
                     <Grid item xs={2} sx={{mt: 2}}>
-                        <Button 
+                        <Button
+                            id='add-friend'
                             variant='contained' 
                             sx={buttonStyle}
                             onClick={handleFriendModalOpen}
@@ -282,11 +294,13 @@ export default function SocialScreen() {
                     </Grid>
                 </Grid>
 
-                {playerRender()}
+                <Box id={id} sx={{height: 100}}>
+                    {playerRender()}
+                </Box>
                 
                 <BackButton />
 
-                <Modal open={isModalOpen} onClose={handleFriendModalClose}>
+                <Modal id={'add-friend-modal'} open={isModalOpen} onClose={handleFriendModalClose}>
                     <Box sx={{
                         width: '30%',
                         height: '27%',
@@ -303,6 +317,7 @@ export default function SocialScreen() {
                         <Divider />
                         <Box component='form' noValidate onSubmit={handleSubmit}>
                             <TextField
+                                id='username'
                                 size='small'
                                 // value={username}
                                 fullWidth
@@ -312,7 +327,7 @@ export default function SocialScreen() {
                                 onChange={handleAddFriendUsernameChange}
                             />
                             <Button
-                                id="signUp"
+                                id="add-friend-submit"
                                 type="submit"
                                 fullWidth
                                 variant="contained"

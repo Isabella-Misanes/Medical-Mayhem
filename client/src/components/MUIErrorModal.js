@@ -8,7 +8,7 @@ export default function MUIErrorModal(props) {
     function handleCloseModal() { auth ? auth.hideModal() : store.hideModal(); }
 
     return (
-        <Modal open={auth ? (auth.errorMessage !== "") : (store.errorMessage !== "")}>
+        <Modal id='error' open={auth ? (auth.errorMessage !== "") : (store.errorMessage !== "")}>
             <Stack sx={{ width: '40%', marginLeft: '30%', marginTop: '20%' }} spacing={2}>
                 <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
