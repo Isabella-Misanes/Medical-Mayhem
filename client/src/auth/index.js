@@ -202,6 +202,7 @@ function AuthContextProvider(props) {
                 navigate("/");
             } 
         } catch(error) {
+            console.log(error)
             authReducer({
                 type: AuthActionType.ERROR,
                 payload: { errorMessage: error.response.data.errorMessage }

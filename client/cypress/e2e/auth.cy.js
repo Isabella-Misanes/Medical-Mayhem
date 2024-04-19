@@ -1,18 +1,5 @@
 const baseUrl = Cypress.config('baseUrl')
 
-Cypress.Commands.add('login', (email, password) => {
-
-  cy.session([email, password], () => {
-
-    cy.visit('/')
-    cy.get('#login').click()
-    cy.get('#email').type(email)
-    cy.get('#password').type(password)
-    cy.get('#loginSubmit').click()
-    cy.url().should('eq', `${baseUrl}/`)
-  })
-})
-
 describe('Authentication', () => {
 
   it('should register an account' , () => {
@@ -38,6 +25,26 @@ describe('Authentication', () => {
 
     cy.wait('@registration')
 
+    cy.url().should('eq', `${baseUrl}/`)
+  })
+
+  it('should login an account' , () => {
+    cy.visit('/')
+    cy.get('#login').click()
+
+    cy.intercept('POST', '/auth/login', {
+      statusCode: 200,
+      body: {
+        success: true,
+        username : 'JohnSmith123',
+        email : 'john.smith@gmail.com',
+      }
+    }).as('login')
+
+    cy.get('#email').type('john.smith@gmail.com')
+    cy.get('#password').type('password')
+    cy.get('#loginSubmit').click()
+    cy.wait('@login')
     cy.url().should('eq', `${baseUrl}/`)
   })
 
@@ -69,9 +76,59 @@ describe('Authentication', () => {
   })
 
   describe('Guests', () => {
-    it('should continue as guest successfully', () => {
+
+    beforeEach(() => {
       cy.visit('/')
       cy.get('#continue-as-guest').click()
+      cy.url().should('eq', `${baseUrl}/`)
+    })
+
+    it('should login from the Settings screen', () => {
+      cy.get('#settings-button').click()
+      cy.url().should('eq', `${baseUrl}/settings`)
+      cy.get('#login').click()
+      cy.url().should('eq', `${baseUrl}/login`)
+      
+      cy.intercept('POST', '/auth/login', {
+        statusCode: 200,
+        body: {
+          success: true,
+          username : 'JohnSmith123',
+          email : 'john.smith@gmail.com',
+        }
+      }).as('login')
+  
+      cy.get('#email').type('john.smith@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#loginSubmit').click()
+      cy.wait('@login')
+      cy.url().should('eq', `${baseUrl}/`)
+    })
+
+    it('should register from the Settings screen', () => {
+      cy.get('#settings-button').click()
+      cy.url().should('eq', `${baseUrl}/settings`)
+      cy.get('#register').click()
+      cy.url().should('eq', `${baseUrl}/register`)
+      
+      cy.intercept('POST', '/auth/register', {
+        statusCode: 200,
+        body: {
+          success: true,
+          username : 'JohnSmith123',
+          email : 'john.smith@gmail.com',
+        }
+      }).as('registration')
+  
+      cy.get('#username').type('JohnSmith123')
+      cy.get('#email').type('john.smith@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#passwordVerify').type('password')
+  
+      cy.get('#signUp').click()
+  
+      cy.wait('@registration')
+  
       cy.url().should('eq', `${baseUrl}/`)
     })
   })

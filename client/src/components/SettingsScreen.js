@@ -222,10 +222,10 @@ export default function SettingsScreen() {
                             </Button> 
                         </> :
                         <>
-                            <Button onClick={() => {handleLogin()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                            <Button id='login' onClick={() => {handleLogin()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Log In
                             </Button>
-                            <Button onClick={() => {handleRegister()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                            <Button id='register' onClick={() => {handleRegister()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Register
                             </Button> 
                         </>}
