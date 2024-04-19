@@ -33,8 +33,6 @@ function AuthContextProvider(props) {
     });
     const navigate = useNavigate();
 
-    
-
     useEffect(() => {
         auth.getLoggedIn();
         // eslint-disable-next-line
@@ -109,8 +107,8 @@ function AuthContextProvider(props) {
             case AuthActionType.UPDATE_USERNAME: {
                 console.log("UPDATING USERNAME")
                 return setAuth({
-                    username: '',
-                    email: '',
+                    username: payload.username,
+                    email: auth.email,
                     role: auth.role,
                     loggedIn: auth.loggedIn,
                     errorMessage: ""
@@ -133,6 +131,7 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         try {
             const response = await api.getLoggedIn();
+            console.log("AFTER")
             console.log("getLoggedIn response: " + response.status)
             console.log(response)
             if (response.status === 200 && !auth.loggedIn) {
@@ -170,11 +169,7 @@ function AuthContextProvider(props) {
                 console.log("success");
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
-                    payload: { user: response.data.user }
-                })
-                authReducer({
-                    type: AuthActionType.LOGIN_USER,
-                    payload: {
+                    payload: { 
                         username: response.data.username,
                         email: response.data.email
                     }
@@ -207,7 +202,6 @@ function AuthContextProvider(props) {
                 navigate("/");
             } 
         } catch(error) {
-            console.log(error.response.data.errorMessage);
             authReducer({
                 type: AuthActionType.ERROR,
                 payload: { errorMessage: error.response.data.errorMessage }

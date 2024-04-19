@@ -27,7 +27,7 @@ export const logoutUser = async () => {
     return await api.get(`/logout/`) 
 }
 export const deleteUser = async () => { 
-    return await api.get(`/deleteUser/`) 
+    return await api.post(`/deleteUser/`) 
 }
 export const registerUser = async (username, email, password, passwordVerify) => {
     return await api.post(`/register/`, {

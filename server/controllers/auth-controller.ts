@@ -5,6 +5,7 @@ import { User } from '../models/user'
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {
+    console.log(req.username)
     try {
         return res.status(200).json({
             loggedIn: true,
@@ -65,7 +66,11 @@ export const loginUser = async (req: Request, res: Response) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500)
+        .json({
+            errorMessage: "Could not log in. Please try again later."
+        })
+        .send();
     }
 }
 
