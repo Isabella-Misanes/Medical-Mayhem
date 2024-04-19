@@ -18,10 +18,12 @@ export default function GameScreen() {
 
         socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
 
-            gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
-                "Opponent Score: " + data
             gameRef.current.scenes.medicationmatching.opponentPointText.text = 
                 "Opponent Score: " + data
+                gameRef.current.scenes.medicationmatching.opponentPoints = data;
+            gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
+                "Opponent Score: " + data
+            gameRef.current.scenes.heartbeatrhythm.opponentScore.val = data;
         })
 	}, []);
 
