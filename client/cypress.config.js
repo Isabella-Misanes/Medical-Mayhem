@@ -6,6 +6,7 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     "experimentalSessionandOrigin": true,
-    "trashAssetsBeforeRuns": true
+    "trashAssetsBeforeRuns": true,
+    "baseUrl": "http://localhost:3000"
   },
 });

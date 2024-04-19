@@ -214,10 +214,10 @@ export default function SettingsScreen() {
                 <Box display="flex" justifyContent={'center'} gap={5}>
                     { auth.role === UserRoleType.USER ?
                         <>
-                            <Button onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
+                            <Button id='log-out' onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
                                 Log Out
                             </Button>
-                            <Button onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
+                            <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
                                 Delete Account
                             </Button> 
                         </> :
