@@ -92,7 +92,7 @@ export default function HomeScreen() {
                         gridSx={{textAlign: 'center'}}
                         id='map-search-button'
                         onClick={() => navigate('/mapsearch')}
-                        text='Map Search'
+                        text='Character Search'
                     />
                     
                     <HomeButton

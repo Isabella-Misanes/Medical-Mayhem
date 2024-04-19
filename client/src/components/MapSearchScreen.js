@@ -38,7 +38,7 @@ export default function MapSearchScreen() {
                     p: 2,
                     boxShadow: 10
                 }}>
-                <h3>Map Search</h3>
+                <h3>Character Search</h3>
                 <Grid container spacing={2}>
                     <Grid item xs={8}/>
                     <Grid item xs={4}>
