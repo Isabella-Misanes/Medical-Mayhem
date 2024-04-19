@@ -45,8 +45,9 @@ export default function HomeScreen() {
     }
 
     function handlePlayButtonClick() {
-        setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP)
+        navigate('/game')
+        // setQueueingUp(true)
+        // socket.emit(SocketEvents.QUEUE_UP)
     }
 
     useEffect(() => {

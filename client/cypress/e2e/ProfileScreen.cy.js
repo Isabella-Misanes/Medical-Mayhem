@@ -2,6 +2,20 @@ import 'cypress-file-upload'
 
 const baseUrl = Cypress.config('baseUrl')
 
+// Helper function to login before every test
+Cypress.Commands.add('login', (email, password) => {
+
+    cy.session([email, password], () => {
+        cy.visit('/')
+        cy.wait(3000)
+        cy.get('#login').click()
+        cy.get('#email').type(email)
+        cy.get('#password').type(password)
+        cy.get('#loginSubmit').click()
+        cy.url().should('eq', `${baseUrl}/`)
+    })
+})
+
 describe('Profile Info Modification', () => {
 
     beforeEach(() => {
@@ -92,4 +106,4 @@ describe('Profile Info Modification', () => {
         cy.get('#edit-button').click()
         cy.get('#file-upload').attachFile('../fixtures/images/Pokémon_Pikachu_art.png')
     })
-})  
+})
