@@ -150,4 +150,28 @@ describe("POST /updateProfile", () => {
             })
             .expect(200)
     })
+
+    it("Should run", () => {
+        
+    })
+})
+
+describe("GET /loggedIn", () => {
+
+    it("logs in a user with a cookie", async () => {
+        const response = await request(app).post("/auth/loggedIn").send({
+            username: 'username',
+            email: "john.smith@blah.com",
+            password: 'password',
+            passwordVerify: 'password'
+        })
+        .set('Cookie', [cookie])
+        .expect(200)
+        .expect('Content-Type', /json/)
+    
+        expect(response.body).toEqual({
+            username: 'username',
+            email: 'john.smith@blah.com'
+        })         
+    })
 })

@@ -6,6 +6,7 @@ Cypress.Commands.add('login', (email, password) => {
     cy.session([email, password], () => {
   
       cy.visit('/')
+      cy.wait(3000)
       cy.get('#login').click()
       cy.get('#email').type(email)
       cy.get('#password').type(password)
@@ -59,9 +60,22 @@ describe('Social Screen', () => {
         })
 
         it('should not allow the user to add themself', () => {
-            cy.get('#username').type('JohnSmith123');
+            cy.get('#username').type('JohnSmith');
             cy.get('#add-friend-submit').click();
             cy.get('#error').should('be.visible');
+        })
+
+        it('should not allow the user to add a user that doesn\'t exist', () => {
+            cy.get('#username').type('skibidi');
+            cy.get('#add-friend-submit').click();
+            cy.get('#error').should('be.visible');
+        })
+
+        it('should allow the user to add a user that exists', () => {
+            cy.get('#username').type('1');
+            cy.get('#add-friend-submit').click();
+            // cy.wait('@sendFriendRequest');
+            cy.get('#add-friend-modal').should('not.be.visible');
         })
     })
 
