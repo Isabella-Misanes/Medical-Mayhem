@@ -14,7 +14,8 @@ client/cypress/screenshots
 
 # production
 /client/build
-/server/dist
+/server/dist/*
+!/server/dist/tests/
 
 # misc
 .DS_Store
