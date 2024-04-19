@@ -132,13 +132,15 @@ export default function MapBuilderScreen() {
                         </Grid>
                         {players.map((image, index) => (
                             <Grid key={index} item xs={4}>
-                                <Paper elevation={3} sx={{ 
-                                    height: '100%',
-                                    width: '100%',
-                                    mb: 2,
-                                    ml: 3,
-                                    backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
-                                    border: selectedCharacter === index ? 1 : 0,
+                                <Paper elevation={3}
+                                    id={'character-'+ (index)}
+                                    sx={{ 
+                                        height: '100%',
+                                        width: '100%',
+                                        mb: 2,
+                                        ml: 3,
+                                        backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
+                                        border: selectedCharacter === index ? 1 : 0,
                                     }}
                                     onClick={() => handleCharacterClick(index)}
                                 >
@@ -155,16 +157,18 @@ export default function MapBuilderScreen() {
                             </Grid>
                         ))}
                         <Grid item xs={4}>
-                            <Paper elevation={3} sx={{
-                                height: '100%',
-                                width: '100%',
-                                maxHeight: '50vh',
-                                mb: 2,
-                                ml: 3,
-                                alignContent: 'center', 
-                                backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
-                                border: selectedCharacter === 6 ? 1 : 0,
-                            }}
+                            <Paper elevation={3} 
+                                id='character-6'
+                                sx={{
+                                    height: '100%',
+                                    width: '100%',
+                                    maxHeight: '50vh',
+                                    mb: 2,
+                                    ml: 3,
+                                    alignContent: 'center', 
+                                    backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
+                                    border: selectedCharacter === 6 ? 1 : 0,
+                                }}
                                 onClick={() => {handleCharacterClick(6)}}
                             >
                                 <form
@@ -225,6 +229,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
+                                id='slider-speed'
                                 value={speed}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
@@ -256,6 +261,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
+                                id='slider-strength'
                                 value={strength}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
@@ -284,6 +290,7 @@ export default function MapBuilderScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <Slider
+                                id='slider-defense'
                                 value={defense}
                                 getAriaValueText={valuetext}
                                 valueLabelDisplay='auto'
@@ -304,20 +311,20 @@ export default function MapBuilderScreen() {
                         <Grid item xs={1}/>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Favorite Minigame</InputLabel>
+                                <InputLabel id="favorite-minigame">Favorite Minigame</InputLabel>
                                 <Select
                                 value={favoredMinigame}
                                 label="Favorite Minigame"
                                 onChange={(event) => {setMinigame(event.target.value)}}
                                 >
-                                <MenuItem value={"Medication Matching"}>Medication Matching</MenuItem>
-                                <MenuItem value={"Heartbeat Rhythm"}>Heartbeat Rhythm</MenuItem>
+                                <MenuItem id='select-medication-matching' value={"Medication Matching"}>Medication Matching</MenuItem>
+                                <MenuItem id='select-heartbeat-rhythm' value={"Heartbeat Rhythm"}>Heartbeat Rhythm</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
                         
                         <Grid item xs={12}>
-                            <Button sx={[buttonStyle, {color: 'white'}]}
+                            <Button id='confirm-changes' sx={[buttonStyle, {color: 'white'}]}
                             onClick={() => {handleUpdateCharacter()}}>
                                 Confirm Changes
                             </Button>
