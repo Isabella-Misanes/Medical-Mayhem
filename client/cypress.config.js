@@ -7,6 +7,6 @@ module.exports = defineConfig({
     },
     "experimentalSessionandOrigin": true,
     "trashAssetsBeforeRuns": true,
-    "baseUrl": "http://localhost:3000"
+    "baseUrl": window.location.href.includes('heroku') ? 'https://medical-mayhem-c0832c3f548e.herokuapp.com': 'http://localhost:3000'
   },
 });

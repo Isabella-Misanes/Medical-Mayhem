@@ -214,8 +214,11 @@ export class medicationmatchingScene extends Scene {
         
         game.input.keyboard.on('press', (event) => {
             if(event.key === Keys.E) {
+                // Moves currColor circle to the selected box
                 currColorBorder.actions.moveTo(vec(this.currCoords.x, this.currCoords.y), 2000);
                 currColorCircle.actions.moveTo(vec(this.currCoords.x, this.currCoords.y), 2000);
+
+                // Check if the player put the medication in the right box
                 if(this.currColor === this.boxesInfo[this.row][this.col].color) {
                     this.points += 100;
                     this.pointText.text = "Score: " + this.points;
@@ -225,6 +228,8 @@ export class medicationmatchingScene extends Scene {
                     this.pointText.text = "Score: " + this.points;
                     socket.emit(SocketEvents.MY_SCORE_CHANGE, this.points)
                 }
+
+                // Bring currColor circle back to original position
                 currColorBorder.actions.moveTo(vec(this.gameWidth - 100, this.gameHeight - 70), 2000);
                 currColorCircle.actions.moveTo(vec(this.gameWidth - 100, this.gameHeight - 70), 2000).callMethod(() => {
                     this.currColor = this.randomColors[Math.floor(Math.random() * this.randomColors.length)];
