@@ -7,10 +7,9 @@ import { useContext, useEffect, useState } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
-import io from 'socket.io-client'
 import SocketEvents from '../constants/socketEvents'
 import loading from '../assets/loading.gif'
-import rootDomain from '../constants/baseURL';
+import socket from '../constants/socket';
 
 // Styling
 const homeButtons = {
@@ -30,8 +29,6 @@ export const modalStyle = {
     p: 3
 };
 
-export const socket = io.connect(rootDomain)
-
 export default function HomeScreen() {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
@@ -50,6 +47,7 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+
         socket.on(SocketEvents.MATCH_FOUND, () => {
             
             // Make sure to turn off event listeners before navigating to different

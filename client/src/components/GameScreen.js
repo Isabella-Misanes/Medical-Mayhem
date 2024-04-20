@@ -4,7 +4,7 @@ import BackButton from './BackButton';
 // import { Engine } from "excalibur";
 import { useEffect, useRef } from "react";
 import { initMedicalMayhem } from '../game/medicalMayhem';
-import { socket } from '../components/HomeScreen'
+import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
 
 export default function GameScreen() {

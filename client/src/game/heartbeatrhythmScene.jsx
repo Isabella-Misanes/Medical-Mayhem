@@ -3,7 +3,7 @@
  */
 
 import { Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
-import { socket } from "../components/HomeScreen";
+import socket from "../constants/socket";
 import SocketEvents from "../constants/socketEvents";
 
 export class heartbeatrhythmScene extends Scene {

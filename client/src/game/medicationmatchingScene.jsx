@@ -8,7 +8,7 @@
  */
 
 import { Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
-import { socket } from "../components/HomeScreen";
+import socket from "../constants/socket";
 import SocketEvents from "../constants/socketEvents";
 
 export class medicationmatchingScene extends Scene {

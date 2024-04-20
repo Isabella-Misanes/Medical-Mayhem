@@ -14,14 +14,13 @@ describe('Authentication', () => {
       }
     }).as('registration')
 
-    cy.wait(3000);
     
     cy.get('#register').click()
 
-    cy.get('#username').type('JohnSmith123')
-    cy.get('#email').type('john.smith@gmail.com')
-    cy.get('#password').type('password')
-    cy.get('#passwordVerify').type('password')
+    cy.get('#username').should('be.visible').type('JohnSmith123')
+    cy.get('#email').should('be.visible').type('john.smith@gmail.com')
+    cy.get('#password').should('be.visible').type('password')
+    cy.get('#passwordVerify').should('be.visible').type('password')
 
     cy.get('#signUp').click()
 
@@ -32,7 +31,7 @@ describe('Authentication', () => {
 
   it('should login an account' , () => {
     cy.visit('/')
-    cy.get('#login').click()
+    cy.get('#login').should('be.visible').click()
 
     cy.intercept('POST', '/auth/login', {
       statusCode: 200,
@@ -43,9 +42,9 @@ describe('Authentication', () => {
       }
     }).as('login')
 
-    cy.get('#email').type('john.smith@gmail.com')
-    cy.get('#password').type('password')
-    cy.get('#loginSubmit').click()
+    cy.get('#email').should('be.visible').type('john.smith@gmail.com')
+    cy.get('#password').should('be.visible').type('password')
+    cy.get('#loginSubmit').should('be.visible').click()
     cy.wait('@login')
     cy.url().should('eq', `${baseUrl}/`)
   })
@@ -54,23 +53,24 @@ describe('Authentication', () => {
 
     beforeEach(() => {
       cy.login('john.smith@gmail.com', 'password')
-      cy.visit('/')
     })
 
     it('should log out using the Log Out button', () => {
-      cy.get('#settings-button').click()
-      cy.get('#log-out').click()
+      cy.visit('/')
+      cy.get('#settings-button').should('be.visible').click()
+      cy.get('#log-out').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/`)
     })
 
     it('should log out using the Delete Account button', () => {
-      cy.get('#settings-button').click()
+      cy.visit('/')
+      cy.get('#settings-button').should('be.visible').click()
 
       cy.intercept('POST', '/auth/deleteUser', {
         statusCode: 200
       }).as('delete-account')
 
-      cy.get('#delete-account').click()
+      cy.get('#delete-account').should('be.visible').click()
       cy.wait('@delete-account')
 
       cy.url().should('eq', `${baseUrl}/`)
@@ -81,14 +81,14 @@ describe('Authentication', () => {
 
     beforeEach(() => {
       cy.visit('/')
-      cy.get('#continue-as-guest').click()
+      cy.get('#continue-as-guest').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/`)
     })
 
     it('should login from the Settings screen', () => {
-      cy.get('#settings-button').click()
+      cy.get('#settings-button').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/settings`)
-      cy.get('#login').click()
+      cy.get('#login').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/login`)
       
       cy.intercept('POST', '/auth/login', {
@@ -100,17 +100,17 @@ describe('Authentication', () => {
         }
       }).as('login')
   
-      cy.get('#email').type('john.smith@gmail.com')
-      cy.get('#password').type('password')
-      cy.get('#loginSubmit').click()
+      cy.get('#email').should('be.visible').type('john.smith@gmail.com')
+      cy.get('#password').should('be.visible').type('password')
+      cy.get('#loginSubmit').should('be.visible').click()
       cy.wait('@login')
       cy.url().should('eq', `${baseUrl}/`)
     })
 
     it('should register from the Settings screen', () => {
-      cy.get('#settings-button').click()
+      cy.get('#settings-button').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/settings`)
-      cy.get('#register').click()
+      cy.get('#register').should('be.visible').click()
       cy.url().should('eq', `${baseUrl}/register`)
       
       cy.intercept('POST', '/auth/register', {
@@ -122,12 +122,12 @@ describe('Authentication', () => {
         }
       }).as('registration')
   
-      cy.get('#username').type('JohnSmith123')
-      cy.get('#email').type('john.smith@gmail.com')
-      cy.get('#password').type('password')
-      cy.get('#passwordVerify').type('password')
+      cy.get('#username').should('be.visible').type('JohnSmith123')
+      cy.get('#email').should('be.visible').type('john.smith@gmail.com')
+      cy.get('#password').should('be.visible').type('password')
+      cy.get('#passwordVerify').should('be.visible').type('password')
   
-      cy.get('#signUp').click()
+      cy.get('#signUp').should('be.visible').click()
   
       cy.wait('@registration')
   
