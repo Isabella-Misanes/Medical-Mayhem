@@ -16,7 +16,6 @@ import http from 'http'
 import { Server, Socket } from 'socket.io'
 import { handleConnection } from './socketHandlers';
 
-// CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 // CREATE OUR SERVER

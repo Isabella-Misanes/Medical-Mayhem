@@ -7,6 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import Cookies from 'js-cookie'
 import fs from 'fs'
 
+// CHANGE PATH WHEN I CAN GET TS-NODE WORKING - Torin
 dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
 
 let mongoServer: MongoMemoryServer; 

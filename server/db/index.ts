@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import path from 'path'
 
-// CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 mongoose
