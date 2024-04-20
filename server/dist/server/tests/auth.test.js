@@ -19,7 +19,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongodb_memory_server_1 = require("mongodb-memory-server");
 const fs_1 = __importDefault(require("fs"));
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') }); // ty DavidP on SO
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env') }); // ty DavidP on SO
 let mongoServer;
 // Create test database to store dummy data
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,12 +40,13 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.disconnect();
 }));
 let cookie;
-const pfp = fs_1.default.readFileSync(path_1.default.resolve(__dirname, '../../assets/default-avatar.txt'), 'utf8');
+// CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
+const pfp = fs_1.default.readFileSync(path_1.default.resolve(__dirname, '../../../assets/default-avatar.txt'), 'utf8');
 describe("POST /register", () => {
     it("registers a user successfully", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(index_1.default).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'password'
         })
@@ -57,16 +58,14 @@ describe("POST /register", () => {
         cookie = cookies[0]; // save cookie for other requests
         expect(response.body).toEqual({
             success: true,
-            user: {
-                username: "username",
-                email: "john.smith@blah.com"
-            }
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"
         });
     }));
     it("responds with status 400 & error message given password too short", () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, supertest_1.default)(index_1.default).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'p',
             passwordVerify: 'p'
         })
@@ -75,8 +74,8 @@ describe("POST /register", () => {
     }));
     it("responds with status 400 & error message given mismatching password verification", () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, supertest_1.default)(index_1.default).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'passwo'
         })
@@ -85,8 +84,8 @@ describe("POST /register", () => {
     }));
     it("responds with status 400 & error message given an already-registered email", () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, supertest_1.default)(index_1.default).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'password'
         })
@@ -125,7 +124,7 @@ describe("POST /updateProfile", () => {
             .post("/api/updateProfile")
             .set('Cookie', [cookie])
             .send({
-            username: 'username',
+            username: 'JohnSmith',
             bio: 'bio',
             pfp: ''
         })
@@ -136,11 +135,26 @@ describe("POST /updateProfile", () => {
             .post("/api/updateProfile")
             .set('Cookie', [cookie])
             .send({
-            username: 'username',
+            username: 'JohnSmith',
             bio: 'bio',
             pfp: pfp
         })
             .expect(200);
+    }));
+});
+describe("GET /loggedIn", () => {
+    console.log(cookie);
+    it("logs in a user with a cookie", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).get("/auth/loggedIn")
+            .set('Cookie', [cookie])
+            .send()
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(response.body).toEqual({
+            loggedIn: true,
+            username: 'JohnSmith',
+            email: 'john.smith@gmail.com'
+        });
     }));
 });
 //# sourceMappingURL=auth.test.js.map

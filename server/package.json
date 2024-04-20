@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "npm run build && jest --detectOpenHandles --rootDir=dist/tests",
+    "test": "npm run build && jest --detectOpenHandles --rootDir=dist/server/tests",
     "build": "tsc",
     "start": "npx nodemon ./startup/server.ts"
   },

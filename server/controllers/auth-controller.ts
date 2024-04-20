@@ -7,6 +7,7 @@ import { User } from '../models/user'
 export const getLoggedIn = async (req: Request, res: Response) => {
     console.log(req.username)
     try {
+        console.log("REACHED")
         return res.status(200).json({
             loggedIn: true,
             username: req.username,

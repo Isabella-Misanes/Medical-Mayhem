@@ -56,8 +56,11 @@ function authManager() {
     // CHECKS IF THE USER STILL EXISTS IN THE DB
     const verifyUserExists = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log(req.userId)
             // Check that the user still exists given id in token
             const loggedInUser = await User.findById(req.userId);
+
+            console.log(loggedInUser)
 
             // If they don't exist, invalidate their cookie and send back error message
             if (loggedInUser == null) {
@@ -78,6 +81,7 @@ function authManager() {
             req.username = loggedInUser.username
             req.email = loggedInUser.email
 
+            console.log(next.name)
             next()
 
         } catch (err) {

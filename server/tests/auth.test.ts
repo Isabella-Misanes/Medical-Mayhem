@@ -7,7 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import Cookies from 'js-cookie'
 import fs from 'fs'
 
-dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
+dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
 
 let mongoServer: MongoMemoryServer; 
 
@@ -33,14 +33,16 @@ afterAll(async () => {
 })
 
 let cookie: string
-const pfp = fs.readFileSync(path.resolve(__dirname, '../../assets/default-avatar.txt'), 'utf8')
+
+// CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
+const pfp = fs.readFileSync(path.resolve(__dirname, '../../../assets/default-avatar.txt'), 'utf8')
 
 describe("POST /register", () => {
 
     it("registers a user successfully", async () => {
         const response = await request(app).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'password'
         })
@@ -55,17 +57,15 @@ describe("POST /register", () => {
 
         expect(response.body).toEqual({
             success: true,
-            user: {
-                username: "username",
-                email: "john.smith@blah.com"              
-            }
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"              
         })
     })
 
     it("responds with status 400 & error message given password too short", async () => {
         await request(app).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'p',
             passwordVerify: 'p'
         })
@@ -75,8 +75,8 @@ describe("POST /register", () => {
 
     it("responds with status 400 & error message given mismatching password verification", async () => {
         await request(app).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'passwo'
         })
@@ -86,8 +86,8 @@ describe("POST /register", () => {
 
     it("responds with status 400 & error message given an already-registered email", async () => {
         await request(app).post("/auth/register").send({
-            username: 'username',
-            email: "john.smith@blah.com",
+            username: 'JohnSmith',
+            email: "john.smith@gmail.com",
             password: 'password',
             passwordVerify: 'password'
         })
@@ -132,7 +132,7 @@ describe("POST /updateProfile", () => {
             .post("/api/updateProfile")
             .set('Cookie', [cookie])
             .send({
-                username: 'username',
+                username: 'JohnSmith',
                 bio: 'bio',
                 pfp: ''
             })
@@ -144,34 +144,26 @@ describe("POST /updateProfile", () => {
             .post("/api/updateProfile")
             .set('Cookie', [cookie])
             .send({
-                username: 'username',
+                username: 'JohnSmith',
                 bio: 'bio',
                 pfp: pfp
             })
             .expect(200)
     })
-
-    it("Should run", () => {
-        
-    })
 })
 
 describe("GET /loggedIn", () => {
-
     it("logs in a user with a cookie", async () => {
-        const response = await request(app).post("/auth/loggedIn").send({
-            username: 'username',
-            email: "john.smith@blah.com",
-            password: 'password',
-            passwordVerify: 'password'
-        })
+        const response = await request(app).get("/auth/loggedIn")
         .set('Cookie', [cookie])
+        .send()
         .expect(200)
         .expect('Content-Type', /json/)
     
         expect(response.body).toEqual({
-            username: 'username',
-            email: 'john.smith@blah.com'
+            loggedIn: true,
+            username: 'JohnSmith',
+            email: 'john.smith@gmail.com'
         })         
     })
 })

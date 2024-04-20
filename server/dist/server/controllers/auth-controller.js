@@ -43,6 +43,7 @@ const user_1 = require("../models/user");
 const getLoggedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.username);
     try {
+        console.log("REACHED");
         return res.status(200).json({
             loggedIn: true,
             username: req.username,

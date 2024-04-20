@@ -3,19 +3,26 @@ import SocketEvents from '../../client/src/constants/socketEvents'
 import { randomBytes } from 'crypto';
 import { io } from './index'
 
+class Rooms {
+    gameRoom: string
+
+    constructor() {
+        this.gameRoom = ''
+    }
+}
+
 // The queue that will hold all players currently queueing for a game by email
 export const queue : Socket[] = []
 
-// TODO: CHANGE any TYPE TO AN OBJECT THAT HOLDS ALL POSSIBLE ROOMS TYPES
-// Maps socket ids to objects that holds room ids
-const socketRooms = new Map<string, any>()
+// Maps socket ids to a set of rooms
+const socketRooms = new Map<string, Rooms>()
 
 // TODO: ADD NAMESPACES SUCH AS /game, /message, etc.
 
 export function handleConnection(socket: Socket) {
 
-    // Maps room names to room ids (ex: 'game': 123456)
-    socketRooms.set(socket.id, new Map<string, any>())
+    // Maps the newly connected socket to an object holding its rooms
+    socketRooms.set(socket.id, new Rooms())
 
     // QUEUEING PLAYERS FOR GAMES
 
@@ -32,21 +39,37 @@ export function handleConnection(socket: Socket) {
         const opponentSocket = queue.shift()
 
         if (opponentSocket) {
+
+            // Generate random room number and join it
             let room = randomBytes(8).toString('hex')
-            
             socket.join(room)
-            socketRooms.get(socket.id).set('game', room)
+
+            // Update room data structure
+            const currSocketRooms = socketRooms.get(socket.id)
+
+            if (currSocketRooms === undefined) {
+                socket.emit('error', 'Socket no longer exists. Please try again later.')
+                return
+            }
+
+            // Do the same for the opponent socket
+            currSocketRooms.gameRoom = room
+
+            const currOppSocketRooms = socketRooms.get(opponentSocket.id)
+
+            if (currOppSocketRooms === undefined) {
+                socket.emit('error', 'Socket no longer exists. Please try again later.')
+                return
+            }
 
             opponentSocket.join(room)
-            socketRooms.get(opponentSocket.id).set('game', room)
+            currOppSocketRooms.gameRoom = room
             
             io.to(room).emit(SocketEvents.MATCH_FOUND)
         }
         else {
             queue.push(socket)
-        }
-
-        console.log(socketRooms)
+        }   
     })
 
     socket.on(SocketEvents.LEAVE_QUEUE, (data) => {
@@ -58,7 +81,14 @@ export function handleConnection(socket: Socket) {
     // GAMEPLAY SCORE KEEPING
 
     socket.on(SocketEvents.MY_SCORE_CHANGE, (data) => {
-        socket.to(socketRooms.get(socket.id).get('game'))
+        const currSocketRooms = socketRooms.get(socket.id)
+
+        if (currSocketRooms === undefined) {
+            socket.emit('error', 'Socket no longer exists. Please try again later.')
+            return
+        }
+
+        socket.to(currSocketRooms.gameRoom)
             .emit(SocketEvents.OPPONENT_SCORE_CHANGE, data)
     })
 }

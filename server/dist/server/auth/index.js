@@ -50,8 +50,10 @@ function authManager() {
     // CHECKS IF THE USER STILL EXISTS IN THE DB
     const verifyUserExists = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log(req.userId);
             // Check that the user still exists given id in token
             const loggedInUser = yield user_1.User.findById(req.userId);
+            console.log(loggedInUser);
             // If they don't exist, invalidate their cookie and send back error message
             if (loggedInUser == null) {
                 res.cookie("token", "", {
@@ -69,6 +71,7 @@ function authManager() {
             // Insert data of user into request otherwise
             req.username = loggedInUser.username;
             req.email = loggedInUser.email;
+            console.log(next.name);
             next();
         }
         catch (err) {
