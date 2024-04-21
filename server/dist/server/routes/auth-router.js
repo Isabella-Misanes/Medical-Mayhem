@@ -15,6 +15,6 @@ router.post('/register', auth_controller_1.AuthController.registerUser);
 router.post('/login', auth_controller_1.AuthController.loginUser);
 router.get('/logout', auth_controller_1.AuthController.logoutUser);
 router.get('/loggedIn', auth_controller_1.AuthController.getLoggedIn);
-router.get('/deleteUser', auth_controller_1.AuthController.deleteUser);
+router.post('/deleteUser', auth_controller_1.AuthController.deleteUser);
 exports.default = router;
 //# sourceMappingURL=auth-router.js.map

@@ -4,6 +4,7 @@ describe('Authentication', () => {
 
   it('should register an account' , () => {
     cy.visit('/')
+    cy.wait(2000)
 
     cy.intercept('POST', '/auth/register', {
       statusCode: 200,
@@ -15,7 +16,7 @@ describe('Authentication', () => {
     }).as('registration')
 
     
-    cy.get('#register').click()
+    cy.get('#register').should('be.visible').click()
 
     cy.get('#username').should('be.visible').type('JohnSmith123')
     cy.get('#email').should('be.visible').type('john.smith@gmail.com')
@@ -31,6 +32,7 @@ describe('Authentication', () => {
 
   it('should login an account' , () => {
     cy.visit('/')
+    cy.wait(2000)
     cy.get('#login').should('be.visible').click()
 
     cy.intercept('POST', '/auth/login', {

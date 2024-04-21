@@ -164,7 +164,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.userId)
         console.log(req.userId)
-        console.log(deletedUser)
         res.status(200).send()
     } catch (err) {
         console.error(err);
