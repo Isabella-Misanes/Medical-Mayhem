@@ -42,21 +42,22 @@ export default function HomeScreen() {
     }
 
     function handlePlayButtonClick() {
-        setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP)
+        // setQueueingUp(true)
+        // socket.emit(SocketEvents.QUEUE_UP)
+        navigate('/game')
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        socket.on(SocketEvents.MATCH_FOUND, () => {
+    //     socket.on(SocketEvents.MATCH_FOUND, () => {
             
-            // Make sure to turn off event listeners before navigating to different
-            // screens in order to avoid unexpected behaviors
-            socket.off(SocketEvents.MATCH_FOUND)
-            navigate('/game')
-        })
-        // eslint-disable-next-line
-    }, [])
+    //         // Make sure to turn off event listeners before navigating to different
+    //         // screens in order to avoid unexpected behaviors
+    //         socket.off(SocketEvents.MATCH_FOUND)
+    //         navigate('/game')
+    //     })
+    //     // eslint-disable-next-line
+    // }, [])
 
     return (
         <div id="home-screen">
