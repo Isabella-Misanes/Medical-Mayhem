@@ -20,7 +20,6 @@ const social_router_1 = __importDefault(require("../routes/social-router"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const socketHandlers_1 = require("./socketHandlers");
-// CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') }); // ty DavidP on SO
 // CREATE OUR SERVER
 exports.app = (0, express_1.default)();

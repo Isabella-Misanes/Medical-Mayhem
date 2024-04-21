@@ -23,18 +23,16 @@ function authManager() {
 
     // THIS IS MIDDLEWARE THAT RUNS WITH EVERY REQUEST TO CHECK IF THE TOKEN STILL EXISTS
     const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-        console.log("req: " + req);
-        console.log("next: " + next);
-        console.log("Who called verify?");
         try {
             const token = req.cookies.token;
+            console.log(token)
             if (!token) {
                 console.log("TOKEN DOESNT EXIST")
                 return res.status(401).json({
                     loggedIn: false,
                     user: null,
                     errorMessage: "Unauthorized"
-                })
+                }).send()
             }
 
             const verified = jwt.verify(token, process.env.JWT_SECRET)
@@ -64,6 +62,7 @@ function authManager() {
 
             // If they don't exist, invalidate their cookie and send back error message
             if (loggedInUser == null) {
+                console.log("HIHJDJHKSDF")
                 res.cookie("token", "", {
                     httpOnly: true,
                     expires: new Date(0),
@@ -85,7 +84,16 @@ function authManager() {
             next()
 
         } catch (err) {
-            return null;
+            res.cookie("token", "", {
+                httpOnly: true,
+                expires: new Date(0),
+                secure: true,
+                sameSite: "none"
+            }).status(404).json({
+                loggedIn: false,
+                user: null,
+                errorMessage: "User no longer exists."
+            }).send();
         }
     }
 
@@ -96,6 +104,8 @@ function authManager() {
         }, process.env.JWT_SECRET, {
             expiresIn: '7d'
         });
+
+        console.log(token)
 
         return token
     }
