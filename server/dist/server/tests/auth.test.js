@@ -19,6 +19,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongodb_memory_server_1 = require("mongodb-memory-server");
 const fs_1 = __importDefault(require("fs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// CHANGE PATH WHEN I CAN GET TS-NODE WORKING - Torin
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env') }); // ty DavidP on SO
 let mongoServer;
 // Create test database to store dummy data
@@ -40,6 +42,7 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.disconnect();
 }));
 let cookie;
+let fakeCookie = 'token=' + jsonwebtoken_1.default.sign({ userId: 'test_id' }, process.env.JWT_SECRET) + ';Path=/; HttpOnly; Secure; SameSite=None ';
 // CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
 const pfp = fs_1.default.readFileSync(path_1.default.resolve(__dirname, '../../../assets/default-avatar.txt'), 'utf8');
 describe("POST /register", () => {
@@ -143,8 +146,7 @@ describe("POST /updateProfile", () => {
     }));
 });
 describe("GET /loggedIn", () => {
-    console.log(cookie);
-    it("logs in a user with a cookie", () => __awaiter(void 0, void 0, void 0, function* () {
+    it("logs in a registered user with a cookie", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(index_1.default).get("/auth/loggedIn")
             .set('Cookie', [cookie])
             .send()
@@ -155,6 +157,80 @@ describe("GET /loggedIn", () => {
             username: 'JohnSmith',
             email: 'john.smith@gmail.com'
         });
+    }));
+    it("doesn't login in a registered user without a cookie", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).get("/auth/loggedIn")
+            .send()
+            .expect(401)
+            .expect('Content-Type', /json/);
+    }));
+    it("doesn't login in a nonregistered user with a cookie", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).get("/auth/loggedIn")
+            .set('Cookie', [fakeCookie])
+            .send()
+            .expect(404);
+    }));
+});
+describe("POST /login", () => {
+    it("logs in in a user successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'password',
+        })
+            .expect(200)
+            .expect('Content-Type', /json/);
+        const cookies = response.header['set-cookie'];
+        expect(cookies).toBeDefined();
+        expect(cookies[0]).toContain('token');
+        expect(response.body).toEqual({
+            success: true,
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"
+        });
+    }));
+    it("logs in in a user successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'password',
+        })
+            .expect(200)
+            .expect('Content-Type', /json/);
+        const cookies = response.header['set-cookie'];
+        expect(cookies).toBeDefined();
+        expect(cookies[0]).toContain('token');
+        expect(response.body).toEqual({
+            success: true,
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"
+        });
+    }));
+    it("doesn't log in with a wrong email", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
+            email: "wrong email",
+            password: 'password',
+        })
+            .expect(401);
+    }));
+    it("doesn't log in with a wrong password", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'pasdffdas',
+        })
+            .expect(401);
+    }));
+});
+describe("POST /deleteUser", () => {
+    it("deletes a user successfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/deleteUser")
+            .set('Cookie', [cookie])
+            .send()
+            .expect(200);
+    }));
+    it("deletes a nonexistent user unsuccessfully", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/auth/deleteUser")
+            .set('Cookie', [fakeCookie])
+            .send()
+            .expect(404);
     }));
 });
 //# sourceMappingURL=auth.test.js.map

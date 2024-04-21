@@ -6,6 +6,7 @@ import path from 'path'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import Cookies from 'js-cookie'
 import fs from 'fs'
+import jwt from 'jsonwebtoken'
 
 // CHANGE PATH WHEN I CAN GET TS-NODE WORKING - Torin
 dotenv.config({ path: path.resolve(__dirname, '../../../.env')}); // ty DavidP on SO
@@ -34,6 +35,7 @@ afterAll(async () => {
 })
 
 let cookie: string
+let fakeCookie = 'token=' + jwt.sign({userId: 'test_id'}, process.env.JWT_SECRET) + ';Path=/; HttpOnly; Secure; SameSite=None '
 
 // CHANGE PATH WHEN I CAN FIGURE OUT TS-NODE
 const pfp = fs.readFileSync(path.resolve(__dirname, '../../../assets/default-avatar.txt'), 'utf8')
@@ -154,7 +156,7 @@ describe("POST /updateProfile", () => {
 })
 
 describe("GET /loggedIn", () => {
-    it("logs in a user with a cookie", async () => {
+    it("logs in a registered user with a cookie", async () => {
         const response = await request(app).get("/auth/loggedIn")
         .set('Cookie', [cookie])
         .send()
@@ -166,5 +168,93 @@ describe("GET /loggedIn", () => {
             username: 'JohnSmith',
             email: 'john.smith@gmail.com'
         })         
+    })
+
+    it("doesn't login in a registered user without a cookie", async () => {
+        const response = await request(app).get("/auth/loggedIn")
+        .send()
+        .expect(401)
+        .expect('Content-Type', /json/)   
+    })
+
+    it("doesn't login in a nonregistered user with a cookie", async () => {
+        const response = await request(app).get("/auth/loggedIn")
+        .set('Cookie', [fakeCookie])
+        .send()
+        .expect(404)
+    })
+})
+
+describe("POST /login", () => {
+
+    it("logs in in a user successfully", async () => {
+        const response = await request(app).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'password',
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+
+        const cookies = response.header['set-cookie']
+        expect(cookies).toBeDefined()
+        expect(cookies[0]).toContain('token')
+
+        expect(response.body).toEqual({
+            success: true,
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"              
+        })
+    })
+
+    it("logs in in a user successfully", async () => {
+        const response = await request(app).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'password',
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+
+        const cookies = response.header['set-cookie']
+        expect(cookies).toBeDefined()
+        expect(cookies[0]).toContain('token')
+
+        expect(response.body).toEqual({
+            success: true,
+            username: "JohnSmith",
+            email: "john.smith@gmail.com"              
+        })
+    })
+
+    it("doesn't log in with a wrong email", async () => {
+        const response = await request(app).post("/auth/login").send({
+            email: "wrong email",
+            password: 'password',
+        })
+        .expect(401)
+    })
+
+    it("doesn't log in with a wrong password", async () => {
+        const response = await request(app).post("/auth/login").send({
+            email: "john.smith@gmail.com",
+            password: 'pasdffdas',
+        })
+        .expect(401)
+    })
+})
+
+describe("POST /deleteUser", () => {
+    
+    it("deletes a user successfully", async () => {
+        const response = await request(app).post("/auth/deleteUser")
+        .set('Cookie', [cookie])
+        .send()
+        .expect(200)
+    })
+
+    it("deletes a nonexistent user unsuccessfully", async () => {
+        const response = await request(app).post("/auth/deleteUser")
+        .set('Cookie', [fakeCookie])
+        .send()
+        .expect(404)
     })
 })

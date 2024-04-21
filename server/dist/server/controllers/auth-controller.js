@@ -189,7 +189,6 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const deletedUser = yield user_1.User.findByIdAndDelete(req.userId);
         console.log(req.userId);
-        console.log(deletedUser);
         res.status(200).send();
     }
     catch (err) {
