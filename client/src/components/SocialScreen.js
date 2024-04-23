@@ -300,7 +300,14 @@ export default function SocialScreen() {
                 
                 <BackButton />
 
-                <Modal id={'add-friend-modal'} open={isModalOpen} onClose={handleFriendModalClose}>
+                <AddFriendModal
+                    isModalOpen={isModalOpen}
+                    handleFriendModalClose={handleFriendModalClose}
+                    handleSubmit={handleSubmit}
+                    handleAddFriendUsernameChange={handleAddFriendUsernameChange}
+                    modal={modal}
+                />
+                {/* <Modal id={'add-friend-modal'} open={isModalOpen} onClose={handleFriendModalClose}>
                     <Box sx={{
                         width: '30%',
                         height: '27%',
@@ -338,11 +345,55 @@ export default function SocialScreen() {
                         </Box>
                         {modal}
                     </Box>
-                </Modal>
+                </Modal> */}
                 {partyMenu}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
             <Sidebar />
         </div>
     );
+}
+
+function AddFriendModal(props) {
+    return (
+        <Modal id={'add-friend-modal'} open={props.isModalOpen} onClose={props.handleFriendModalClose}>
+            <Box sx={{
+                width: '30%',
+                height: '27%',
+                bgcolor: '#2d7044',
+                border: 1,
+                borderColor: 'white',
+                top: '20%',
+                left: '30%',
+                position: 'absolute',
+                boxShadow: 5,
+                textAlign: 'center',
+            }}>
+                <h1>Add Friend</h1>
+                <Divider />
+                <Box component='form' noValidate onSubmit={props.handleSubmit}>
+                    <TextField
+                        id='username'
+                        size='small'
+                        // value={username}
+                        fullWidth
+                        label='Enter Username'
+                        variant="filled"
+                        sx={{bgcolor: '#e3e3e3', width: '90%', mt: '5%'}}
+                        onChange={props.handleAddFriendUsernameChange}
+                    />
+                    <Button
+                        id="add-friend-submit"
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2, width: '50%' }}
+                    >
+                        Add Friend
+                    </Button>
+                </Box>
+                {props.modal}
+            </Box>
+        </Modal>
+    )
 }
