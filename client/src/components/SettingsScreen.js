@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Grid, LinearProgress, Typography, ToggleButton } from '@mui/material';
+import { Box, Button, Divider, Grid, LinearProgress, Typography, ToggleButton, Slider } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox'
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import { buttonStyle } from '../App';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext, { UserRoleType } from '../auth';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,10 @@ import { useNavigate } from 'react-router-dom';
 export default function SettingsScreen() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [masterValue, setMasterValue] = useState(100);
+    const [musicValue, setMusicValue] = useState(100);
+    const [sfxValue, setSfxValue] = useState(100);
 
     const resetButton = {
         mt: 1,
@@ -52,6 +55,9 @@ export default function SettingsScreen() {
 
     function handleResetAudio() {
         console.log("Reset Audio in Settings.");
+        setMasterValue(100);
+        setMusicValue(100);
+        setSfxValue(100);
     }
     function handleConfirmAudio(event) {
         console.log("Confirm Audio in Settings.");
@@ -62,6 +68,18 @@ export default function SettingsScreen() {
     }
     function handleConfirmControls(event) {
         console.log("Confirm Controls in Settings");
+    }
+
+    const handleMasterSliderChange = (event, newValue) => {
+        setMasterValue(newValue);
+    }
+
+    const handleMusicSliderChange = (event, newValue) => {
+        setMusicValue(newValue);
+    }
+    
+    const handleSfxSliderChange = (event, newValue) => {
+        setSfxValue(newValue);
     }
 
     return (
@@ -103,30 +121,42 @@ export default function SettingsScreen() {
                         Master
                     </Grid>
                     <Grid item xs={7}>
-                        <LinearProgress variant="determinate" value={56} />
+                        <Slider
+                            value={typeof masterValue === 'number' ? masterValue : 0}
+                            onChange={handleMasterSliderChange}
+                            aria-labelledby="master-slider"
+                        />
                     </Grid>
                     <Grid item xs={2}>
-                        56
+                        {masterValue}
                     </Grid>
 
                     <Grid item xs={3}>
                         Music
                     </Grid>
                     <Grid item xs={7}>
-                        <LinearProgress variant="determinate" value={15} />
+                        <Slider
+                            value={typeof musicValue === 'number' ? musicValue : 0}
+                            onChange={handleMusicSliderChange}
+                            aria-labelledby="music-slider"
+                        />
                     </Grid>
                     <Grid item xs={2}>
-                        15
+                        {musicValue}
                     </Grid>
 
                     <Grid item xs={3}>
                         SFX
                     </Grid>
                     <Grid item xs={7}>
-                        <LinearProgress variant="determinate" value={90} />
+                        <Slider
+                            value={typeof sfxValue === 'number' ? sfxValue : 0}
+                            onChange={handleSfxSliderChange}
+                            aria-labelledby="sfx-slider"
+                        />
                     </Grid>
                     <Grid item xs={2}>
-                        90
+                        {sfxValue}
                     </Grid>
                     <Grid item xs={6}>
                         <Button onClick={() => {handleResetAudio()}} sx={resetButton}>
@@ -142,11 +172,11 @@ export default function SettingsScreen() {
                 <Divider />
                 
                 <h4>Controls</h4>
-                <Grid container spacing={1} sx={{
-                    width: '80%',
-                    ml: '10%',
-                    alignItems: 'center'
-                }}>
+                    <Grid container spacing={1} sx={{
+                        width: '80%',
+                        ml: '10%',
+                        alignItems: 'center'
+                    }}>
                     <Grid item xs={6}>
                         Move Up
                     </Grid>
@@ -222,7 +252,7 @@ export default function SettingsScreen() {
                             </Button> 
                         </> :
                         <>
-                            <Button id='login' onClick={() => {handleLogin()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                            <Button id='login' onClick={() => navigate('/login')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Log In
                             </Button>
                             <Button id='register' onClick={() => {handleRegister()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
