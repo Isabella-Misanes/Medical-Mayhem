@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Grid, LinearProgress, Typography, ToggleButton, Slider } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox'
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import { buttonStyle } from '../App';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext, { UserRoleType } from '../auth';
 import { useNavigate } from 'react-router-dom';
@@ -45,14 +45,6 @@ export default function SettingsScreen() {
         auth.logoutUser();
     }
 
-    function handleLogin() {
-        navigate('/login')
-    }
-
-    function handleRegister() {
-        navigate('/register')
-    }
-
     function handleResetAudio() {
         console.log("Reset Audio in Settings.");
         setMasterValue(100);
@@ -61,6 +53,7 @@ export default function SettingsScreen() {
     }
     function handleConfirmAudio(event) {
         console.log("Confirm Audio in Settings.");
+        store.updateAudioSettings(masterValue, musicValue, sfxValue);
     }
 
     function handleResetControls() {
@@ -81,6 +74,16 @@ export default function SettingsScreen() {
     const handleSfxSliderChange = (event, newValue) => {
         setSfxValue(newValue);
     }
+
+    useEffect(() => {
+        setMasterValue(store.profileInfo.masterVolume);
+        setMusicValue(store.profileInfo.musicVolume);
+        setSfxValue(store.profileInfo.sfxVolume);
+    }, [store.profileInfo])
+
+    useEffect(() => {
+        store.getSettings();
+    }, [])
 
     return (
         <div id="settings-screen">
@@ -164,7 +167,7 @@ export default function SettingsScreen() {
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button onClick={() => {handleConfirmAudio()}} sx={confirmButton}>
+                        <Button onClick={handleConfirmAudio} sx={confirmButton}>
                             Confirm
                         </Button>
                     </Grid>
@@ -255,7 +258,7 @@ export default function SettingsScreen() {
                             <Button id='login' onClick={() => navigate('/login')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Log In
                             </Button>
-                            <Button id='register' onClick={() => {handleRegister()}} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                            <Button id='register' onClick={() => navigate('/register')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Register
                             </Button> 
                         </>}

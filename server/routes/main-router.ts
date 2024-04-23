@@ -11,5 +11,7 @@ router.post('/updateProfile', PlayerController.updateProfile)
 router.get('/recentPlayers', PlayerController.getRecentPlayers)
 router.get('/getAvatar', PlayerController.getAvatar)
 router.post('/updateAvatar', PlayerController.updateAvatar)
+router.get('/settings/audio/get', PlayerController.getAudioSettings)
+router.post('/settings/audio/update', PlayerController.updateAudioSettings)
 
 export default router

@@ -156,5 +156,34 @@ export const updateAvatar = async (req: Request, res: Response) => {
     }
 }
 
+export const getAudioSettings = async (req: Request, res: Response) => {
+    console.log('Get audio settings');
+    try {
+        const user = await User.findOne({_id: req.userId}, {masterVolume: 1, musicVolume: 1, sfxVolume: 1});
+        if(!user) return res.status(400).send({errorMessage: 'User not found.'});
+        return res.status(200).json({
+            masterVolume: user.masterVolume,
+            musicVolume: user.musicVolume,
+            sfxVolume: user.sfxVolume
+        })
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const updateAudioSettings = async (req: Request, res: Response) => {
+    console.log('Update audio settings');
+    try {
+        const {masterVolume, musicVolume, sfxVolume} = req.body;
+        const updatedUser = await User.updateOne({_id: req.userId}, {$set: {masterVolume: masterVolume, musicVolume: musicVolume, sfxVolume: sfxVolume}});
+        console.log(updatedUser);
+        console.log(await User.findOne({username: 'JareBear'}));
+        res.status(200).send();
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
 
 export * as PlayerController from './player-controller'

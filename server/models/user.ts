@@ -10,13 +10,6 @@ const UserSchema = new Schema(
         profilePicture: {type: String, default: ""},
         email: {type: String, required: true},
         passwordHash: {type: String, required: true},
-        keybinds: {type: Map, default: new Map<string, string>([
-            ['UP', 'W'],
-            ['DOWN', 'S'],
-            ['LEFT', 'A'],
-            ['RIGHT', 'D'],
-            ['INTERACT', 'E'],
-        ])},
         chatVisibility: {type: Boolean, default: true},
         friendsIds: [{ type: ObjectId, ref: 'User' }],
         blockedIds: [{type: ObjectId, ref: 'User'}],
@@ -29,10 +22,23 @@ const UserSchema = new Schema(
         // achievements : [Achievement],
         // featuredAchievements : [Achievement],
         onlineStatus: {type: Boolean, default: true},
-        appearAsOffline: {type: Boolean, default: false},
         dateSinceOnline: {type: Date, default: new Date()},
         dateRegistered: {type: Date, default: new Date()},
         isAdmin: {type: Boolean, default: false},
+
+        // Settings
+        masterVolume: {type: Number, required: true, default: 100},
+        musicVolume: {type: Number, required: true, default: 100},
+        sfxVolume: {type: Number, required: true, default: 100},
+        keybinds: {type: Map, default: new Map<string, string>([
+            ['UP', 'W'],
+            ['DOWN', 'S'],
+            ['LEFT', 'A'],
+            ['RIGHT', 'D'],
+            ['INTERACT', 'E'],
+        ])},
+        appearAsOffline: {type: Boolean, default: false},
+
         // Pertaining to sprites and gameplay
         avatarSprite: {type: String, default: ""},
         speed: {type: Number, default: 0},

@@ -45,6 +45,7 @@ export const GlobalStoreActionType = {
     VIEW_FRIENDS: "VIEW_FRIENDS",
     REMOVE_FRIEND: "REMOVE_FRIENDS",
     ERROR: "ERROR",
+    GET_SETTINGS: "GET_SETTINGS",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
@@ -190,6 +191,15 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: payload,
                 });
+            }
+            case GlobalStoreActionType.GET_SETTINGS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: payload,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                })
             }
             default:
                 return store;
@@ -481,6 +491,32 @@ function GlobalStoreContextProvider(props) {
     }
     store.sortMinigamesPlayed = function(event) {
         console.log("Sort by minigames played in store.");
+    }
+
+    // Settings Screen
+    store.getSettings = () => {
+        console.log('Get settings in store');
+        async function asyncGetSettings() {
+            try {
+                let response = await apis.getSettings();
+                storeReducer({
+                    type: GlobalStoreActionType.GET_SETTINGS,
+                    payload: response.data
+                })
+            } catch(err) {console.error(err)}
+        }
+        asyncGetSettings();
+    }
+
+    store.updateAudioSettings = (masterVolume, musicVolume, sfxVolume) => {
+        console.log('Update settings in store.');
+        async function asyncUpdateAudioSettings() {
+            try {
+                let response = await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
+                console.log(response);
+            } catch(error) { console.error(error); }
+        }
+        asyncUpdateAudioSettings();
     }
 
     // Report Modal
