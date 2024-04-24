@@ -156,5 +156,60 @@ export const updateAvatar = async (req: Request, res: Response) => {
     }
 }
 
+export const getSettings = async (req: Request, res: Response) => {
+    console.log('Get settings');
+    try {
+        const user = await User.findOne({_id: req.userId}, {masterVolume: 1, musicVolume: 1, sfxVolume: 1, keybinds: 1});
+        if(!user) return res.status(400).send({errorMessage: 'User not found.'});
+        console.log(user.keybinds);
+        return res.status(200).json({
+            masterVolume: user.masterVolume,
+            musicVolume: user.musicVolume,
+            sfxVolume: user.sfxVolume,
+            keybinds: user.keybinds
+        })
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const updateAudioSettings = async (req: Request, res: Response) => {
+    console.log('Update audio settings');
+    try {
+        const {masterVolume, musicVolume, sfxVolume} = req.body;
+        const updatedUser = await User.updateOne({_id: req.userId}, {$set: {masterVolume: masterVolume, musicVolume: musicVolume, sfxVolume: sfxVolume}});
+        console.log(updatedUser);
+        console.log(await User.findOne({username: 'JareBear'}));
+        res.status(200).send();
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const updateKeybinds = async (req: Request, res: Response) => {
+    console.log('Update keybinds');
+    try {
+        const {up, left, down, right, interact} = req.body;
+        console.log(up, left, down, right, interact);
+        const currUser = await User.findOne({_id: req.userId});
+        if(!currUser) return res.status(400).send('User not found.');
+        const newKeybinds : Map<string, string> = new Map<string, string>();
+        for(const [k, v] of currUser.keybinds.entries()) newKeybinds.set(k, v as string);
+        if(up) newKeybinds.set('UP', up);
+        if(left) newKeybinds.set('LEFT', left);
+        if(down) newKeybinds.set('DOWN', down);
+        if(right) newKeybinds.set('RIGHT', right);
+        if(interact) newKeybinds.set('INTERACT', interact);
+        const updateUser = await User.updateOne({_id: req.userId}, {$set: {keybinds: newKeybinds}});
+        console.log(updateUser);
+        res.status(200).send();
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
 
 export * as PlayerController from './player-controller'
