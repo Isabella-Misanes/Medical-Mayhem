@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import AuthContext from '../auth';
+import AuthContext, { UserRoleType } from '../auth';
 import apis from './store-request-api';
 // import { useNavigate } from 'react-router-dom'
 // import jsTPS from '../common/jsTPS'
@@ -496,11 +496,10 @@ function GlobalStoreContextProvider(props) {
 
     // Settings Screen
     store.getSettings = () => {
-        console.log('Get settings in store');
+        if(auth.role === UserRoleType.GUEST) return;
         async function asyncGetSettings() {
             try {
                 let response = await apis.getSettings();
-                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.GET_SETTINGS,
                     payload: response.data
@@ -511,23 +510,18 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.updateAudioSettings = (masterVolume, musicVolume, sfxVolume) => {
-        console.log('Update settings in store.');
         async function asyncUpdateAudioSettings() {
             try {
-                let response = await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
-                console.log(response);
+                await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
             } catch(error) { console.error(error); }
         }
         asyncUpdateAudioSettings();
     }
 
     store.updateKeybinds = ({up, left, down, right, interact}) => {
-        console.log('Update keybinds in store.');
         async function asyncUpdateKeybinds() {
             try {
-                console.log(up, left, down, right, interact);
-                let response = await apis.updateKeybinds({up, left, down, right, interact});
-                console.log(response);
+                await apis.updateKeybinds({up, left, down, right, interact});
             } catch(error) { console.error(error); }
         }
         asyncUpdateKeybinds();

@@ -42,100 +42,100 @@ export default function HomeScreen() {
     }, [])
 
     return (
-        <div id="home-screen-wrapper">
-            <div id="home-screen">
-                <Grid container>
-                    <Grid item xs={1}/>
-                    <Grid item xs={6}>
-                        <Grid container id="home-menu" sx={[homeScreen, {boxShadow: 4}]}>
-                            <Grid item xs={12}>
-                                <Typography variant="h2" color="red">Medical Mayhem</Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <HomeButton
-                                    xs={12} id='play-button'
-                                    gridSx={{textAlign: 'center'}}
-                                    buttonSx={[homeButtons, {fontSize: '24pt'}]}
-                                    // onClick={() => navigate('/game')}
-                                    onClick={handlePlayButtonClick}
-                                    text='Play'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    gridSx={{textAlign: 'center'}}
-                                    id='map-search-button'
-                                    onClick={() => navigate('/mapsearch')}
-                                    text='Character Search'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    id='map-builder-button'
-                                    onClick={() => navigate('/mapbuilder')}
-                                    backgroundColor='transparent'
-                                    buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
-                                    text='Character Builder'
-                                    disable={auth.role === UserRoleType.GUEST}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    gridSx={{textAlign: 'center'}}
-                                    id='social-button'
-                                    onClick={() => navigate('/social')}
-                                    buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
-                                    text='Social'
-                                    disable={auth.role === UserRoleType.GUEST}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    id='forums-button'
-                                    onClick={() => navigate('/forum')}
-                                    text='Forums'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    gridSx={{textAlign: 'center'}}
-                                    id='profile-button'
-                                    onClick={() => navigate('/profile')}
-                                    buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
-                                    text='Profile'
-                                    disable={auth.role === UserRoleType.GUEST}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    id='settings-button'
-                                    onClick={() => navigate('/settings')}
-                                    text='Settings'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    gridSx={{textAlign: 'center'}}
-                                    id='about-button'
-                                    onClick={() => navigate('/about')}
-                                    text='About'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    id="leaderboard-button"
-                                    onClick={() => navigate("/leaderboard")}
-                                    text='Leaderboard'
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <HomeButton
-                                    id='map-search-button'
-                                    onClick={handleInviteButtonClick}
-                                    buttonSx={[buttonStyle, {color: 'white', width: '25%'}]}
-                                    text='Invite'
-                                />
-                            </Grid>
+        <div id="home-screen">
+            <Grid container>
+                <Grid item xs={1}/>
+                <Grid item xs={6}>
+                    <Grid container sx={[homeScreen, {boxShadow: 4}]}>
+                        <Grid item xs={12}>
+                            <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <HomeButton
+                                xs={12} id='play-button'
+                                gridSx={{textAlign: 'center'}}
+                                buttonSx={[homeButtons, {fontSize: '24pt'}]}
+                                // onClick={() => navigate('/game')}
+                                onClick={handlePlayButtonClick}
+                                text='Play'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                gridSx={{textAlign: 'center'}}
+                                id='map-search-button'
+                                onClick={() => navigate('/mapsearch')}
+                                text='Character Search'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                id='map-builder-button'
+                                onClick={() => navigate('/mapbuilder')}
+                                backgroundColor='transparent'
+                                buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
+                                text='Character Builder'
+                                disable={auth.role === UserRoleType.GUEST}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                gridSx={{textAlign: 'center'}}
+                                id='social-button'
+                                onClick={() => navigate('/social')}
+                                buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
+                                text='Social'
+                                disable={auth.role === UserRoleType.GUEST}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                id='forums-button'
+                                onClick={() => navigate('/forum')}
+                                text='Forums'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                gridSx={{textAlign: 'center'}}
+                                id='profile-button'
+                                onClick={() => navigate('/profile')}
+                                buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
+                                text='Profile'
+                                disable={auth.role === UserRoleType.GUEST}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                id='settings-button'
+                                onClick={() => navigate('/settings')}
+                                text='Settings'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                gridSx={{textAlign: 'center'}}
+                                id='about-button'
+                                onClick={() => navigate('/about')}
+                                text='About'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                id="leaderboard-button"
+                                onClick={() => navigate("/leaderboard")}
+                                text='Leaderboard'
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <HomeButton
+                                id='map-search-button'
+                                onClick={handleInviteButtonClick}
+                                buttonSx={[buttonStyle, {color: 'white', width: '25%'}]}
+                                text='Invite'
+                            />
+                        </Grid>
+                        { auth.role === UserRoleType.ADMIN &&
                             <Grid item xs={6}>
                                 <HomeButton
                                     onClick={() => navigate("/reports")}
@@ -143,18 +143,17 @@ export default function HomeScreen() {
                                     text='Reports'
                                 />
                             </Grid>
-                        </Grid>                
-                    </Grid>
-                    <Grid item xs={4}/>
-                    <Grid item xs={1}>
-                        <Sidebar/>
-                    </Grid>
+                        }
+                        <Grid item xs={12}/>
+                        <Grid item xs={12}/>
+                    </Grid>                
                 </Grid>
-                <MessagesDrawer />
-                {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
-                <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
-                <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
-            </div>
+            </Grid>
+            <MessagesDrawer />
+            <Sidebar />
+            {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
+            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
+            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )
 }
@@ -187,20 +186,11 @@ function QueueModal(props) {
             aria-labelledby="modal-find-game"
             id="queue-modal"
         >
-            <Box
-                sx={modalStyle}>
-                <Button 
-                    sx={{
-                    color: 'black',
-                    ":hover":{
-                        bgcolor: '#f1f9f4'
-                        }
-                    }}
-                    onClick={handleXButtonClick}
-                >
+            <Box sx={modalStyle}>
+                <Button sx={{color: 'black', ":hover":{bgcolor: '#f1f9f4'}}} onClick={handleXButtonClick}>
                     X
                 </Button>
-                <br></br>
+                <br />
                 <Typography id="modal-find-game" variant="h6" component="h2">
                     {modalText}
                 </Typography>
