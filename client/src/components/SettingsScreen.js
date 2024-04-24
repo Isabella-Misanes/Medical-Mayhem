@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider, Modal } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox'
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
@@ -15,14 +15,22 @@ export default function SettingsScreen() {
     const [masterValue, setMasterValue] = useState(100);
     const [musicValue, setMusicValue] = useState(100);
     const [sfxValue, setSfxValue] = useState(100);
+    const [modal, setModal] = useState(false);
+    const [currInput, setCurrInput] = useState('');
+    const [keybinds, setKeybinds] = useState({
+        UP: 'W',
+        LEFT: 'A',
+        DOWN: 'S',
+        RIGHT: 'D',
+        INTERACT: 'E'
+    });
 
     const resetButton = {
         mt: 1,
         mb: 2,
         bgcolor: 'red',
         color: 'white',
-        ":hover": {
-          bgcolor: '#c20900'},
+        ":hover": {bgcolor: '#c20900'},
     }
 
     const confirmButton = {
@@ -30,8 +38,7 @@ export default function SettingsScreen() {
         mb: 2,
         bgcolor: 'green',
         color: 'white',
-        ":hover": {
-          bgcolor: '#2d7044'},
+        ":hover": {bgcolor: '#2d7044'},
     }
 
     function handleLogout() {
@@ -50,6 +57,7 @@ export default function SettingsScreen() {
         setMasterValue(100);
         setMusicValue(100);
         setSfxValue(100);
+        store.updateAudioSettings(100, 100, 100);
     }
     function handleConfirmAudio(event) {
         console.log("Confirm Audio in Settings.");
@@ -75,14 +83,23 @@ export default function SettingsScreen() {
         setSfxValue(newValue);
     }
 
+    // State change causes modal to open or close
+    const toggleModal = () => setModal(!modal);
+
+    // Set user's volume settings upon change
     useEffect(() => {
+        
         setMasterValue(store.profileInfo.masterVolume);
         setMusicValue(store.profileInfo.musicVolume);
         setSfxValue(store.profileInfo.sfxVolume);
-    }, [store.profileInfo])
+        setKeybinds(store.profileInfo.keybinds);
+        console.log('profileInfo:', store.profileInfo);
+    }, [store.profileInfo]);
 
+    // Get user's settings upon opening the page
     useEffect(() => {
         store.getSettings();
+        //eslint-disable-next-line
     }, [])
 
     return (
@@ -163,7 +180,7 @@ export default function SettingsScreen() {
                     </Grid>
                     <Grid item xs={6}>
                         <Button onClick={() => {handleResetAudio()}} sx={resetButton}>
-                            Reset
+                            Reset to Default
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
@@ -183,37 +200,51 @@ export default function SettingsScreen() {
                     <Grid item xs={6}>
                         Move Up
                     </Grid>
-                    <Grid item xs={6}>
-                        W
-                    </Grid>
-                    <Grid item xs={6}>
-                        Move Down
-                    </Grid>
-                    <Grid item xs={6}>
-                        S
-                    </Grid>
+                    <Button item xs={6} onClick={() => {
+                        setCurrInput('Up');
+                        toggleModal();
+                    }}>
+                        {keybinds && keybinds.UP}
+                    </Button>
                     <Grid item xs={6}>
                         Move Left
                     </Grid>
-
+                    <Button item xs={6} onClick={() => {
+                        setCurrInput('Left');
+                        toggleModal();
+                    }}>
+                        {keybinds && keybinds.LEFT}
+                    </Button>
                     <Grid item xs={6}>
-                        A
+                        Move Down
                     </Grid>
+                    <Button item xs={6} onClick={() => {
+                        setCurrInput('Down');
+                        toggleModal();
+                    }}>
+                        {keybinds && keybinds.DOWN}
+                    </Button>
                     <Grid item xs={6}>
                         Move Right
                     </Grid>
-                    <Grid item xs={6}>
-                        D
-                    </Grid>
+                    <Button item xs={6} onClick={() => {
+                        setCurrInput('Right');
+                        toggleModal();
+                    }}>
+                        {keybinds && keybinds.RIGHT}
+                    </Button>
                     <Grid item xs={6}>
                         Interact
                     </Grid>
-                    <Grid item xs={6}>
-                        E
-                    </Grid>
+                    <Button item xs={6} onClick={() => {
+                        setCurrInput('Interact');
+                        toggleModal();
+                    }}>
+                        {keybinds && keybinds.INTERACT}
+                    </Button>
                     <Grid item xs={6}>
                         <Button onClick={() => {handleResetControls()}} sx={resetButton}>
-                            Reset
+                            Reset to Default
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
@@ -267,6 +298,115 @@ export default function SettingsScreen() {
             </Box>
             <Sidebar/>
             <BackButton />
+            <InputModal
+                store={store}
+                keybinds={keybinds}
+                setKeybinds={setKeybinds}
+                open={modal}
+                toggleModal={toggleModal}
+                inputKey={currInput}
+            />
         </div>
     );
+}
+
+function InputModal(props) {
+    const store = props.store;
+    const keybinds = props.keybinds;
+    const setKeybinds = props.setKeybinds;
+    console.log(keybinds);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
+    // chatgpt a real one for this
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            console.log('Key pressed:', event.key);
+            // Add your logic here based on the key pressed
+            
+            const currKey = (event.key === ' ') ? 'SPACE' : event.key.toUpperCase();
+            // console.log(props.inputKey);
+            if(props.inputKey === 'Up') {
+                store.updateKeybinds({up: currKey});
+                setKeybinds({
+                    UP: currKey,
+                    LEFT: keybinds.LEFT,
+                    DOWN: keybinds.DOWN,
+                    RIGHT: keybinds.RIGHT,
+                    INTERACT: keybinds.INTERACT
+                })
+            }
+            if(props.inputKey === 'Left') {
+                store.updateKeybinds({left: currKey});
+                setKeybinds({
+                    UP: keybinds.UP,
+                    LEFT: currKey,
+                    DOWN: keybinds.DOWN,
+                    RIGHT: keybinds.RIGHT,
+                    INTERACT: keybinds.INTERACT
+                })
+            }
+            if(props.inputKey === 'Down') {
+                store.updateKeybinds({down: currKey});
+                setKeybinds({
+                    UP: keybinds.UP,
+                    LEFT: keybinds.LEFT,
+                    DOWN: currKey,
+                    RIGHT: keybinds.RIGHT,
+                    INTERACT: keybinds.INTERACT
+                })
+            }
+            if(props.inputKey === 'Right') {
+                store.updateKeybinds({right: currKey});
+                setKeybinds({
+                    UP: keybinds.UP,
+                    LEFT: keybinds.LEFT,
+                    DOWN: keybinds.DOWN,
+                    RIGHT: currKey,
+                    INTERACT: keybinds.INTERACT
+                })
+            }
+            if(props.inputKey === 'Interact') {
+                store.updateKeybinds({interact: currKey});
+                setKeybinds({
+                    UP: keybinds.UP,
+                    LEFT: keybinds.LEFT,
+                    DOWN: keybinds.DOWN,
+                    RIGHT: keybinds.RIGHT,
+                    INTERACT: currKey
+                })
+            }
+            // console.log(keybinds);
+            props.toggleModal();
+        };
+
+        // Attach event listener when modal is open, remove it when it is closed
+        if(props.open) document.addEventListener('keydown', handleKeyPress);
+        // Remove event listener when modal is closed
+        else document.removeEventListener('keydown', handleKeyPress);
+
+        // Clean up the event listener when component unmounts
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+        //eslint-disable-next-line
+    }, [props.open]);
+
+    return (
+        <Modal open={props.open} onClose={props.toggleModal}>
+            <Box sx={style}>
+                <h1>Enter Input for {props.inputKey}</h1>
+            </Box>
+        </Modal>
+    )
 }

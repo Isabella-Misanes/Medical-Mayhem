@@ -58,7 +58,7 @@ export const updateAvatar = async (pic, speed, strength, defense, favoredMinigam
 }
 
 export const getSettings = async() => {
-    return api.get('/settings/audio/get');
+    return api.get('/settings/get');
 }
 
 export const updateAudioSettings = async(masterVolume, musicVolume, sfxVolume) => {
@@ -66,6 +66,16 @@ export const updateAudioSettings = async(masterVolume, musicVolume, sfxVolume) =
         masterVolume: masterVolume,
         musicVolume: musicVolume,
         sfxVolume: sfxVolume
+    })
+}
+
+export const updateKeybinds = async({up, left, down, right, interact}) => {
+    return api.post('/settings/keybinds/update', {
+        up: up,
+        left: left,
+        down: down,
+        right: right,
+        interact: interact
     })
 }
 
@@ -85,6 +95,7 @@ const apis = {
     updateAvatar,
     getSettings,
     updateAudioSettings,
+    updateKeybinds,
 }
 
 export default apis

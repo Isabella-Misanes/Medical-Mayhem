@@ -193,6 +193,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
+                console.log('IN GET SETTINGS:', payload);
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -499,6 +500,7 @@ function GlobalStoreContextProvider(props) {
         async function asyncGetSettings() {
             try {
                 let response = await apis.getSettings();
+                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.GET_SETTINGS,
                     payload: response.data
@@ -517,6 +519,18 @@ function GlobalStoreContextProvider(props) {
             } catch(error) { console.error(error); }
         }
         asyncUpdateAudioSettings();
+    }
+
+    store.updateKeybinds = ({up, left, down, right, interact}) => {
+        console.log('Update keybinds in store.');
+        async function asyncUpdateKeybinds() {
+            try {
+                console.log(up, left, down, right, interact);
+                let response = await apis.updateKeybinds({up, left, down, right, interact});
+                console.log(response);
+            } catch(error) { console.error(error); }
+        }
+        asyncUpdateKeybinds();
     }
 
     // Report Modal
