@@ -135,13 +135,15 @@ export default function HomeScreen() {
                                 text='Invite'
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                onClick={() => navigate("/reports")}
-                                buttonSx={[buttonStyle, {color: 'white'}]}
-                                text='Reports'
-                            />
-                        </Grid>
+                        { auth.role === UserRoleType.ADMIN &&
+                            <Grid item xs={6}>
+                                <HomeButton
+                                    onClick={() => navigate("/reports")}
+                                    buttonSx={[buttonStyle, {color: 'white'}]}
+                                    text='Reports'
+                                />
+                            </Grid>
+                        }
                         <Grid item xs={12}/>
                         <Grid item xs={12}/>
                     </Grid>                
@@ -150,8 +152,8 @@ export default function HomeScreen() {
             <MessagesDrawer />
             <Sidebar />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
-            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
-            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
+            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
+            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )
 }
@@ -184,20 +186,11 @@ function QueueModal(props) {
             aria-labelledby="modal-find-game"
             id="queue-modal"
         >
-            <Box
-                sx={modalStyle}>
-                <Button 
-                    sx={{
-                    color: 'black',
-                    ":hover":{
-                        bgcolor: '#f1f9f4'
-                        }
-                    }}
-                    onClick={handleXButtonClick}
-                >
+            <Box sx={modalStyle}>
+                <Button sx={{color: 'black', ":hover":{bgcolor: '#f1f9f4'}}} onClick={handleXButtonClick}>
                     X
                 </Button>
-                <br></br>
+                <br />
                 <Typography id="modal-find-game" variant="h6" component="h2">
                     {modalText}
                 </Typography>
