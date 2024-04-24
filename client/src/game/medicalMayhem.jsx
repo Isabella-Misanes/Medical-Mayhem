@@ -7,6 +7,7 @@ import { TiledResource } from "@excaliburjs/plugin-tiled";
 import map from './Level_1.tmx'
 import Player from "./actors/player";
 import { Resources, loader } from "./resources";
+import Patient from "./actors/patient";
 
 const gameWidth = 1000;
 const gameHeight = 750;
@@ -44,6 +45,8 @@ export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
 
     const player = new Player()
     engine.add(player)
+    const patient = new Patient()
+    engine.add(patient)
 
     engine.add("heartbeatrhythm", new heartbeatrhythmScene());
     engine.add("medicationmatching", new medicationmatchingScene());

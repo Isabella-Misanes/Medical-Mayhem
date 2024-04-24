@@ -25,6 +25,8 @@ export default class Player extends Actor {
     onPreUpdate(engine, elapsedMs) {
         this.vel = ex.Vector.Zero;
 
+        // POSITION FOR PATIENTS: X 20 Y 540 
+
         if (engine.input.keyboard.isHeld(ex.Keys.ArrowRight)) {
             this.vel = ex.vec(Config.PlayerSpeed, 0);
             //this.graphics.use('right-walk');
