@@ -24,7 +24,14 @@ code {
 
 }
 #home-screen {
-  width: 1200px;
+  width: 100vw;
+  height: 100vh;
   margin-left: auto;
   margin-right: auto;
+}
+
+#home-menu {
+  height: 95vh;
+  bottom: 0px;
+  margin-top: 5vh;
 }

@@ -1,12 +1,10 @@
 export const homeScreen = {
     bgcolor: 'white',
-    height: '95%',
+    height: '100%',
     width : '100%',
     textAlign: 'center',
     borderRadius: 4,
-    alignItems: 'center',
-    // position: 'absolute',
-    bottom: '0%'
+    alignItems: 'flex-start',
 };
 
 export const homeButtons = {
