@@ -53,32 +53,33 @@ export default function SettingsScreen() {
     }
 
     function handleResetAudio() {
-        console.log("Reset Audio in Settings.");
+        if(auth.role === UserRoleType.GUEST) return;
         setMasterValue(100);
         setMusicValue(100);
         setSfxValue(100);
         store.updateAudioSettings(100, 100, 100);
     }
-    function handleConfirmAudio(event) {
-        console.log("Confirm Audio in Settings.");
+    function handleConfirmAudio() {
+        if(auth.role === UserRoleType.GUEST) return;
         store.updateAudioSettings(masterValue, musicValue, sfxValue);
     }
 
     function handleResetControls() {
         console.log("Reset controls in Settings.");
+        setKeybinds({UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'});
+        store.updateKeybinds({up: 'W', left: 'A', down: 'S', right: 'D', interact: 'E'});
     }
-    function handleConfirmControls(event) {
+    function handleConfirmControls() {
         console.log("Confirm Controls in Settings");
+        store.updateKeybinds({up: keybinds.UP, left: keybinds.LEFT, down: keybinds.DOWN, right: keybinds.RIGHT, interact: keybinds.INTERACT});
     }
 
     const handleMasterSliderChange = (event, newValue) => {
         setMasterValue(newValue);
     }
-
     const handleMusicSliderChange = (event, newValue) => {
         setMusicValue(newValue);
     }
-    
     const handleSfxSliderChange = (event, newValue) => {
         setSfxValue(newValue);
     }
@@ -88,17 +89,16 @@ export default function SettingsScreen() {
 
     // Set user's volume settings upon change
     useEffect(() => {
-        
-        setMasterValue(store.profileInfo.masterVolume);
-        setMusicValue(store.profileInfo.musicVolume);
-        setSfxValue(store.profileInfo.sfxVolume);
+        setMasterValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.masterVolume);
+        setMusicValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.musicVolume);
+        setSfxValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.sfxVolume);
         setKeybinds(store.profileInfo.keybinds);
-        console.log('profileInfo:', store.profileInfo);
+        //eslint-disable-next-line
     }, [store.profileInfo]);
 
-    // Get user's settings upon opening the page
+    // Get user's settings
     useEffect(() => {
-        store.getSettings();
+        if(auth.role !== UserRoleType.GUEST) store.getSettings();
         //eslint-disable-next-line
     }, [])
 
@@ -145,6 +145,7 @@ export default function SettingsScreen() {
                             value={typeof masterValue === 'number' ? masterValue : 0}
                             onChange={handleMasterSliderChange}
                             aria-labelledby="master-slider"
+                            disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
                     <Grid item xs={2}>
@@ -159,27 +160,23 @@ export default function SettingsScreen() {
                             value={typeof musicValue === 'number' ? musicValue : 0}
                             onChange={handleMusicSliderChange}
                             aria-labelledby="music-slider"
+                            disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
-                    <Grid item xs={2}>
-                        {musicValue}
-                    </Grid>
+                    <Grid item xs={2}>{musicValue}</Grid>
 
-                    <Grid item xs={3}>
-                        SFX
-                    </Grid>
+                    <Grid item xs={3}>SFX</Grid>
                     <Grid item xs={7}>
                         <Slider
                             value={typeof sfxValue === 'number' ? sfxValue : 0}
                             onChange={handleSfxSliderChange}
                             aria-labelledby="sfx-slider"
+                            disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
-                    <Grid item xs={2}>
-                        {sfxValue}
-                    </Grid>
+                    <Grid item xs={2}>{sfxValue}</Grid>
                     <Grid item xs={6}>
-                        <Button onClick={() => {handleResetAudio()}} sx={resetButton}>
+                        <Button onClick={handleResetAudio} sx={resetButton}>
                             Reset to Default
                         </Button>
                     </Grid>
@@ -197,58 +194,53 @@ export default function SettingsScreen() {
                         ml: '10%',
                         alignItems: 'center'
                     }}>
-                    <Grid item xs={6}>
-                        Move Up
-                    </Grid>
-                    <Button item xs={6} onClick={() => {
+                    <Grid item xs={6}>Up</Grid>
+                    <Button xs={6} onClick={() => {
+                        if(auth.role !== UserRoleType.USER) return;
                         setCurrInput('Up');
                         toggleModal();
                     }}>
-                        {keybinds && keybinds.UP}
+                        {auth.role === UserRoleType.GUEST ? "W" : keybinds && keybinds.UP}
                     </Button>
-                    <Grid item xs={6}>
-                        Move Left
-                    </Grid>
-                    <Button item xs={6} onClick={() => {
+                    <Grid item xs={6}>Left</Grid>
+                    <Button xs={6} onClick={() => {
+                        if(auth.role !== UserRoleType.USER) return;
                         setCurrInput('Left');
                         toggleModal();
                     }}>
-                        {keybinds && keybinds.LEFT}
+                        {auth.role === UserRoleType.GUEST ? "A" : keybinds && keybinds.LEFT}
                     </Button>
-                    <Grid item xs={6}>
-                        Move Down
-                    </Grid>
-                    <Button item xs={6} onClick={() => {
+                    <Grid item xs={6}>Down</Grid>
+                    <Button xs={6} onClick={() => {
+                        if(auth.role !== UserRoleType.USER) return;
                         setCurrInput('Down');
                         toggleModal();
                     }}>
-                        {keybinds && keybinds.DOWN}
+                        {auth.role === UserRoleType.GUEST ? "S" : keybinds && keybinds.DOWN}
                     </Button>
-                    <Grid item xs={6}>
-                        Move Right
-                    </Grid>
-                    <Button item xs={6} onClick={() => {
+                    <Grid item xs={6}>Right</Grid>
+                    <Button xs={6} onClick={() => {
+                        if(auth.role !== UserRoleType.USER) return;
                         setCurrInput('Right');
                         toggleModal();
                     }}>
-                        {keybinds && keybinds.RIGHT}
+                        {auth.role === UserRoleType.GUEST ? "D" : keybinds && keybinds.RIGHT}
                     </Button>
-                    <Grid item xs={6}>
-                        Interact
-                    </Grid>
-                    <Button item xs={6} onClick={() => {
+                    <Grid item xs={6}>Interact</Grid>
+                    <Button xs={6} onClick={() => {
+                        if(auth.role !== UserRoleType.USER) return;
                         setCurrInput('Interact');
                         toggleModal();
                     }}>
-                        {keybinds && keybinds.INTERACT}
+                        {auth.role === UserRoleType.GUEST ? "E" : keybinds && keybinds.INTERACT}
                     </Button>
                     <Grid item xs={6}>
-                        <Button onClick={() => {handleResetControls()}} sx={resetButton}>
+                        <Button onClick={handleResetControls} sx={resetButton}>
                             Reset to Default
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button onClick={() => {handleConfirmControls()}} sx={confirmButton}>
+                        <Button onClick={handleConfirmControls} sx={confirmButton}>
                             Confirm
                         </Button>
                     </Grid>
@@ -258,17 +250,17 @@ export default function SettingsScreen() {
                 { auth.role === UserRoleType.USER && 
                 <>
                     <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
-                        <ToggleButton size='small'>
+                        <ToggleButton size='small' value={false}>
                             Private Profile
                             <Checkbox />
                         </ToggleButton>
 
-                        <ToggleButton size='small'>
+                        <ToggleButton size='small' value={false}>
                             Messages
                             <Checkbox />
                         </ToggleButton>
 
-                        <ToggleButton size='small'>
+                        <ToggleButton size='small' value={false}>
                             Party
                             <Checkbox />
                         </ToggleButton>
@@ -285,21 +277,21 @@ export default function SettingsScreen() {
                                 Delete Account
                             </Button> 
                         </> :
-                        <>
+                        <Grid>
+                            <Typography variant="h5" gutterBottom><strong>Login to change default settings</strong></Typography>
                             <Button id='login' onClick={() => navigate('/login')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
                                 Log In
                             </Button>
-                            <Button id='register' onClick={() => navigate('/register')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                            <Button id='register' onClick={() => navigate('/register')} sx={[buttonStyle, {color: 'white', mt: 2, ml: 2}]}>
                                 Register
                             </Button> 
-                        </>}
+                        </Grid>}
                     
                 </Box>
             </Box>
             <Sidebar/>
             <BackButton />
             <InputModal
-                store={store}
                 keybinds={keybinds}
                 setKeybinds={setKeybinds}
                 open={modal}
@@ -311,10 +303,7 @@ export default function SettingsScreen() {
 }
 
 function InputModal(props) {
-    const store = props.store;
-    const keybinds = props.keybinds;
-    const setKeybinds = props.setKeybinds;
-    console.log(keybinds);
+    const {keybinds, setKeybinds} = props;
 
     const style = {
         position: 'absolute',
@@ -331,13 +320,8 @@ function InputModal(props) {
     // chatgpt a real one for this
     useEffect(() => {
         const handleKeyPress = (event) => {
-            console.log('Key pressed:', event.key);
-            // Add your logic here based on the key pressed
-            
             const currKey = (event.key === ' ') ? 'SPACE' : event.key.toUpperCase();
-            // console.log(props.inputKey);
             if(props.inputKey === 'Up') {
-                store.updateKeybinds({up: currKey});
                 setKeybinds({
                     UP: currKey,
                     LEFT: keybinds.LEFT,
@@ -347,7 +331,6 @@ function InputModal(props) {
                 })
             }
             if(props.inputKey === 'Left') {
-                store.updateKeybinds({left: currKey});
                 setKeybinds({
                     UP: keybinds.UP,
                     LEFT: currKey,
@@ -357,7 +340,6 @@ function InputModal(props) {
                 })
             }
             if(props.inputKey === 'Down') {
-                store.updateKeybinds({down: currKey});
                 setKeybinds({
                     UP: keybinds.UP,
                     LEFT: keybinds.LEFT,
@@ -367,7 +349,6 @@ function InputModal(props) {
                 })
             }
             if(props.inputKey === 'Right') {
-                store.updateKeybinds({right: currKey});
                 setKeybinds({
                     UP: keybinds.UP,
                     LEFT: keybinds.LEFT,
@@ -377,7 +358,6 @@ function InputModal(props) {
                 })
             }
             if(props.inputKey === 'Interact') {
-                store.updateKeybinds({interact: currKey});
                 setKeybinds({
                     UP: keybinds.UP,
                     LEFT: keybinds.LEFT,
@@ -386,19 +366,15 @@ function InputModal(props) {
                     INTERACT: currKey
                 })
             }
-            // console.log(keybinds);
             props.toggleModal();
         };
 
         // Attach event listener when modal is open, remove it when it is closed
         if(props.open) document.addEventListener('keydown', handleKeyPress);
-        // Remove event listener when modal is closed
         else document.removeEventListener('keydown', handleKeyPress);
 
         // Clean up the event listener when component unmounts
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
+        return () => document.removeEventListener('keydown', handleKeyPress);
         //eslint-disable-next-line
     }, [props.open]);
 

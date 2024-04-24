@@ -14,15 +14,10 @@ export default function HomeWrapper() {
     useEffect(() => {
         console.log("HomeWrapper useEffect")
         console.log("auth.loggedIN: " + auth.loggedIn)
-        if(auth.loggedIn)
-            setIsAuthorized(true)
-
-        else
-            setIsAuthorized(false)
+        setIsAuthorized(auth.loggedIn)
     }, [auth.loggedIn])
 
-    if (isAuthorized === undefined)
-        return null
+    if (isAuthorized === undefined) return null
 
     return (isAuthorized) ? <HomeScreen /> : <WelcomeScreen />;
 }
