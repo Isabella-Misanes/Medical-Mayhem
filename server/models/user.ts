@@ -38,6 +38,8 @@ const UserSchema = new Schema(
             ['INTERACT', 'E'],
         ])},
         appearAsOffline: {type: Boolean, default: false},
+        toggleChat: {type: Boolean, default: true},
+        toggleParty: {type: Boolean, default: true},
 
         // Pertaining to sprites and gameplay
         avatarSprite: {type: String, default: ""},

@@ -24,6 +24,11 @@ export default function SettingsScreen() {
         RIGHT: 'D',
         INTERACT: 'E'
     });
+    const [toggles, setToggles] = useState({
+        privateProfile: false,
+        messages: true,
+        party: true,
+    });
 
     const resetButton = {
         mt: 1,
@@ -250,19 +255,39 @@ export default function SettingsScreen() {
                 { auth.role === UserRoleType.USER && 
                 <>
                     <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
-                        <ToggleButton size='small' value={false}>
+                        <ToggleButton onClick={() => {
+                            setToggles({
+                                privateProfile: !toggles.privateProfile,
+                                messages: toggles.messages,
+                                party: toggles.party
+                            })
+                            store.updateToggles(!toggles.privateProfile, toggles.messages, toggles.party);
+                        }} size='small' value={false}>
                             Private Profile
-                            <Checkbox />
+                            <Checkbox checked={toggles.privateProfile} />
                         </ToggleButton>
 
-                        <ToggleButton size='small' value={false}>
+                        <ToggleButton onClick={() => {
+                            setToggles({
+                                ...toggles,
+                                messages: !toggles.messages,
+                            })
+                            store.updateToggles(toggles.privateProfile, !toggles.messages, toggles.party);
+                        }} size='small' value={false}>
                             Messages
-                            <Checkbox />
+                            <Checkbox checked={toggles.messages} />
                         </ToggleButton>
 
-                        <ToggleButton size='small' value={false}>
+                        <ToggleButton onClick={() => {
+                            setToggles({
+                                privateProfile: toggles.privateProfile,
+                                messages: toggles.messages,
+                                party: !toggles.party
+                            })
+                            store.updateToggles(toggles.privateProfile, toggles.messages, !toggles.party);
+                        }} size='small' value={false}>
                             Party
-                            <Checkbox />
+                            <Checkbox checked={toggles.party} />
                         </ToggleButton>
                     </Box>
                 </>}
@@ -275,7 +300,7 @@ export default function SettingsScreen() {
                             </Button>
                             <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
                                 Delete Account
-                            </Button> 
+                            </Button>
                         </> :
                         <Grid>
                             <Typography variant="h5" gutterBottom><strong>Login to change default settings</strong></Typography>

@@ -117,7 +117,6 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
-                console.log("IN GET:", payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -127,7 +126,6 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
-                console.log("IN UPDATE PROFILE:", payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -153,7 +151,6 @@ function GlobalStoreContextProvider(props) {
             }
 
             case GlobalStoreActionType.VIEW_FRIENDS: {
-                console.log("IN VIEW FRIENDS:", payload)
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -193,7 +190,6 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
-                console.log('IN GET SETTINGS:', payload);
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -525,6 +521,15 @@ function GlobalStoreContextProvider(props) {
             } catch(error) { console.error(error); }
         }
         asyncUpdateKeybinds();
+    }
+
+    store.updateToggles = (privateProfile, toggleChat, toggleParty) => {
+        async function asyncUpdateToggles() {
+            try {
+                await apis.updateToggles(privateProfile, toggleChat, toggleParty);
+            } catch(error) { console.error(error); }
+        }
+        asyncUpdateToggles();
     }
 
     // Report Modal

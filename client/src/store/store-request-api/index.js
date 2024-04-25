@@ -79,6 +79,14 @@ export const updateKeybinds = async({up, left, down, right, interact}) => {
     })
 }
 
+export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
+    return api.post('/settings/toggles/update', {
+        privateProfile: privateProfile,
+        toggleChat: toggleChat,
+        toggleParty: toggleParty
+    })
+}
+
 const apis = {
     getProfile,
     updateProfile,
@@ -96,6 +104,7 @@ const apis = {
     getSettings,
     updateAudioSettings,
     updateKeybinds,
+    updateToggles,
 }
 
 export default apis
