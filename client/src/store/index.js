@@ -264,13 +264,17 @@ function GlobalStoreContextProvider(props) {
         console.log("Private messaging in store")
     }
 
-    store.sendFriend = function(targetUser, handleFriendModalClose) {
+    store.sendFriend = function(targetUser, handleFriendModalClose, setConfirmModal) {
         console.log("Sending friend request to user", targetUser, "in store");
         async function asyncSendFriend() {
             try {
                 let response = await apis.sendFriendRequest(targetUser)
-                if(response.status === 200) handleFriendModalClose();
-                console.log("Sent a friend request to user", targetUser);
+                if(response.status === 200) {
+                    handleFriendModalClose();
+                    setConfirmModal(true);
+                    console.log("Successfully sent a friend request to user", targetUser);
+                }
+                else console.log("Failed to send friend request.");
             } catch(error) {
                 console.error(error.response.data.errorMessage);
                 storeReducer({

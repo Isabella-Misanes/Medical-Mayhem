@@ -19,6 +19,7 @@ export default function SocialScreen() {
     const [currFriend, setCurrFriend] = useState('');
     // Add friend modal functionality
     const [addFriendUsername, setAddFriendUsername] = useState('');
+    const [confirmModal, setConfirmModal] = useState(false);
 
     function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
@@ -55,7 +56,10 @@ export default function SocialScreen() {
         // eslint-disable-next-line
     }, [store.profileInfo])
 
-    function handleFriendModalOpen() { setModalOpen(true); }
+    function handleFriendModalOpen() {
+        setAddFriendUsername('');
+        setModalOpen(true);
+    }
     function handleFriendModalClose() { setModalOpen(false); }
 
     const renderButton = (buttonNum, str) => {
@@ -199,8 +203,7 @@ export default function SocialScreen() {
     // Add friend
     const handleSubmit = (event) => {
         event.preventDefault();
-        store.sendFriend(addFriendUsername, handleFriendModalClose);
-        // TODO: Handle module change to confirm that a friend request was sent
+        store.sendFriend(addFriendUsername, handleFriendModalClose, setConfirmModal);
     };
 
     const handleAddFriendUsernameChange = (event) => {
@@ -208,7 +211,7 @@ export default function SocialScreen() {
         setAddFriendUsername(event.target.value);
     }
 
-    let modal = store.errorMessage !== "" ? <MUIErrorModal id={'error'} store={store} /> : "";
+    let modal = store.errorMessage === "" ? null : <MUIErrorModal id={'error'} store={store} />;
     
     return (
         <div id="social-screen">
@@ -307,45 +310,11 @@ export default function SocialScreen() {
                     handleAddFriendUsernameChange={handleAddFriendUsernameChange}
                     modal={modal}
                 />
-                {/* <Modal id={'add-friend-modal'} open={isModalOpen} onClose={handleFriendModalClose}>
-                    <Box sx={{
-                        width: '30%',
-                        height: '27%',
-                        bgcolor: '#2d7044',
-                        border: 1,
-                        borderColor: 'white',
-                        top: '20%',
-                        left: '30%',
-                        position: 'absolute',
-                        boxShadow: 5,
-                        textAlign: 'center',
-                    }}>
-                        <h1>Add Friend</h1>
-                        <Divider />
-                        <Box component='form' noValidate onSubmit={handleSubmit}>
-                            <TextField
-                                id='username'
-                                size='small'
-                                // value={username}
-                                fullWidth
-                                label='Enter Username'
-                                variant="filled"
-                                sx={{bgcolor: '#e3e3e3', width: '90%', mt: '5%'}}
-                                onChange={handleAddFriendUsernameChange}
-                            />
-                            <Button
-                                id="add-friend-submit"
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2, width: '50%' }}
-                            >
-                                Add Friend
-                            </Button>
-                        </Box>
-                        {modal}
-                    </Box>
-                </Modal> */}
+                <ConfirmModal
+                    confirmModal={confirmModal}
+                    handleModalClose={() => setConfirmModal(false)}
+                    username={addFriendUsername}
+                />
                 {partyMenu}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
@@ -393,6 +362,27 @@ function AddFriendModal(props) {
                     </Button>
                 </Box>
                 {props.modal}
+            </Box>
+        </Modal>
+    )
+}
+
+function ConfirmModal(props) {
+    return (
+        <Modal id={'add-friend-modal'} open={props.confirmModal} onClose={props.handleModalClose}>
+            <Box sx={{
+                width: '30%',
+                height: '27%',
+                bgcolor: '#2d7044',
+                border: 1,
+                borderColor: 'white',
+                top: '20%',
+                left: '30%',
+                position: 'absolute',
+                boxShadow: 5,
+                textAlign: 'center',
+            }}>
+                <h1>Friend request sent to user {props.username}.</h1>
             </Box>
         </Modal>
     )
