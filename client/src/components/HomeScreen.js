@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
