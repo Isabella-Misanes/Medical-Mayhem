@@ -1,4 +1,4 @@
-import { BoundingBox, Engine } from "excalibur";
+import { BoundingBox, CollisionType, Engine } from "excalibur";
 import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
 import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
 import { GameResultsScene } from "./scenes/GameResultsScene";
@@ -35,6 +35,7 @@ export const MedicalMayhem = (gameRef, gameCanvasRef) => {
     
     const player = new Player()
     engine.add(player)
+    
     const patient = new Patient()
     engine.add(patient)
 
@@ -53,9 +54,8 @@ export const MedicalMayhem = (gameRef, gameCanvasRef) => {
 
     // engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
 
+    engine.showDebug = true
     engine.start(loader).then(() => {
-        Resources.tiledMap.tileWidth = 100
-        Resources.tiledMap.tileLength = 100
         Resources.tiledMap.addToScene(engine.currentScene)
     });
 

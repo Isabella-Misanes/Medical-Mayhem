@@ -8,11 +8,12 @@ export default class Patient extends Actor {
         super({
             z: 100,
             pos: ex.vec(20, 540),
-            width: 100,
-            height: 100,
-            collisionType: ex.CollisionType.Active,
+            width: 25,
+            height: 25,
+            collisionType: ex.CollisionType.Passive,
             color: Color.Chartreuse
         })
+        this.following = false
     }
 
     onInitialize(engine) {
@@ -20,12 +21,12 @@ export default class Patient extends Actor {
         sprite.scale.setTo(1.5, 1.5)
 
         this.graphics.use(sprite)
+
     }
 
     onPreUpdate(engine, elapsedMs) {
-        this.vel = ex.Vector.Zero;
+        
 
-        // POSITION FOR PATIENTS: X 20 Y 540 
 
         // if (engine.input.keyboard.isHeld(ex.Keys.ArrowRight)) {
         //     this.vel = ex.vec(Config.PlayerSpeed, 0);
