@@ -8,10 +8,10 @@
  */
 
 import { Actor, Color, vec, Keys, Text, Font, TextAlign, Timer, Scene } from "excalibur";
-import socket from "../constants/socket";
-import SocketEvents from "../constants/socketEvents";
+import socket from "../../constants/socket";
+import SocketEvents from "../../constants/socketEvents";
 
-export class medicationmatchingScene extends Scene {
+export class MedicationMatchingScene extends Scene {
 
     onInitialize(engine) {
         console.log("INIT MEDICATION MATCHING");

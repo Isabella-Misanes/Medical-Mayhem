@@ -21,7 +21,6 @@ export const Resources = {
             },
         },
     }),
-
 }
 
 export const loader = new Loader()

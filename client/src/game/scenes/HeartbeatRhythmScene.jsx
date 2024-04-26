@@ -3,11 +3,11 @@
  */
 
 import { Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
-import socket from "../constants/socket";
-import SocketEvents from "../constants/socketEvents";
+import socket from "../../constants/socket";
+import SocketEvents from "../../constants/socketEvents";
 import { TiledResource } from '@excaliburjs/plugin-tiled'
 
-export class heartbeatrhythmScene extends Scene {
+export class HeartbeatRhythmScene extends Scene {
 
     engine;
     timeText;

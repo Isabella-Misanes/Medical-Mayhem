@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
 import { useEffect, useRef } from "react";
-import { initMedicalMayhem } from '../game/medicalMayhem';
+import { MedicalMayhem } from '../game/MedicalMayhem'
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
 
@@ -13,7 +13,7 @@ export default function GameScreen() {
 
     useEffect(() => {
 		if (!gameRef.current && gameCanvas.current) {
-			initMedicalMayhem(gameRef, gameCanvas);
+			MedicalMayhem(gameRef, gameCanvas);
 		}
 
         socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {

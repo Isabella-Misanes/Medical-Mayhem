@@ -1,16 +1,16 @@
-import { Engine } from "excalibur";
-import { medicationmatchingScene } from "./medicationmatchingScene";
-import { heartbeatrhythmScene } from "./heartbeatrhythmScene";
-import { gameResultsScene } from "./gameResultsScene";
-import { Loader } from "excalibur";
+import { BoundingBox, Engine } from "excalibur";
+import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
+import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
+import { GameResultsScene } from "./scenes/GameResultsScene";
+import { Loader, DisplayMode, Camera } from "excalibur";
 import { TiledResource } from "@excaliburjs/plugin-tiled";
 import map from './Level_1.tmx'
 import Player from "./actors/player";
 import { Resources, loader } from "./resources";
 import Patient from "./actors/patient";
 
-const gameWidth = 1000;
-const gameHeight = 750;
+const gameWidth = 1820;
+const gameHeight = 950;
 // const timer = new Timer({
 //     interval: 1000,
 //     fcn: () => {
@@ -20,43 +20,42 @@ const gameHeight = 750;
 //     repeats: true
 //   })
 
-export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
+export const MedicalMayhem = (gameRef, gameCanvasRef) => {
     if (!gameCanvasRef.current) return;
-  
-    // const tiledMap = new TiledResource(map, {
-    //     entityClassNameFactories: {
-    //         player: (props) => {
-    //             const player = new Player();
-    //             player.z = 100;
-    //             return player;
-    //         }
-    //     },
-    // })
 
-    // const loader = new Loader([tiledMap])
+    //const loader = new Loader([tiledMap])
 
     gameRef.current = new Engine({
         canvasElement: gameCanvasRef.current,
-        width: gameWidth,
-        height: gameHeight,
-        debug: true
+        width: window.innerWidth,
+        height: window.innerHeight,
+        displayMode: DisplayMode.FullScreen,
     });
     const engine = gameRef.current;
-
+    
     const player = new Player()
     engine.add(player)
     const patient = new Patient()
     engine.add(patient)
 
-    engine.add("heartbeatrhythm", new heartbeatrhythmScene());
-    engine.add("medicationmatching", new medicationmatchingScene());
-    engine.add("gameresults", new gameResultsScene());
+    const camera = new Camera()
+    camera.strategy.lockToActor(player)
+    camera.zoom = 2.5
+    camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
 
-    let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
+    engine.currentScene.camera = camera
 
-    //engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
+    // engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
+    // engine.add("medicationmatching", new MedicationMatchingScene());
+    // engine.add("gameresults", new GameResultsScene());
+
+    // let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
+
+    // engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
 
     engine.start(loader).then(() => {
+        Resources.tiledMap.tileWidth = 100
+        Resources.tiledMap.tileLength = 100
         Resources.tiledMap.addToScene(engine.currentScene)
     });
 

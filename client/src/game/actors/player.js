@@ -7,7 +7,7 @@ export default class Player extends Actor {
     constructor(pos) {
         super({
             z: 100,
-            pos: ex.vec(20, 20),
+            pos: ex.vec(279, 194),
             width: 100,
             height: 100,
             collisionType: ex.CollisionType.Active,
@@ -43,5 +43,7 @@ export default class Player extends Actor {
             this.vel = ex.vec(0, Config.PlayerSpeed);
             //this.graphics.use('down-walk');
         }
+
+        console.log(this.pos)
     }
 }
