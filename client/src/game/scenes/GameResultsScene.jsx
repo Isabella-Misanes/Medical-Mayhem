@@ -5,7 +5,7 @@
 // import { Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
 import { Actor, Color, vec, Text, Font, TextAlign, Scene } from "excalibur";
 
-export class gameResultsScene extends Scene {
+export class GameResultsScene extends Scene {
 
     onInitialize(engine) {
         console.log("STARTING RESULTS SCREEN");

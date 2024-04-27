@@ -1,10 +1,18 @@
-import { Engine } from "excalibur";
-import { medicationmatchingScene } from "./medicationmatchingScene";
-import { heartbeatrhythmScene } from "./heartbeatrhythmScene";
-import { gameResultsScene } from "./gameResultsScene";
+import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
+import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
+import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
+import { GameResultsScene } from "./scenes/GameResultsScene";
+import { Loader, DisplayMode, Camera } from "excalibur";
+import { TiledResource } from "@excaliburjs/plugin-tiled";
+import map from './Level_1.tmx'
+import Player from "./actors/player";
+import { Resources, loader } from "./resources";
+import Patient from "./actors/patient";
+import * as ex from 'excalibur'
 
-const gameWidth = 1000;
-const gameHeight = 750;
+
+const gameWidth = 1820;
+const gameHeight = 950;
 // const timer = new Timer({
 //     interval: 1000,
 //     fcn: () => {
@@ -14,24 +22,54 @@ const gameHeight = 750;
 //     repeats: true
 //   })
 
-export const initMedicalMayhem = (gameRef, gameCanvasRef) => {
+export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
+
     if (!gameCanvasRef.current) return;
-  
+
     gameRef.current = new Engine({
         canvasElement: gameCanvasRef.current,
-        width: gameWidth,
-        height: gameHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        displayMode: DisplayMode.FullScreen,
     });
     const engine = gameRef.current;
 
-    engine.add("heartbeatrhythm", new heartbeatrhythmScene());
-    engine.add("medicationmatching", new medicationmatchingScene());
-    engine.add("gameresults", new gameResultsScene());
+    //var gameplayScene = new ex.Scene();
 
-    let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
+    console.log(players)
+    console.log(username)
+    
+    for (let i in players) {
+        let player
 
-    engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
+        if (players[i] === username) {
+            player = new Player(players[i], true)
+            const camera = new Camera()
+            camera.strategy.lockToActor(player)
+            camera.zoom = 2.5
+            camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
+            engine.currentScene.camera = camera
+        }
 
-    engine.start();
+        else
+            player = new Player(players[i])
+
+        engine.add(player)
+    }
+
+    const patient = new Patient()
+    engine.add(patient)
+
+    // engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
+    // engine.add("medicationmatching", new MedicationMatchingScene());
+    // engine.add("gameresults", new GameResultsScene());
+
+    // let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
+
+    // engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
+
+    engine.start(loader).then(() => {
+        Resources.tiledMap.addToScene(engine.currentScene)
+    });
 
   };

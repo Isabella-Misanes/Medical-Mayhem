@@ -36,6 +36,9 @@ export const GlobalStoreActionType = {
     LIKE_DISLIKE: "LIKE_DISLIKE",
     PLAY_SONG: "PLAY_SONG",
 
+    // GAME ACTIONS
+    UPDATE_TEAMMATES: "UPDATE_TEAMMATES",
+
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY TORIN
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
@@ -93,6 +96,7 @@ function GlobalStoreContextProvider(props) {
             defense: 0,
             favoredMinigame: "",
         },
+        players: [] // an array of usernames for players matched with
     });
 
     console.log("inside useGlobalStore");
@@ -114,6 +118,16 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                });
+            }
+            case GlobalStoreActionType.UPDATE_TEAMMATES: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    players: payload
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -210,6 +224,15 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
+    // Game
+    store.updatePlayers = function (data) {
+        console.log(data)
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_TEAMMATES,
+            payload: data.players
+        })
+    }
+
     // HomeScreen
     store.acceptInvite = function (event) {
         console.log("Invite ACCEPTED in store.");
@@ -238,7 +261,6 @@ function GlobalStoreContextProvider(props) {
         asyncGetProfile()
     }
 
-    // TODO: INCLUDE TRY CATCH
     store.updateProfile = function(username, bio, pfp) {
         async function asyncUpdateProfile() {
             try{

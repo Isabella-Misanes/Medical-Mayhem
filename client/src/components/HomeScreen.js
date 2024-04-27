@@ -10,11 +10,30 @@ import AuthContext, { UserRoleType } from '../auth';
 import SocketEvents from '../constants/socketEvents'
 import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
-import { homeScreen, homeButtons, modalStyle } from '../Styles';
+import GlobalStoreContext from '../store';
+
+// Styling
+const homeButtons = {
+    color: 'black',
+    bgcolor: 'white',
+    ":hover": {bgcolor: '#e5e5e5'}
+}
+
+export const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'white',
+    boxShadow: 24,
+    p: 3
+};
 
 export default function HomeScreen() {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -26,16 +45,20 @@ export default function HomeScreen() {
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP)
+        socket.emit(SocketEvents.QUEUE_UP, auth.username)
     }
 
     useEffect(() => {
+        socket.emit(SocketEvents.SET_USERNAME, auth.username)
 
-        socket.on(SocketEvents.MATCH_FOUND, () => {
+        socket.on(SocketEvents.MATCH_FOUND, (data) => {
             
             // Make sure to turn off event listeners before navigating to different
             // screens in order to avoid unexpected behaviors
+            console.log(data)
             socket.off(SocketEvents.MATCH_FOUND)
+            store.updatePlayers(data)
+            console.log(store.players)
             navigate('/game')
         })
         // eslint-disable-next-line

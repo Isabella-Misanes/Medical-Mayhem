@@ -3,10 +3,11 @@
  */
 
 import { Actor, Color, CollisionType, vec, Keys, Text, Font, TextAlign, Scene } from "excalibur";
-import socket from "../constants/socket";
-import SocketEvents from "../constants/socketEvents";
+import socket from "../../constants/socket";
+import SocketEvents from "../../constants/socketEvents";
+import { TiledResource } from '@excaliburjs/plugin-tiled'
 
-export class heartbeatrhythmScene extends Scene {
+export class HeartbeatRhythmScene extends Scene {
 
     engine;
     timeText;
@@ -95,7 +96,7 @@ export class heartbeatrhythmScene extends Scene {
                 if(ball) {
                     ball.kill();
                     this.yourScore.val += 100;
-                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
+                    //socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
                     this.yourScore.text.text = 'Score: ' + this.yourScore.val;
                 }
             }

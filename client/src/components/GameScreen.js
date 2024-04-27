@@ -2,29 +2,23 @@ import { Box } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
-import { useEffect, useRef } from "react";
-import { initMedicalMayhem } from '../game/medicalMayhem';
+import { useContext, useEffect, useRef } from "react";
+import { MedicalMayhem } from '../game/MedicalMayhem'
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
+import AuthContext from '../auth';
+import GlobalStoreContext from '../store';
 
 export default function GameScreen() {
+    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
     const gameCanvas = useRef(null);
 	const gameRef = useRef();
 
     useEffect(() => {
-		if (!gameRef.current && gameCanvas.current) {
-			initMedicalMayhem(gameRef, gameCanvas);
-		}
-
-        socket.on(SocketEvents.OPPONENT_SCORE_CHANGE, (data) => {
-
-            gameRef.current.scenes.medicationmatching.opponentPointText.text = 
-                "Opponent Score: " + data
-                gameRef.current.scenes.medicationmatching.opponentPoints = data;
-            gameRef.current.scenes.heartbeatrhythm.opponentScore.text.text = 
-                "Opponent Score: " + data
-            gameRef.current.scenes.heartbeatrhythm.opponentScore.val = data;
-        })
+		if (!gameRef.current && gameCanvas.current)
+			MedicalMayhem(gameRef, gameCanvas, store.players, auth.username);
 	}, []);
 
     return (
