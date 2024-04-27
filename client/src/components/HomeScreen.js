@@ -10,6 +10,7 @@ import AuthContext, { UserRoleType } from '../auth';
 import SocketEvents from '../constants/socketEvents'
 import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
+import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
 
 // Styling
