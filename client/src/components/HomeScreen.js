@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
@@ -70,9 +70,9 @@ export default function HomeScreen() {
             <Grid container>
                 <Grid item xs={1}/>
                 <Grid item xs={6}>
-                    <Grid container sx={[homeScreen, {boxShadow: 4}]}>
+                    <Grid container id="home-menu" sx={[homeScreen, {boxShadow: 4}]}>
                         <Grid item xs={12}>
-                            <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
+                            <Typography variant="h2" color="red">Medical Mayhem</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <HomeButton
