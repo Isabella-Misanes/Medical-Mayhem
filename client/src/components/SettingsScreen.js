@@ -252,7 +252,7 @@ export default function SettingsScreen() {
                 </Grid>
                 <Divider />
 
-                { auth.role === UserRoleType.USER && 
+                { auth.role !== UserRoleType.GUEST && 
                 <>
                     <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
                         <ToggleButton onClick={() => {
@@ -293,7 +293,7 @@ export default function SettingsScreen() {
                 </>}
                
                 <Box display="flex" justifyContent={'center'} gap={5}>
-                    { auth.role === UserRoleType.USER ?
+                    { auth.role !== UserRoleType.GUEST ?
                         <>
                             <Button id='log-out' onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
                                 Log Out

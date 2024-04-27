@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
@@ -38,7 +38,8 @@ export default function HomeScreen() {
 
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
-    const [queueingUp, setQueueingUp] = useState(false)
+    const [queueingUp, setQueueingUp] = useState(false);
+    const [role, setRole] = useState(UserRoleType.GUEST);
     
     function handleInviteButtonClick() {
         setShowInviteModal(true);
@@ -62,8 +63,13 @@ export default function HomeScreen() {
             console.log(store.players)
             navigate('/game')
         })
+
         // eslint-disable-next-line
     }, [])
+
+    // TODO: For some reason when switching from guest user to admin user, the role is set to 'USER' and doesn't update until refresh.
+    // Evident by the report button not appearing when logging out of guest user and logging into an admin user.
+    useEffect(() => setRole(auth.role), [auth]);
 
     return (
         <div id="home-screen">
@@ -159,7 +165,7 @@ export default function HomeScreen() {
                                 text='Invite'
                             />
                         </Grid>
-                        { auth.role === UserRoleType.ADMIN &&
+                        { role === UserRoleType.ADMIN &&
                             <Grid item xs={6}>
                                 <HomeButton
                                     onClick={() => navigate("/reports")}

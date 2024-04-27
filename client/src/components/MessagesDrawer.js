@@ -82,8 +82,8 @@ export default function MessagesDrawer() {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                                     <Tab label="Public" value="1" sx={tabButton}/>
-                                    {auth.role === UserRoleType.USER && <Tab label="Party" value="2" sx={tabButton}/>}
-                                    {auth.role === UserRoleType.USER && <Tab label="Private" value="3" sx={tabButton}/>}
+                                    {auth.role !== UserRoleType.GUEST && <Tab label="Party" value="2" sx={tabButton}/>}
+                                    {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>}
                                 </TabList>
                             </Box>
                             <TabPanel value="1">
