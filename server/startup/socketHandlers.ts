@@ -3,69 +3,72 @@ import SocketEvents from '../../client/src/constants/socketEvents'
 import { randomBytes } from 'crypto';
 import { io } from './index'
 
-class Rooms {
+class SocketInfo {
+    username: string
     gameRoom: string
 
-    constructor() {
+    constructor(username = '') {
+        this.username = username
         this.gameRoom = ''
     }
 }
 
-// The queue that will hold all players currently queueing for a game by email
+// The queue that will hold all players currently queueing for a game by username
 export const queue : Socket[] = []
 
 // Maps socket ids to a set of rooms
-const socketRooms = new Map<string, Rooms>()
+const socketInfos = new Map<string, SocketInfo>()
 
 // TODO: ADD NAMESPACES SUCH AS /game, /message, etc.
 
 export function handleConnection(socket: Socket) {
 
     // Maps the newly connected socket to an object holding its rooms
-    socketRooms.set(socket.id, new Rooms())
-
-    // QUEUEING PLAYERS FOR GAMES
+    socketInfos.set(socket.id, new SocketInfo())
 
     socket.on('disconnect', () => {
 
         if (queue.includes(socket))
             queue.splice(queue.indexOf(socket), 1)
 
-        socketRooms.delete(socket.id)
+        socketInfos.delete(socket.id)
+    })
+
+    socket.on(SocketEvents.SET_USERNAME, (data) => {
+        (socketInfos.get(socket.id) as SocketInfo).username = data
+        console.log(data)
     })
 
     socket.on(SocketEvents.QUEUE_UP, (data) => {
 
-        const opponentSocket = queue.shift()
-
-        if (opponentSocket) {
+        if (queue.length >= 1) {
 
             // Generate random room number and join it
             let room = randomBytes(8).toString('hex')
             socket.join(room)
 
             // Update room data structure
-            const currSocketRooms = socketRooms.get(socket.id)
+            const currSocketInfo = socketInfos.get(socket.id) as SocketInfo
+            currSocketInfo.username = data
+            currSocketInfo.gameRoom = room
 
-            if (currSocketRooms === undefined) {
-                socket.emit('error', 'Socket no longer exists. Please try again later.')
-                return
+            const players = []
+            players.push(currSocketInfo.username)
+
+            // Pop players from queue and add them to the room
+            for (let i = 0; i < 1; i++) {
+                const teammateSocket = queue.shift() as Socket
+                teammateSocket.join(room)
+
+                const currTeammateSocketInfo = socketInfos.get(teammateSocket.id) as SocketInfo
+                currTeammateSocketInfo.gameRoom = room
+
+                players.push(currTeammateSocketInfo.username)
             }
 
-            // Do the same for the opponent socket
-            currSocketRooms.gameRoom = room
-
-            const currOppSocketRooms = socketRooms.get(opponentSocket.id)
-
-            if (currOppSocketRooms === undefined) {
-                socket.emit('error', 'Socket no longer exists. Please try again later.')
-                return
-            }
-
-            opponentSocket.join(room)
-            currOppSocketRooms.gameRoom = room
-            
-            io.to(room).emit(SocketEvents.MATCH_FOUND)
+            io.to(room).emit(SocketEvents.MATCH_FOUND, {
+                players: players
+            })
         }
         else {
             queue.push(socket)
@@ -78,18 +81,11 @@ export function handleConnection(socket: Socket) {
         console.log(queue)
     })
 
-    // GAMEPLAY SCORE KEEPING
+    // GAMEPLAY
 
-    socket.on(SocketEvents.MY_SCORE_CHANGE, (data) => {
-        const currSocketRooms = socketRooms.get(socket.id)
-
-        if (currSocketRooms === undefined) {
-            socket.emit('error', 'Socket no longer exists. Please try again later.')
-            return
-        }
-
-        socket.to(currSocketRooms.gameRoom)
-            .emit(SocketEvents.OPPONENT_SCORE_CHANGE, data)
+    // data is a player username, and a vec
+    socket.on(SocketEvents.PLAYER_MOVED, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.PLAYER_MOVED, data)
     })
 }
 

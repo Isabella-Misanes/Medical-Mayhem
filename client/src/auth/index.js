@@ -78,8 +78,14 @@ function AuthContextProvider(props) {
                 })
             }
             case AuthActionType.LOGIN_GUEST: {
+
+                let guestId = ''
+
+                for (let i = 0; i < 10; i++)
+                    guestId += Math.floor(Math.random() * 10)
+
                 return setAuth({
-                    username: '',
+                    username: 'Guest' + guestId,
                     email: '',
                     role: UserRoleType.GUEST,
                     loggedIn: true,

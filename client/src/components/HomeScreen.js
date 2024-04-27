@@ -10,6 +10,7 @@ import AuthContext, { UserRoleType } from '../auth';
 import SocketEvents from '../constants/socketEvents'
 import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
+import GlobalStoreContext from '../store';
 
 // Styling
 const homeButtons = {
@@ -32,6 +33,7 @@ export const modalStyle = {
 export default function HomeScreen() {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -42,22 +44,25 @@ export default function HomeScreen() {
     }
 
     function handlePlayButtonClick() {
-        // setQueueingUp(true)
-        // socket.emit(SocketEvents.QUEUE_UP)
-        navigate('/game')
+        setQueueingUp(true)
+        socket.emit(SocketEvents.QUEUE_UP, auth.username)
     }
 
-    // useEffect(() => {
+    useEffect(() => {
+        socket.emit(SocketEvents.SET_USERNAME, auth.username)
 
-    //     socket.on(SocketEvents.MATCH_FOUND, () => {
+        socket.on(SocketEvents.MATCH_FOUND, (data) => {
             
-    //         // Make sure to turn off event listeners before navigating to different
-    //         // screens in order to avoid unexpected behaviors
-    //         socket.off(SocketEvents.MATCH_FOUND)
-    //         navigate('/game')
-    //     })
-    //     // eslint-disable-next-line
-    // }, [])
+            // Make sure to turn off event listeners before navigating to different
+            // screens in order to avoid unexpected behaviors
+            console.log(data)
+            socket.off(SocketEvents.MATCH_FOUND)
+            store.updatePlayers(data)
+            console.log(store.players)
+            navigate('/game')
+        })
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div id="home-screen">

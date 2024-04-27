@@ -1,4 +1,4 @@
-import { BoundingBox, CollisionType, Engine } from "excalibur";
+import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
 import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
 import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
 import { GameResultsScene } from "./scenes/GameResultsScene";
@@ -8,6 +8,8 @@ import map from './Level_1.tmx'
 import Player from "./actors/player";
 import { Resources, loader } from "./resources";
 import Patient from "./actors/patient";
+import * as ex from 'excalibur'
+
 
 const gameWidth = 1820;
 const gameHeight = 950;
@@ -20,10 +22,9 @@ const gameHeight = 950;
 //     repeats: true
 //   })
 
-export const MedicalMayhem = (gameRef, gameCanvasRef) => {
-    if (!gameCanvasRef.current) return;
+export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
 
-    //const loader = new Loader([tiledMap])
+    if (!gameCanvasRef.current) return;
 
     gameRef.current = new Engine({
         canvasElement: gameCanvasRef.current,
@@ -32,19 +33,32 @@ export const MedicalMayhem = (gameRef, gameCanvasRef) => {
         displayMode: DisplayMode.FullScreen,
     });
     const engine = gameRef.current;
+
+    //var gameplayScene = new ex.Scene();
+
+    console.log(players)
+    console.log(username)
     
-    const player = new Player()
-    engine.add(player)
-    
+    for (let i in players) {
+        let player
+
+        if (players[i] === username) {
+            player = new Player(players[i], true)
+            const camera = new Camera()
+            camera.strategy.lockToActor(player)
+            camera.zoom = 2.5
+            camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
+            engine.currentScene.camera = camera
+        }
+
+        else
+            player = new Player(players[i])
+
+        engine.add(player)
+    }
+
     const patient = new Patient()
     engine.add(patient)
-
-    const camera = new Camera()
-    camera.strategy.lockToActor(player)
-    camera.zoom = 2.5
-    camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
-
-    engine.currentScene.camera = camera
 
     // engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
     // engine.add("medicationmatching", new MedicationMatchingScene());
@@ -54,7 +68,6 @@ export const MedicalMayhem = (gameRef, gameCanvasRef) => {
 
     // engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
 
-    engine.showDebug = true
     engine.start(loader).then(() => {
         Resources.tiledMap.addToScene(engine.currentScene)
     });
