@@ -220,7 +220,9 @@ export const updateToggles = async (req: Request, res: Response) => {
 export const viewOnlinePlayers = async (req: Request, res: Response) => {
     try {
         // Sorts by username from A-Z. Collation makes it case-insensitive
-        const onlinePlayersTemp = await User.find({onlineStatus: true}, {username: 1}).collation({locale: 'en', strength: 2}).sort({username: 1});
+        const currUser = await User.findOne({_id: req.userId}, {username: 1});
+        if(!currUser) return res.status(400).json({errorMessage: 'User not found.'});
+        const onlinePlayersTemp = await User.find({$and: [{onlineStatus: true}, {username: {$ne: currUser.username}}]}, {username: 1}).collation({locale: 'en', strength: 2}).sort({username: 1});
         const onlinePlayers: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
         await Promise.all(onlinePlayersTemp.map(async (onlinePlayerId) => {
             const onlinePlayer = await User.findById(onlinePlayerId);
