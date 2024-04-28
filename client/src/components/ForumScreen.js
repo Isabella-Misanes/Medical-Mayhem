@@ -46,7 +46,7 @@ export default function ForumScreen() {
                 <h3>Forums</h3>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        {auth.role === UserRoleType.USER && (
+                        {auth.role !== UserRoleType.GUEST && (
                             <Button variant="contained"
                                 sx={[buttonStyle, { left: '2%', mb: 1, fontSize: '12px' }]}
                                 onClick={()=>{navigate("/newthread")}}>

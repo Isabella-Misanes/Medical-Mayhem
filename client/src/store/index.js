@@ -47,8 +47,9 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
     REMOVE_FRIEND: "REMOVE_FRIENDS",
-    ERROR: "ERROR",
+    GET_ONLINE_PLAYERS: "GET_ONLINE_PLAYERS",
     GET_SETTINGS: "GET_SETTINGS",
+    ERROR: "ERROR",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
@@ -382,7 +383,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncViewSentRequests() {
             try {
                 let response = await apis.viewSentRequests()
-                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
@@ -451,6 +451,21 @@ function GlobalStoreContextProvider(props) {
         }
         asyncAcceptFriendRequest();
     }
+
+    store.getOnlinePlayers = function() {
+        async function asyncGetOnlinePlayers() {
+            try {
+                let response = await apis.getOnlinePlayers();
+                console.log('response:', response);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch(error) { console.error(error); }
+        }
+        asyncGetOnlinePlayers();
+    }
+
     // Forums Screen
     store.openThread = function (event) {
         console.log("Opening thread in store.");
