@@ -58,6 +58,10 @@ export const loginUser = async (req: Request, res: Response) => {
         const token = await auth.signToken((existingUser._id).toString());
         console.log("token: " + token);
 
+        // Change user's online status to true
+        existingUser.onlineStatus = true;
+        await existingUser.save();
+
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
@@ -79,6 +83,8 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const logoutUser = async (req: Request, res: Response) => {
+    const {username} = req.body;
+    await User.findOneAndUpdate({username: username}, {$set: {onlineStatus: false}});
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),

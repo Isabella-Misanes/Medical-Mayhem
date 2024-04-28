@@ -42,6 +42,10 @@ export default function SocialScreen() {
                 store.showReceivedRequests();
                 setId('received-requests');
                 break;
+            case 4:
+                store.getOnlinePlayers();
+                setId('online-users');
+                break;
             default:
                 // store.viewFriends();
                 // break;
@@ -85,7 +89,8 @@ export default function SocialScreen() {
         if(activeButton === 0) str += 'Friends';
         else if(activeButton === 1) str += 'Recent Players';
         else if(activeButton === 2) str += 'Sent Friend Requests';
-        else str += 'Received Friend Requests';
+        else if(activeButton === 3) str += 'Received Friend Requests';
+        else str += 'Online Users';
         
         if(playerList.length !== 0) {
             for(let i = 0; i < playerList.length; i++) {
@@ -100,6 +105,11 @@ export default function SocialScreen() {
                             setCurrFriend(playerList[i]);
                         }}
                     />
+                )
+            }
+            if(playerList.length > 10) {
+                playerCards.push(
+                    
                 )
             }
         }
@@ -238,8 +248,13 @@ export default function SocialScreen() {
                     top: '7.5%',
                     left: '3.75%',
                     p: 2,
-                    marginRight: '10%',
+                    // marginRight: '10%',
             }}>
+                {/*
+                    TODO: Fix UI issues:
+                    Grid container doesn't take up full box width (appears fine but see inspect element menu)
+                    Grid item elements within container go outside of the grid container width/height
+                 */}
                 <Grid container spacing={2}>
                     <Grid item xs={2} sx={{
                         bgcolor: 'white',
@@ -261,7 +276,21 @@ export default function SocialScreen() {
                             Add Friend
                         </Button>
                     </Grid>
-                    <Grid item xs={4}/>
+                    <Grid item xs={1}>
+                        <Box sx={{
+                            bgcolor: 'white',
+                            mt: 2,
+                            mb: 2,
+                            ml: 14,
+                            textAlign: 'center',
+                            boxShadow: 5,
+                            width: 'fit-content',
+                            position: 'absolute'
+                        }}>
+                            {renderButton(4, "Online Users")}
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3} />
                     <Grid item xs={3}>
                         <Box sx={{
                             bgcolor: 'white',

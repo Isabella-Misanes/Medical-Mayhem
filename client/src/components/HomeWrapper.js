@@ -19,5 +19,7 @@ export default function HomeWrapper() {
 
     if (isAuthorized === undefined) return null
 
+    // TODO: Set user's online status to false when user closes window/tab while website is open
+
     return (isAuthorized) ? <HomeScreen /> : <WelcomeScreen />;
 }

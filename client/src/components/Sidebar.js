@@ -82,7 +82,7 @@ export default function Sidebar() {
     );
 
     return (
-        auth.role === UserRoleType.USER && 
+        auth.role !== UserRoleType.GUEST && 
             <Box sx={{ 
                 backgroundColor: '#104c00',
                 position: 'fixed',
