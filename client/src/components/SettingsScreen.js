@@ -48,7 +48,7 @@ export default function SettingsScreen() {
 
     function handleLogout() {
         store.reset()
-        auth.logoutUser();
+        auth.logoutUser(auth.username);
     }
 
     function handleDeleteAcc() {
