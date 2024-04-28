@@ -57,6 +57,8 @@ export const updateAvatar = async (pic, speed, strength, defense, favoredMinigam
     });
 }
 
+export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
+
 export const getSettings = async() => {
     return api.get('/settings/get');
 }
@@ -101,6 +103,7 @@ const apis = {
     acceptFriendRequest,
     getAvatar,
     updateAvatar,
+    getAllAvatars,
     getSettings,
     updateAudioSettings,
     updateKeybinds,

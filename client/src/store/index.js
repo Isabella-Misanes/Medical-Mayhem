@@ -53,6 +53,7 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
+    GET_AVATAR_LIST: "GET_AVATAR_LIST",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -96,7 +97,8 @@ function GlobalStoreContextProvider(props) {
             defense: 0,
             favoredMinigame: "",
         },
-        players: [] // an array of usernames for players matched with
+        players: [], // an array of usernames for players matched with
+        avatarList: [], // the list of avatars in the Character 
     });
 
     console.log("inside useGlobalStore");
@@ -201,6 +203,16 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
+                });
+            }
+            case GlobalStoreActionType.GET_AVATAR_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    avatarList: payload,
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
@@ -463,6 +475,20 @@ function GlobalStoreContextProvider(props) {
     // Map Search Screen
     store.openMap = function (event) {
         console.log("Opening map in store.");
+    }
+
+    store.getAllAvatars = function () {
+        async function asyncGetAllAvatars() {
+            try {
+                let response = await apis.getAllAvatars()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_AVATAR_LIST,
+                    payload: response.data
+                })
+            } catch (error) { console.log(error) }
+        }
+        asyncGetAllAvatars();
     }
 
     // Character Select Screen

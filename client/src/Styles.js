@@ -46,3 +46,12 @@ export const innerContentBox = {
     position: 'absolute',
     alignItems: 'flex-start',
 }
+
+export const sortButton = {
+    mt: 1,
+    mb: 1,
+    fontSize: '10px',
+    borderColor: 'black',
+    borderRadius: 0,
+    color: 'black'
+}

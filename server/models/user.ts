@@ -42,6 +42,7 @@ const UserSchema = new Schema(
         toggleParty: {type: Boolean, default: true},
 
         // Pertaining to sprites and gameplay
+        avatars: [{type: ObjectId, ref: 'Avatar'}],
         avatarSprite: {type: String, default: ""},
         speed: {type: Number, default: 0},
         strength: {type: Number, default: 0},
