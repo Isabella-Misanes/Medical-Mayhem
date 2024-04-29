@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
-// import socket from '../constants/socket';
 
 export default function WelcomeScreen() {
     const navigate = useNavigate();

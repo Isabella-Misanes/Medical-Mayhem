@@ -6,7 +6,7 @@ export const getAllAvatars = async (req: Request, res: Response) => {
     console.log("get all avatars");
     
     try {
-        const avatars = await Avatar.find();
+        const avatars = await Avatar.find({isPublic: true});
 
         if(!avatars) {
             console.log("No avatars found");
@@ -37,7 +37,7 @@ export const updateAvatarList = async (req: Request, res: Response) => {
                 strength: strength,
                 defense: defense, 
                 favoredMinigame: favoredMinigame,
-                author: targetUser?._id,
+                author: targetUser.username,
                 comments: [],
                 isPublic: isPublic,
             });

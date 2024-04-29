@@ -97,6 +97,7 @@ export default function HomeScreen() {
                                 onClick={() => navigate('/mapsearch')}
                                 text='Character Search'
                                 buttonSx={homeButtons}
+                                disable={auth.role === UserRoleType.GUEST}
                             />
                         </Grid>
                         <Grid item xs={6}>
