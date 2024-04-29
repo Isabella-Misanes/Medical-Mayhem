@@ -5,13 +5,16 @@ import { User } from '../models/user'
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {
-    console.log(req.username)
+    const {username, email} = req;
     try {
         console.log("REACHED")
+        const user = await User.findOne({username: username}, {isAdmin: 1});
+        console.log(user);
         return res.status(200).json({
             loggedIn: true,
-            username: req.username,
-            email: req.email
+            username: username,
+            email: email,
+            isAdmin: user?.isAdmin
         })
     } catch (err) {
         console.log("err: " + err);
@@ -55,6 +58,10 @@ export const loginUser = async (req: Request, res: Response) => {
         const token = await auth.signToken((existingUser._id).toString());
         console.log("token: " + token);
 
+        // Change user's online status to true
+        existingUser.onlineStatus = true;
+        await existingUser.save();
+
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
@@ -76,6 +83,8 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const logoutUser = async (req: Request, res: Response) => {
+    const {username} = req.body;
+    await User.findOneAndUpdate({username: username}, {$set: {onlineStatus: false}});
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),

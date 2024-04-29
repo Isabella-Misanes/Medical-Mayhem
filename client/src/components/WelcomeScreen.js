@@ -3,17 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
-import socket from '../constants/socket';
+import { splashButtonStyle } from '../Styles';
 
 export default function WelcomeScreen() {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
-
-    const splashButtonStyle = {
-        bgcolor: 'black',
-        ":hover": {
-          bgcolor: 'black'},
-    }
 
     let modal = "";
     if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;

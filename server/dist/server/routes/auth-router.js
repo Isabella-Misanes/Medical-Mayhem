@@ -13,7 +13,7 @@ router.use('/deleteUser', auth_1.auth.verifyToken);
 router.use('/deleteUser', auth_1.auth.verifyUserExists);
 router.post('/register', auth_controller_1.AuthController.registerUser);
 router.post('/login', auth_controller_1.AuthController.loginUser);
-router.get('/logout', auth_controller_1.AuthController.logoutUser);
+router.post('/logout', auth_controller_1.AuthController.logoutUser);
 router.get('/loggedIn', auth_controller_1.AuthController.getLoggedIn);
 router.post('/deleteUser', auth_controller_1.AuthController.deleteUser);
 exports.default = router;

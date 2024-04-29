@@ -15,6 +15,12 @@ describe('Home Navigation', () => {
             cy.get('#profile-button').should('be.visible').should('be.disabled')
         })
       
+        it('should not be able to click Character Search as a guest', () => {
+            cy.visit('/')
+            cy.get('#continue-as-guest').should('be.visible').click()
+            cy.get('#map-search-button').should('be.visible').should('be.disabled')
+        })
+
         it('should display a queue modal successfully', () => {
             cy.visit('/')
             cy.get('#continue-as-guest').should('be.visible').click()
@@ -22,14 +28,6 @@ describe('Home Navigation', () => {
             cy.intercept('POST', '/socket.io/**', {}).as('socket.io')
             cy.get('#play-button').should('be.visible').click()
             cy.get('#queue-modal').should('be.visible')
-        })
-        
-        it('should navigate to the map search screen successfully', () => {
-            cy.visit('/')
-            cy.get('#continue-as-guest').should('be.visible').click()
-            cy.get('#map-search-button').should('be.visible').should('be.enabled')
-            cy.get('#map-search-button').should('be.visible').click()
-            cy.url().should('eq', `${baseUrl}/mapsearch`)
         })
     
         it('should navigate to the forums screen successfully', () => {

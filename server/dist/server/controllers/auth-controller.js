@@ -41,13 +41,16 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = require("../models/user");
 // Determines and returns if the user is logged in or not
 const getLoggedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.username);
+    const { username, email } = req;
     try {
         console.log("REACHED");
+        const user = yield user_1.User.findOne({ username: username }, { isAdmin: 1 });
+        console.log(user);
         return res.status(200).json({
             loggedIn: true,
-            username: req.username,
-            email: req.email
+            username: username,
+            email: email,
+            isAdmin: user === null || user === void 0 ? void 0 : user.isAdmin
         });
     }
     catch (err) {
@@ -87,6 +90,9 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // LOGIN THE USER
         const token = yield index_1.auth.signToken((existingUser._id).toString());
         console.log("token: " + token);
+        // Change user's online status to true
+        existingUser.onlineStatus = true;
+        yield existingUser.save();
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
@@ -108,6 +114,8 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.loginUser = loginUser;
 const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username } = req.body;
+    yield user_1.User.findOneAndUpdate({ username: username }, { $set: { onlineStatus: false } });
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),

@@ -45,7 +45,7 @@ function AuthContextProvider(props) {
                 return setAuth({
                     username: payload.username,
                     email: payload.email,
-                    role: UserRoleType.USER,
+                    role: payload.role,
                     loggedIn: payload.loggedIn,
                     errorMessage: ""
                 });
@@ -147,7 +147,8 @@ function AuthContextProvider(props) {
                     payload: {
                         loggedIn: response.data.loggedIn,
                         username: response.data.username,
-                        email: response.data.email
+                        email: response.data.email,
+                        role: response.data.isAdmin ? UserRoleType.ADMIN : UserRoleType.USER
                     }
                 });
             }
@@ -216,8 +217,8 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.logoutUser = async function() {
-        const response = await api.logoutUser();
+    auth.logoutUser = async function(username) {
+        const response = await api.logoutUser(username);
         if (response.status === 200) {
             authReducer( {
                 type: AuthActionType.LOGOUT_USER,

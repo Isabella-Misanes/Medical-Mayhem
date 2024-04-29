@@ -1,5 +1,5 @@
-import { Box, Button, Divider, Grid, Menu, MenuItem, Modal, Typography, TextField } from '@mui/material';
-import { buttonStyle } from '../App';
+import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
+import { buttonStyle, noPlayersCard, socialInner, socialModal, socialOuter } from '../Styles';
 import Sidebar from './Sidebar';
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { ReportModal, BackButton } from '.';
 import SocialCard from './SocialCard';
 import MUIErrorModal from './MUIErrorModal';
+import UserOptionMenu from './UserOptionMenu';
 
 export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
@@ -19,6 +20,7 @@ export default function SocialScreen() {
     const [currFriend, setCurrFriend] = useState('');
     // Add friend modal functionality
     const [addFriendUsername, setAddFriendUsername] = useState('');
+    const [confirmModal, setConfirmModal] = useState(false);
 
     function handleButtonClick(buttonId) { setActiveButton(buttonId); };
 
@@ -41,6 +43,10 @@ export default function SocialScreen() {
                 store.showReceivedRequests();
                 setId('received-requests');
                 break;
+            case 4:
+                store.getOnlinePlayers();
+                setId('online-users');
+                break;
             default:
                 // store.viewFriends();
                 // break;
@@ -55,7 +61,10 @@ export default function SocialScreen() {
         // eslint-disable-next-line
     }, [store.profileInfo])
 
-    function handleFriendModalOpen() { setModalOpen(true); }
+    function handleFriendModalOpen() {
+        setAddFriendUsername('');
+        setModalOpen(true);
+    }
     function handleFriendModalClose() { setModalOpen(false); }
 
     const renderButton = (buttonNum, str) => {
@@ -70,9 +79,7 @@ export default function SocialScreen() {
         )
     };
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const handleProfileMenuOpen = (event) => { setAnchorEl(event.currentTarget); };
     
     // TODO: Handle having more than 10 players on the page
     const playerRender = () => {
@@ -81,10 +88,12 @@ export default function SocialScreen() {
         if(activeButton === 0) str += 'Friends';
         else if(activeButton === 1) str += 'Recent Players';
         else if(activeButton === 2) str += 'Sent Friend Requests';
-        else str += 'Received Friend Requests';
+        else if(activeButton === 3) str += 'Received Friend Requests';
+        else str += 'Online Users';
         
         if(playerList.length !== 0) {
-            for(let i = 0; i < playerList.length; i++) {
+            // TODO: Arbitrarily limited max # of displayed users to 10 but have to figure out how to display more than 10 later
+            for(let i = 0; i < playerList.length && i < 10; i++) {
                 playerCards.push(
                     <SocialCard
                         key={i}
@@ -92,8 +101,8 @@ export default function SocialScreen() {
                         left={`${5 + ((i % 5) * 17.5)}%`}
                         friend={playerList[i]}
                         onClick={(event) => {
+                            setCurrFriend(playerList[i].username);
                             handleProfileMenuOpen(event);
-                            setCurrFriend(playerList[i]);
                         }}
                     />
                 )
@@ -104,15 +113,7 @@ export default function SocialScreen() {
                 <Box
                     id={str.toLowerCase().replace(/\s+/g, '-')}
                     key={'no-players'}
-                    sx={{
-                        width: '90%',
-                        height: '40%',
-                        bgcolor: 'white',
-                        position: 'absolute',
-                        top: '30%',
-                        left: '5%',
-                        boxShadow: 5
-                    }}
+                    sx={noPlayersCard}
                 >
                     <h1>{str}</h1>
                 </Box>
@@ -121,86 +122,10 @@ export default function SocialScreen() {
         return playerCards;
     }
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
-    function handlePrivateMessaging(event) {
-        store.openPrivateMessaging(event);
-        handleMenuClose();
-    }
-
-    // TODO: Display modal to confirm user wants to remove friend
-    // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
-    function handleRemoveFriend() {
-        store.removeFriend(currFriend);
-        handleMenuClose();
-    }
-
-    function handleCancelRequest() {
-        store.cancelFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleIgnoreRequest() {
-        store.ignoreFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleAcceptRequest() {
-        store.acceptFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleReportPlayer(event) {
-        setShowReportModal(true);
-        handleMenuClose();
-    }
-
-    let optionStr = () => {
-        if(activeButton === 0) return 'Remove Friend';
-        else if(activeButton === 2) return 'Cancel Friend Request';
-        else return 'Ignore Friend Request';
-    }
-
-    const acceptRequestItem = (
-        <MenuItem onClick={() => handleAcceptRequest(currFriend)}>
-            Accept Friend Request
-        </MenuItem>
-    )
-    const partyMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-            keepMounted
-            transformOrigin={{vertical: 'top',horizontal: 'right'}}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
-                Private Message
-            </MenuItem>
-            {activeButton === 3 && acceptRequestItem}
-            <MenuItem onClick={() => {
-                if(activeButton === 0) handleRemoveFriend();
-                else if(activeButton === 1) handleMenuClose();
-                else if(activeButton === 2) handleCancelRequest();
-                else handleIgnoreRequest(currFriend);
-            }}>
-                {optionStr()}
-            </MenuItem>
-            <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
-                Report Player
-            </MenuItem>
-            
-        </Menu>
-    );
-
     // Add friend
     const handleSubmit = (event) => {
         event.preventDefault();
-        store.sendFriend(addFriendUsername, handleFriendModalClose);
-        // TODO: Handle module change to confirm that a friend request was sent
+        store.sendFriend(addFriendUsername, handleFriendModalClose, setConfirmModal);
     };
 
     const handleAddFriendUsernameChange = (event) => {
@@ -208,35 +133,17 @@ export default function SocialScreen() {
         setAddFriendUsername(event.target.value);
     }
 
-    let modal = store.errorMessage !== "" ? <MUIErrorModal id={'error'} store={store} /> : "";
+    let modal = store.errorMessage === "" ? null : <MUIErrorModal id={'error'} store={store} />;
     
     return (
         <div id="social-screen">
-            <Box sx={{
-                height: '85%',
-                width: '85%',
-                flexDirection: 'column',
-                backgroundColor: '#626262',
-                position: 'absolute',
-                textAlign: 'center',
-                top: '5%',
-                left: '2.5%',
-                p: 2,
-                boxShadow: 10
-            }} />
-            <Box
-                sx={{
-                    height: '80%',
-                    width: '82.5%',
-                    flexDirection: 'column',
-                    backgroundColor: '#BA7943',
-                    position: 'absolute',
-                    textAlign: 'center',
-                    top: '7.5%',
-                    left: '3.75%',
-                    p: 2,
-                    marginRight: '10%',
-            }}>
+            <Box sx={socialOuter} />
+            <Box sx={socialInner}>
+                {/*
+                    TODO: Fix UI issues:
+                    Grid container doesn't take up full box width (appears fine but see inspect element menu)
+                    Grid item elements within container go outside of the grid container width/height
+                 */}
                 <Grid container spacing={2}>
                     <Grid item xs={2} sx={{
                         bgcolor: 'white',
@@ -258,7 +165,21 @@ export default function SocialScreen() {
                             Add Friend
                         </Button>
                     </Grid>
-                    <Grid item xs={4}/>
+                    <Grid item xs={1}>
+                        <Box sx={{
+                            bgcolor: 'white',
+                            mt: 2,
+                            mb: 2,
+                            ml: 14,
+                            textAlign: 'center',
+                            boxShadow: 5,
+                            width: 'fit-content',
+                            position: 'absolute'
+                        }}>
+                            {renderButton(4, "Online Users")}
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3} />
                     <Grid item xs={3}>
                         <Box sx={{
                             bgcolor: 'white',
@@ -300,49 +221,73 @@ export default function SocialScreen() {
                 
                 <BackButton />
 
-                <Modal id={'add-friend-modal'} open={isModalOpen} onClose={handleFriendModalClose}>
-                    <Box sx={{
-                        width: '30%',
-                        height: '27%',
-                        bgcolor: '#2d7044',
-                        border: 1,
-                        borderColor: 'white',
-                        top: '20%',
-                        left: '30%',
-                        position: 'absolute',
-                        boxShadow: 5,
-                        textAlign: 'center',
-                    }}>
-                        <h1>Add Friend</h1>
-                        <Divider />
-                        <Box component='form' noValidate onSubmit={handleSubmit}>
-                            <TextField
-                                id='username'
-                                size='small'
-                                // value={username}
-                                fullWidth
-                                label='Enter Username'
-                                variant="filled"
-                                sx={{bgcolor: '#e3e3e3', width: '90%', mt: '5%'}}
-                                onChange={handleAddFriendUsernameChange}
-                            />
-                            <Button
-                                id="add-friend-submit"
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2, width: '50%' }}
-                            >
-                                Add Friend
-                            </Button>
-                        </Box>
-                        {modal}
-                    </Box>
-                </Modal>
-                {partyMenu}
+                <AddFriendModal
+                    isModalOpen={isModalOpen}
+                    handleFriendModalClose={handleFriendModalClose}
+                    handleSubmit={handleSubmit}
+                    handleAddFriendUsernameChange={handleAddFriendUsernameChange}
+                    modal={modal}
+                />
+                <ConfirmModal
+                    confirmModal={confirmModal}
+                    handleModalClose={() => setConfirmModal(false)}
+                    username={isModalOpen ? addFriendUsername : currFriend}
+                />
+                {isMenuOpen && <UserOptionMenu
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    isMenuOpen={isMenuOpen}
+                    targetUser={currFriend}
+                    setShowReportModal={setShowReportModal}
+                    handleFriendModalClose={handleFriendModalClose}
+                    setConfirmModal={setConfirmModal}
+                />}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
             <Sidebar />
         </div>
     );
+}
+
+function AddFriendModal(props) {
+    return (
+        <Modal id={'add-friend-modal'} open={props.isModalOpen} onClose={props.handleFriendModalClose}>
+            <Box sx={socialModal}>
+                <h1>Add Friend</h1>
+                <Divider />
+                <Box component='form' noValidate onSubmit={props.handleSubmit}>
+                    <TextField
+                        id='username'
+                        size='small'
+                        // value={username}
+                        fullWidth
+                        label='Enter Username'
+                        variant="filled"
+                        sx={{bgcolor: '#e3e3e3', width: '90%', mt: '5%'}}
+                        onChange={props.handleAddFriendUsernameChange}
+                    />
+                    <Button
+                        id="add-friend-submit"
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={[buttonStyle, { mt: 3, mb: 2, width: '50%' }]}
+                    >
+                        Add Friend
+                    </Button>
+                </Box>
+                {props.modal}
+            </Box>
+        </Modal>
+    )
+}
+
+function ConfirmModal(props) {
+    return (
+        <Modal id={'confirm-modal'} open={props.confirmModal} onClose={props.handleModalClose}>
+            <Box sx={socialModal}>
+                <h1>Friend request sent to user {props.username}.</h1>
+            </Box>
+        </Modal>
+    )
 }

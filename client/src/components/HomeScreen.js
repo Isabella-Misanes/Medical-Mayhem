@@ -1,17 +1,19 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
 import AuthContext, { UserRoleType } from '../auth';
 import SocketEvents from '../constants/socketEvents'
 import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
-import { homeScreen, homeButtons, modalStyle } from '../Styles';
+import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
+import { buttonStyle, homeButtons, modalStyle } from '../Styles';
+
+// Styling
 
 export default function HomeScreen() {
     const navigate = useNavigate();
@@ -20,7 +22,8 @@ export default function HomeScreen() {
 
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
-    const [queueingUp, setQueueingUp] = useState(false)
+    const [queueingUp, setQueueingUp] = useState(false);
+    const [role, setRole] = useState(UserRoleType.GUEST);
     
     function handleInviteButtonClick() {
         setShowInviteModal(true);
@@ -44,17 +47,22 @@ export default function HomeScreen() {
             console.log(store.players)
             navigate('/game')
         })
+
         // eslint-disable-next-line
     }, [])
+
+    // TODO: For some reason when switching from guest user to admin user, the role is set to 'USER' and doesn't update until refresh.
+    // Evident by the report button not appearing when logging out of guest user and logging into an admin user.
+    useEffect(() => setRole(auth.role), [auth]);
 
     return (
         <div id="home-screen">
             <Grid container>
                 <Grid item xs={1}/>
                 <Grid item xs={6}>
-                    <Grid container sx={[homeScreen, {boxShadow: 4}]}>
+                    <Grid container id="home-menu" sx={[homeScreen, {boxShadow: 4}]}>
                         <Grid item xs={12}>
-                            <Typography variant="h2" color="red" gutterBottom>Medical Mayhem</Typography>
+                            <Typography variant="h2" color="red">Medical Mayhem</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <HomeButton
@@ -72,6 +80,8 @@ export default function HomeScreen() {
                                 id='map-search-button'
                                 onClick={() => navigate('/mapsearch')}
                                 text='Character Search'
+                                buttonSx={homeButtons}
+                                disable={auth.role === UserRoleType.GUEST}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -99,6 +109,7 @@ export default function HomeScreen() {
                                 id='forums-button'
                                 onClick={() => navigate('/forum')}
                                 text='Forums'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -116,6 +127,7 @@ export default function HomeScreen() {
                                 id='settings-button'
                                 onClick={() => navigate('/settings')}
                                 text='Settings'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -124,6 +136,7 @@ export default function HomeScreen() {
                                 id='about-button'
                                 onClick={() => navigate('/about')}
                                 text='About'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -131,6 +144,7 @@ export default function HomeScreen() {
                                 id="leaderboard-button"
                                 onClick={() => navigate("/leaderboard")}
                                 text='Leaderboard'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -141,32 +155,35 @@ export default function HomeScreen() {
                                 text='Invite'
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                onClick={() => navigate("/reports")}
-                                buttonSx={[buttonStyle, {color: 'white'}]}
-                                text='Reports'
-                            />
-                        </Grid>
+                        { role === UserRoleType.ADMIN &&
+                            <Grid item xs={6}>
+                                <HomeButton
+                                    onClick={() => navigate("/reports")}
+                                    buttonSx={[buttonStyle, {color: 'white'}]}
+                                    text='Reports'
+                                />
+                            </Grid>
+                        }
                         <Grid item xs={12}/>
                         <Grid item xs={12}/>
                     </Grid>                
                 </Grid>
+                <Sidebar />
             </Grid>
             <MessagesDrawer />
-            <Sidebar />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
-            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />               
-            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />               
+            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
+            <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )
 }
 
 function HomeButton(props) {
+    const {xs, gridSx, id, onClick, buttonSx, disable, text} = props;
     return (
-        <Grid item xs={props.xs} sx={props.gridSx}>
-            <Button id={props.id} onClick={props.onClick} sx={props.buttonSx} disabled={props.disable}>
-                {props.text}
+        <Grid item xs={xs} sx={gridSx}>
+            <Button id={id} onClick={onClick} sx={buttonSx} disabled={disable}>
+                {text}
             </Button>
         </Grid>
     )
@@ -190,20 +207,11 @@ function QueueModal(props) {
             aria-labelledby="modal-find-game"
             id="queue-modal"
         >
-            <Box
-                sx={modalStyle}>
-                <Button 
-                    sx={{
-                    color: 'black',
-                    ":hover":{
-                        bgcolor: '#f1f9f4'
-                        }
-                    }}
-                    onClick={handleXButtonClick}
-                >
+            <Box sx={modalStyle}>
+                <Button sx={{color: 'black', ":hover":{bgcolor: '#f1f9f4'}}} onClick={handleXButtonClick}>
                     X
                 </Button>
-                <br></br>
+                <br />
                 <Typography id="modal-find-game" variant="h6" component="h2">
                     {modalText}
                 </Typography>
@@ -216,7 +224,3 @@ function QueueModal(props) {
         </Modal>
     )
 }
-
-
-// Default params for the xs and buttonSx properties of the HomeButton
-HomeButton.defaultProps = { buttonSx: homeButtons }

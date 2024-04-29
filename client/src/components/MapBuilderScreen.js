@@ -1,10 +1,10 @@
-import { Button, Grid, InputLabel, MenuItem, Paper, Select, Slider } from '@mui/material';
+import { Button, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, Slider, Switch, TextField } from '@mui/material';
 import {FormControl} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import player1 from '../assets/Player-1.png.png';
 import player2 from '../assets/Player-2.png.png';
 import player3 from '../assets/Player-3.png.png';
@@ -22,6 +22,8 @@ export default function MapBuilderScreen() {
     const [strength, setStrength] = useState(0);
     const [defense, setDefense] = useState(0);
     const [favoredMinigame, setMinigame] = useState("");
+    const [isPublic, setIsPublic] = useState(false);
+    const [avatarName, setAvatarName] = useState("");
 
     const players = [
         player1,
@@ -63,17 +65,18 @@ export default function MapBuilderScreen() {
 
     useEffect(() => {
         store.getAvatar();
-        console.log(store.avatar);
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {     
         setSelectedSprite(store.avatar.pic);
+        setAvatarName(store.avatar.name);
         setSprite(store.avatar.pic);
         setSpeed(store.avatar.speed);
         setStrength(store.avatar.strength);
         setDefense(store.avatar.defense);
         setMinigame(store.avatar.favoredMinigame);
+        setIsPublic(store.avatar.isPublic);
     }, [store.avatar])
 
     function handleCharacterClick(index) {
@@ -106,8 +109,12 @@ export default function MapBuilderScreen() {
     }
 
     function handleUpdateCharacter() {
-        console.log(selectedSprite);
-        store.updateAvatar(selectedSprite, speed, strength, defense, favoredMinigame);
+        store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+        store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+    }
+
+    function handleUpdateName(event) {
+        setAvatarName(event.target.value);
     }
 
     return (
@@ -309,10 +316,11 @@ export default function MapBuilderScreen() {
                             3
                         </Grid>
                         <Grid item xs={1}/>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <FormControl fullWidth>
                                 <InputLabel id="favorite-minigame">Favorite Minigame</InputLabel>
                                 <Select
+                                size='small'
                                 value={favoredMinigame}
                                 label="Favorite Minigame"
                                 onChange={(event) => {setMinigame(event.target.value)}}
@@ -322,7 +330,22 @@ export default function MapBuilderScreen() {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        <Grid item xs={4}>
+                            <FormControlLabel control={
+                                <Switch 
+                                    checked={isPublic}
+                                    onChange={() => {setIsPublic(!isPublic)}}
+                                />
+                                } 
+                                label="Public" 
+                            />
+                        </Grid>
                         
+                        <Grid item xs={12}>
+                            <TextField fullWidth size='small' label='Name' value={avatarName}
+                                onChange={(event) => {handleUpdateName(event)}}
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <Button id='confirm-changes' sx={[buttonStyle, {color: 'white'}]}
                             onClick={() => {handleUpdateCharacter()}}>

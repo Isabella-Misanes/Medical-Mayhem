@@ -1,6 +1,7 @@
-import { Actor, Vector, Color } from "excalibur";
+// import { Actor, Vector, Color } from "excalibur";
+import { Actor, Color } from "excalibur";
 import * as ex from 'excalibur'
-import{ Config } from './config'
+// import{ Config } from './config'
 import { Resources } from "../resources";
 
 export default class Patient extends Actor {
@@ -22,27 +23,5 @@ export default class Patient extends Actor {
 
         this.graphics.use(sprite)
 
-    }
-
-    onPreUpdate(engine, elapsedMs) {
-        
-
-
-        // if (engine.input.keyboard.isHeld(ex.Keys.ArrowRight)) {
-        //     this.vel = ex.vec(Config.PlayerSpeed, 0);
-        //     //this.graphics.use('right-walk');
-        // }
-        // if (engine.input.keyboard.isHeld(ex.Keys.ArrowLeft)) {
-        //     this.vel = ex.vec(-Config.PlayerSpeed, 0);
-        //     //this.graphics.use('left-walk');
-        // }
-        // if (engine.input.keyboard.isHeld(ex.Keys.ArrowUp)) {
-        //     this.vel = ex.vec(0, -Config.PlayerSpeed);
-        //     //this.graphics.use('up-walk');
-        // }
-        // if (engine.input.keyboard.isHeld(ex.Keys.ArrowDown)) {
-        //     this.vel = ex.vec(0, Config.PlayerSpeed);
-        //     //this.graphics.use('down-walk');
-        // }
     }
 }

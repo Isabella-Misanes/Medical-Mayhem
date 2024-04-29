@@ -166,7 +166,8 @@ describe("GET /loggedIn", () => {
         expect(response.body).toEqual({
             loggedIn: true,
             username: 'JohnSmith',
-            email: 'john.smith@gmail.com'
+            email: 'john.smith@gmail.com',
+            isAdmin: false
         })         
     })
 

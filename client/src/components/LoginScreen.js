@@ -4,9 +4,11 @@ import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
+import { useNavigate } from 'react-router-dom';
 
-export default function RegisterScreen() {
+export default function LoginScreen() {
     const {auth} = useContext(AuthContext);
+    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         username: '',
@@ -95,7 +97,7 @@ export default function RegisterScreen() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="/register/" variant="body2">
+                                <Link onClick={() => navigate('/register')} variant="body2">
                                     Don't have an account? Sign Up
                                 </Link>
                             </Grid>

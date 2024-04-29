@@ -1,5 +1,17 @@
 const baseUrl = Cypress.config('baseUrl')
 
+Cypress.Commands.add('login', (email, password) => {
+
+    cy.session([email, password], () => {
+        cy.visit('/')
+        cy.get('#login').should('be.visible').click()
+        cy.get('#email').should('be.visible').type(email)
+        cy.get('#password').should('be.visible').type(password)
+        cy.get('#loginSubmit').should('be.visible').click()
+        cy.url().should('eq', `${baseUrl}/`)
+    })
+})
+
 describe('Social Screen', () => {
     // Continue as registered user before each test
     beforeEach(() => {
@@ -65,8 +77,21 @@ describe('Social Screen', () => {
 
             cy.get('#add-friend-submit').should('be.visible').click();
             cy.wait('@sendFriend');
-            cy.get('#add-friend-modal').should('not.exist');
-            cy.get('#sent-button').should('be.visible').click();
+            cy.get('#confirm-modal').should('be.visible');
         })
     })
+
+    // describe('Received Friend Request Functionality', () => {
+    //     it('should allow the user to accept friend requests from other users', () => {
+
+    //     })
+
+    //     it('should allow the user to reject friend requests from other users', () => {
+            
+    //     })
+    // })
+
+    // describe('Friend Functionality', () => {
+        
+    // })
 })

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, List, ListItem, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 
@@ -42,12 +42,10 @@ export default function ReportsScreen() {
                                     <Typography sx={{
                                         ml: 2
                                     }}>
-                                        <p>
                                             <strong>Report Against McKillaGorilla</strong><br/>
                                             by Joji John<br/>
                                             <br/>
                                             He plays too much
-                                        </p>
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={2}>

@@ -1,4 +1,5 @@
-import { Actor, Vector, Color } from "excalibur";
+// import { Actor, Vector, Color } from "excalibur";
+import { Actor, Color } from "excalibur";
 import * as ex from 'excalibur'
 import{ Config } from './config'
 import { Resources } from "../resources";
@@ -19,8 +20,9 @@ export default class Player extends Actor {
             collisionGroup: PlayerCollisionGroup
         })
         this.isMyPlayer = isMyPlayer // is this a teammate, or the player that the user is currently controlling?
-        this.username = username
-        this.guidingPatient = null
+        this.username = username // string
+        this.guidingPatient = null // a reference to the patient being guided by the player
+        this.posCorrection = null
     }
 
     onInitialize(engine) {
@@ -34,8 +36,10 @@ export default class Player extends Actor {
         socket.on(SocketEvents.PLAYER_MOVED, (data) => {
 
             // console.log(data)
-            if (data.username === this.username)
+            if (data.username === this.username) {
                 this.vel = ex.vec(data.vel._x, data.vel._y)
+                this.posCorrection = data.pos
+            }
         })
 
         socket.on(SocketEvents.STOP_FOLLOW, (data) => {
@@ -99,12 +103,18 @@ export default class Player extends Actor {
 
             socket.emit(SocketEvents.PLAYER_MOVED, {
                 username: this.username,
-                vel: this.vel
+                vel: this.vel,
+                pos: this.pos.clone().add(this.vel.clone().scale(elapsedMs / 1000)),
             })
         }
-        // else {
-        //     console.log(this.vel)
-        //     console.log(this.pos)
-        // }
+    }
+
+    onPostUpdate(engine, elapsedMs) {
+        if(this.posCorrection && 
+            (this.pos.x !== this.posCorrection._x || 
+            this.pos.y !== this.posCorrection._y)) {
+                this.pos = ex.vec(this.posCorrection._x, this.posCorrection._y)
+                this.posCorrection = null
+            }
     }
 }

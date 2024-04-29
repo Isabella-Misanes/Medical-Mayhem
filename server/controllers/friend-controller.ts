@@ -126,7 +126,7 @@ export const viewReceivedFriendRequests = async (req: Request, res: Response) =>
 export const cancelFriendRequest = async (req: Request, res: Response) => {
     try {
         console.log('cancelFriendRequest')
-        const {username} = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = await User.findOne({username: username});
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         console.log(req.userId, targetUser._id);
@@ -140,7 +140,7 @@ export const cancelFriendRequest = async (req: Request, res: Response) => {
 export const ignoreFriendRequest = async (req: Request, res: Response) => {
     try {
         console.log('ignoreFriendRequest')
-        const {username} = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = await User.findOne({username: username});
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         console.log(req.userId, targetUser._id);
@@ -154,7 +154,7 @@ export const ignoreFriendRequest = async (req: Request, res: Response) => {
 export const acceptFriendRequest = async (req: Request, res: Response) => {
     try {
         console.log('acceptFriendRequest')
-        const {username} = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = await User.findOne({username: username});
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         console.log(targetUser);

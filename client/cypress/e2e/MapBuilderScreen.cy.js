@@ -1,5 +1,17 @@
 const baseUrl = Cypress.config('baseUrl')
 
+Cypress.Commands.add('login', (email, password) => {
+
+    cy.session([email, password], () => {
+        cy.visit('/')
+        cy.get('#login').should('be.visible').click()
+        cy.get('#email').should('be.visible').type(email)
+        cy.get('#password').should('be.visible').type(password)
+        cy.get('#loginSubmit').should('be.visible').click()
+        cy.url().should('eq', `${baseUrl}/`)
+    })
+})
+
 describe('Character Builder Screen', () => {
 
     beforeEach(() => {
