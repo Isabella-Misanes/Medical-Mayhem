@@ -55,6 +55,7 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
             player = new Player(players[i])
 
         engine.add(player)
+        
     }
 
     const patient = new Patient()
