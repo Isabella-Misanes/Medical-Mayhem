@@ -11,11 +11,14 @@ export default function MapSearchScreen() {
     const [avatarList, setAvatarList] = useState([]);
 
     useEffect(() => {
-        store.getAllAvatars();
-        setAvatarList(store.avatarList);
-        console.log(avatarList);
+        if (store.avatarList && store.avatarList.avatars.length > 0) {
+            setAvatarList(store.avatarList.avatars);
+        } else {
+            store.getAllAvatars();
+            setAvatarList([]);
+        }
         // eslint-disable-next-line
-    }, [])
+    }, [store.avatarList])
 
     function handleOpenMap(event) {
         store.openMap(event);
@@ -51,11 +54,8 @@ export default function MapSearchScreen() {
                 }}>
                     Search Results
                 </Grid>
-                <Grid item xs={1} sx={{ fontSize: '10px', ml: -2}}>
+                <Grid item xs={2} sx={{ fontSize: '10px', ml: -2}}>
                     Author
-                </Grid>
-                <Grid item xs={1} sx={{ fontSize: '10px'}}>
-                    Downloads
                 </Grid>
                 <Grid item xs={1} sx={{ fontSize: '10px', ml: 1}}>
                     Comments
@@ -64,36 +64,33 @@ export default function MapSearchScreen() {
                     <Divider />
                 </Grid>
                 
-                <List sx={{ 
-                    width: '100%', 
-                    ml: 2
-                }}>
-                    {avatarList.map((avatar, index) => (
-                        <>
-                            <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
-                                <ListItemButton onClick={() => { setCharacterList(false) }}>
-                                    <Grid item xs={9} sx={{ textAlign: 'left' }}>
-                                        {avatar.avatarName}
-                                    </Grid>
-                                    <Grid item xs={1} sx={{ fontSize: '10px' }}>
-                                        {avatar.author}
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        {avatar.speed}
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        {avatar.strength}
-                                    </Grid>
-                                </ListItemButton>
-                            </ListItem>
-                            <Divider />
-                        </>
-                    ))}
+                <List sx={{ width: '100%', ml: 2 }}>
+                    {avatarList.length === 0 ? (
+                        <div>Loading...</div>
+                    ) : (
+                        avatarList.map((avatar, index) => (
+                            <div id={"character-card-" + index}>
+                                <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
+                                    <ListItemButton onClick={() => { setCharacterList(false) }}>
+                                        <Grid item xs={9} sx={{ textAlign: 'left' }}>
+                                            {avatar.avatarName}
+                                        </Grid>
+                                        <Grid item xs={2} sx={{ fontSize: '10px' }}>
+                                            {avatar.author}
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            {avatar.comments.length}
+                                        </Grid>
+                                    </ListItemButton>
+                                </ListItem>
+                                <Divider />
+                            </div>
+                        ))
+                    )}
                 </List>
+
+
             </Grid>
-            <Grid item xs={12}/>
-            <Grid item xs={12}/>
-            <Grid item xs={12}/>
             <Grid item xs={12}/>
         </Grid>
     );
