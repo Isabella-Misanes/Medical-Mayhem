@@ -6,10 +6,12 @@ const SocketEvents = {
     QUEUE_UP: "QUEUE_UP",
     MY_SCORE_CHANGE: "MY_SCORE_CHANGE",
     LEAVE_QUEUE: "LEAVE_QUEUE",
+    SET_USERNAME: "SET_USERNAME",
     // SENT BY SERVER
     MATCH_FOUND: "MATCH_FOUND",
     OPPONENT_SCORE_CHANGE: "OPPONENT_SCORE_CHANGE",
-    ERROR: "ERROR"
+    ERROR: "ERROR",
+    PLAYER_MOVED: "PLAYER_MOVED"
 };
 exports.default = SocketEvents;
 //# sourceMappingURL=socketEvents.js.map

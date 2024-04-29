@@ -41,7 +41,7 @@ export function handleConnection(socket: Socket) {
 
     socket.on(SocketEvents.QUEUE_UP, (data) => {
 
-        if (queue.length >= 1) {
+        if (queue.length >= 3) {
 
             // Generate random room number and join it
             let room = randomBytes(8).toString('hex')
@@ -56,7 +56,7 @@ export function handleConnection(socket: Socket) {
             players.push(currSocketInfo.username)
 
             // Pop players from queue and add them to the room
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 3; i++) {
                 const teammateSocket = queue.shift() as Socket
                 teammateSocket.join(room)
 

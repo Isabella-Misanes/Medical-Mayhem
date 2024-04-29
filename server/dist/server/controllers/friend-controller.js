@@ -167,7 +167,7 @@ exports.viewReceivedFriendRequests = viewReceivedFriendRequests;
 const cancelFriendRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('cancelFriendRequest');
-        const { username } = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = yield user_1.User.findOne({ username: username });
         if (!targetUser)
             return res.status(400).json({ errorMessage: 'Target user not found.' });
@@ -183,7 +183,7 @@ exports.cancelFriendRequest = cancelFriendRequest;
 const ignoreFriendRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('ignoreFriendRequest');
-        const { username } = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = yield user_1.User.findOne({ username: username });
         if (!targetUser)
             return res.status(400).json({ errorMessage: 'Target user not found.' });
@@ -199,7 +199,7 @@ exports.ignoreFriendRequest = ignoreFriendRequest;
 const acceptFriendRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('acceptFriendRequest');
-        const { username } = req.body.targetUser;
+        const username = req.body.targetUser;
         const targetUser = yield user_1.User.findOne({ username: username });
         if (!targetUser)
             return res.status(400).json({ errorMessage: 'Target user not found.' });
