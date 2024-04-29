@@ -107,10 +107,12 @@ export const getAvatar = async (req: Request, res: Response) => {
             .status(200)
             .json({
                 pic: existingUser.avatarSprite,
+                name: existingUser.avatarName,
                 speed: existingUser.speed,
                 strength: existingUser.strength,
                 defense: existingUser.defense,
-                favoredMinigame: existingUser.favoredMinigame
+                favoredMinigame: existingUser.favoredMinigame,
+                isPublic: existingUser.isPublic,
             })
     } catch (err) {
         console.error(err);
@@ -120,21 +122,21 @@ export const getAvatar = async (req: Request, res: Response) => {
 
 export const updateAvatar = async (req: Request, res: Response) => {
     try {
-        const {pic, speed, strength, defense, favoredMinigame} = req.body
+        const {pic, name, speed, strength, defense, favoredMinigame, isPublic} = req.body
 
         let updatedUser
 
         if (pic) {
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {avatarSprite: pic, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame}}
+                {$set: {avatarSprite: pic, avatarName: name, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame, isPublic: isPublic}}
             );
         }
 
         else {
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame}}
+                {$set: {avatarName: name, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame, isPublic: isPublic}}
             );
         }
 

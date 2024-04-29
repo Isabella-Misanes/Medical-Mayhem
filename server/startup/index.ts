@@ -13,6 +13,7 @@ import authRouter from '../routes/auth-router'
 import mainRouter from '../routes/main-router'
 import socialRouter from '../routes/social-router'
 import partyRouter from '../routes/party-router'
+import avatarRouter from '../routes/avatar-router'
 import http from 'http'
 import { Server, Socket } from 'socket.io'
 import { handleConnection } from './socketHandlers';
@@ -37,6 +38,7 @@ app.use('/auth', authRouter)
 app.use('/api', mainRouter)
 app.use('/api', socialRouter)
 app.use('/api', partyRouter)
+app.use('/api', avatarRouter)
 
 // Creates the HTTP server with Express handling requests and responses
 export const server = http.createServer(app)

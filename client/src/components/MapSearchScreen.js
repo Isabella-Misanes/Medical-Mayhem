@@ -1,13 +1,18 @@
 import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
-import { outerContentBox, innerContentBox } from '../Styles';
+import { outerContentBox, innerContentBox, sortButton } from '../Styles';
 
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
+
+    useEffect(() => {
+        store.getAllAvatars()
+        // eslint-disable-next-line
+    }, [])
 
     function handleOpenMap(event) {
         store.openMap(event);
@@ -18,32 +23,21 @@ export default function MapSearchScreen() {
             <Grid item xs={12}>
                 <h3>Character Search</h3>
             </Grid>
-            <Grid item xs={8}/>
+            <Grid item xs={1}/>
+            <Grid item xs={6}>
+                <TextField fullWidth label="Search" size="small" />
+            </Grid>
             <Grid item xs={4}>
-                <TextField label="Search" size="small" />
-                <Button variant='outlined' sx={{
-                    mt: 1,
-                    mb: 1,
-                    fontSize: '10px',
-                    borderColor: 'black',
-                    borderRadius: 0,
-                    color: 'black'
-                }}
+                <Button variant='outlined' sx={sortButton}
                     onClick={(event) => {handleOpenMap(event)}}>
                     Newest
                 </Button>
-                <Button variant='outlined' sx={{
-                    mt: 1,
-                    mb: 1,
-                    fontSize: '10px',
-                    borderColor: 'black',
-                    borderRadius: 0,
-                    color: 'black'
-                }}
+                <Button variant='outlined' sx={sortButton}
                     onClick={(event) => {handleOpenMap(event)}}>
                     Top
                 </Button>
             </Grid>
+            <Grid item xs={1}/>
             <Grid container spacing={1} sx={{
                 fontSize: '14px',
                 alignItems: 'center'
@@ -147,7 +141,7 @@ export default function MapSearchScreen() {
                 </Grid>
                 <Grid item xs={3}/>
             </Grid>
-            
+
             <Sidebar/>
             <BackButton />
         </div>
