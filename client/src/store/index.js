@@ -55,6 +55,7 @@ export const GlobalStoreActionType = {
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
+    UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -93,10 +94,12 @@ function GlobalStoreContextProvider(props) {
         errorMessage: "",
         avatar: {
             pic: "",
+            name: "",
             speed: 0,
             strength: 0,
             defense: 0,
             favoredMinigame: "",
+            isPublic: false,
         },
         players: [], // an array of usernames for players matched with
         avatarList: [], // the list of avatars in the Character 
@@ -159,10 +162,12 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: {
                         pic: "",
+                        name: "",
                         speed: 0,
                         strength: 0,
                         defense: 0,
                         favoredMinigame: "",
+                        isPublic: false,
                     }
                 });
             }
@@ -215,6 +220,16 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     avatarList: payload,
                 });
+            }
+            case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    avatarList: payload,
+                })
             }
             case GlobalStoreActionType.GET_SETTINGS: {
                 return setStore({
@@ -523,24 +538,51 @@ function GlobalStoreContextProvider(props) {
         asyncGetAvatar();
     }
 
-    store.updateAvatar = function(pic, speed, strength, defense, favoredMinigame) {
-        async function asyncUpdateProfile() {
+    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+        async function asyncUpdateAvatar() {
             try{
-                let response = await apis.updateAvatar(pic, speed, strength, defense, favoredMinigame);
+                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR,
                     payload: {
                         pic: pic,
+                        name: name,
                         speed: speed,
                         strength: strength,
                         defense: defense,
                         favoredMinigame: favoredMinigame,
+                        isPublic: isPublic,
                     }
                 })
+                // store.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic);
             } catch (error) { alert("Please choose an image below 50 KB.") }
         }
-        asyncUpdateProfile();
+        asyncUpdateAvatar();
+    }
+
+    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+        async function asyncUpdateAvatarList() {
+            try {
+                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_AVATAR_LIST,
+                    payload: {
+                        pic: pic,
+                        name: name,
+                        speed: speed,
+                        strength: strength,
+                        defense: defense,
+                        favoredMinigame: favoredMinigame,
+                        isPublic: isPublic,
+                    }
+                })
+            } catch(error) {
+                console.error(error);
+            }
+        }
+        asyncUpdateAvatarList();
     }
 
     // Leaderboard Screen

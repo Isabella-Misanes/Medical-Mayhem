@@ -1,13 +1,18 @@
 import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { outerContentBox, innerContentBox, sortButton } from '../Styles';
 
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
+
+    useEffect(() => {
+        store.getAllAvatars()
+        // eslint-disable-next-line
+    }, [])
 
     function handleOpenMap(event) {
         store.openMap(event);

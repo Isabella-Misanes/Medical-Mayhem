@@ -44,10 +44,12 @@ const UserSchema = new Schema(
         // Pertaining to sprites and gameplay
         avatars: [{type: ObjectId, ref: 'Avatar'}],
         avatarSprite: {type: String, default: ""},
+        avatarName: {type: String, default: ""},
         speed: {type: Number, default: 0},
         strength: {type: Number, default: 0},
         defense: {type: Number, default: 0},
         favoredMinigame: {type: String, default: ""},
+        isPublic: {type: Boolean, default: false},
     },
     { timestamps: true },
 )

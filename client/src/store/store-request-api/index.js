@@ -37,14 +37,20 @@ export const getOnlinePlayers = async() => { return api.get('/onlinePlayers'); }
 
 export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
 
-export const updateAvatar = async (pic, speed, strength, defense, favoredMinigame) => {
+export const updateAvatar = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
     return api.post(`/updateAvatar/`, {
         pic: pic,
+        name: name,
         speed: speed,
         strength: strength,
         defense: defense,
         favoredMinigame: favoredMinigame,
+        isPublic: isPublic
     });
+}
+
+export const updateAvatarList = async (avatar) => {
+    return api.post(`/updateAvatarList/`, avatar);
 }
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
@@ -94,6 +100,7 @@ const apis = {
     getOnlinePlayers,
     getAvatar,
     updateAvatar,
+    updateAvatarList,
     getAllAvatars,
     getSettings,
     updateAudioSettings,
