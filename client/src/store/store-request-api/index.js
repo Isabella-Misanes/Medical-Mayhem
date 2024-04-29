@@ -19,7 +19,7 @@ export const viewFriends = async() => { return await api.get('/friends/'); }
 
 export const sendFriendRequest = async(targetUsername) => { return await api.post('/friendRequest/:targetUsername', {targetUsername: targetUsername}); }
 
-export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:username', {username: targetUser.username}); }
+export const removeFriend = async(targetUser) => { return await api.post('/friend/remove/:username', {username: targetUser}); }
 
 export const getRecentPlayers = async() => { return await api.get('/recentPlayers') }
 
@@ -77,6 +77,14 @@ export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
     })
 }
 
+export const getParty = async() => { return api.get('/party'); }
+
+export const getRelationToUser = async(targetUsername) => {
+    return api.post('/relationToUser', {targetUsername: targetUsername});
+}
+
+export const blockPlayer = async (targetUsername) => { return api.post('/blockPlayer', {targetUsername: targetUsername}); }
+
 const apis = {
     getProfile,
     updateProfile,
@@ -96,6 +104,9 @@ const apis = {
     updateAudioSettings,
     updateKeybinds,
     updateToggles,
+    getParty,
+    getRelationToUser,
+    blockPlayer
 }
 
 export default apis

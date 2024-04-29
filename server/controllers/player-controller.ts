@@ -2,6 +2,7 @@ import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { User } from '../models/user'
+import { FriendRequest } from '../models/friend-request';
 
 //TODO: might have to add additional middleware that check if the user still exists
 
@@ -155,7 +156,6 @@ export const updateAvatar = async (req: Request, res: Response) => {
 }
 
 export const getSettings = async (req: Request, res: Response) => {
-    console.log('Get settings');
     try {
         const user = await User.findOne({_id: req.userId}, {masterVolume: 1, musicVolume: 1, sfxVolume: 1, keybinds: 1, appearAsOffline: 1, toggleChat: 1, toggleParty: 1});
         if(!user) return res.status(400).send({errorMessage: 'User not found.'});
@@ -235,6 +235,55 @@ export const viewOnlinePlayers = async (req: Request, res: Response) => {
             }
         }));
         return res.status(200).json({players: onlinePlayers});
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const getRelationToUser = async (req: Request, res: Response) => {
+    try {
+        const currUser = await User.findOne({_id: req.userId}, {username: 1, friendsIds: 1, blockedIds: 1});
+        const targetUser = await User.findOne({username: req.body.targetUsername}, {_id: 1, friendsIds: 1, blockedIds: 1});
+        if(!currUser || !targetUser) return res.status(400).json({errorMessage: 'User not found.'});
+        const targetId = targetUser._id;
+        const reqSent = await FriendRequest.findOne({sender: currUser._id, receiver: targetId});
+        const reqRecv = await FriendRequest.findOne({receiver: currUser._id, sender: targetId});
+        if(currUser.friendsIds.includes(targetId) && targetUser.friendsIds.includes(currUser._id)) res.status(200).send('FRIENDS');
+        else if(reqSent) res.status(200).send('SENT');
+        else if(reqRecv) res.status(200).send('RECEIVED');
+        else if(currUser.blockedIds.includes(targetId)) res.status(200).send('BLOCKED');
+    } catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
+export const blockPlayer = async (req: Request, res: Response) => {
+    try {
+        const currUser = await User.findOne({_id: req.userId}, {username: 1, friendsIds: 1, blockedIds: 1});
+        const targetUser = await User.findOne({username: req.body.targetUsername}, {_id: 1, friendsIds: 1, blockedIds: 1});
+        if(!currUser || !targetUser) return res.status(400).json({errorMessage: 'User not found.'});
+        const targetId = targetUser._id;
+        
+        // If current and target user are friends, remove from each other's friend lists
+        if(currUser.friendsIds.includes(targetId)) {
+            let ind = currUser.friendsIds.indexOf(targetId);
+            if(ind > -1) currUser.friendsIds.splice(ind, 1);
+            ind = targetUser.friendsIds.indexOf(currUser._id);
+            if(ind > -1) targetUser.friendsIds.splice(ind, 1);
+        }
+
+        // If current user sent a friend request to target user (or vice versa), remove friend request
+        const reqSent = await FriendRequest.findOne({sender: currUser._id, receiver: targetId});
+        const reqRecv = await FriendRequest.findOne({receiver: currUser._id, sender: targetId});
+        if(reqSent) await FriendRequest.deleteOne({_id: reqSent._id});
+        if(reqRecv) await FriendRequest.deleteOne({_id: reqRecv._id});
+
+        // Block user
+        currUser.blockedIds.push(targetId);
+        await currUser.save();
+        res.status(200).json({message: 'User blocked.'});
     } catch(err) {
         console.error(err);
         res.status(500).send();

@@ -96,6 +96,7 @@ export default function HomeScreen() {
                                 id='map-search-button'
                                 onClick={() => navigate('/mapsearch')}
                                 text='Character Search'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -123,6 +124,7 @@ export default function HomeScreen() {
                                 id='forums-button'
                                 onClick={() => navigate('/forum')}
                                 text='Forums'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -140,6 +142,7 @@ export default function HomeScreen() {
                                 id='settings-button'
                                 onClick={() => navigate('/settings')}
                                 text='Settings'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -148,6 +151,7 @@ export default function HomeScreen() {
                                 id='about-button'
                                 onClick={() => navigate('/about')}
                                 text='About'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -155,6 +159,7 @@ export default function HomeScreen() {
                                 id="leaderboard-button"
                                 onClick={() => navigate("/leaderboard")}
                                 text='Leaderboard'
+                                buttonSx={homeButtons}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -178,21 +183,22 @@ export default function HomeScreen() {
                         <Grid item xs={12}/>
                     </Grid>                
                 </Grid>
+                <Sidebar />
             </Grid>
             <MessagesDrawer />
-            <Sidebar />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
             <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
-            <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
+            <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )
 }
 
 function HomeButton(props) {
+    const {xs, gridSx, id, onClick, buttonSx, disable, text} = props;
     return (
-        <Grid item xs={props.xs} sx={props.gridSx}>
-            <Button id={props.id} onClick={props.onClick} sx={props.buttonSx} disabled={props.disable}>
-                {props.text}
+        <Grid item xs={xs} sx={gridSx}>
+            <Button id={id} onClick={onClick} sx={buttonSx} disabled={disable}>
+                {text}
             </Button>
         </Grid>
     )
@@ -233,7 +239,3 @@ function QueueModal(props) {
         </Modal>
     )
 }
-
-
-// Default params for the xs and buttonSx properties of the HomeButton
-HomeButton.defaultProps = { buttonSx: homeButtons }

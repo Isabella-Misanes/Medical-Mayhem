@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { ReportModal, BackButton } from '.';
 import SocialCard from './SocialCard';
 import MUIErrorModal from './MUIErrorModal';
+import UserOptionMenu from './UserOptionMenu';
 
 export default function SocialScreen() {
     const { store } = useContext(GlobalStoreContext);
@@ -78,9 +79,7 @@ export default function SocialScreen() {
         )
     };
 
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const handleProfileMenuOpen = (event) => { setAnchorEl(event.currentTarget); };
     
     // TODO: Handle having more than 10 players on the page
     const playerRender = () => {
@@ -93,7 +92,8 @@ export default function SocialScreen() {
         else str += 'Online Users';
         
         if(playerList.length !== 0) {
-            for(let i = 0; i < playerList.length; i++) {
+            // TODO: Arbitrarily limited max # of displayed users to 10 but have to figure out how to display more than 10 later
+            for(let i = 0; i < playerList.length && i < 10; i++) {
                 playerCards.push(
                     <SocialCard
                         key={i}
@@ -101,15 +101,11 @@ export default function SocialScreen() {
                         left={`${5 + ((i % 5) * 17.5)}%`}
                         friend={playerList[i]}
                         onClick={(event) => {
+                            console.log(playerList[i]);
+                            setCurrFriend(playerList[i].username);
                             handleProfileMenuOpen(event);
-                            setCurrFriend(playerList[i]);
                         }}
                     />
-                )
-            }
-            if(playerList.length > 10) {
-                playerCards.push(
-                    
                 )
             }
         }
@@ -134,81 +130,6 @@ export default function SocialScreen() {
         }
         return playerCards;
     }
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
-
-    function handlePrivateMessaging(event) {
-        store.openPrivateMessaging(event);
-        handleMenuClose();
-    }
-
-    // TODO: Display modal to confirm user wants to remove friend
-    // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)
-    function handleRemoveFriend() {
-        store.removeFriend(currFriend);
-        handleMenuClose();
-    }
-
-    function handleCancelRequest() {
-        store.cancelFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleIgnoreRequest() {
-        store.ignoreFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleAcceptRequest() {
-        store.acceptFriendRequest(currFriend);
-        handleMenuClose();
-    }
-
-    function handleReportPlayer(event) {
-        setShowReportModal(true);
-        handleMenuClose();
-    }
-
-    let optionStr = () => {
-        if(activeButton === 0) return 'Remove Friend';
-        else if(activeButton === 2) return 'Cancel Friend Request';
-        else return 'Ignore Friend Request';
-    }
-
-    const acceptRequestItem = (
-        <MenuItem onClick={() => handleAcceptRequest(currFriend)}>
-            Accept Friend Request
-        </MenuItem>
-    )
-    const partyMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-            keepMounted
-            transformOrigin={{vertical: 'top',horizontal: 'right'}}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
-                Private Message
-            </MenuItem>
-            {activeButton === 3 && acceptRequestItem}
-            <MenuItem onClick={() => {
-                if(activeButton === 0) handleRemoveFriend();
-                else if(activeButton === 1) handleMenuClose();
-                else if(activeButton === 2) handleCancelRequest();
-                else handleIgnoreRequest(currFriend);
-            }}>
-                {optionStr()}
-            </MenuItem>
-            <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
-                Report Player
-            </MenuItem>
-            
-        </Menu>
-    );
 
     // Add friend
     const handleSubmit = (event) => {
@@ -342,9 +263,17 @@ export default function SocialScreen() {
                 <ConfirmModal
                     confirmModal={confirmModal}
                     handleModalClose={() => setConfirmModal(false)}
-                    username={addFriendUsername}
+                    username={isMenuOpen ? currFriend : addFriendUsername}
                 />
-                {partyMenu}
+                {isMenuOpen && <UserOptionMenu
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    isMenuOpen={isMenuOpen}
+                    targetUser={currFriend}
+                    setShowReportModal={setShowReportModal}
+                    handleFriendModalClose={handleFriendModalClose}
+                    setConfirmModal={setConfirmModal}
+                />}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
             <Sidebar />

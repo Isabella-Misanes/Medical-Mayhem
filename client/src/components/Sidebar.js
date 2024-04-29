@@ -1,8 +1,7 @@
-import { Box, IconButton, Menu, MenuItem} from '@mui/material';
+import { Avatar, Box, IconButton, Menu, MenuItem} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AuthContext, { UserRoleType } from '../auth';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import ReportModal from './ReportModal';
 
@@ -12,6 +11,8 @@ export default function Sidebar() {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
+    const [clickedUser, setClickedUser] = useState('');
+    const [party, setParty] = useState(store.partyInfo);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -30,12 +31,12 @@ export default function Sidebar() {
     }
 
     function handlePrivateMessaging(event) {
-        store.openPrivateMessaging(event);
+        // store.openPrivateMessaging(event);
         handleMenuClose();
     }
 
     function handleAddFriend(event) {
-        store.sendFriend(event);
+        // store.sendFriend(event);
         handleMenuClose();
     }
 
@@ -53,6 +54,15 @@ export default function Sidebar() {
         setShowReportModal(true);
         handleMenuClose();
     }
+
+    useEffect(() => {
+        if(auth.role !== UserRoleType.GUEST) store.getParty();
+        //eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
+        setParty(store.partyInfo);
+    }, [store.partyInfo])
 
     const partyMenu = (
         <Menu
@@ -81,6 +91,21 @@ export default function Sidebar() {
         </Menu>
     );
 
+    const renderPartyMembers = () => {
+        const partyMembers = [];
+        if(party && party.users.length > 0) {
+            party.users.forEach((user, index) => {
+                partyMembers.push(
+                    <PartyMember user={user} key={index} onClick={(event) => {
+                        setClickedUser(user);
+                        handleProfileMenuOpen(event);
+                    }} marginTop={(index * 50) + 10 + 'px'} />
+                )
+            })
+        }
+        return partyMembers;
+    }
+
     return (
         auth.role !== UserRoleType.GUEST && 
             <Box sx={{ 
@@ -93,10 +118,7 @@ export default function Sidebar() {
                 flexDirection: 'column',
                 right: '0%'
             }}>
-                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'10px'} />
-                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'60px'} />
-                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'110px'} />
-                <PartyMember handleProfileMenuOpen={handleProfileMenuOpen} marginTop={'160px'} />
+                {renderPartyMembers()}
                 
                 <IconButton onClick={()=>{handleLogout()}} sx={{
                     position: 'fixed',
@@ -114,21 +136,24 @@ export default function Sidebar() {
 }
 
 function PartyMember(props) {
-    return (
-        <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
-            onClick={props.handleProfileMenuOpen}
-            sx={{
-                position: 'absolute',
-                right: '22.5px',
-                marginTop: props.marginTop,
-                color: 'white'
-            }}
-        >
-            <AccountCircleIcon/>
-        </IconButton>
-    );
+    const {user} = props;
+    if(user) {
+        return (
+            <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-haspopup="true"
+                onClick={props.onClick}
+                sx={{
+                    position: 'absolute',
+                    right: '22.5px',
+                    marginTop: props.marginTop,
+                    color: 'white'
+                }}
+            >
+                <Avatar src={user.profilePicture} />
+            </IconButton>
+        );
+    }
 }

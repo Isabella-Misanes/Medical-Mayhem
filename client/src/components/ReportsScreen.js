@@ -42,12 +42,10 @@ export default function ReportsScreen() {
                                     <Typography sx={{
                                         ml: 2
                                     }}>
-                                        <p>
                                             <strong>Report Against McKillaGorilla</strong><br/>
                                             by Joji John<br/>
                                             <br/>
                                             He plays too much
-                                        </p>
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={2}>

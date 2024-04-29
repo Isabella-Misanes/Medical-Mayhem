@@ -70,12 +70,10 @@ export default function SettingsScreen() {
     }
 
     function handleResetControls() {
-        console.log("Reset controls in Settings.");
         setKeybinds({UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'});
         store.updateKeybinds({up: 'W', left: 'A', down: 'S', right: 'D', interact: 'E'});
     }
     function handleConfirmControls() {
-        console.log("Confirm Controls in Settings");
         store.updateKeybinds({up: keybinds.UP, left: keybinds.LEFT, down: keybinds.DOWN, right: keybinds.RIGHT, interact: keybinds.INTERACT});
     }
 

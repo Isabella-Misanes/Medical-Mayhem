@@ -16,5 +16,7 @@ router.post('/settings/audio/update', PlayerController.updateAudioSettings);
 router.post('/settings/keybinds/update', PlayerController.updateKeybinds);
 router.post('/settings/toggles/update', PlayerController.updateToggles);
 router.get('/onlinePlayers', PlayerController.viewOnlinePlayers);
+router.post('/relationToUser', PlayerController.getRelationToUser);
+router.post('/blockPlayer', PlayerController.blockPlayer);
 
 export default router

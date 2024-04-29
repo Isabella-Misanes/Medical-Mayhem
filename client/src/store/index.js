@@ -18,23 +18,9 @@ console.log("create GlobalStoreContext");
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR GLOBAL
 // DATA STORE STATE THAT CAN BE PROCESSED
 export const GlobalStoreActionType = {
-    CHANGE_LIST_NAME: "CHANGE_LIST_NAME",
-    CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
-    CREATE_NEW_LIST: "CREATE_NEW_LIST",
-    LOAD_LIST_INFO: "LOAD_LIST_INFO",
-    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
-    SET_CURRENT_LIST: "SET_CURRENT_LIST",
-    SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
-    EDIT_SONG: "EDIT_SONG",
-    REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     CHANGE_SCREEN: "CHANGE_SCREEN",
     CHANGE_SORT_TYPE: "CHANGE_SORT_TYPE",
-    PUBLISH_LIST: "PUBLISH_LIST",
-    CHANGE_SEARCH_BAR: "CHANGE_SEARCH_BAR",
-    SET_PLAYING_LIST: "SET_PLAYING_LIST",
-    LIKE_DISLIKE: "LIKE_DISLIKE",
-    PLAY_SONG: "PLAY_SONG",
 
     // GAME ACTIONS
     UPDATE_TEAMMATES: "UPDATE_TEAMMATES",
@@ -49,6 +35,8 @@ export const GlobalStoreActionType = {
     REMOVE_FRIEND: "REMOVE_FRIENDS",
     GET_ONLINE_PLAYERS: "GET_ONLINE_PLAYERS",
     GET_SETTINGS: "GET_SETTINGS",
+    GET_PARTY: "GET_PARTY",
+    GET_RELATION: "GET_RELATION",
     ERROR: "ERROR",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
@@ -62,8 +50,6 @@ export const GlobalStoreActionType = {
 const CurrentModal = {
     NONE: "NONE",
     DELETE_LIST: "DELETE_LIST",
-    EDIT_SONG: "EDIT_SONG",
-    REMOVE_SONG: "REMOVE_SONG"
 }
 
 const CurrentHomeScreen = {
@@ -97,7 +83,12 @@ function GlobalStoreContextProvider(props) {
             defense: 0,
             favoredMinigame: "",
         },
-        players: [] // an array of usernames for players matched with
+        players: [], // an array of usernames for players matched with
+        partyInfo: {
+            users: [],
+            partyLeader: ""
+        },
+        relation: ''
     });
 
     console.log("inside useGlobalStore");
@@ -112,15 +103,6 @@ function GlobalStoreContextProvider(props) {
         console.log(store);
         switch (type) {
             // UPDATES
-            case GlobalStoreActionType.CHANGE_SEARCH_BAR: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                });
-            }
             case GlobalStoreActionType.UPDATE_TEAMMATES: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
@@ -172,6 +154,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
+                    partyInfo: store.partyInfo,
                 });
             }
 
@@ -213,6 +196,25 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                 })
             }
+            case GlobalStoreActionType.GET_PARTY:
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    partyInfo: payload
+                });
+            case GlobalStoreActionType.GET_RELATION:
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    partyInfo: store.partyInfo,
+                    relation: payload
+                })
             default:
                 return store;
         }
@@ -341,7 +343,7 @@ function GlobalStoreContextProvider(props) {
             try {
                 let response = await apis.removeFriend(targetUser);
                 storeReducer({
-                    type: GlobalStoreActionType.REMOVE_FRIEND,
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
                 })
             } catch(err) { console.error(err) }
@@ -371,7 +373,7 @@ function GlobalStoreContextProvider(props) {
                 console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.VIEW_FRIENDS,
-                    payload: response.data
+                    payload: response.data.players
                 })
             } catch (error) { console.error(error) }
         }
@@ -411,9 +413,7 @@ function GlobalStoreContextProvider(props) {
         console.log("Cancel friend request in store");
         async function asyncCancelFriendRequest() {
             try {
-                console.log(targetUser);
-                let response = await apis.cancelFriendRequest(targetUser)
-                console.log(response);
+                let response = await apis.cancelFriendRequest(targetUser);
                 storeReducer({
                     type: GlobalStoreActionType.VIEW_FRIENDS,
                     payload: response.data
@@ -437,6 +437,7 @@ function GlobalStoreContextProvider(props) {
         }
         asyncIgnoreFriendRequest();
     }
+
     store.acceptFriendRequest = function(targetUser) {
         console.log("Accept friend request in store");
         async function asyncAcceptFriendRequest() {
@@ -464,6 +465,19 @@ function GlobalStoreContextProvider(props) {
             } catch(error) { console.error(error); }
         }
         asyncGetOnlinePlayers();
+    }
+
+    store.blockPlayer = (targetUser) => {
+        async function asyncBlockPlayer() {
+            try {
+                let response = await apis.blockPlayer(targetUser);
+                storeReducer({
+                    type: GlobalStoreActionType.VIEW_FRIENDS,
+                    payload: response.data
+                })
+            } catch(err) { console.error(err); }
+        }
+        asyncBlockPlayer();
     }
 
     // Forums Screen
@@ -587,6 +601,38 @@ function GlobalStoreContextProvider(props) {
 
     store.completeReport = function(event) {
         console.log("Completed report in store.");
+    }
+
+    store.getParty = function() {
+        if(auth.role === UserRoleType.GUEST) return;
+        async function asyncGetParty() {
+            try {
+                let response = await apis.getParty();
+                console.log(response.data);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_PARTY,
+                    payload: response.data
+                })
+            } catch(err) {console.error(err) }
+        }
+        asyncGetParty();
+    }
+
+    // Misc
+    store.getRelationToUser = function(targetUsername) {
+        if(auth.role === UserRoleType.GUEST || targetUsername === '') return;
+        console.log('get relation to user', targetUsername, 'in store');
+        async function asyncGetRelationToUser() {
+            try {
+                let response = await apis.getRelationToUser(targetUsername);
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_RELATION,
+                    payload: response.data
+                })
+            } catch(err) { console.error(err) }
+        }
+        asyncGetRelationToUser();
     }
 
     store.hideModal = () => {
