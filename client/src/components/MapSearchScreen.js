@@ -13,21 +13,12 @@ export default function MapSearchScreen() {
     const [currAvatar, setCurrAvatar] = useState(null);
 
     useEffect(() => {
-        async function fetchAvatars() {
-            try {
-                if (!store.avatarList || store.avatarList.avatars.length === 0) {
-                    await store.getAllAvatars();
-                    setAvatarList(store.avatarList.avatars);
-                } 
-                else {
-                    setAvatarList(store.avatarList.avatars);
-                }
-            } catch (error) {
-                console.error("Error fetching avatars:", error);
-                // Handle error if needed
-            }
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+            setAvatarList(store.avatarList.avatars);
+        } else {
+            store.getAllAvatars();
+            setAvatarList([]);
         }
-        fetchAvatars();
         // eslint-disable-next-line
     }, [store.avatarList])
 
