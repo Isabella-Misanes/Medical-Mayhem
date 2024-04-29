@@ -263,7 +263,7 @@ export default function SocialScreen() {
                 <ConfirmModal
                     confirmModal={confirmModal}
                     handleModalClose={() => setConfirmModal(false)}
-                    username={isMenuOpen ? currFriend : addFriendUsername}
+                    username={isModalOpen ? addFriendUsername : currFriend}
                 />
                 {isMenuOpen && <UserOptionMenu
                     anchorEl={anchorEl}
