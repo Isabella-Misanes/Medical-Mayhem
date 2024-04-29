@@ -47,7 +47,8 @@ export default function SettingsScreen() {
     }
 
     function handleLogout() {
-        store.reset()
+        navigate('/');
+        store.reset();
         auth.logoutUser(auth.username);
     }
 
@@ -94,13 +95,13 @@ export default function SettingsScreen() {
 
     // Set user's volume settings upon change
     useEffect(() => {
-        setMasterValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.masterVolume);
-        setMusicValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.musicVolume);
-        setSfxValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.sfxVolume);
-        setKeybinds(auth.role === UserRoleType.GUEST ? {
-            UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'
-        } : store.settings.keybinds);
-        setToggles(store.settings.toggles);
+        if(store.settings) {
+            setMasterValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.masterVolume);
+            setMusicValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.musicVolume);
+            setSfxValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.sfxVolume);
+            setKeybinds(auth.role === UserRoleType.GUEST ? {UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'} : store.settings.keybinds);
+            setToggles(auth.role === UserRoleType.GUEST ? {privateProfile: false, messages: true, party: true} : store.settings.toggles);
+        }
         //eslint-disable-next-line
     }, [store.settings]);
 

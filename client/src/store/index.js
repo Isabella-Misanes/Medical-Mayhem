@@ -135,7 +135,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    players: payload
+                    players: payload,
+                    settings: store.settings,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -145,6 +146,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
+                    settings: store.settings,
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -154,6 +156,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
+                    settings: store.settings,
                 });
             }
             case GlobalStoreActionType.RESET: {
@@ -170,6 +173,23 @@ function GlobalStoreContextProvider(props) {
                         defense: 0,
                         favoredMinigame: "",
                         isPublic: false,
+                    },
+                    settings: {
+                        masterVolume: 100,
+                        musicVolume: 100,
+                        sfxVolume: 100,
+                        keybinds: {
+                            UP: 'W',
+                            LEFT: 'A',
+                            DOWN: 'S',
+                            RIGHT: 'D',
+                            INTERACT: 'E'
+                        },
+                        toggles: {
+                            privateProfile: false,
+                            messages: true,
+                            party: true,
+                        },
                     }
                 });
             }
@@ -182,6 +202,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: store.partyInfo,
+                    settings: store.settings,
                 });
             }
 
@@ -191,7 +212,8 @@ function GlobalStoreContextProvider(props) {
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: payload.errorMessage,
-                    avatar: store.avatar
+                    avatar: store.avatar,
+                    settings: store.settings,
                 })
             }
 
@@ -202,6 +224,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
+                    settings: store.settings,
                 });
             }
 
@@ -212,6 +235,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
+                    settings: store.settings,
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
@@ -222,6 +246,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
+                    settings: store.settings,
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
@@ -232,6 +257,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
+                    settings: store.settings,
                 })
             }
             case GlobalStoreActionType.GET_SETTINGS: {
@@ -310,7 +336,8 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: store.partyInfo,
-                    relation: payload
+                    relation: payload,
+                    settings: store.settings,
                 })
             default:
                 return store;

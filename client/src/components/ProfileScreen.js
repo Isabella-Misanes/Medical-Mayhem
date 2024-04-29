@@ -83,15 +83,15 @@ export default function ProfileScreen() {
     }, [])
 
     useEffect(() => {
-        setUsername(auth.username)     
-        setBio(store.profileInfo.bio)
-        setPostImage(store.profileInfo.pfp)
+        setUsername(auth.username)
+        if(store.profileInfo) {
+            setBio(store.profileInfo.bio)
+            setPostImage(store.profileInfo.pfp)
+        }
 
         // eslint-disable-next-line
     }, [auth, store.profileInfo])
 
-
-    console.log('editEnabled: '+ editEnabled)
     const profileScreen = (
             <Card sx={{
                 bgcolor: '#4D9147',

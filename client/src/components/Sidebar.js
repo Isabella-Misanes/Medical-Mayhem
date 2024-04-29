@@ -12,7 +12,7 @@ export default function Sidebar() {
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
     const [clickedUser, setClickedUser] = useState('');
-    console.log(clickedUser);
+    if(clickedUser); // Will implement later
     const [party, setParty] = useState(store.partyInfo);
 
     const handleProfileMenuOpen = (event) => {
@@ -57,7 +57,7 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        if(auth.role !== UserRoleType.GUEST) store.getParty();
+        // if(auth.role !== UserRoleType.GUEST) store.getParty();
         //eslint-disable-next-line
     }, [])
 
