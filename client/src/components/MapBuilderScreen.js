@@ -65,7 +65,6 @@ export default function MapBuilderScreen() {
 
     useEffect(() => {
         store.getAvatar();
-        console.log(store.avatar);
         // eslint-disable-next-line
     }, [])
 
@@ -110,13 +109,11 @@ export default function MapBuilderScreen() {
     }
 
     function handleUpdateCharacter() {
-        console.log(selectedSprite);
         store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
-        // store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+        store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
     }
 
     function handleUpdateName(event) {
-        console.log(event.target.value);
         setAvatarName(event.target.value);
     }
 

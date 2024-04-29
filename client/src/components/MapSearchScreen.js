@@ -8,10 +8,11 @@ import { outerContentBox, innerContentBox, sortButton } from '../Styles';
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
-    const avatarList = [{avatarName: "Untitled", author: "User1", speed: 1, strength: 2}];
+    var avatarList = [];
 
     useEffect(() => {
         store.getAllAvatars();
+        avatarList = store.avatarList;
         console.log(avatarList);
         // eslint-disable-next-line
     }, [])

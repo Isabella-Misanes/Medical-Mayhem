@@ -49,8 +49,16 @@ export const updateAvatar = async (pic, name, speed, strength, defense, favoredM
     });
 }
 
-export const updateAvatarList = async (avatar) => {
-    return api.post(`/updateAvatarList/`, avatar);
+export const updateAvatarList = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
+    return api.post(`/updateAvatarList/`, {
+        pic: pic,
+        name: name,
+        speed: speed,
+        strength: strength,
+        defense: defense,
+        favoredMinigame: favoredMinigame,
+        isPublic: isPublic
+    });
 }
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
