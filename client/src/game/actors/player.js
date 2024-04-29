@@ -19,8 +19,9 @@ export default class Player extends Actor {
             collisionGroup: PlayerCollisionGroup
         })
         this.isMyPlayer = isMyPlayer // is this a teammate, or the player that the user is currently controlling?
-        this.username = username
-        this.guidingPatient = null
+        this.username = username // string
+        this.guidingPatient = null // a reference to the patient being guided by the player
+        this.posCorrection = null // used to check if the character was moved to the correct position reflected by the player who sent the PLAYER_MOVE event
     }
 
     onInitialize(engine) {
@@ -32,10 +33,9 @@ export default class Player extends Actor {
         // EVENT HANDLING
 
         socket.on(SocketEvents.PLAYER_MOVED, (data) => {
-
-            console.log(data)
-            if (data.username == this.username)
-                this.vel = ex.vec(data.vel._x, data.vel._y)
+            if (data.username == this.username) {
+                this.pos = ex.vec(data.pos._x, data.pos._y)
+            }
         })
 
         this.on('collisionstart', (event) => {
@@ -72,12 +72,8 @@ export default class Player extends Actor {
 
             socket.emit(SocketEvents.PLAYER_MOVED, {
                 username: this.username,
-                vel: this.vel
+                pos: this.pos.clone().add(this.vel.clone().scale(elapsedMs / 1000)),
             })
         }
-        // else {
-        //     console.log(this.vel)
-        //     console.log(this.pos)
-        // }
     }
 }
