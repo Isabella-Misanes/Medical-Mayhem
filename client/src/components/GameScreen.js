@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
 import { useContext, useEffect, useRef } from "react";
-import { MedicalMayhem } from '../game/MedicalMayhem'
+import { MedicalMayhem } from '../game/medicalMayhem'
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
 import AuthContext from '../auth';

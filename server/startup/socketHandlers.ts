@@ -87,5 +87,10 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.PLAYER_MOVED, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.PLAYER_MOVED, data)
     })
+
+    // data is a player username
+    socket.on(SocketEvents.STOP_FOLLOW, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
+    })
 }
 
