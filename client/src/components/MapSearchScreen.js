@@ -11,7 +11,7 @@ export default function MapSearchScreen() {
     const [avatarList, setAvatarList] = useState([]);
 
     useEffect(() => {
-        if (store.avatarList && store.avatarList.avatars.length > 0) {
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
             setAvatarList(store.avatarList.avatars);
         } else {
             store.getAllAvatars();
@@ -69,7 +69,7 @@ export default function MapSearchScreen() {
                         <div>Loading...</div>
                     ) : (
                         avatarList.map((avatar, index) => (
-                            <div id={"character-card-" + index}>
+                            <div key={index} id={"character-card-" + index}>
                                 <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
                                     <ListItemButton onClick={() => { setCharacterList(false) }}>
                                         <Grid item xs={9} sx={{ textAlign: 'left' }}>

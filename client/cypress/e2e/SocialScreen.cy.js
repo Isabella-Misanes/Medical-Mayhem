@@ -77,22 +77,21 @@ describe('Social Screen', () => {
 
             cy.get('#add-friend-submit').should('be.visible').click();
             cy.wait('@sendFriend');
-            cy.get('#add-friend-modal').should('not.exist');
-            cy.get('#sent-button').should('be.visible').click();
+            cy.get('#confirm-modal').should('be.visible');
         })
     })
 
-    describe('Received Friend Request Functionality', () => {
-        it('should allow the user to accept friend requests from other users', () => {
+    // describe('Received Friend Request Functionality', () => {
+    //     it('should allow the user to accept friend requests from other users', () => {
 
-        })
+    //     })
 
-        it('should allow the user to reject friend requests from other users', () => {
+    //     it('should allow the user to reject friend requests from other users', () => {
             
-        })
-    })
+    //     })
+    // })
 
-    describe('Friend Functionality', () => {
+    // describe('Friend Functionality', () => {
         
-    })
+    // })
 })

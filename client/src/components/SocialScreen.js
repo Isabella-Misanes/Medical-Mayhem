@@ -101,7 +101,6 @@ export default function SocialScreen() {
                         left={`${5 + ((i % 5) * 17.5)}%`}
                         friend={playerList[i]}
                         onClick={(event) => {
-                            console.log(playerList[i]);
                             setCurrFriend(playerList[i].username);
                             handleProfileMenuOpen(event);
                         }}
@@ -327,7 +326,7 @@ function AddFriendModal(props) {
 
 function ConfirmModal(props) {
     return (
-        <Modal id={'add-friend-modal'} open={props.confirmModal} onClose={props.handleModalClose}>
+        <Modal id={'confirm-modal'} open={props.confirmModal} onClose={props.handleModalClose}>
             <Box sx={{
                 width: '30%',
                 height: '27%',
