@@ -5,6 +5,7 @@ import { React, useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { charList, characterCard, outerContentBox, innerContentBox, sortButton } from '../Styles';
 import CharacterInfo from './CharacterInfo';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
@@ -103,7 +104,8 @@ export default function MapSearchScreen() {
     const characterDetails = (
         <Grid container sx={innerContentBox}>
             <Button sx={{color: '#3A9158'}} onClick={() => {setCharacterList(true)}}>
-                {'<--'} Character search
+                <ArrowBackIcon/>
+                Character search
             </Button>
             <CharacterInfo 
                 avatar={currAvatar}

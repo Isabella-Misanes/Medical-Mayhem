@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
-import { buttonStyle } from '../Styles';
+import { buttonStyle, noPlayersCard, socialInner, socialModal, socialOuter } from '../Styles';
 import Sidebar from './Sidebar';
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
@@ -113,15 +113,7 @@ export default function SocialScreen() {
                 <Box
                     id={str.toLowerCase().replace(/\s+/g, '-')}
                     key={'no-players'}
-                    sx={{
-                        width: '90%',
-                        height: '40%',
-                        bgcolor: 'white',
-                        position: 'absolute',
-                        top: '30%',
-                        left: '5%',
-                        boxShadow: 5
-                    }}
+                    sx={noPlayersCard}
                 >
                     <h1>{str}</h1>
                 </Box>
@@ -145,31 +137,8 @@ export default function SocialScreen() {
     
     return (
         <div id="social-screen">
-            <Box sx={{
-                height: '85%',
-                width: '85%',
-                flexDirection: 'column',
-                backgroundColor: '#626262',
-                position: 'absolute',
-                textAlign: 'center',
-                top: '5%',
-                left: '2.5%',
-                p: 2,
-                boxShadow: 10
-            }} />
-            <Box
-                sx={{
-                    height: '80%',
-                    width: '82.5%',
-                    flexDirection: 'column',
-                    backgroundColor: '#BA7943',
-                    position: 'absolute',
-                    textAlign: 'center',
-                    top: '7.5%',
-                    left: '3.75%',
-                    p: 2,
-                    // marginRight: '10%',
-            }}>
+            <Box sx={socialOuter} />
+            <Box sx={socialInner}>
                 {/*
                     TODO: Fix UI issues:
                     Grid container doesn't take up full box width (appears fine but see inspect element menu)
@@ -283,18 +252,7 @@ export default function SocialScreen() {
 function AddFriendModal(props) {
     return (
         <Modal id={'add-friend-modal'} open={props.isModalOpen} onClose={props.handleFriendModalClose}>
-            <Box sx={{
-                width: '30%',
-                height: '27%',
-                bgcolor: '#2d7044',
-                border: 1,
-                borderColor: 'white',
-                top: '20%',
-                left: '30%',
-                position: 'absolute',
-                boxShadow: 5,
-                textAlign: 'center',
-            }}>
+            <Box sx={socialModal}>
                 <h1>Add Friend</h1>
                 <Divider />
                 <Box component='form' noValidate onSubmit={props.handleSubmit}>
@@ -313,7 +271,7 @@ function AddFriendModal(props) {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, width: '50%' }}
+                        sx={[buttonStyle, { mt: 3, mb: 2, width: '50%' }]}
                     >
                         Add Friend
                     </Button>
@@ -327,18 +285,7 @@ function AddFriendModal(props) {
 function ConfirmModal(props) {
     return (
         <Modal id={'confirm-modal'} open={props.confirmModal} onClose={props.handleModalClose}>
-            <Box sx={{
-                width: '30%',
-                height: '27%',
-                bgcolor: '#2d7044',
-                border: 1,
-                borderColor: 'white',
-                top: '20%',
-                left: '30%',
-                position: 'absolute',
-                boxShadow: 5,
-                textAlign: 'center',
-            }}>
+            <Box sx={socialModal}>
                 <h1>Friend request sent to user {props.username}.</h1>
             </Box>
         </Modal>
