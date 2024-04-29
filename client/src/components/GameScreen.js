@@ -19,6 +19,7 @@ export default function GameScreen() {
     useEffect(() => {
 		if (!gameRef.current && gameCanvas.current)
 			MedicalMayhem(gameRef, gameCanvas, store.players, auth.username);
+        //eslint-disable-next-line
 	}, []);
 
     return (

@@ -1,18 +1,23 @@
-import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
-import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
-import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
-import { GameResultsScene } from "./scenes/GameResultsScene";
-import { Loader, DisplayMode, Camera } from "excalibur";
-import { TiledResource } from "@excaliburjs/plugin-tiled";
-import map from './Level_1.tmx'
+// import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
+// import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
+// import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
+// import { GameResultsScene } from "./scenes/GameResultsScene";
+// import { Loader, DisplayMode, Camera } from "excalibur";
+// import { TiledResource } from "@excaliburjs/plugin-tiled";
+// import map from './Level_1.tmx'
+// import Player from "./actors/player";
+// import { Resources, loader } from "./resources";
+// import Patient from "./actors/patient";
+// import * as ex from 'excalibur'
+
+import { BoundingBox, Engine, } from "excalibur";
+import { DisplayMode, Camera } from "excalibur";
 import Player from "./actors/player";
 import { Resources, loader } from "./resources";
 import Patient from "./actors/patient";
-import * as ex from 'excalibur'
 
-
-const gameWidth = 1820;
-const gameHeight = 950;
+// const gameWidth = 1820;
+// const gameHeight = 950;
 // const timer = new Timer({
 //     interval: 1000,
 //     fcn: () => {

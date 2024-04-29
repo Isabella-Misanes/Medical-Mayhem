@@ -52,7 +52,6 @@ export const updateProfile = async (req: Request, res: Response) => {
             );
         }
 
-        console.log("updatedUser: " + updatedUser);
         if (!updatedUser) {
             return res
                 .status(400)

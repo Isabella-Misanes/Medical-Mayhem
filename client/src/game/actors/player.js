@@ -1,4 +1,5 @@
-import { Actor, Vector, Color } from "excalibur";
+// import { Actor, Vector, Color } from "excalibur";
+import { Actor, Color } from "excalibur";
 import * as ex from 'excalibur'
 import{ Config } from './config'
 import { Resources } from "../resources";
@@ -33,7 +34,7 @@ export default class Player extends Actor {
         // EVENT HANDLING
 
         socket.on(SocketEvents.PLAYER_MOVED, (data) => {
-            if (data.username == this.username) {
+            if (data.username === this.username) {
                 this.pos = ex.vec(data.pos._x, data.pos._y)
             }
         })

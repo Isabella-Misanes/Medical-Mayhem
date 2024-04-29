@@ -12,6 +12,7 @@ export default function Sidebar() {
     const isMenuOpen = Boolean(anchorEl);
     const [showReportModal, setShowReportModal] = useState(false);
     const [clickedUser, setClickedUser] = useState('');
+    console.log(clickedUser);
     const [party, setParty] = useState(store.partyInfo);
 
     const handleProfileMenuOpen = (event) => {

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Menu, MenuItem, Modal, Typography, TextField } from '@mui/material';
+import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
 import Sidebar from './Sidebar';
 import GlobalStoreContext from '../store';
