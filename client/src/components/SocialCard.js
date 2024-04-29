@@ -1,5 +1,6 @@
 import { Box, Avatar, Grid } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
+import { socialCard } from '../Styles';
 // import { useContext, useEffect, useState } from 'react';
 // import GlobalStoreContext from '../store';
 
@@ -19,16 +20,7 @@ export default function SocialCard(props) {
     }
     
     return (
-        <Box onClick={onClick} sx={{
-            width: '15%',
-            height: '30%',
-            bgcolor: 'yellow',
-            position: 'absolute',
-            top: top,
-            left: left,
-            boxShadow: 5,
-            cursor: 'pointer'
-        }}>
+        <Box onClick={onClick} sx={[socialCard, { top: top, left: left }]}>
             <Avatar
                 src={friendPfp}
                 sx={{width: 150, height: 150, margin: 'auto', marginTop: '5px' }}
