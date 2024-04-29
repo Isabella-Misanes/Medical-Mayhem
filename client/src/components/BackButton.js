@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import { useNavigate } from 'react-router-dom';
 
 export default function BackButton() {

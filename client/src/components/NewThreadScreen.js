@@ -1,5 +1,5 @@
 import { Box, Button, Grid, TextField } from '@mui/material';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import GlobalStoreContext from '../store';

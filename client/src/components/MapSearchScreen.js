@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 import { React, useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
-import { outerContentBox, innerContentBox, sortButton } from '../Styles';
+import { charList, characterCard, outerContentBox, innerContentBox, sortButton } from '../Styles';
 import CharacterInfo from './CharacterInfo';
 
 export default function MapSearchScreen() {
@@ -71,13 +71,13 @@ export default function MapSearchScreen() {
                     <Divider />
                 </Grid>
                 
-                <List sx={{ width: '100%', ml: 2 }}>
+                <List sx={charList}>
                     {avatarList.length === 0 ? (
                         <div>Loading...</div>
                     ) : (
                         avatarList.map((avatar, index) => (
-                            <div key={index} id={"character-card-" + index}>
-                                <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
+                            <div id={"character-card-" + index}>
+                                <ListItem key={index} sx={characterCard}>
                                     <ListItemButton onClick={() => {handleCharacterClick(avatar)}}>
                                         <Grid item xs={9} sx={{ textAlign: 'left' }}>
                                             {avatar.avatarName}
@@ -95,8 +95,6 @@ export default function MapSearchScreen() {
                         ))
                     )}
                 </List>
-
-
             </Grid>
             <Grid item xs={12}/>
         </Grid>
@@ -104,7 +102,7 @@ export default function MapSearchScreen() {
 
     const characterDetails = (
         <Grid container sx={innerContentBox}>
-            <Button onClick={() => {setCharacterList(true)}}>
+            <Button sx={{color: '#3A9158'}} onClick={() => {setCharacterList(true)}}>
                 {'<--'} Character search
             </Button>
             <CharacterInfo 

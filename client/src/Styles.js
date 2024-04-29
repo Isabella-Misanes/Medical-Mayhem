@@ -1,3 +1,9 @@
+export const splashButtonStyle = {
+    bgcolor: 'black',
+    ":hover": {
+      bgcolor: 'black'},
+};
+
 export const homeScreen = {
     bgcolor: 'white',
     height: '100%',
@@ -9,8 +15,9 @@ export const homeScreen = {
 
 export const homeButtons = {
     color: 'black',
+    bgcolor: 'white',
     ":hover": {bgcolor: '#e5e5e5'}
-};
+}
 
 export const modalStyle = {
     position: 'absolute',
@@ -21,6 +28,12 @@ export const modalStyle = {
     bgcolor: 'white',
     boxShadow: 24,
     p: 3
+};
+
+export const buttonStyle = {
+bgcolor: '#3A9158',
+":hover": {
+    bgcolor: '#2d7044'},
 };
 
 export const outerContentBox = {
@@ -54,4 +67,17 @@ export const sortButton = {
     borderColor: 'black',
     borderRadius: 0,
     color: 'black'
+}
+
+export const charList = {
+    width: '100%', 
+    ml: 2,
+    maxHeight: '63vh',
+    overflow: 'scroll'
+}
+
+export const characterCard = {
+    bgcolor: 'white', 
+    mt: 2, 
+    mb: 2,
 }

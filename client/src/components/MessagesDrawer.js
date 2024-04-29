@@ -3,7 +3,7 @@ import { Box, Button, Divider, Drawer, Grid, List, ListItem, Tab, TextField } fr
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import SendIcon from '@mui/icons-material/Send';
 import AuthContext, { UserRoleType } from '../auth';
 

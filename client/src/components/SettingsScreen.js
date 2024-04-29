@@ -2,7 +2,7 @@ import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider, Modal } f
 import Checkbox from '@mui/material/Checkbox'
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext, { UserRoleType } from '../auth';
