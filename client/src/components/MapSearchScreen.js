@@ -1,16 +1,18 @@
 import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
 import Sidebar from './Sidebar';
 import BackButton from './BackButton';
-import { useContext, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { outerContentBox, innerContentBox, sortButton } from '../Styles';
 
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
+    const avatarList = [{avatarName: "Untitled", author: "User1", speed: 1, strength: 2}];
 
     useEffect(() => {
-        store.getAllAvatars()
+        store.getAllAvatars();
+        console.log(avatarList);
         // eslint-disable-next-line
     }, [])
 
@@ -65,48 +67,27 @@ export default function MapSearchScreen() {
                     width: '100%', 
                     ml: 2
                 }}>
-                    <ListItem sx={{bgcolor: 'white', mt: 2, mb: 2}}>
-                        <ListItemButton onClick={() => {setCharacterList(false)}}>
-                            <Grid item xs={9} sx={{
-                                textAlign: 'left',
-                            }}>
-                                Example Map
-                            </Grid>
-                            <Grid item xs={1} sx={{
-                                fontSize: '10px'
-                            }}>
-                                User1
-                            </Grid>
-                            <Grid item xs={1}>
-                                2
-                            </Grid>
-                            <Grid item xs={1}>
-                                188
-                            </Grid>
-                        </ListItemButton>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem sx={{bgcolor: 'white', mt: 2, mb: 2}}>
-                        <ListItemButton onClick={() => {setCharacterList(false)}}>
-                            <Grid item xs={9} sx={{
-                                textAlign: 'left',
-                            }}>
-                                New Map
-                            </Grid>
-                            <Grid item xs={1} sx={{
-                                fontSize: '10px'
-                            }}>
-                                User2
-                            </Grid>
-                            <Grid item xs={1}>
-                                20
-                            </Grid>
-                            <Grid item xs={1}>
-                                1
-                            </Grid>
-                        </ListItemButton>
-                    </ListItem>
-                    <Divider/>
+                    {avatarList.map((avatar, index) => (
+                        <>
+                            <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
+                                <ListItemButton onClick={() => { setCharacterList(false) }}>
+                                    <Grid item xs={9} sx={{ textAlign: 'left' }}>
+                                        {avatar.avatarName}
+                                    </Grid>
+                                    <Grid item xs={1} sx={{ fontSize: '10px' }}>
+                                        {avatar.author}
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        {avatar.speed}
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        {avatar.strength}
+                                    </Grid>
+                                </ListItemButton>
+                            </ListItem>
+                            <Divider />
+                        </>
+                    ))}
                 </List>
             </Grid>
             <Grid item xs={12}/>
