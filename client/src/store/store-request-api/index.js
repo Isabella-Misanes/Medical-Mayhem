@@ -67,13 +67,13 @@ export const updateAudioSettings = async(masterVolume, musicVolume, sfxVolume) =
     })
 }
 
-export const updateKeybinds = async({up, left, down, right, interact}) => {
+export const updateKeybinds = async({UP, LEFT, DOWN, RIGHT, INTERACT}) => {
     return api.post('/settings/keybinds/update', {
-        up: up,
-        left: left,
-        down: down,
-        right: right,
-        interact: interact
+        UP: UP,
+        LEFT: LEFT,
+        DOWN: DOWN,
+        RIGHT: RIGHT,
+        INTERACT: INTERACT
     })
 }
 

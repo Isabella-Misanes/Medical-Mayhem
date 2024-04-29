@@ -30,13 +30,13 @@ const UserSchema = new Schema(
         masterVolume: {type: Number, required: true, default: 100},
         musicVolume: {type: Number, required: true, default: 100},
         sfxVolume: {type: Number, required: true, default: 100},
-        keybinds: {type: Map, default: new Map<string, string>([
-            ['UP', 'W'],
-            ['DOWN', 'S'],
-            ['LEFT', 'A'],
-            ['RIGHT', 'D'],
-            ['INTERACT', 'E'],
-        ])},
+        keybinds: {
+            UP: {type: String, required: true, default: 'W'},
+            LEFT: {type: String, required: true, default: 'A'},
+            DOWN: {type: String, required: true, default: 'S'},
+            RIGHT: {type: String, required: true, default: 'D'},
+            INTERACT: {type: String, required: true, default: 'E'}
+        },
         appearAsOffline: {type: Boolean, default: false},
         toggleChat: {type: Boolean, default: true},
         toggleParty: {type: Boolean, default: true},

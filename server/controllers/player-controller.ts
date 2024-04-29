@@ -166,9 +166,11 @@ export const getSettings = async (req: Request, res: Response) => {
             musicVolume: user.musicVolume,
             sfxVolume: user.sfxVolume,
             keybinds: user.keybinds,
-            appearAsOffline: user.appearAsOffline,
-            toggleChat: user.toggleChat,
-            toggleParty: user.toggleParty,
+            toggles: {
+                privateProfile: user.appearAsOffline,
+                messages: user.toggleChat,
+                party: user.toggleParty,
+            }
         })
     } catch(err) {
         console.error(err);
@@ -189,16 +191,16 @@ export const updateAudioSettings = async (req: Request, res: Response) => {
 
 export const updateKeybinds = async (req: Request, res: Response) => {
     try {
-        const {up, left, down, right, interact} = req.body;
+        const {UP, LEFT, DOWN, RIGHT, INTERACT} = req.body;
         const currUser = await User.findOne({_id: req.userId});
         if(!currUser) return res.status(400).send('User not found.');
-        const newKeybinds : Map<string, string> = new Map<string, string>([
-            ['UP', up || currUser.keybinds.get('UP')],
-            ['LEFT', left || currUser.keybinds.get('LEFT')],
-            ['DOWN', down || currUser.keybinds.get('DOWN')],
-            ['RIGHT', right || currUser.keybinds.get('RIGHT')],
-            ['INTERACT', interact || currUser.keybinds.get('INTERACT')]
-        ]);
+        const newKeybinds = {
+            UP: UP || currUser.keybinds?.UP,
+            LEFT: LEFT || currUser.keybinds?.LEFT,
+            DOWN: DOWN || currUser.keybinds?.DOWN,
+            RIGHT: RIGHT || currUser.keybinds?.RIGHT,
+            INTERACT: INTERACT || currUser.keybinds?.INTERACT,
+        };
         await User.updateOne({_id: req.userId}, {$set: {keybinds: newKeybinds}});
         res.status(200).send();
 

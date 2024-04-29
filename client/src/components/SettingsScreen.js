@@ -70,11 +70,13 @@ export default function SettingsScreen() {
     }
 
     function handleResetControls() {
+        if(auth.role === UserRoleType.GUEST) return;
         setKeybinds({UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'});
-        store.updateKeybinds({up: 'W', left: 'A', down: 'S', right: 'D', interact: 'E'});
+        store.updateKeybinds({UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'});
     }
     function handleConfirmControls() {
-        store.updateKeybinds({up: keybinds.UP, left: keybinds.LEFT, down: keybinds.DOWN, right: keybinds.RIGHT, interact: keybinds.INTERACT});
+        console.log('keybinds:', keybinds);
+        store.updateKeybinds(keybinds);
     }
 
     const handleMasterSliderChange = (event, newValue) => {
@@ -92,12 +94,15 @@ export default function SettingsScreen() {
 
     // Set user's volume settings upon change
     useEffect(() => {
-        setMasterValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.masterVolume);
-        setMusicValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.musicVolume);
-        setSfxValue(auth.role === UserRoleType.GUEST ? 100 : store.profileInfo.sfxVolume);
-        setKeybinds(store.profileInfo.keybinds);
+        setMasterValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.masterVolume);
+        setMusicValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.musicVolume);
+        setSfxValue(auth.role === UserRoleType.GUEST ? 100 : store.settings.sfxVolume);
+        setKeybinds(auth.role === UserRoleType.GUEST ? {
+            UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'
+        } : store.settings.keybinds);
+        setToggles(store.settings.toggles);
         //eslint-disable-next-line
-    }, [store.profileInfo]);
+    }, [store.settings]);
 
     // Get user's settings
     useEffect(() => {
@@ -199,7 +204,7 @@ export default function SettingsScreen() {
                     }}>
                     <Grid item xs={6}>Up</Grid>
                     <Button xs={6} onClick={() => {
-                        if(auth.role !== UserRoleType.USER) return;
+                        if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Up');
                         toggleModal();
                     }}>
@@ -207,7 +212,7 @@ export default function SettingsScreen() {
                     </Button>
                     <Grid item xs={6}>Left</Grid>
                     <Button xs={6} onClick={() => {
-                        if(auth.role !== UserRoleType.USER) return;
+                        if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Left');
                         toggleModal();
                     }}>
@@ -215,7 +220,7 @@ export default function SettingsScreen() {
                     </Button>
                     <Grid item xs={6}>Down</Grid>
                     <Button xs={6} onClick={() => {
-                        if(auth.role !== UserRoleType.USER) return;
+                        if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Down');
                         toggleModal();
                     }}>
@@ -223,7 +228,7 @@ export default function SettingsScreen() {
                     </Button>
                     <Grid item xs={6}>Right</Grid>
                     <Button xs={6} onClick={() => {
-                        if(auth.role !== UserRoleType.USER) return;
+                        if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Right');
                         toggleModal();
                     }}>
@@ -231,7 +236,7 @@ export default function SettingsScreen() {
                     </Button>
                     <Grid item xs={6}>Interact</Grid>
                     <Button xs={6} onClick={() => {
-                        if(auth.role !== UserRoleType.USER) return;
+                        if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Interact');
                         toggleModal();
                     }}>
@@ -312,7 +317,7 @@ export default function SettingsScreen() {
                     
                 </Box>
             </Box>
-            <Sidebar/>
+            <Sidebar />
             <BackButton />
             <InputModal
                 keybinds={keybinds}

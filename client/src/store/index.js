@@ -35,6 +35,9 @@ export const GlobalStoreActionType = {
     REMOVE_FRIEND: "REMOVE_FRIENDS",
     GET_ONLINE_PLAYERS: "GET_ONLINE_PLAYERS",
     GET_SETTINGS: "GET_SETTINGS",
+    UPDATE_AUDIO_SETTINGS: "UPDATE_AUDIO_SETTINGS",
+    UPDATE_KEYBINDS: "UPDATE_KEYBINDS",
+    UPDATE_TOGGLES: "UPDATE_TOGGLES",
     GET_PARTY: "GET_PARTY",
     GET_RELATION: "GET_RELATION",
     ERROR: "ERROR",
@@ -94,6 +97,23 @@ function GlobalStoreContextProvider(props) {
         },
         relation: '',
         avatarList: [], // the list of avatars in the Character 
+        settings: {
+            masterVolume: 100,
+            musicVolume: 100,
+            sfxVolume: 100,
+            keybinds: {
+                UP: 'W',
+                LEFT: 'A',
+                DOWN: 'S',
+                RIGHT: 'D',
+                INTERACT: 'E'
+            },
+            toggles: {
+                privateProfile: false,
+                messages: true,
+                party: true,
+            },
+        }
     });
 
     console.log("inside useGlobalStore");
@@ -218,9 +238,61 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: payload,
+                    profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    settings: payload,
+                })
+            }
+            case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
+                console.log('update audio settings payload:', payload);
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: {
+                        masterVolume: payload.masterVolume,
+                        musicVolume: payload.musicVolume,
+                        sfxVolume: payload.sfxVolume,
+                        keybinds: store.settings.keybinds,
+                        toggles: store.settings.toggles
+                    },
+                })
+            }
+            case GlobalStoreActionType.UPDATE_KEYBINDS: {
+                console.log('update keybinds payload:', payload);
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: {
+                        masterVolume: store.settings.masterVolume,
+                        musicVolume: store.settings.musicVolume,
+                        sfxVolume: store.settings.sfxVolume,
+                        keybinds: payload,
+                        toggles: store.settings.toggles,
+                    },
+                })
+            }
+            case GlobalStoreActionType.UPDATE_TOGGLES: {
+                console.log('update toggles payload:', payload);
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: {
+                        masterVolume: store.settings.masterVolume,
+                        musicVolume: store.settings.musicVolume,
+                        sfxVolume: store.settings.sfxVolume,
+                        keybinds: store.settings.keybinds,
+                        toggles: payload
+                    },
                 })
             }
             case GlobalStoreActionType.GET_PARTY:
@@ -230,7 +302,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    partyInfo: payload
+                    partyInfo: payload,
+                    settings: store.settings,
                 });
             case GlobalStoreActionType.GET_RELATION:
                 return setStore({
@@ -619,6 +692,7 @@ function GlobalStoreContextProvider(props) {
         async function asyncGetSettings() {
             try {
                 let response = await apis.getSettings();
+                console.log(response.data);
                 storeReducer({
                     type: GlobalStoreActionType.GET_SETTINGS,
                     payload: response.data
@@ -631,16 +705,37 @@ function GlobalStoreContextProvider(props) {
     store.updateAudioSettings = (masterVolume, musicVolume, sfxVolume) => {
         async function asyncUpdateAudioSettings() {
             try {
-                await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
+                let response = await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
+                console.log(response.data);
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_AUDIO_SETTINGS,
+                    payload: {
+                        masterVolume: masterVolume,
+                        musicVolume: musicVolume,
+                        sfxVolume: sfxVolume
+                    }
+                })
             } catch(error) { console.error(error); }
         }
         asyncUpdateAudioSettings();
     }
 
-    store.updateKeybinds = ({up, left, down, right, interact}) => {
+    store.updateKeybinds = ({UP, LEFT, DOWN, RIGHT, INTERACT}) => {
         async function asyncUpdateKeybinds() {
             try {
-                await apis.updateKeybinds({up, left, down, right, interact});
+                console.log(UP);
+                let response = await apis.updateKeybinds({UP, LEFT, DOWN, RIGHT, INTERACT});
+                console.log(response.data);
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_KEYBINDS,
+                    payload: {
+                        UP: UP,
+                        LEFT: LEFT,
+                        DOWN: DOWN,
+                        RIGHT: RIGHT,
+                        INTERACT: INTERACT
+                    }
+                })
             } catch(error) { console.error(error); }
         }
         asyncUpdateKeybinds();
@@ -649,7 +744,16 @@ function GlobalStoreContextProvider(props) {
     store.updateToggles = (privateProfile, toggleChat, toggleParty) => {
         async function asyncUpdateToggles() {
             try {
-                await apis.updateToggles(privateProfile, toggleChat, toggleParty);
+                let response = await apis.updateToggles(privateProfile, toggleChat, toggleParty);
+                console.log(response.data);
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_TOGGLES,
+                    payload: {
+                        privateProfile: privateProfile,
+                        messages: toggleChat,
+                        party: toggleParty,
+                    }
+                })
             } catch(error) { console.error(error); }
         }
         asyncUpdateToggles();
@@ -676,7 +780,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncGetParty() {
             try {
                 let response = await apis.getParty();
-                console.log(response.data);
                 storeReducer({
                     type: GlobalStoreActionType.GET_PARTY,
                     payload: response.data
@@ -689,11 +792,9 @@ function GlobalStoreContextProvider(props) {
     // Misc
     store.getRelationToUser = function(targetUsername) {
         if(auth.role === UserRoleType.GUEST || targetUsername === '') return;
-        console.log('get relation to user', targetUsername, 'in store');
         async function asyncGetRelationToUser() {
             try {
                 let response = await apis.getRelationToUser(targetUsername);
-                console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.GET_RELATION,
                     payload: response.data
