@@ -245,7 +245,6 @@ function GlobalStoreContextProvider(props) {
                 })
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
-                console.log('update audio settings payload:', payload);
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -262,7 +261,6 @@ function GlobalStoreContextProvider(props) {
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
-                console.log('update keybinds payload:', payload);
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -279,7 +277,6 @@ function GlobalStoreContextProvider(props) {
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
-                console.log('update toggles payload:', payload);
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -692,7 +689,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncGetSettings() {
             try {
                 let response = await apis.getSettings();
-                console.log(response.data);
                 storeReducer({
                     type: GlobalStoreActionType.GET_SETTINGS,
                     payload: response.data
@@ -705,8 +701,7 @@ function GlobalStoreContextProvider(props) {
     store.updateAudioSettings = (masterVolume, musicVolume, sfxVolume) => {
         async function asyncUpdateAudioSettings() {
             try {
-                let response = await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
-                console.log(response.data);
+                await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AUDIO_SETTINGS,
                     payload: {
@@ -723,9 +718,7 @@ function GlobalStoreContextProvider(props) {
     store.updateKeybinds = ({UP, LEFT, DOWN, RIGHT, INTERACT}) => {
         async function asyncUpdateKeybinds() {
             try {
-                console.log(UP);
-                let response = await apis.updateKeybinds({UP, LEFT, DOWN, RIGHT, INTERACT});
-                console.log(response.data);
+                await apis.updateKeybinds({UP, LEFT, DOWN, RIGHT, INTERACT});
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_KEYBINDS,
                     payload: {
@@ -744,8 +737,7 @@ function GlobalStoreContextProvider(props) {
     store.updateToggles = (privateProfile, toggleChat, toggleParty) => {
         async function asyncUpdateToggles() {
             try {
-                let response = await apis.updateToggles(privateProfile, toggleChat, toggleParty);
-                console.log(response.data);
+                await apis.updateToggles(privateProfile, toggleChat, toggleParty);
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_TOGGLES,
                     payload: {
