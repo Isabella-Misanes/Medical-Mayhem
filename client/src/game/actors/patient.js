@@ -1,6 +1,7 @@
-import { Actor, Vector, Color } from "excalibur";
+// import { Actor, Vector, Color } from "excalibur";
+import { Actor, Color } from "excalibur";
 import * as ex from 'excalibur'
-import{ Config } from './config'
+// import{ Config } from './config'
 import { Resources } from "../resources";
 
 export default class Patient extends Actor {

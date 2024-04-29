@@ -7,7 +7,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@excaliburjs/plugin-tiled": "0.29.0-alpha.1",
+    "@excaliburjs/plugin-tiled": "^0.29.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.14",
@@ -26,8 +26,8 @@
     "socket.io-client": "^4.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "DISABLE_ES_LINT_PLUGIN=true react-scripts start",
+    "build": "DISABLE_ES_LINT_PLUGIN=true react-scripts build",
     "test": "npx cypress open",
     "eject": "react-scripts eject"
   },
