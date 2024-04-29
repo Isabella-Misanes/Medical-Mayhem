@@ -155,7 +155,8 @@ describe("GET /loggedIn", () => {
         expect(response.body).toEqual({
             loggedIn: true,
             username: 'JohnSmith',
-            email: 'john.smith@gmail.com'
+            email: 'john.smith@gmail.com',
+            isAdmin: false
         });
     }));
     it("doesn't login in a registered user without a cookie", () => __awaiter(void 0, void 0, void 0, function* () {

@@ -17,6 +17,8 @@ const path_1 = __importDefault(require("path"));
 const auth_router_1 = __importDefault(require("../routes/auth-router"));
 const main_router_1 = __importDefault(require("../routes/main-router"));
 const social_router_1 = __importDefault(require("../routes/social-router"));
+const party_router_1 = __importDefault(require("../routes/party-router"));
+const avatar_router_1 = __importDefault(require("../routes/avatar-router"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const socketHandlers_1 = require("./socketHandlers");
@@ -36,6 +38,8 @@ exports.app.use((0, cookie_parser_1.default)());
 exports.app.use('/auth', auth_router_1.default);
 exports.app.use('/api', main_router_1.default);
 exports.app.use('/api', social_router_1.default);
+exports.app.use('/api', party_router_1.default);
+exports.app.use('/api', avatar_router_1.default);
 // Creates the HTTP server with Express handling requests and responses
 exports.server = http_1.default.createServer(exports.app);
 // Wrapper that adds socket functionality
