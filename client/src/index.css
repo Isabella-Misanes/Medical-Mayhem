@@ -35,3 +35,7 @@ code {
   bottom: 0px;
   margin-top: 5vh;
 }
+
+#character-card {
+  width: 100%;
+}
