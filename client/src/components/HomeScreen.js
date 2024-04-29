@@ -1,7 +1,6 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { buttonStyle } from '../App';
 import InviteModal from './InviteModal';
 import { useContext, useState, useEffect } from 'react';
 import ReportModal from './ReportModal';
@@ -12,24 +11,9 @@ import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
 import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
+import { buttonStyle, homeButtons, modalStyle } from '../Styles';
 
 // Styling
-const homeButtons = {
-    color: 'black',
-    bgcolor: 'white',
-    ":hover": {bgcolor: '#e5e5e5'}
-}
-
-export const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'white',
-    boxShadow: 24,
-    p: 3
-};
 
 export default function HomeScreen() {
     const navigate = useNavigate();

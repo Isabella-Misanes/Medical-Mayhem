@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, List, ListItem, ListItemButton, TextField, Typography } from '@mui/material';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
