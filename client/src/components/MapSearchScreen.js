@@ -4,11 +4,13 @@ import BackButton from './BackButton';
 import { React, useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { outerContentBox, innerContentBox, sortButton } from '../Styles';
+import CharacterInfo from './CharacterInfo';
 
 export default function MapSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
     const [avatarList, setAvatarList] = useState([]);
+    const [currAvatar, setCurrAvatar] = useState(null);
 
     useEffect(() => {
         if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
@@ -22,6 +24,11 @@ export default function MapSearchScreen() {
 
     function handleOpenMap(event) {
         store.openMap(event);
+    }
+
+    function handleCharacterClick(avatar) {
+        setCurrAvatar(avatar);
+        setCharacterList(false);
     }
 
     const characterList = (
@@ -71,7 +78,7 @@ export default function MapSearchScreen() {
                         avatarList.map((avatar, index) => (
                             <div key={index} id={"character-card-" + index}>
                                 <ListItem key={index} sx={{ bgcolor: 'white', mt: 2, mb: 2 }}>
-                                    <ListItemButton onClick={() => { setCharacterList(false) }}>
+                                    <ListItemButton onClick={() => {handleCharacterClick(avatar)}}>
                                         <Grid item xs={9} sx={{ textAlign: 'left' }}>
                                             {avatar.avatarName}
                                         </Grid>
@@ -97,13 +104,12 @@ export default function MapSearchScreen() {
 
     const characterDetails = (
         <Grid container sx={innerContentBox}>
-            <Grid item xs={12}>
-                <h3>Sprite by ____</h3>
-            </Grid>
-            
             <Button onClick={() => {setCharacterList(true)}}>
-                Character search
+                {'<--'} Character search
             </Button>
+            <CharacterInfo 
+                avatar={currAvatar}
+            />
         </Grid>
     );
 
