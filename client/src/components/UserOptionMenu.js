@@ -21,7 +21,10 @@ export default function UserOptionMenu(props) {
         handleMenuClose();
     }
 
-    function handleInviteToParty() { handleMenuClose(); }
+    function handleInviteToParty() {
+        console.log('Party invite sent');
+        handleMenuClose();
+    }
 
     // TODO: Display modal to confirm user wants to remove friend
     // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)

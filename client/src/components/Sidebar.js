@@ -57,7 +57,7 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        // if(auth.role !== UserRoleType.GUEST) store.getParty();
+        if(auth.role !== UserRoleType.GUEST) store.getParty();
         //eslint-disable-next-line
     }, [])
 
@@ -114,7 +114,7 @@ export default function Sidebar() {
                 position: 'fixed',
                 flexGrow: 1,
                 height: '100%',
-                width: '70px',
+                width: '10%',
                 display: 'flex',
                 flexDirection: 'column',
                 right: '0%'

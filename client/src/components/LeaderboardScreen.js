@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Grid, Menu, MenuItem, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
@@ -308,7 +308,7 @@ export default function LeaderBoardScreen() {
             </Box>
         </Box>
         {sortMenu}
-        <Sidebar />
+        
         <BackButton />
         </div>
     );

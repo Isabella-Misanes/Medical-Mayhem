@@ -1,5 +1,5 @@
 import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import { React, useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
@@ -127,7 +127,7 @@ export default function MapSearchScreen() {
                 <Grid item xs={3}/>
             </Grid>
 
-            <Sidebar/>
+            
             <BackButton />
         </div>
     );

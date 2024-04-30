@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
-import Sidebar from './Sidebar';
+
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
@@ -275,7 +275,7 @@ export default function SocialScreen() {
                 />}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
-            <Sidebar />
+            
         </div>
     );
 }

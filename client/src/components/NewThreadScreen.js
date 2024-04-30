@@ -1,6 +1,6 @@
 import { Box, Button, Grid, TextField } from '@mui/material';
 import { buttonStyle } from '../App';
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import GlobalStoreContext from '../store';
 import { useContext } from 'react';
@@ -73,7 +73,7 @@ export default function ForumScreen() {
                     
                 </Box>
             </Box>
-            <Sidebar/>
+            
             <BackButton />
         </div>
     );

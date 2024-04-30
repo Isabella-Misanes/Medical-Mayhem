@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 // import { Engine } from "excalibur";
 import { useContext, useEffect, useRef } from "react";
@@ -41,7 +40,6 @@ export default function GameScreen() {
                     backgroundSize: '100%'
                 }}/> */}
             </Box>
-            <Sidebar/>
             <BackButton />
         </div>
     );

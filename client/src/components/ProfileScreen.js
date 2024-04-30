@@ -1,5 +1,5 @@
 import { Box, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
-import Sidebar from './Sidebar';
+
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
@@ -360,7 +360,7 @@ export default function ProfileScreen() {
     return (
         <div id="profile-screen">
             {showProfileScreen ? profileScreen : achievementsScreen}
-            <Sidebar />
+            
             <BackButton />
         </div>
     );
