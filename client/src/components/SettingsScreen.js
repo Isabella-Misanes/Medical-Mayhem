@@ -146,13 +146,12 @@ export default function SettingsScreen() {
                     ml: '10%',
                     alignItems: 'center'
                 }}>
-                    <Grid item xs={3}>
-                        Master
-                    </Grid>
+                    <Grid item xs={3}>Master</Grid>
                     <Grid item xs={7}>
                         <Slider
                             id='master-slider'
                             marks
+                            // step={1}
                             data-cy='master-slider'
                             value={typeof masterValue === 'number' ? masterValue : 0}
                             onChange={handleMasterSliderChange}
@@ -160,44 +159,42 @@ export default function SettingsScreen() {
                             disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
-                    <Grid item xs={2}>
-                        {masterValue}
-                    </Grid>
+                    <Grid id='master-volume' item xs={2}>{masterValue}</Grid>
 
-                    <Grid item xs={3}>
-                        Music
-                    </Grid>
+                    <Grid item xs={3}>Music</Grid>
                     <Grid item xs={7}>
                         <Slider
                             id='music-slider'
                             marks
+                            step={1}
                             value={typeof musicValue === 'number' ? musicValue : 0}
                             onChange={handleMusicSliderChange}
                             aria-labelledby="music-slider"
                             disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
-                    <Grid item xs={2}>{musicValue}</Grid>
+                    <Grid id='music-volume' item xs={2}>{musicValue}</Grid>
 
                     <Grid item xs={3}>SFX</Grid>
                     <Grid item xs={7}>
                         <Slider
                             id='sfx-slider'
                             marks
+                            step={1}
                             value={typeof sfxValue === 'number' ? sfxValue : 0}
                             onChange={handleSfxSliderChange}
                             aria-labelledby="sfx-slider"
                             disabled={auth.role === UserRoleType.GUEST}
                         />
                     </Grid>
-                    <Grid item xs={2}>{sfxValue}</Grid>
+                    <Grid id='sfx-volume' item xs={2}>{sfxValue}</Grid>
                     <Grid item xs={6}>
-                        <Button onClick={handleResetAudio} sx={resetButton}>
+                        <Button id='reset-audio' onClick={handleResetAudio} sx={resetButton}>
                             Reset to Default
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button onClick={handleConfirmAudio} sx={confirmButton}>
+                        <Button id='confirm-audio' onClick={handleConfirmAudio} sx={confirmButton}>
                             Confirm
                         </Button>
                     </Grid>
