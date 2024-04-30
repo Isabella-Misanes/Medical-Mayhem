@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import HomeScreen from './HomeScreen'
 import WelcomeScreen from './WelcomeScreen'
 import AuthContext from '../auth'
+import Sidebar from './Sidebar';
 // import { GlobalStoreContext } from '../store'
 
 export default function HomeWrapper() {
@@ -21,5 +22,10 @@ export default function HomeWrapper() {
 
     // TODO: Set user's online status to false when user closes window/tab while website is open
 
-    return (isAuthorized) ? <HomeScreen /> : <WelcomeScreen />;
+    return (isAuthorized) ? (
+        <>
+            <HomeScreen />
+            <Sidebar />
+        </>
+    ) : <WelcomeScreen />;
 }

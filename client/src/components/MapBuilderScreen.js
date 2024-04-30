@@ -2,7 +2,7 @@ import { Button, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, Sl
 import {FormControl} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import { buttonStyle } from '../Styles';
 import player1 from '../assets/Player-1.png.png';
@@ -127,7 +127,7 @@ export default function MapBuilderScreen() {
                     <h1>Build your character!</h1>
                 </Grid>
                 <Grid item xs={1}>
-                    <Sidebar />
+                    
                 </Grid>
                 <Grid item xs={4}>
                     <Grid container spacing={3}>
