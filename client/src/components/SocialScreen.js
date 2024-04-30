@@ -1,6 +1,11 @@
 import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
+<<<<<<< HEAD
 import { buttonStyle, noPlayersCard, socialInner, socialModal, socialOuter } from '../Styles';
 import Sidebar from './Sidebar';
+=======
+import { buttonStyle } from '../App';
+
+>>>>>>> origin/Jared
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
@@ -244,7 +249,7 @@ export default function SocialScreen() {
                 />}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
-            <Sidebar />
+            
         </div>
     );
 }

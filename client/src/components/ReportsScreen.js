@@ -1,5 +1,5 @@
 import { Box, Button, Grid, List, ListItem, Typography } from '@mui/material';
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import { buttonStyle } from '../Styles';
 import { useContext } from 'react';
@@ -72,7 +72,7 @@ export default function ReportsScreen() {
                     </List>
                 </Box>
             </Box>
-            <Sidebar/>
+            
             <BackButton />
         </div>
     );

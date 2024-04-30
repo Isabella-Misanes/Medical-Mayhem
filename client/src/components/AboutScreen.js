@@ -1,11 +1,9 @@
 import { Box, Divider, Typography } from '@mui/material';
-import Sidebar from './Sidebar';
 import BackButton from './BackButton';
 
 export default function AboutScreen() {
     return (
         <div id="about-screen">
-            <Sidebar/>
             <Box sx={{
                 height: '90%',
                 width: '45%',

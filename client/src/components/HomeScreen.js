@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material';
-import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import InviteModal from './InviteModal';
 import { useContext, useState, useEffect } from 'react';
@@ -168,7 +167,6 @@ export default function HomeScreen() {
                         <Grid item xs={12}/>
                     </Grid>                
                 </Grid>
-                <Sidebar />
             </Grid>
             <MessagesDrawer />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}

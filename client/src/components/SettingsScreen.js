@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider, Modal } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox'
-import Sidebar from './Sidebar';
+
 import BackButton from './BackButton';
 import { buttonStyle } from '../Styles';
 import { useContext, useEffect, useState } from 'react';
@@ -151,6 +151,9 @@ export default function SettingsScreen() {
                     </Grid>
                     <Grid item xs={7}>
                         <Slider
+                            id='master-slider'
+                            marks
+                            data-cy='master-slider'
                             value={typeof masterValue === 'number' ? masterValue : 0}
                             onChange={handleMasterSliderChange}
                             aria-labelledby="master-slider"
@@ -166,6 +169,8 @@ export default function SettingsScreen() {
                     </Grid>
                     <Grid item xs={7}>
                         <Slider
+                            id='music-slider'
+                            marks
                             value={typeof musicValue === 'number' ? musicValue : 0}
                             onChange={handleMusicSliderChange}
                             aria-labelledby="music-slider"
@@ -177,6 +182,8 @@ export default function SettingsScreen() {
                     <Grid item xs={3}>SFX</Grid>
                     <Grid item xs={7}>
                         <Slider
+                            id='sfx-slider'
+                            marks
                             value={typeof sfxValue === 'number' ? sfxValue : 0}
                             onChange={handleSfxSliderChange}
                             aria-labelledby="sfx-slider"
@@ -318,7 +325,7 @@ export default function SettingsScreen() {
                     
                 </Box>
             </Box>
-            <Sidebar />
+            
             <BackButton />
             <InputModal
                 keybinds={keybinds}
