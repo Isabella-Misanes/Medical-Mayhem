@@ -1,8 +1,6 @@
-import { Box, Button, Divider, Grid, Typography, ToggleButton, Slider, Modal } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox'
-
+import { Box, Button, Divider, Grid, Stack, Typography, Slider, Switch, Modal } from '@mui/material';
 import BackButton from './BackButton';
-import { buttonStyle } from '../Styles';
+import { buttonStyle, confirmButton, innerContentBox, outerContentBox, resetButton } from '../Styles';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext, { UserRoleType } from '../auth';
@@ -30,21 +28,7 @@ export default function SettingsScreen() {
         party: true,
     });
 
-    const resetButton = {
-        mt: 1,
-        mb: 2,
-        bgcolor: 'red',
-        color: 'white',
-        ":hover": {bgcolor: '#c20900'},
-    }
-
-    const confirmButton = {
-        mt: 1,
-        mb: 2,
-        bgcolor: 'green',
-        color: 'white',
-        ":hover": {bgcolor: '#2d7044'},
-    }
+    
 
     function handleLogout() {
         navigate('/');
@@ -113,215 +97,226 @@ export default function SettingsScreen() {
 
     return (
         <div id="settings-screen">
-            <Box sx={{
-                height: '90%',
-                width: '45%',
-                flexDirection: 'column',
-                backgroundColor: '#fffbc3',
-                position: 'absolute',
-                left: '27.5%',
-                top: '3%',
-                textAlign: 'center',
-                p: 2,
-                boxShadow: 10
-            }}/>
-            <Box
-                sx={{
-                    height: '85%',
-                    width: '40%',
-                    flexDirection: 'column',
-                    backgroundColor: 'white',
-                    position: 'absolute',
-                    left: '30%',
-                    top: '5%',
-                    textAlign: 'center',
-                    p: 2,
-                    boxShadow: 10
-                }}>
-                <Typography variant="h4" gutterBottom><strong>Settings</strong></Typography>
-                <Divider />
-                <h4>Audio</h4>
-                <Grid container spacing={1} sx={{
-                    width: '80%',
-                    ml: '10%',
-                    alignItems: 'center'
-                }}>
-                    <Grid item xs={3}>Master</Grid>
-                    <Grid item xs={7}>
-                        <Slider
-                            id='master-slider'
-                            marks
-                            // step={1}
-                            data-cy='master-slider'
-                            value={typeof masterValue === 'number' ? masterValue : 0}
-                            onChange={handleMasterSliderChange}
-                            aria-labelledby="master-slider"
-                            disabled={auth.role === UserRoleType.GUEST}
-                        />
-                    </Grid>
-                    <Grid id='master-volume' item xs={2}>{masterValue}</Grid>
+            <Grid container>
+                <Grid item xs={3}/>
+                <Grid item xs={6}>
+                    <Grid container sx={outerContentBox}>
+                        <Grid item xs={10}>
+                            <Grid container sx={innerContentBox}>
+                                <Grid item xs={12}>
+                                    <h1>Settings</h1>
+                                    <Divider />
+                                    <Grid container sx={{ alignItems: 'center', mb: 2 }}>
+                                        <Grid item xs={12}>
+                                            <h4>Audio</h4>
+                                        </Grid>
+                                        <Grid item xs={3}>Master</Grid>
+                                        <Grid item xs={7}>
+                                            <Slider
+                                                id='master-slider'
+                                                marks
+                                                // step={1}
+                                                data-cy='master-slider'
+                                                value={typeof masterValue === 'number' ? masterValue : 0}
+                                                onChange={handleMasterSliderChange}
+                                                aria-labelledby="master-slider"
+                                                disabled={auth.role === UserRoleType.GUEST}
+                                            />
+                                        </Grid>
+                                        <Grid id='master-volume' item xs={2}>{masterValue}</Grid>
 
-                    <Grid item xs={3}>Music</Grid>
-                    <Grid item xs={7}>
-                        <Slider
-                            id='music-slider'
-                            marks
-                            step={1}
-                            value={typeof musicValue === 'number' ? musicValue : 0}
-                            onChange={handleMusicSliderChange}
-                            aria-labelledby="music-slider"
-                            disabled={auth.role === UserRoleType.GUEST}
-                        />
-                    </Grid>
-                    <Grid id='music-volume' item xs={2}>{musicValue}</Grid>
+                                        <Grid item xs={3}>Music</Grid>
+                                        <Grid item xs={7}>
+                                            <Slider
+                                                id='music-slider'
+                                                marks
+                                                step={1}
+                                                value={typeof musicValue === 'number' ? musicValue : 0}
+                                                onChange={handleMusicSliderChange}
+                                                aria-labelledby="music-slider"
+                                                disabled={auth.role === UserRoleType.GUEST}
+                                            />
+                                        </Grid>
+                                        <Grid id='music-volume' item xs={2}>{musicValue}</Grid>
 
-                    <Grid item xs={3}>SFX</Grid>
-                    <Grid item xs={7}>
-                        <Slider
-                            id='sfx-slider'
-                            marks
-                            step={1}
-                            value={typeof sfxValue === 'number' ? sfxValue : 0}
-                            onChange={handleSfxSliderChange}
-                            aria-labelledby="sfx-slider"
-                            disabled={auth.role === UserRoleType.GUEST}
-                        />
-                    </Grid>
-                    <Grid id='sfx-volume' item xs={2}>{sfxValue}</Grid>
-                    <Grid item xs={6}>
-                        <Button id='reset-audio' onClick={handleResetAudio} sx={resetButton}>
-                            Reset to Default
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Button id='confirm-audio' onClick={handleConfirmAudio} sx={confirmButton}>
-                            Confirm
-                        </Button>
+                                        <Grid item xs={3}>SFX</Grid>
+                                        <Grid item xs={7}>
+                                            <Slider
+                                                id='sfx-slider'
+                                                marks
+                                                step={1}
+                                                value={typeof sfxValue === 'number' ? sfxValue : 0}
+                                                onChange={handleSfxSliderChange}
+                                                aria-labelledby="sfx-slider"
+                                                disabled={auth.role === UserRoleType.GUEST}
+                                            />
+                                        </Grid>
+                                        <Grid id='sfx-volume' item xs={2}>{sfxValue}</Grid>
+                                    </Grid>
+                                    
+                                    <Grid container sx={{ mb: 2 }}>
+                                        <Grid item xs={6}>
+                                            <Button id='reset-audio' onClick={handleResetAudio} sx={resetButton}>
+                                                Reset to Default
+                                            </Button>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Button id='confirm-audio' onClick={handleConfirmAudio} sx={confirmButton}>
+                                                Confirm
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                    <Divider />
+
+                                    <Grid container>
+                                        <Grid item xs={5}>
+                                            <h4>Controls</h4>
+                                            <Grid container spacing={1} sx={{ alignItems: 'center' }}>
+                                                <Grid item xs={6}>Up</Grid>
+                                                <Button xs={6} onClick={() => {
+                                                    if(auth.role === UserRoleType.GUEST) return;
+                                                    setCurrInput('Up');
+                                                    toggleModal();
+                                                }}>
+                                                    {auth.role === UserRoleType.GUEST ? "W" : keybinds && keybinds.UP}
+                                                </Button>
+                                                <Grid item xs={6}>Left</Grid>
+                                                <Button xs={6} onClick={() => {
+                                                    if(auth.role === UserRoleType.GUEST) return;
+                                                    setCurrInput('Left');
+                                                    toggleModal();
+                                                }}>
+                                                    {auth.role === UserRoleType.GUEST ? "A" : keybinds && keybinds.LEFT}
+                                                </Button>
+                                                <Grid item xs={6}>Down</Grid>
+                                                <Button xs={6} onClick={() => {
+                                                    if(auth.role === UserRoleType.GUEST) return;
+                                                    setCurrInput('Down');
+                                                    toggleModal();
+                                                }}>
+                                                    {auth.role === UserRoleType.GUEST ? "S" : keybinds && keybinds.DOWN}
+                                                </Button>
+                                                <Grid item xs={6}>Right</Grid>
+                                                <Button xs={6} onClick={() => {
+                                                    if(auth.role === UserRoleType.GUEST) return;
+                                                    setCurrInput('Right');
+                                                    toggleModal();
+                                                }}>
+                                                    {auth.role === UserRoleType.GUEST ? "D" : keybinds && keybinds.RIGHT}
+                                                </Button>
+                                                <Grid item xs={6}>Interact</Grid>
+                                                <Button xs={6} onClick={() => {
+                                                    if(auth.role === UserRoleType.GUEST) return;
+                                                    setCurrInput('Interact');
+                                                    toggleModal();
+                                                }}>
+                                                    {auth.role === UserRoleType.GUEST ? "E" : keybinds && keybinds.INTERACT}
+                                                </Button>
+                                                <Stack direction="row" alignItems="center" spacing={1}>
+                                                    <Button onClick={handleResetControls} sx={resetButton}>
+                                                        Reset to Default
+                                                    </Button>
+                                                    <Button onClick={handleConfirmControls} sx={confirmButton}>
+                                                        Confirm
+                                                    </Button>
+                                                </Stack>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Divider orientation='vertical' />
+                                        </Grid>
+                                        
+                                        <Grid item xs={6}>
+                                            <Grid container>
+                                                { auth.role !== UserRoleType.GUEST && 
+                                                    <div id='settings-guest'>
+                                                        <Grid item xs={12}>
+                                                            <Stack direction="row" alignItems="center">
+                                                                <h4>Private Profile</h4>
+                                                                Off
+                                                                <Switch 
+                                                                    checked={toggles.privateProfile}
+                                                                    onChange={() => {
+                                                                        setToggles({
+                                                                            privateProfile: !toggles.privateProfile,
+                                                                            messages: toggles.messages,
+                                                                            party: toggles.party
+                                                                        })
+                                                                        store.updateToggles(!toggles.privateProfile, toggles.messages, toggles.party);
+                                                                    }}
+                                                                />
+                                                                On
+                                                            </Stack>
+                                                        </Grid>
+                                                        <Grid item xs={12}>
+                                                            <h4>Enable Messaging</h4>
+                                                            <Stack direction="row" alignItems="center">
+                                                                Off
+                                                                <Switch 
+                                                                    checked={toggles.messages}
+                                                                    onChange={() => {
+                                                                        setToggles({
+                                                                            ...toggles,
+                                                                            messages: !toggles.messages,
+                                                                        })
+                                                                        store.updateToggles(toggles.privateProfile, !toggles.messages, toggles.party);
+                                                                    }}
+                                                                />
+                                                                On
+                                                            </Stack>
+                                                        </Grid>
+                                                        <Grid item xs={12}>
+                                                            <h4>Enable Party</h4>
+                                                            <Stack direction="row" alignItems="center">
+                                                                Off
+                                                                <Switch 
+                                                                    checked={toggles.party}
+                                                                    onChange={() => {
+                                                                        setToggles({
+                                                                            privateProfile: toggles.privateProfile,
+                                                                            messages: toggles.messages,
+                                                                            party: !toggles.party
+                                                                        })
+                                                                        store.updateToggles(toggles.privateProfile, toggles.messages, !toggles.party);
+                                                                    }}
+                                                                />
+                                                                On
+                                                            </Stack>
+                                                        </Grid>
+                                                    </div>}
+                                                
+                                                    { auth.role !== UserRoleType.GUEST ?
+                                                        <Stack direction="row" alignItems="center" spacing={1}>
+                                                            <Button id='log-out' onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
+                                                                Log Out
+                                                            </Button>
+                                                            <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
+                                                                Delete Account
+                                                            </Button>
+                                                        </Stack> :
+                                                        <Grid>
+                                                            <Typography variant="h5" gutterBottom><strong>Login to change default settings</strong></Typography>
+                                                            <Button id='login' onClick={() => navigate('/login')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
+                                                                Log In
+                                                            </Button>
+                                                            <Button id='register' onClick={() => navigate('/register')} sx={[buttonStyle, {color: 'white', mt: 2, ml: 2}]}>
+                                                                Register
+                                                            </Button> 
+                                                        </Grid>
+                                                    }
+                                            </Grid>
+                                            
+                                            
+
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-                <Divider />
-                
-                <h4>Controls</h4>
-                    <Grid container spacing={1} sx={{
-                        width: '80%',
-                        ml: '10%',
-                        alignItems: 'center'
-                    }}>
-                    <Grid item xs={6}>Up</Grid>
-                    <Button xs={6} onClick={() => {
-                        if(auth.role === UserRoleType.GUEST) return;
-                        setCurrInput('Up');
-                        toggleModal();
-                    }}>
-                        {auth.role === UserRoleType.GUEST ? "W" : keybinds && keybinds.UP}
-                    </Button>
-                    <Grid item xs={6}>Left</Grid>
-                    <Button xs={6} onClick={() => {
-                        if(auth.role === UserRoleType.GUEST) return;
-                        setCurrInput('Left');
-                        toggleModal();
-                    }}>
-                        {auth.role === UserRoleType.GUEST ? "A" : keybinds && keybinds.LEFT}
-                    </Button>
-                    <Grid item xs={6}>Down</Grid>
-                    <Button xs={6} onClick={() => {
-                        if(auth.role === UserRoleType.GUEST) return;
-                        setCurrInput('Down');
-                        toggleModal();
-                    }}>
-                        {auth.role === UserRoleType.GUEST ? "S" : keybinds && keybinds.DOWN}
-                    </Button>
-                    <Grid item xs={6}>Right</Grid>
-                    <Button xs={6} onClick={() => {
-                        if(auth.role === UserRoleType.GUEST) return;
-                        setCurrInput('Right');
-                        toggleModal();
-                    }}>
-                        {auth.role === UserRoleType.GUEST ? "D" : keybinds && keybinds.RIGHT}
-                    </Button>
-                    <Grid item xs={6}>Interact</Grid>
-                    <Button xs={6} onClick={() => {
-                        if(auth.role === UserRoleType.GUEST) return;
-                        setCurrInput('Interact');
-                        toggleModal();
-                    }}>
-                        {auth.role === UserRoleType.GUEST ? "E" : keybinds && keybinds.INTERACT}
-                    </Button>
-                    <Grid item xs={6}>
-                        <Button onClick={handleResetControls} sx={resetButton}>
-                            Reset to Default
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Button onClick={handleConfirmControls} sx={confirmButton}>
-                            Confirm
-                        </Button>
-                    </Grid>
-                </Grid>
-                <Divider />
-
-                { auth.role !== UserRoleType.GUEST && 
-                <>
-                    <Box display="flex" justifyContent={'space-evenly'} spacing={1} paddingTop={2}>
-                        <ToggleButton onClick={() => {
-                            setToggles({
-                                privateProfile: !toggles.privateProfile,
-                                messages: toggles.messages,
-                                party: toggles.party
-                            })
-                            store.updateToggles(!toggles.privateProfile, toggles.messages, toggles.party);
-                        }} size='small' value={false}>
-                            Private Profile
-                            <Checkbox checked={toggles.privateProfile} />
-                        </ToggleButton>
-
-                        <ToggleButton onClick={() => {
-                            setToggles({
-                                ...toggles,
-                                messages: !toggles.messages,
-                            })
-                            store.updateToggles(toggles.privateProfile, !toggles.messages, toggles.party);
-                        }} size='small' value={false}>
-                            Messages
-                            <Checkbox checked={toggles.messages} />
-                        </ToggleButton>
-
-                        <ToggleButton onClick={() => {
-                            setToggles({
-                                privateProfile: toggles.privateProfile,
-                                messages: toggles.messages,
-                                party: !toggles.party
-                            })
-                            store.updateToggles(toggles.privateProfile, toggles.messages, !toggles.party);
-                        }} size='small' value={false}>
-                            Party
-                            <Checkbox checked={toggles.party} />
-                        </ToggleButton>
-                    </Box>
-                </>}
-               
-                <Box display="flex" justifyContent={'center'} gap={5}>
-                    { auth.role !== UserRoleType.GUEST ?
-                        <>
-                            <Button id='log-out' onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
-                                Log Out
-                            </Button>
-                            <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
-                                Delete Account
-                            </Button>
-                        </> :
-                        <Grid>
-                            <Typography variant="h5" gutterBottom><strong>Login to change default settings</strong></Typography>
-                            <Button id='login' onClick={() => navigate('/login')} sx={[buttonStyle, {color: 'white', mt: 2}]}>
-                                Log In
-                            </Button>
-                            <Button id='register' onClick={() => navigate('/register')} sx={[buttonStyle, {color: 'white', mt: 2, ml: 2}]}>
-                                Register
-                            </Button> 
-                        </Grid>}
-                    
-                </Box>
-            </Box>
+                <Grid item xs={3}/>
+            </Grid>
             
             <BackButton />
             <InputModal
