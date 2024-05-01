@@ -36,6 +36,7 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
         width: window.innerWidth,
         height: window.innerHeight,
         displayMode: DisplayMode.FullScreen,
+        suppressPlayButton: true,
     });
     const engine = gameRef.current;
 

@@ -108,24 +108,20 @@ export default function Sidebar() {
     }
 
     return (
-        auth.role !== UserRoleType.GUEST && 
-            <Box sx={{ 
+            <Box id='sidebar' sx={{ 
                 backgroundColor: '#104c00',
-                position: 'fixed',
                 flexGrow: 1,
                 height: '100%',
-                width: '10%',
                 display: 'flex',
                 flexDirection: 'column',
                 right: '0%'
-            }}>
+            }}
+            >
                 {renderPartyMembers()}
                 
                 <IconButton onClick={()=>{handleLogout()}} sx={{
                     position: 'fixed',
-                    alignContent: 'center',
                     bottom: '2%',
-                    right: '15px',
                     color: 'white'
                 }}>
                     <LogoutIcon />

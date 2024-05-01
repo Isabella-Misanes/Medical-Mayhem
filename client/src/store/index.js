@@ -47,6 +47,8 @@ export const GlobalStoreActionType = {
     UPDATE_AVATAR: "UPDATE_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
+    GET_COMMENTS: "GET_COMMENTS",
+    CREATE_COMMENT: "CREATE_COMMENT",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -57,10 +59,16 @@ const CurrentModal = {
     DELETE_LIST: "DELETE_LIST",
 }
 
-const CurrentHomeScreen = {
+const CurrentScreen = {
+    ABOUT: "ABOUT",
+    GAME: "GAME",
     HOME: "HOME",
-    ALL_LISTS: "ALL_LISTS",
-    USERS: "USERS"
+    CHAR_BUILDER: "CHAR_BUILDER",
+    CHAR_SEARCH: "CHAR_SEARCH",
+    PROFILE: "PROFILE",
+    SETTINGS: "SETTINGS",
+    REPORT: "REPORT",
+    SOCIAL: "SOCIAL",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -74,7 +82,7 @@ function GlobalStoreContextProvider(props) {
     // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
-        currentHomeScreen: CurrentHomeScreen.HOME,
+        CurrentScreen: CurrentScreen.HOME,
         profileInfo: {
             username: "",
             bio: "",
@@ -96,7 +104,8 @@ function GlobalStoreContextProvider(props) {
             partyLeader: ""
         },
         relation: '',
-        avatarList: [], // the list of avatars in the Character 
+        avatarList: [], // the list of avatars in the Character Search
+        commentsList: [],
         settings: {
             masterVolume: 100,
             musicVolume: 100,
@@ -131,38 +140,41 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_TEAMMATES: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
                     players: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.RESET: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: CurrentHomeScreen.HOME,
+                    CurrentScreen: CurrentScreen.HOME,
                     profileInfo: {},
                     errorMessage: "",
                     avatar: {
@@ -190,90 +202,120 @@ function GlobalStoreContextProvider(props) {
                             messages: true,
                             party: true,
                         },
-                    }
+                    },
+                    commentsList: store.commentsList,
                 });
             }
 
             case GlobalStoreActionType.VIEW_FRIENDS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: store.partyInfo,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
 
             case GlobalStoreActionType.ERROR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: payload.errorMessage,
                     avatar: store.avatar,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
             }
 
             case GlobalStoreActionType.GET_AVATAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
 
             case GlobalStoreActionType.UPDATE_AVATAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
             }
-            case GlobalStoreActionType.GET_SETTINGS: {
+            case GlobalStoreActionType.GET_COMMENTS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    settings: store.settings,
+                    commentsList: payload,
+                });
+            }
+            case GlobalStoreActionType.CREATE_COMMENT: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: store.settings,
+                    commentsList: payload,
+                });
+            }
+            case GlobalStoreActionType.GET_SETTINGS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    CurrentScreen: store.CurrentScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
                     settings: payload,
-                })
+                    commentsList: store.commentsList,
+                });
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -284,12 +326,13 @@ function GlobalStoreContextProvider(props) {
                         keybinds: store.settings.keybinds,
                         toggles: store.settings.toggles
                     },
+                    commentsList: store.commentsList,
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -300,12 +343,13 @@ function GlobalStoreContextProvider(props) {
                         keybinds: payload,
                         toggles: store.settings.toggles,
                     },
+                    commentsList: store.commentsList,
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -316,29 +360,34 @@ function GlobalStoreContextProvider(props) {
                         keybinds: store.settings.keybinds,
                         toggles: payload
                     },
+                    commentsList: store.commentsList,
                 })
             }
-            case GlobalStoreActionType.GET_PARTY:
+            case GlobalStoreActionType.GET_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
-            case GlobalStoreActionType.GET_RELATION:
+            }
+            case GlobalStoreActionType.GET_RELATION: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: store.partyInfo,
                     relation: payload,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
+            }
             default:
                 return store;
         }
@@ -694,6 +743,23 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncUpdateAvatarList();
+    }
+
+    // Character Info
+    store.getComments = function(avatar) {
+        async function asyncGetComments() {
+            try {
+                let response = await apis.getAvatar(avatar)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.GET_COMMENTS,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncGetComments();
     }
 
     // Leaderboard Screen

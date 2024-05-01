@@ -13,7 +13,8 @@ const SocketEvents = {
     OPPONENT_SCORE_CHANGE: "OPPONENT_SCORE_CHANGE",
     ERROR: "ERROR",
 
-    PLAYER_MOVED: "PLAYER_MOVED"
+    PLAYER_MOVED: "PLAYER_MOVED",
+    STOP_FOLLOW: "STOP_FOLLOW"
 }
 
 export default SocketEvents

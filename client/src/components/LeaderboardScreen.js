@@ -5,7 +5,7 @@ import SortIcon from '@mui/icons-material/Sort';
 import BackButton from './BackButton';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 
 export default function LeaderBoardScreen() {
     const {store} = useContext(GlobalStoreContext);

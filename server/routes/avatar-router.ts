@@ -6,5 +6,6 @@ import { AvatarController } from '../controllers/avatar-controller'
 
 router.get('/avatars', AvatarController.getAllAvatars);
 router.post('/updateAvatarList', AvatarController.updateAvatarList);
+router.get('/comments', AvatarController.getComments);
 
 export default router

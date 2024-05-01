@@ -68,4 +68,25 @@ export const updateAvatarList = async (req: Request, res: Response) => {
     }
 }
 
+export const getComments = async (req: Request, res: Response) => {
+    console.log("Get comments");
+    
+    try {
+        const avatar = await Avatar.findOne({isPublic: true});
+
+        if(!avatar) {
+            console.log("No avatars found");
+            return res.status(404).json({errorMessage: 'Avatar not found.'});
+        }
+        else {
+            console.log("Comments not found.", avatar);
+            return res.status(200).json({avatar})
+        }
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 export * as AvatarController from './avatar-controller'

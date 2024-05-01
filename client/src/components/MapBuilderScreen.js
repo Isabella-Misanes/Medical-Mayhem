@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 
 import BackButton from './BackButton';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import player1 from '../assets/Player-1.png.png';
 import player2 from '../assets/Player-2.png.png';
 import player3 from '../assets/Player-3.png.png';

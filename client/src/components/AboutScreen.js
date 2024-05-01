@@ -1,44 +1,32 @@
-import { Box, Divider, Typography } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import BackButton from './BackButton';
+import { innerContentBox, outerContentBox } from '../Styles';
 
 export default function AboutScreen() {
     return (
         <div id="about-screen">
-            <Box sx={{
-                height: '90%',
-                width: '45%',
-                flexDirection: 'column',
-                backgroundColor: '#fffbc3',
-                position: 'absolute',
-                left: '27.5%',
-                top: '3%',
-                textAlign: 'center',
-                p: 2,
-                boxShadow: 10
-            }}/>
-            <Box
-                sx={{
-                    height: '85%',
-                    width: '40%',
-                    flexDirection: 'column',
-                    backgroundColor: 'white',
-                    position: 'absolute',
-                    left: '30%',
-                    top: '5%',
-                    textAlign: 'center',
-                    p: 2,
-                    boxShadow: 10
-                }}>
-                <Typography variant="h4" gutterBottom>About Screen</Typography>
-                <Divider />
-                <p>Medical Mayhem is a top down 2-D multiplayer game created by:</p>
-                <p>
-                    Thomas Aloi<br/>
-                    Torin McNally<br/>
-                    Isabella Misanes<br/>
-                    Jared Tjahjadi<br/>
-                </p>
-            </Box>
+            <Grid container>
+                <Grid item xs={3}/>
+                <Grid item xs={6}>
+                    <Grid container sx={outerContentBox}>
+                        <Grid item xs={10}>
+                            <Grid container sx={innerContentBox}>
+                                <Grid item xs={12}>
+                                    <h1>About Screen</h1>
+                                    <Divider />
+                                    <h3>Medical Mayhem is a top down 2-D multiplayer game created by:</h3>
+                                        <h4>Thomas Aloi</h4>
+                                        <h4>Torin McNally</h4>
+                                        <h4>Isabella Misanes</h4>
+                                        <h4>Jared Tjahjadi</h4>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={3}/>
+            </Grid>
+            
             <BackButton />
         </div>
     );

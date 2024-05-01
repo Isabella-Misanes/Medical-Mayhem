@@ -1,7 +1,7 @@
 import { Box, Button, Grid, List, ListItem, Typography } from '@mui/material';
 
 import BackButton from './BackButton';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 import { useContext } from 'react';
 import GlobalStoreContext from '../store';
 
