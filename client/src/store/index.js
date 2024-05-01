@@ -59,10 +59,16 @@ const CurrentModal = {
     DELETE_LIST: "DELETE_LIST",
 }
 
-const CurrentHomeScreen = {
+const CurrentScreen = {
+    ABOUT: "ABOUT",
+    GAME: "GAME",
     HOME: "HOME",
-    ALL_LISTS: "ALL_LISTS",
-    USERS: "USERS"
+    CHAR_BUILDER: "CHAR_BUILDER",
+    CHAR_SEARCH: "CHAR_SEARCH",
+    PROFILE: "PROFILE",
+    SETTINGS: "SETTINGS",
+    REPORT: "REPORT",
+    SOCIAL: "SOCIAL",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -76,7 +82,7 @@ function GlobalStoreContextProvider(props) {
     // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
-        currentHomeScreen: CurrentHomeScreen.HOME,
+        CurrentScreen: CurrentScreen.HOME,
         profileInfo: {
             username: "",
             bio: "",
@@ -134,7 +140,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_TEAMMATES: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -146,7 +152,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_PROFILE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -157,7 +163,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_PROFILE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -168,7 +174,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.RESET: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: CurrentHomeScreen.HOME,
+                    CurrentScreen: CurrentScreen.HOME,
                     profileInfo: {},
                     errorMessage: "",
                     avatar: {
@@ -204,7 +210,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.VIEW_FRIENDS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -217,7 +223,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.ERROR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: payload.errorMessage,
                     avatar: store.avatar,
@@ -229,7 +235,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_AVATAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
@@ -241,7 +247,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_AVATAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
@@ -252,7 +258,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_AVATAR_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -264,7 +270,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -298,7 +304,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_SETTINGS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -309,7 +315,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -326,7 +332,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -343,7 +349,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.UPDATE_TOGGLES: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -360,7 +366,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
@@ -372,7 +378,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.GET_RELATION: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
+                    CurrentScreen: store.CurrentScreen,
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
