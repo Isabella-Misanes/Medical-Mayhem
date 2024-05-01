@@ -31,9 +31,10 @@ export const modalStyle = {
 };
 
 export const buttonStyle = {
-bgcolor: '#3A9158',
-":hover": {
-    bgcolor: '#2d7044'},
+    color: 'white',
+    bgcolor: '#3A9158',
+    ":hover": {
+        bgcolor: '#2d7044'},
 };
 
 export const outerContentBox = {

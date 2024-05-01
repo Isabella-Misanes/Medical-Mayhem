@@ -1,4 +1,5 @@
-import { Grid } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
+import { buttonStyle } from '../Styles';
 
 export default function CharacterInfo(props) {
     const avatar = props.avatar;
@@ -13,11 +14,11 @@ export default function CharacterInfo(props) {
     
     return (
         <div id="character-card">
-            <Grid container>
+            <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <h3>{avatar.avatarName}</h3>
                 </Grid>
-                <Grid item container xs={12}>
+                <Grid item container spacing={1} xs={12}>
                     <Grid item xs={4}>
                         <img 
                             src={avatarPic}
@@ -33,6 +34,25 @@ export default function CharacterInfo(props) {
                             Defense: <strong>{avatar.defense}</strong><br/>
                             Favorite Minigame: <strong>{avatar.favoredMinigame}</strong>
                     </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <h4>Comments</h4>
+                </Grid>
+
+                <Grid item xs={1}/>
+                <Grid item xs={10}>
+                    Comments Here
+                </Grid>
+                <Grid item xs={1}/>
+
+                <Grid item xs={1}/>
+                <Grid item xs={10}>
+                    <TextField fullWidth label='Comment' />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button sx={buttonStyle}>
+                        Comment
+                    </Button>
                 </Grid>
             </Grid>
         </div>

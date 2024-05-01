@@ -47,6 +47,8 @@ export const GlobalStoreActionType = {
     UPDATE_AVATAR: "UPDATE_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
+    GET_COMMENTS: "GET_COMMENTS",
+    CREATE_COMMENT: "CREATE_COMMENT",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -96,7 +98,8 @@ function GlobalStoreContextProvider(props) {
             partyLeader: ""
         },
         relation: '',
-        avatarList: [], // the list of avatars in the Character 
+        avatarList: [], // the list of avatars in the Character Search
+        commentsList: [],
         settings: {
             masterVolume: 100,
             musicVolume: 100,
@@ -137,6 +140,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     players: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -147,6 +151,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -157,6 +162,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.RESET: {
@@ -190,7 +196,8 @@ function GlobalStoreContextProvider(props) {
                             messages: true,
                             party: true,
                         },
-                    }
+                    },
+                    commentsList: store.commentsList,
                 });
             }
 
@@ -203,6 +210,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     partyInfo: store.partyInfo,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
 
@@ -214,7 +222,8 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: payload.errorMessage,
                     avatar: store.avatar,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
             }
 
             case GlobalStoreActionType.GET_AVATAR: {
@@ -225,6 +234,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
 
@@ -236,6 +246,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
@@ -247,6 +258,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     avatarList: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
@@ -258,7 +270,30 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     avatarList: payload,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
+            }
+            case GlobalStoreActionType.GET_COMMENTS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: store.settings,
+                    commentsList: payload,
+                });
+            }
+            case GlobalStoreActionType.CREATE_COMMENT: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentHomeScreen: store.currentHomeScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    settings: store.settings,
+                    commentsList: payload,
+                });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
                 return setStore({
@@ -268,7 +303,8 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: payload,
-                })
+                    commentsList: store.commentsList,
+                });
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
                 return setStore({
@@ -284,6 +320,7 @@ function GlobalStoreContextProvider(props) {
                         keybinds: store.settings.keybinds,
                         toggles: store.settings.toggles
                     },
+                    commentsList: store.commentsList,
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
@@ -300,6 +337,7 @@ function GlobalStoreContextProvider(props) {
                         keybinds: payload,
                         toggles: store.settings.toggles,
                     },
+                    commentsList: store.commentsList,
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
@@ -316,9 +354,10 @@ function GlobalStoreContextProvider(props) {
                         keybinds: store.settings.keybinds,
                         toggles: payload
                     },
+                    commentsList: store.commentsList,
                 })
             }
-            case GlobalStoreActionType.GET_PARTY:
+            case GlobalStoreActionType.GET_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -327,8 +366,10 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     partyInfo: payload,
                     settings: store.settings,
+                    commentsList: store.commentsList,
                 });
-            case GlobalStoreActionType.GET_RELATION:
+            }
+            case GlobalStoreActionType.GET_RELATION: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -338,7 +379,9 @@ function GlobalStoreContextProvider(props) {
                     partyInfo: store.partyInfo,
                     relation: payload,
                     settings: store.settings,
-                })
+                    commentsList: store.commentsList,
+                });
+            }
             default:
                 return store;
         }
@@ -694,6 +737,23 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncUpdateAvatarList();
+    }
+
+    // Character Info
+    store.getComments = function(avatar) {
+        async function asyncGetComments() {
+            try {
+                let response = await apis.getAvatar(avatar)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.GET_COMMENTS,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncGetComments();
     }
 
     // Leaderboard Screen
