@@ -95,6 +95,18 @@ export const characterCard = {
     mb: 2,
 }
 
+export const commList = {
+    width: '100%', 
+    maxHeight: '10vh',
+    overflow: 'scroll'
+}
+
+export const commentCard = {
+    bgcolor: 'white', 
+    mt: 2, 
+    mb: 2,
+}
+
 export const socialModal = {
     width: '30%',
     height: '27%',

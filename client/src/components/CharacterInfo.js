@@ -1,9 +1,23 @@
-import { Button, Grid, TextField } from '@mui/material';
-import { buttonStyle } from '../Styles';
+import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
+import { buttonStyle, commList, commentCard } from '../Styles';
+import { useState, useContext, useEffect } from 'react';
+import GlobalStoreContext from '../store';
 
 export default function CharacterInfo(props) {
+    const {store} = useContext(GlobalStoreContext);
+    const [commentsList, setCommentsList] = useState([]);
     const avatar = props.avatar;
     const avatarPic = avatar.avatarSprite !== '' ? convertDataUrl(avatar.avatarSprite) : '';
+
+    useEffect(() => {
+        if (store.commentsList && store.commentsList.comments && store.commentsList.comments.length > 0) {
+            setCommentsList(store.commentsList.comments);
+        } else {
+            store.getAllAvatars();
+            setCommentsList([]);
+        }
+        // eslint-disable-next-line
+    }, [store.commentsList])
 
     function convertDataUrl(dataUrl) {
         var arr = dataUrl.split(','),
@@ -41,6 +55,27 @@ export default function CharacterInfo(props) {
 
                 <Grid item xs={1}/>
                 <Grid item xs={10}>
+                    <List sx={commList}>
+                        {commentsList.length === 0 ? (
+                            <div>No comments.</div>
+                        ) : (
+                            commentsList.map((comment, index) => (
+                                <div id={"comment-card-" + index}>
+                                    <ListItem key={index} sx={commentCard}>
+                                        <ListItemButton onClick={() => {console.log("Clicked")}}>
+                                            <Grid item xs={9} sx={{ textAlign: 'left' }}>
+                                                {comment.text}
+                                            </Grid>
+                                            <Grid item xs={2} sx={{ fontSize: '10px' }}>
+                                                {comment.author}
+                                            </Grid>
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <Divider />
+                                </div>
+                            ))
+                        )}
+                    </List>
                     Comments Here
                 </Grid>
                 <Grid item xs={1}/>

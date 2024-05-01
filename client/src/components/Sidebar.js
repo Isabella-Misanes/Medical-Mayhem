@@ -144,7 +144,6 @@ function PartyMember(props) {
                 onClick={props.onClick}
                 sx={{
                     position: 'absolute',
-                    right: '22.5px',
                     marginTop: props.marginTop,
                     color: 'white'
                 }}
