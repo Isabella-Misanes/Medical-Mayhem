@@ -57,3 +57,11 @@ code {
 #character-card {
   width: 100%;
 }
+
+#settings-guest {
+  text-align: left;
+}
+
+#controls-menu {
+  text-align: left;
+}
