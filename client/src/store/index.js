@@ -29,6 +29,7 @@ export const GlobalStoreActionType = {
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
     RESET: "RESET",
+    ADD_TO_PARTY: "ADD_TO_PARTY",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
@@ -56,7 +57,6 @@ export const GlobalStoreActionType = {
 
 const CurrentModal = {
     NONE: "NONE",
-    DELETE_LIST: "DELETE_LIST",
 }
 
 const CurrentScreen = {
@@ -483,6 +483,23 @@ function GlobalStoreContextProvider(props) {
         }
         asyncSendFriend();
     }
+
+    // Party
+
+    // store.addToParty = function (accepter) {
+    //     async function asyncAddToParty() {
+    //         try {
+    //             let response = await apis.
+    //         } catch(error) {
+    //             storeReducer({
+    //                 type: GlobalStoreActionType.ERROR,
+    //                 payload: { errorMessage: error.response.data.errorMessage }
+    //             })
+    //         }
+    //     }
+
+    //     asyncAddToParty
+    // }
 
     store.promoteToLeader = function (event) {
         console.log("Promote to leader in store");

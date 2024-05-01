@@ -97,6 +97,8 @@ export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
 
 export const getParty = async() => { return api.get('/party'); }
 
+export const addToParty = async(accepter) => { return api.get('/addToParty/:targetUsername', {targetUsername: accepter}) }
+
 export const getRelationToUser = async(targetUsername) => {
     return api.post('/relationToUser', {targetUsername: targetUsername});
 }

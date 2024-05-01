@@ -16,18 +16,20 @@ import {
     LeaderboardScreen,
     RegisterScreen,
     HomeWrapper,
-    Sidebar
+    Sidebar,
+    InviteModal
 } from '.'
+import GlobalStoreContext from "../store";
 
 export default function MainLayout() {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+
+    const [displayInviteModal, setDisplayInviteModal] = useState(false)
     const [displaySidebar, setDisplaySidebar] = useState(false)
 
+
     useEffect(() => {
-        console.log("HEEEEEREERER")
-        console.log(auth)
-        console.log(auth.role)
-        console.log(auth.loggedIn && auth.role !== UserRoleType.GUEST)
         setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST)
     }, [auth])
 
@@ -50,6 +52,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
+                <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
             </div>
             {displaySidebar && <Sidebar />}
         </div>
