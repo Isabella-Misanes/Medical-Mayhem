@@ -173,7 +173,6 @@ export default function SettingsScreen() {
                                                 <Divider />
                                             </Grid>
                                         </Grid>
-                                        <Divider />
 
                                         <Grid container id='controls-menu'>
                                             <Grid item xs={6}>
@@ -181,46 +180,26 @@ export default function SettingsScreen() {
                                                     <h4>Controls</h4>
                                                 </Grid>
                                                 <Grid container sx={{ alignItems: 'center' }}>
-                                                    <Grid item xs={6}>Up</Grid>
-                                                    <Button xs={6} onClick={() => {
-                                                        if(auth.role === UserRoleType.GUEST) return;
-                                                        setCurrInput('Up');
-                                                        toggleModal();
-                                                    }}>
-                                                        {auth.role === UserRoleType.GUEST ? "W" : keybinds && keybinds.UP}
-                                                    </Button>
-                                                    <Grid item xs={6}>Left</Grid>
-                                                    <Button xs={6} onClick={() => {
-                                                        if(auth.role === UserRoleType.GUEST) return;
-                                                        setCurrInput('Left');
-                                                        toggleModal();
-                                                    }}>
-                                                        {auth.role === UserRoleType.GUEST ? "A" : keybinds && keybinds.LEFT}
-                                                    </Button>
-                                                    <Grid item xs={6}>Down</Grid>
-                                                    <Button xs={6} onClick={() => {
-                                                        if(auth.role === UserRoleType.GUEST) return;
-                                                        setCurrInput('Down');
-                                                        toggleModal();
-                                                    }}>
-                                                        {auth.role === UserRoleType.GUEST ? "S" : keybinds && keybinds.DOWN}
-                                                    </Button>
-                                                    <Grid item xs={6}>Right</Grid>
-                                                    <Button xs={6} onClick={() => {
-                                                        if(auth.role === UserRoleType.GUEST) return;
-                                                        setCurrInput('Right');
-                                                        toggleModal();
-                                                    }}>
-                                                        {auth.role === UserRoleType.GUEST ? "D" : keybinds && keybinds.RIGHT}
-                                                    </Button>
-                                                    <Grid item xs={6}>Interact</Grid>
-                                                    <Button xs={6} onClick={() => {
-                                                        if(auth.role === UserRoleType.GUEST) return;
-                                                        setCurrInput('Interact');
-                                                        toggleModal();
-                                                    }}>
-                                                        {auth.role === UserRoleType.GUEST ? "E" : keybinds && keybinds.INTERACT}
-                                                    </Button>
+                                                    <InputField
+                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey={'W'} inputStr={'Up'} keybinds={keybinds} keybindControl={keybinds.UP}
+                                                    />
+                                                    <InputField
+                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey={'A'} inputStr={'Left'} keybinds={keybinds} keybindControl={keybinds.LEFT}
+                                                    />
+                                                    <InputField
+                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey={'S'} inputStr={'Down'} keybinds={keybinds} keybindControl={keybinds.DOWN}
+                                                    />
+                                                    <InputField
+                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey={'D'} inputStr={'Right'} keybinds={keybinds} keybindControl={keybinds.RIGHT}
+                                                    />
+                                                    <InputField
+                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey={'E'} inputStr={'Interact'} keybinds={keybinds} keybindControl={keybinds.INTERACT}
+                                                    />
 
                                                     <Grid item xs={6}>
                                                         <Button onClick={handleResetControls} sx={resetButton}>
@@ -242,12 +221,8 @@ export default function SettingsScreen() {
                                                             <Grid item xs={12} sx={{ textAlign: 'center' }}>
                                                                 <h4>Permissions</h4>
                                                             </Grid>
-                                                            <Grid item xs={4}>
-                                                                <i>Private Profile</i>
-                                                            </Grid>
-                                                            <Grid item xs={2}>
-                                                                Off
-                                                            </Grid>
+                                                            <Grid item xs={4}><i>Private Profile</i></Grid>
+                                                            <Grid item xs={2}>Off</Grid>
                                                             <Grid item xs={4}>
                                                                 <Switch 
                                                                     checked={toggles.privateProfile}
@@ -261,16 +236,10 @@ export default function SettingsScreen() {
                                                                     }}
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs={2}>
-                                                                On
-                                                            </Grid>
+                                                            <Grid item xs={2}>On</Grid>
 
-                                                            <Grid item xs={4}>
-                                                                <i>Messages</i>
-                                                            </Grid>
-                                                            <Grid item xs={2}>
-                                                                Off
-                                                            </Grid>
+                                                            <Grid item xs={4}><i>Messages</i></Grid>
+                                                            <Grid item xs={2}>Off</Grid>
                                                             <Grid item xs={4}>
                                                                 <Switch 
                                                                     checked={toggles.messages}
@@ -283,16 +252,10 @@ export default function SettingsScreen() {
                                                                     }}
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs={2}>
-                                                                Off
-                                                            </Grid>
+                                                            <Grid item xs={2}>On</Grid>
 
-                                                            <Grid item xs={4}>
-                                                                <i>Enable Party</i>
-                                                            </Grid>
-                                                            <Grid item xs={2}>
-                                                                Off
-                                                            </Grid>
+                                                            <Grid item xs={4}><i>Enable Party</i></Grid>
+                                                            <Grid item xs={2}>Off</Grid>
                                                             <Grid item xs={4}>
                                                                 <Switch 
                                                                     checked={toggles.party}
@@ -306,21 +269,19 @@ export default function SettingsScreen() {
                                                                     }}
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs={2}>
-                                                                On
-                                                            </Grid>
+                                                            <Grid item xs={2}>On</Grid>
                                                         </Grid>
                                                     </div>}
                                                 
                                                     { auth.role !== UserRoleType.GUEST ?
                                                         <Grid container>
                                                             <Grid item xs={6}>
-                                                                <Button id='log-out' onClick={() => {handleLogout()}} sx={[confirmButton, {color: 'white', mt: 2}]}>
+                                                                <Button id='log-out' onClick={() => handleLogout()} sx={[confirmButton, {color: 'white', mt: 2}]}>
                                                                     Log Out
                                                                 </Button>
                                                             </Grid>
                                                             <Grid item xs={6}>
-                                                                <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
+                                                                <Button id='delete-account' onClick={() => handleDeleteAcc()} sx={[resetButton, {color: 'white', mt: 2}]}>
                                                                     Delete Account
                                                                 </Button>
                                                             </Grid>
@@ -347,13 +308,7 @@ export default function SettingsScreen() {
             </Grid>
             
             <BackButton />
-            <InputModal
-                keybinds={keybinds}
-                setKeybinds={setKeybinds}
-                open={modal}
-                toggleModal={toggleModal}
-                inputKey={currInput}
-            />
+            <InputModal keybinds={keybinds} setKeybinds={setKeybinds} open={modal} toggleModal={toggleModal} inputKey={currInput} />
         </div>
     );
 }
@@ -440,5 +395,21 @@ function InputModal(props) {
                 <h1>Enter Input for {props.inputKey}</h1>
             </Box>
         </Modal>
+    )
+}
+
+function InputField(props) {
+    const {auth, setCurrInput, toggleModal, keybinds, keybindControl, inputStr, inputKey} = props;
+    return (
+        <>
+            <Grid item xs={6}>{inputStr}</Grid>
+            <Button xs={6} onClick={() => {
+                if(auth.role === UserRoleType.GUEST) return;
+                setCurrInput(`${inputStr}`);
+                toggleModal();
+            }}>
+                {auth.role === UserRoleType.GUEST ? `${inputKey}` : keybinds && keybindControl}
+            </Button>
+        </>
     )
 }
