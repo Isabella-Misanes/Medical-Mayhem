@@ -11,7 +11,7 @@ module.exports = defineConfig({
     // Uncomment localhost and comment out heroku when testing on computer,
     // uncomment heroku and comment out localhost when testing on heroku
 
-    // "baseUrl": "https://medical-mayhem-c0832c3f548e.herokuapp.com",
-    "baseUrl": "http://localhost:3000",
+    "baseUrl": "https://medical-mayhem-c0832c3f548e.herokuapp.com",
+    // "baseUrl": "http://localhost:3000",
   },
 });
