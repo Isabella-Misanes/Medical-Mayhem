@@ -22,10 +22,21 @@ Cypress.Commands.add('moveSlider', (vol) => {
     cy.get(`#${vol}-slider`).within(() => cy.get(`span[data-index=${random}]`).click({multiple: true, force: true}));
     cy.get('#confirm-audio').click();
     cy.reenter();
+    cy.intercept('GET', 'localhost:4000/api/settings/get').as('getSettings')
+    cy.wait('@getSettings');
     // Margin of error in testing
     cy.get(`#${vol}-volume`).should('be.visible').each(x => {
         expect(x.text()).to.be.oneOf([`${random}`, `${random + 1}`, `${random - 1}`]);
     });
+})
+
+Cypress.Commands.add('testInput', (input, inputKey, inputStr) => {
+    const upperCaseInput = input.toUpperCase();
+    const capitalizedInput = `${upperCaseInput.charAt(0)}${input.substring(1)}`// First letter is capitalized
+    cy.get(`#${capitalizedInput}-input`).should('not.exist');
+    cy.get(`#${input}-button`).should('exist').click();
+    cy.get(`#${capitalizedInput}-input`).should('exist').type(`{${inputKey}}`);
+    cy.get(`#${input}-button`).contains(inputStr);
 })
 
 describe('Settings Screen', () => {
@@ -53,5 +64,24 @@ describe('Settings Screen', () => {
         cy.get('#music-volume').should('be.visible').contains('100');
         cy.get('#sfx-volume').should('be.visible').contains('100');
     })
-    // it('should be able to modify keybinds')
+
+    // Keybinds
+    it('should be able to modify keybinds', () => {
+        cy.testInput('up', 'upArrow', 'ARROWUP');
+        cy.testInput('left', 'leftArrow', 'ARROWLEFT');
+        cy.testInput('down', 'downArrow', 'ARROWDOWN');
+        cy.testInput('right', 'rightArrow', 'ARROWRIGHT');
+        cy.testInput('interact', 'E', 'E');
+        cy.get('#confirm-keybinds').should('exist').click();
+    })
+
+    // Reset keybinds
+    it('should be able to reset keybinds', () => {
+        cy.get('#reset-keybinds').click();
+        cy.get('#up-button').should('exist').contains('W');
+        cy.get('#left-button').should('exist').contains('A');
+        cy.get('#down-button').should('exist').contains('S');
+        cy.get('#right-button').should('exist').contains('D');
+        cy.get('#interact-button').should('exist').contains('E');
+    })
 })

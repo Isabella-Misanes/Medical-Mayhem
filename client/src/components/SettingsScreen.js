@@ -208,7 +208,7 @@ export default function SettingsScreen() {
                         alignItems: 'center'
                     }}>
                     <Grid item xs={6}>Up</Grid>
-                    <Button xs={6} onClick={() => {
+                    <Button id='up-button' xs={6} onClick={() => {
                         if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Up');
                         toggleModal();
@@ -216,7 +216,7 @@ export default function SettingsScreen() {
                         {auth.role === UserRoleType.GUEST ? "W" : keybinds && keybinds.UP}
                     </Button>
                     <Grid item xs={6}>Left</Grid>
-                    <Button xs={6} onClick={() => {
+                    <Button id='left-button' xs={6} onClick={() => {
                         if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Left');
                         toggleModal();
@@ -224,7 +224,7 @@ export default function SettingsScreen() {
                         {auth.role === UserRoleType.GUEST ? "A" : keybinds && keybinds.LEFT}
                     </Button>
                     <Grid item xs={6}>Down</Grid>
-                    <Button xs={6} onClick={() => {
+                    <Button id='down-button' xs={6} onClick={() => {
                         if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Down');
                         toggleModal();
@@ -232,7 +232,7 @@ export default function SettingsScreen() {
                         {auth.role === UserRoleType.GUEST ? "S" : keybinds && keybinds.DOWN}
                     </Button>
                     <Grid item xs={6}>Right</Grid>
-                    <Button xs={6} onClick={() => {
+                    <Button id='right-button' xs={6} onClick={() => {
                         if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Right');
                         toggleModal();
@@ -240,7 +240,7 @@ export default function SettingsScreen() {
                         {auth.role === UserRoleType.GUEST ? "D" : keybinds && keybinds.RIGHT}
                     </Button>
                     <Grid item xs={6}>Interact</Grid>
-                    <Button xs={6} onClick={() => {
+                    <Button id='interact-button' xs={6} onClick={() => {
                         if(auth.role === UserRoleType.GUEST) return;
                         setCurrInput('Interact');
                         toggleModal();
@@ -248,12 +248,12 @@ export default function SettingsScreen() {
                         {auth.role === UserRoleType.GUEST ? "E" : keybinds && keybinds.INTERACT}
                     </Button>
                     <Grid item xs={6}>
-                        <Button onClick={handleResetControls} sx={resetButton}>
+                        <Button id='reset-keybinds' onClick={handleResetControls} sx={resetButton}>
                             Reset to Default
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button onClick={handleConfirmControls} sx={confirmButton}>
+                        <Button id='confirm-keybinds' onClick={handleConfirmControls} sx={confirmButton}>
                             Confirm
                         </Button>
                     </Grid>
@@ -412,7 +412,7 @@ function InputModal(props) {
     }, [props.open]);
 
     return (
-        <Modal open={props.open} onClose={props.toggleModal}>
+        <Modal id={`${props.inputKey}-input`} open={props.open} onClose={props.toggleModal}>
             <Box sx={style}>
                 <h1>Enter Input for {props.inputKey}</h1>
             </Box>
