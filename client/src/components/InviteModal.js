@@ -4,20 +4,22 @@ import { useContext, useEffect, useState } from 'react';
 import socket from '../constants/socket';
 import SocketEvents from "../constants/socketEvents";
 import AuthContext from '../auth';
+import GlobalStoreContext from '../store';
 
 export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
     const [inviter, setInviter] = useState('')
 
     function handleAcceptInvite(event) {
+        console.log(store.partyInfo)
         socket.emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
             inviter: inviter
         })
         setDisplayInviteModal(false)
-    }
+    }  
 
     function handleRejectInvite(event) {
-        //store.rejectInvite(event);
         setDisplayInviteModal(false)
     }
 
@@ -25,6 +27,10 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
         socket.on(SocketEvents.PARTY_INVITE, (data) => {
             setInviter(data.inviter)
             setDisplayInviteModal(true)
+        })
+        socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, ({accepter}) => {
+            console.log(store.partyInfo)
+            store.addToParty(accepter)
         })
     }, [])
 

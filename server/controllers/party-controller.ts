@@ -21,4 +21,22 @@ export const getParty = async (req: Request, res: Response) => {
     }
 }
 
+export const getUserPartyInfo = async (req: Request, res: Response) => {
+    console.log(req.params)
+    try {
+        const {username} = req.params;
+        const user = await User.findOne({username: username})
+        if(!user) return res.status(400).json({errorMessage: 'User not found.'});
+
+        res.status(200).json({
+            _id: user._id,
+            username: username,
+            profilePicture: user.profilePicture
+        }).send()
+    } catch(err) {
+        console.error(err)
+        res.status(400).send()
+    }
+}
+
 export * as PartyController from './party-controller'

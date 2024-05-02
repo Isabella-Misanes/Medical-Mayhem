@@ -97,15 +97,13 @@ export function handleConnection(socket: Socket) {
             return
         }
 
-        console.log(receiverInfo)
-
         socket.to(receiverInfo.socket.id).emit(SocketEvents.PARTY_INVITE, {
-            inviter: receiverInfo.username
+            inviter: data.inviter
         })
 
     })
 
-    socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, (data) => {
+    socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, async (data) => {
 
         // Find the inviter's socket info using the given inviter's username
         const inviterInfo = [...socketInfos.values()].find(socketInfo => socketInfo.username == data.inviter)
@@ -125,13 +123,18 @@ export function handleConnection(socket: Socket) {
         }
 
         // Add the inviter to the party room
-        let room = inviterInfo.partyRoom
+        let room = accepterInfo.partyRoom
         inviterInfo.socket.join(room)
         inviterInfo.partyRoom = room
 
+        console.log(socketInfos)
+
+        // Get all users in the same party as the inviter and accepter
+        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)
+
         // Let everyone know in the party the accepter has accepted the invite
-        socket.to(room).emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
-            accepter: accepterInfo.username
+        io.to(room).emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
+            accepter: accepterInfo.username,
         })
     })
 

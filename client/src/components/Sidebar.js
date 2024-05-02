@@ -57,12 +57,15 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        if(auth.role !== UserRoleType.GUEST) store.getParty();
+        console.log(auth.username)
+        if(auth.role !== UserRoleType.GUEST) store.addToParty(auth.username);
+        console.log(store.partyInfo)
         //eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         setParty(store.partyInfo);
+        console.log(store.partyInfo)
     }, [store.partyInfo])
 
     const partyMenu = (
