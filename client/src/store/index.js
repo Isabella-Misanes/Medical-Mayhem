@@ -47,6 +47,7 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
+    LOAD_AVATAR: "LOAD_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
     GET_COMMENTS: "GET_COMMENTS",
@@ -106,6 +107,17 @@ function GlobalStoreContextProvider(props) {
         },
         relation: '',
         avatarList: [], // the list of avatars in the Character Search
+        avatarView: {
+            avatarSprite: "",
+            avatarName: "",
+            speed: 0,
+            strength: 0,
+            defense: 0,
+            favoredMinigame: "",
+            author: "",
+            comments: [],
+            isPublic: true,
+        },
         commentsList: [],
         settings: {
             masterVolume: 100,
@@ -150,6 +162,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     players: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -165,6 +179,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -179,6 +195,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -201,6 +219,8 @@ function GlobalStoreContextProvider(props) {
                         favoredMinigame: "",
                         isPublic: false,
                     },
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: {
                         masterVolume: 100,
                         musicVolume: 100,
@@ -232,6 +252,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     partyInfo: store.partyInfo,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -247,6 +269,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: payload.errorMessage,
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -262,6 +286,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -277,6 +303,23 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
+                    settings: store.settings,
+                    commentsList: store.commentsList,
+                    partyInfo: store.partyInfo,
+                    playerList: store.playerList,
+                });
+            }
+            case GlobalStoreActionType.LOAD_AVATAR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    CurrentScreen: store.CurrentScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -292,6 +335,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -307,6 +351,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     avatarList: payload,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -321,6 +366,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: payload,
                     partyInfo: store.partyInfo,
@@ -335,6 +382,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: payload,
                     partyInfo: store.partyInfo,
@@ -349,6 +398,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: payload,
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
@@ -363,6 +414,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: {
                         masterVolume: payload.masterVolume,
                         musicVolume: payload.musicVolume,
@@ -383,6 +436,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: {
                         masterVolume: store.settings.masterVolume,
                         musicVolume: store.settings.musicVolume,
@@ -403,6 +458,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     settings: {
                         masterVolume: store.settings.masterVolume,
                         musicVolume: store.settings.musicVolume,
@@ -423,6 +480,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     partyInfo: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -437,6 +496,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     partyInfo: {
                         users: payload.partyUsers,
                         partyLeader: store.partyInfo.partyLeader
@@ -454,6 +515,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
                     partyInfo: store.partyInfo,
                     relation: payload,
                     settings: store.settings,
@@ -903,6 +966,21 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Character Info
+    store.loadAvatar = function(avatar) {
+        async function asyncRetrieveAvatar() {
+            try {
+                let response = await apis.loadAvatar(avatar)
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_AVATAR,
+                    payload: response.data.existingAvatar
+                })
+                return response.data.existingAvatar;
+            } catch (error) { console.log(error) }
+        }
+        asyncRetrieveAvatar();
+    }
+
     store.getComments = function(avatar) {
         async function asyncGetComments() {
             try {
