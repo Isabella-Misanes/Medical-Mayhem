@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
-const CommentsSchema = new Schema(
+const CommentSchema = new Schema(
     {
         senderId: {type: ObjectId, ref: 'User'},
         text: {type: String, required: true},
@@ -12,4 +12,4 @@ const CommentsSchema = new Schema(
     { timestamps: true },
 )
 
-export const Comments = mongoose.model('Comments', CommentsSchema)
+export const Comment = mongoose.model('Comments', CommentSchema)

@@ -63,8 +63,18 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
-export const getComments = async () => { return await api.get(`/comments/`) }
+export const getComments = async (avatar) => { 
+    return api.get(`/mapsearch/comments/`, {
+        avatar: avatar
+    })
+}
 
+export const addComment = async(text, targetAvatar) => {
+    return api.post('/mapsearch/addComment/', {
+        text: text,
+        targetAvatar: targetAvatar,
+    })
+}
 export const getSettings = async() => {
     return api.get('/settings/get');
 }
@@ -123,6 +133,7 @@ const apis = {
     updateAvatarList,
     getAllAvatars,
     getComments,
+    addComment,
     getSettings,
     updateAudioSettings,
     updateKeybinds,

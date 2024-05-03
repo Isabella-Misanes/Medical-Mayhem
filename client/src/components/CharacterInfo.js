@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, List, ListItem, ListItemButton, TextField } from '@mui/material';
+import { Button, Divider, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
 import { buttonStyle, commList, commentCard } from '../Styles';
 import { useState, useContext, useEffect } from 'react';
 import GlobalStoreContext from '../store';
@@ -6,6 +6,8 @@ import GlobalStoreContext from '../store';
 export default function CharacterInfo(props) {
     const {store} = useContext(GlobalStoreContext);
     const [commentsList, setCommentsList] = useState([]);
+    const [commentText, setCommentText] = useState("");
+    
     const avatar = props.avatar;
     const avatarPic = avatar.avatarSprite !== '' ? convertDataUrl(avatar.avatarSprite) : '';
 
@@ -13,7 +15,7 @@ export default function CharacterInfo(props) {
         if (store.commentsList && store.commentsList.comments && store.commentsList.comments.length > 0) {
             setCommentsList(store.commentsList.comments);
         } else {
-            store.getAllAvatars();
+            // store.getComments(avatar); // Un-comment after implementation
             setCommentsList([]);
         }
         // eslint-disable-next-line
@@ -25,6 +27,22 @@ export default function CharacterInfo(props) {
         mime = arr[0].match(/:(.*?);/)[1];
         return 'data:' + mime + ';base64,' + btoa(bstr);
     }
+
+    function handleSubmitComment() {
+        store.addComment(commentText, avatar);
+        // console.log("comments", props.avatar.comments);
+    }
+
+    const showComments = (
+        commentsList.map((comment, index) => (
+            <div id={"comment-card-" + index}>
+                <ListItem key={index} sx={commentCard}>
+                    <ListItemText primary={comment.text} secondary={"- " + comment.author}/>
+                </ListItem>
+                <Divider />
+            </div>
+        ))
+    );
     
     return (
         <div id="character-card">
@@ -50,6 +68,7 @@ export default function CharacterInfo(props) {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
+                    <Divider />
                     <h4>Comments</h4>
                 </Grid>
 
@@ -58,35 +77,20 @@ export default function CharacterInfo(props) {
                     <List sx={commList}>
                         {commentsList.length === 0 ? (
                             <div>No comments.</div>
-                        ) : (
-                            commentsList.map((comment, index) => (
-                                <div id={"comment-card-" + index}>
-                                    <ListItem key={index} sx={commentCard}>
-                                        <ListItemButton onClick={() => {console.log("Clicked")}}>
-                                            <Grid item xs={9} sx={{ textAlign: 'left' }}>
-                                                {comment.text}
-                                            </Grid>
-                                            <Grid item xs={2} sx={{ fontSize: '10px' }}>
-                                                {comment.author}
-                                            </Grid>
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <Divider />
-                                </div>
-                            ))
-                        )}
+                        ) : showComments}
                     </List>
-                    Comments Here
                 </Grid>
                 <Grid item xs={1}/>
 
                 <Grid item xs={1}/>
                 <Grid item xs={10}>
-                    <TextField fullWidth label='Comment' />
+                    <TextField fullWidth label='Comment' 
+                    onChange={(event) => {setCommentText(event.target.value)}}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button sx={buttonStyle}>
-                        Comment
+                    <Button sx={buttonStyle}
+                        onClick={() => {handleSubmitComment()}}>
+                        Send Comment
                     </Button>
                 </Grid>
             </Grid>

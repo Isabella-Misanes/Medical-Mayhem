@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import AuthContext, { UserRoleType } from '../auth';
 import apis from './store-request-api';
 // import { useNavigate } from 'react-router-dom'
@@ -49,7 +49,7 @@ export const GlobalStoreActionType = {
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
     GET_COMMENTS: "GET_COMMENTS",
-    CREATE_COMMENT: "CREATE_COMMENT",
+    ADD_COMMENT: "ADD_COMMENT",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -303,7 +303,7 @@ function GlobalStoreContextProvider(props) {
                     partyInfo: store.partyInfo
                 });
             }
-            case GlobalStoreActionType.CREATE_COMMENT: {
+            case GlobalStoreActionType.ADD_COMMENT: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     currentHomeScreen: store.currentHomeScreen,
@@ -807,7 +807,7 @@ function GlobalStoreContextProvider(props) {
     store.getComments = function(avatar) {
         async function asyncGetComments() {
             try {
-                let response = await apis.getAvatar(avatar)
+                let response = await apis.getComments(avatar)
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.GET_COMMENTS,
@@ -818,6 +818,22 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncGetComments();
+    }
+
+    store.addComment = function(text, targetAvatar) {
+        async function asyncAddComment() {
+            try {
+                let response = await apis.addComment(text, targetAvatar)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.ADD_COMMENT,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncAddComment();
     }
 
     // Leaderboard Screen
