@@ -42,9 +42,9 @@ export default function CharacterInfo(props) {
 
     const showComments = (
         view.map((comment, index) => (
-            <div id={"comment-card-" + index}>
+            <div key={index} id={"comment-card-" + index}>
                 <ListItem key={index} sx={commentCard}>
-                    <ListItemText primary={comment.text} secondary={"- " + comment.senderId}/>
+                    <ListItemText key={index} primary={comment.text} secondary={"- " + comment.senderUsername}/>
                 </ListItem>
                 <Divider />
             </div>

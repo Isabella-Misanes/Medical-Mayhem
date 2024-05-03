@@ -84,18 +84,16 @@ export default function MapSearchScreen() {
                         <div>Loading...</div>
                     ) : (
                         avatarList.map((avatar, index) => (
-                            <div id={"character-card-" + index}>
+                            <div key={index} id={"character-card-" + index}>
                                 <ListItem key={index} sx={characterCard}>
-                                    <ListItemButton onClick={() => {handleCharacterClick(avatar)}}>
+                                    <ListItemButton key={index} onClick={() => {handleCharacterClick(avatar)}}>
                                         <Grid item xs={9} sx={{ textAlign: 'left' }}>
                                             {avatar.avatarName}
                                         </Grid>
                                         <Grid item xs={2} sx={{ fontSize: '10px' }}>
                                             {avatar.author}
                                         </Grid>
-                                        <Grid item xs={1}>
-                                            {avatar.comments.length}
-                                        </Grid>
+                                        <Grid item xs={1}>{avatar.comments.length}</Grid>
                                     </ListItemButton>
                                 </ListItem>
                                 <Divider />

@@ -120,11 +120,13 @@ export const addComment = async (req: Request, res: Response) => {
     console.log("Adding comment");
     try {
         const {text, targetAvatar} = req.body;
-        const author = await User.findOne({_id: req.userId});
+        const author = await User.findOne({_id: req.userId}, {username: 1});
 
         if(author) {
+            console.log(author);
             const comment = new Comment({
                 senderId: author,
+                senderUsername: author.username,
                 text: text,
                 sendDate: new Date()
             });
