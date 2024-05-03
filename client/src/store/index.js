@@ -565,16 +565,46 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Messages
-    store.sendPublicMessage = function(event) {
-        console.log("Send public message in store.");
+    store.getPublicMessages = function() {
+        console.log('Get public messages in store.');
     }
 
-    store.sendPartyMessage = function(event) {
+    store.getPartyMessages = function() {
+        console.log('Get party messages in store.');
+    }
+
+    store.getPrivateMessages = function() {
+        console.log('Get private messages in store.');
+    }
+
+    store.sendPublicMessage = function(message) {
+        console.log("Send public message in store:", message);
+        async function asyncSendPublicMessage() {
+            try {
+                await apis.sendPublicMessage(message);
+            } catch(err) { console.error(err) }
+        }
+        asyncSendPublicMessage();
+    }
+
+    store.sendPartyMessage = function(message) {
         console.log("Send party message in store.");
+        async function asyncSendPartyMessage() {
+            try {
+                await apis.sendPartyMessage(message);
+            } catch(err) { console.error(err) }
+        }
+        asyncSendPartyMessage();
     }
 
-    store.sendPrivateMessage = function(event) {
+    store.sendPrivateMessage = function(message) {
         console.log("Send private message in store.");
+        async function asyncSendPrivateMessage() {
+            try {
+                await apis.sendPrivateMessage(message);
+            } catch(err) { console.error(err) }
+        }
+        asyncSendPrivateMessage();
     }
 
     // Social Screen
