@@ -181,33 +181,33 @@ export default function SettingsScreen() {
                                                 </Grid>
                                                 <Grid container sx={{ alignItems: 'center' }}>
                                                     <InputField
-                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
-                                                        inputKey={'W'} inputStr={'Up'} keybinds={keybinds} keybindControl={keybinds.UP}
+                                                        auth={auth} id='up-button' setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey='W' inputStr='Up' keybinds={keybinds} keybindControl={keybinds.UP}
                                                     />
                                                     <InputField
-                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
-                                                        inputKey={'A'} inputStr={'Left'} keybinds={keybinds} keybindControl={keybinds.LEFT}
+                                                        auth={auth} id='left-button' setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey='A' inputStr='Left' keybinds={keybinds} keybindControl={keybinds.LEFT}
                                                     />
                                                     <InputField
-                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
-                                                        inputKey={'S'} inputStr={'Down'} keybinds={keybinds} keybindControl={keybinds.DOWN}
+                                                        auth={auth} id='down-button' setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey='S' inputStr='Down' keybinds={keybinds} keybindControl={keybinds.DOWN}
                                                     />
                                                     <InputField
-                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
-                                                        inputKey={'D'} inputStr={'Right'} keybinds={keybinds} keybindControl={keybinds.RIGHT}
+                                                        auth={auth} id='right-button' setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey='D' inputStr='Right' keybinds={keybinds} keybindControl={keybinds.RIGHT}
                                                     />
                                                     <InputField
-                                                        auth={auth} setCurrInput={setCurrInput} toggleModal={toggleModal}
-                                                        inputKey={'E'} inputStr={'Interact'} keybinds={keybinds} keybindControl={keybinds.INTERACT}
+                                                        auth={auth} id='interact-button' setCurrInput={setCurrInput} toggleModal={toggleModal}
+                                                        inputKey='E' inputStr='Interact' keybinds={keybinds} keybindControl={keybinds.INTERACT}
                                                     />
 
                                                     <Grid item xs={6}>
-                                                        <Button onClick={handleResetControls} sx={resetButton}>
+                                                        <Button id='reset-keybinds' onClick={handleResetControls} sx={resetButton}>
                                                             Reset
                                                         </Button>
                                                     </Grid>
                                                     <Grid item xs={6}>
-                                                        <Button onClick={handleConfirmControls} sx={confirmButton}>
+                                                        <Button id='confirm-keybinds' onClick={handleConfirmControls} sx={confirmButton}>
                                                             Confirm
                                                         </Button>
                                                     </Grid>
@@ -399,11 +399,11 @@ function InputModal(props) {
 }
 
 function InputField(props) {
-    const {auth, setCurrInput, toggleModal, keybinds, keybindControl, inputStr, inputKey} = props;
+    const {auth, id, setCurrInput, toggleModal, keybinds, keybindControl, inputStr, inputKey} = props;
     return (
         <>
             <Grid item xs={6}>{inputStr}</Grid>
-            <Button xs={6} onClick={() => {
+            <Button id={id} xs={6} onClick={() => {
                 if(auth.role === UserRoleType.GUEST) return;
                 setCurrInput(`${inputStr}`);
                 toggleModal();

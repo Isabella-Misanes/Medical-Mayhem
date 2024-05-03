@@ -32,7 +32,7 @@ export const getUserPartyInfo = async (req: Request, res: Response) => {
             _id: user._id,
             username: username,
             profilePicture: user.profilePicture
-        }).send()
+        });
     } catch(err) {
         console.error(err)
         res.status(400).send()

@@ -3,11 +3,11 @@ import { buttonStyle } from '../Styles';
 import { useContext, useEffect, useState } from 'react';
 import socket from '../constants/socket';
 import SocketEvents from "../constants/socketEvents";
-import AuthContext from '../auth';
+// import AuthContext from '../auth';
 import GlobalStoreContext from '../store';
 
 export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
-    const { auth } = useContext(AuthContext);
+    // const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [inviter, setInviter] = useState('')
 
@@ -32,6 +32,7 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
             console.log(store.partyInfo)
             store.addToParty(accepter)
         })
+        //eslint-disable-next-line
     }, [])
 
     return (
