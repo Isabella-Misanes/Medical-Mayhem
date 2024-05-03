@@ -57,7 +57,7 @@ export default function MessagesDrawer() {
             const publicChatMessage = chat.public[i];
             console.log(publicChatMessage);
             messageItems.push(
-                <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} />
+                <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} auth={auth} />
             )
         }
         return messageItems;
@@ -107,9 +107,7 @@ export default function MessagesDrawer() {
                                 </TabList>
                             </Box>
                             <TabPanel value="1">
-                                <Box sx={{
-                                    bgcolor: '#E7E7E7',
-                                }}>
+                                <Box sx={{bgcolor: '#E7E7E7'}}>
                                     <List sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
@@ -120,64 +118,35 @@ export default function MessagesDrawer() {
                                 </Box>
                             </TabPanel>
                             <TabPanel value="2">
-                            <Box sx={{
-                                    bgcolor: '#E7E7E7',
-                                }}>
+                            <Box sx={{bgcolor: '#E7E7E7'}}>
                                     <List sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: Hello World
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer</strong>: Hello!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>MedicalGamer</strong>: Hi!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User1</strong>: lololol
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User1</strong>: omg
-                                        </ListItem>
+                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
+                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
+                                        <Message username='MedicalGamer' messageText='Hi!' auth={auth} />
+                                        <Message username='User1' messageText='lololol' auth={auth} />
+                                        <Message username='User1' messageText='omg' auth={auth} />
                                     </List>
                                 </Box>
                             </TabPanel>
                             <TabPanel value="3">
-                            <Box sx={{
-                                    bgcolor: '#E7E7E7',
-                                }}>
+                            <Box sx={{bgcolor: '#E7E7E7'}}>
                                     <List sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <Message username='McKillaGorilla' messageText='Hello World' />
-                                        <Message username='ExamplePlayer (You)' messageText='Hello!' />
-                                        <ListItem>
-                                            <strong>ExamplePlayer (You)</strong>: Hello!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: Hi Guys!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer (You)</strong>: Yoooooooooo
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: World
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer (You)</strong>: Hi
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: omg
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer (You)</strong>: testingggg
-                                        </ListItem>
+                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
+                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
+                                        <Message username='McKillaGorilla' messageText='Hi Guys!' auth={auth} />
+                                        <Message username='ExamplePlayer' messageText='Yoooooooooo' auth={auth} />
+                                        <Message username='McKillaGorilla' messageText='World' auth={auth} />
+                                        <Message username='ExamplePlayer' messageText='Hi' auth={auth} />
+                                        <Message username='McKillaGorilla' messageText='omg' auth={auth} />
+                                        <Message username='ExamplePlayer' messageText='testingggg' auth={auth} />
                                     </List>
                                 </Box>
                             </TabPanel>
@@ -188,7 +157,10 @@ export default function MessagesDrawer() {
                                 pb: 2
                             }}>
                                 <Grid item xs={10}>
-                                    <TextField value={messageText} fullWidth variant="standard" label="Send message..." onChange={(event) => handleMessageTextChange(event)} />
+                                    <TextField
+                                        value={messageText} fullWidth variant="standard" label="Send message..."
+                                        onChange={(event) => handleMessageTextChange(event)}
+                                    />
                                 </Grid>
                                 <Grid item xs={2}>
                                     <Button type='button' id='send-message' onClick={() => {
@@ -212,10 +184,8 @@ export default function MessagesDrawer() {
 }
 
 function Message(props) {
-    const {username, messageText} = props;
+    const {username, messageText, auth} = props;
     return (
-        <ListItem>
-            <strong>{username}</strong>: {messageText}
-        </ListItem>
+        <ListItem><strong>{username}{auth.username === username && ' (You)'}</strong>: {messageText}</ListItem>
     )
 }
