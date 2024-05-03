@@ -29,7 +29,7 @@ export const GlobalStoreActionType = {
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
     RESET: "RESET",
-    ADD_TO_PARTY: "ADD_TO_PARTY",
+    UPDATE_PARTY: "UPDATE_PARTY",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
@@ -393,9 +393,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                 });
             }
-            case GlobalStoreActionType.ADD_TO_PARTY: {
-                store.partyInfo.users.push(payload.accepter)
-                //console.log([...store.partyInfo.users, payload.accepter])
+            case GlobalStoreActionType.UPDATE_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: store.CurrentScreen,
@@ -403,7 +401,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: {
-                        users: store.partyInfo.users,
+                        users: payload.partyUsers,
                         partyLeader: store.partyInfo.partyLeader
                     },
                     settings: store.settings,
@@ -522,24 +520,11 @@ function GlobalStoreContextProvider(props) {
     // Party
 
     // Adds the given user to the party array
-    store.addToParty = function (accepter) {
-
-        async function asyncAddToParty() {
-            try {
-                const response = await apis.getUserPartyInfo(accepter)
-                storeReducer({
-                    type: GlobalStoreActionType.ADD_TO_PARTY,
-                    payload: {accepter: response.data}
-                })
-            } catch(error) {
-                console.error(error);
-                storeReducer({
-                    type: GlobalStoreActionType.ERROR,
-                    payload: { errorMessage: error.response.data.errorMessage }
-                })
-            }
-        }
-        asyncAddToParty();
+    store.updateParty = function (partyUsers) {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_PARTY,
+            payload: {partyUsers: partyUsers}
+        })
     }
 
     store.promoteToLeader = function (event) {
@@ -957,6 +942,15 @@ function GlobalStoreContextProvider(props) {
     store.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
     }
+
+    useEffect(() => {
+        if (store.partyInfo.users.length === 0 && 
+            auth.loggedIn &&
+            auth.role !== UserRoleType.GUEST) {
+                store.partyInfo.users.push(auth.username)
+            }
+    //eslint-disable-next-line
+    }, [store.partyInfo.users, auth.loggedIn])
 
     return (
         <GlobalStoreContext.Provider value={{store}}>

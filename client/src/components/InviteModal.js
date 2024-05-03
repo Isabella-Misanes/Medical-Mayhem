@@ -3,11 +3,9 @@ import { buttonStyle } from '../Styles';
 import { useContext, useEffect, useState } from 'react';
 import socket from '../constants/socket';
 import SocketEvents from "../constants/socketEvents";
-import AuthContext from '../auth';
 import GlobalStoreContext from '../store';
 
 export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
-    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [inviter, setInviter] = useState('')
 
@@ -25,13 +23,16 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
 
     useEffect(() => {
         socket.on(SocketEvents.PARTY_INVITE, (data) => {
+            console.log("PARTY INVITE RECEIVED")
             setInviter(data.inviter)
             setDisplayInviteModal(true)
         })
-        socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, ({accepter}) => {
-            console.log(store.partyInfo)
-            store.addToParty(accepter)
+
+        socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
+            console.log('RECEIVED UPDATE PARTY INFO')
+            store.updateParty(data.partyUsers)
         })
+    //eslint-disable-next-line
     }, [])
 
     return (

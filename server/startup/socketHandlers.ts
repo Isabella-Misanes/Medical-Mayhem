@@ -88,9 +88,13 @@ export function handleConnection(socket: Socket) {
 
     socket.on(SocketEvents.PARTY_INVITE, (data) => {
 
+        console.log(data)
+        console.log(socketInfos)
         console.log("PARTY INVITE")
 
         const receiverInfo = [...socketInfos.values()].find(socketInfo => socketInfo.username == data.receiver)
+
+        console.log(receiverInfo)
 
         if (receiverInfo == undefined) {
             socket.emit(SocketEvents.ERROR, 'User invited no longer exists.')
@@ -127,14 +131,34 @@ export function handleConnection(socket: Socket) {
         inviterInfo.socket.join(room)
         inviterInfo.partyRoom = room
 
-        console.log(socketInfos)
+        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
 
-        // Get all users in the same party as the inviter and accepter
-        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)
 
-        // Let everyone know in the party the accepter has accepted the invite
-        io.to(room).emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
-            accepter: accepterInfo.username,
+        console.log(partyUsers)
+        // Let the inviter know that the accepter has accepted the invite
+        io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
+            partyUsers: partyUsers
+        })
+    })
+
+    // data is the json containing newly updated party info with id, username, pfp for each user
+    // socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
+    //     console.log(socketInfos.get(socket.id) as SocketInfo)
+    //     console.log(data)
+    //     io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+    //         partyUsers: data.partyUsers
+    //     })
+    // })
+
+    socket.on(SocketEvents.LEAVE_PARTY, (data) => {
+
+        const oldPartyRoom = (socketInfos.get(socket.id) as SocketInfo).partyRoom;
+        (socketInfos.get(socket.id) as SocketInfo).partyRoom = ''
+
+        console.log(data)
+
+        io.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+            partyUsers: data.partyUsers
         })
     })
 
