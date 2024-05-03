@@ -9,7 +9,8 @@ const SocketEvents = {
     SET_USERNAME: "SET_USERNAME",
     PARTY_INVITE: "PARTY_INVITE",
     PARTY_INVITE_ACCEPTED: "PARTY_INVITE_ACCEPTED",
-    
+    UPDATE_PARTY_INFO: "UPDATE_PARTY_INFO", // when a user is added to a party, the inviter will send current party members
+    LEAVE_PARTY: "LEAVE_PARTY",
 
     // SENT BY SERVER
     MATCH_FOUND: "MATCH_FOUND",

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import AuthContext, { UserRoleType } from '../auth';
 import apis from './store-request-api';
 // import { useNavigate } from 'react-router-dom'
@@ -29,7 +29,7 @@ export const GlobalStoreActionType = {
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
     RESET: "RESET",
-    ADD_TO_PARTY: "ADD_TO_PARTY",
+    UPDATE_PARTY: "UPDATE_PARTY",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
@@ -410,10 +410,7 @@ function GlobalStoreContextProvider(props) {
                     playerList: store.playerList,
                 });
             }
-            case GlobalStoreActionType.ADD_TO_PARTY: {
-                store.partyInfo.users.push(payload.accepter)
-                //console.log([...store.partyInfo.users, payload.accepter])
-                console.log(store.playerList);
+            case GlobalStoreActionType.UPDATE_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: store.CurrentScreen,
@@ -421,7 +418,7 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: {
-                        users: store.partyInfo.users,
+                        users: payload.partyUsers,
                         partyLeader: store.partyInfo.partyLeader
                     },
                     settings: store.settings,
@@ -548,24 +545,11 @@ function GlobalStoreContextProvider(props) {
     // Party
 
     // Adds the given user to the party array
-    store.addToParty = function (accepter) {
-        console.log('store.playerList:', store.playerList);
-        async function asyncAddToParty() {
-            try {
-                const response = await apis.getUserPartyInfo(accepter)
-                storeReducer({
-                    type: GlobalStoreActionType.ADD_TO_PARTY,
-                    payload: {accepter: response.data}
-                })
-            } catch(error) {
-                console.error(error);
-                storeReducer({
-                    type: GlobalStoreActionType.ERROR,
-                    payload: { errorMessage: error.response.data.errorMessage }
-                })
-            }
-        }
-        asyncAddToParty();
+    store.updateParty = function (partyUsers) {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_PARTY,
+            payload: {partyUsers: partyUsers}
+        })
     }
 
     store.promoteToLeader = function (event) {
@@ -985,6 +969,15 @@ function GlobalStoreContextProvider(props) {
     store.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
     }
+
+    useEffect(() => {
+        if (store.partyInfo.users.length === 0 && 
+            auth.loggedIn &&
+            auth.role !== UserRoleType.GUEST) {
+                store.partyInfo.users.push(auth.username)
+            }
+    //eslint-disable-next-line
+    }, [store.partyInfo.users, auth.loggedIn])
 
     return (
         <GlobalStoreContext.Provider value={{store}}>
