@@ -104,7 +104,6 @@ export function handleConnection(socket: Socket) {
         socket.to(receiverInfo.socket.id).emit(SocketEvents.PARTY_INVITE, {
             inviter: data.inviter
         })
-
     })
 
     socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, async (data) => {
@@ -117,24 +116,23 @@ export function handleConnection(socket: Socket) {
             return
         }
 
-        // Create a party room for the accepter if no party exists
-        const accepterInfo = socketInfos.get(socket.id) as SocketInfo
-
-        if (accepterInfo.partyRoom == '') {
+        // Create a party room for the inviter if no party exists
+        if (inviterInfo.partyRoom == '') {
             let room = randomBytes(8).toString('hex')
-            socket.join(room)
-            accepterInfo.partyRoom = room
+            inviterInfo.socket.join(room)
+            inviterInfo.partyRoom = room
         }
 
-        // Add the inviter to the party room
-        let room = accepterInfo.partyRoom
-        inviterInfo.socket.join(room)
-        inviterInfo.partyRoom = room
+        // Add the accepter to the party room
+        const accepterInfo = socketInfos.get(socket.id) as SocketInfo
+        let room = inviterInfo.partyRoom
+        socket.join(room)
+        accepterInfo.partyRoom = room
 
         const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
 
-
-        console.log(partyUsers)
+        console.log("PARTYUSERES:" + partyUsers)
+        console.log(socketInfos)
         // Let the inviter know that the accepter has accepted the invite
         io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: partyUsers
