@@ -1,6 +1,5 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import InviteModal from './InviteModal';
 import { useContext, useState, useEffect } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
