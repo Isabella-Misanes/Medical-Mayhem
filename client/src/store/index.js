@@ -30,6 +30,7 @@ export const GlobalStoreActionType = {
     UPDATE_PROFILE: "UPDATE_PROFILE",
     RESET: "RESET",
     UPDATE_PARTY: "UPDATE_PARTY",
+    UPDATE_LEADER: "UPDATE_LEADER",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
@@ -39,7 +40,7 @@ export const GlobalStoreActionType = {
     UPDATE_AUDIO_SETTINGS: "UPDATE_AUDIO_SETTINGS",
     UPDATE_KEYBINDS: "UPDATE_KEYBINDS",
     UPDATE_TOGGLES: "UPDATE_TOGGLES",
-    GET_PARTY: "GET_PARTY",
+
     GET_RELATION: "GET_RELATION",
     ERROR: "ERROR",
 
@@ -381,7 +382,7 @@ function GlobalStoreContextProvider(props) {
                     partyInfo: store.partyInfo
                 })
             }
-            case GlobalStoreActionType.GET_PARTY: {
+            case GlobalStoreActionType.UPDATE_PARTY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: store.CurrentScreen,
@@ -393,7 +394,11 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                 });
             }
-            case GlobalStoreActionType.UPDATE_PARTY: {
+            case GlobalStoreActionType.UPDATE_LEADER: {
+                console.log({
+                    users: store.partyInfo.users,
+                    partyLeader: payload
+                })
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: store.CurrentScreen,
@@ -401,8 +406,8 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: {
-                        users: payload.partyUsers,
-                        partyLeader: store.partyInfo.partyLeader
+                        users: store.partyInfo.users,
+                        partyLeader: payload
                     },
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -520,15 +525,23 @@ function GlobalStoreContextProvider(props) {
     // Party
 
     // Adds the given user to the party array
-    store.updateParty = function (partyUsers) {
+    // where data is of form { users: ['username', ...], partyLeader: '...' }
+    store.updateParty = function (data) {
+        console.log(data)
         storeReducer({
             type: GlobalStoreActionType.UPDATE_PARTY,
-            payload: {partyUsers: partyUsers}
+            payload: data
         })
     }
 
-    store.promoteToLeader = function (event) {
-        console.log("Promote to leader in store");
+    // data is a string username for the leader
+    store.promoteToLeader = function (data) {
+        console.log(data)
+        console.log(store.partyInfo)
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_LEADER,
+            payload: data
+        })
     }
 
     store.removeFromParty = function (event) {
@@ -903,20 +916,6 @@ function GlobalStoreContextProvider(props) {
         console.log("Completed report in store.");
     }
 
-    store.getParty = function() {
-        if(auth.role === UserRoleType.GUEST) return;
-        async function asyncGetParty() {
-            try {
-                let response = await apis.getParty();
-                storeReducer({
-                    type: GlobalStoreActionType.GET_PARTY,
-                    payload: response.data
-                })
-            } catch(err) {console.error(err) }
-        }
-        asyncGetParty();
-    }
-
     // Misc
     store.getRelationToUser = function(targetUsername) {
         if(auth.role === UserRoleType.GUEST || targetUsername === '') return;
@@ -944,6 +943,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     useEffect(() => {
+        console.log("STORE USE EFFECT")
         if (store.partyInfo.users.length === 0 && 
             auth.loggedIn &&
             auth.role !== UserRoleType.GUEST) {
