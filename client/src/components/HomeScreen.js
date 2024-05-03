@@ -19,14 +19,9 @@ export default function HomeScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
-    const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [queueingUp, setQueueingUp] = useState(false);
     const [role, setRole] = useState(UserRoleType.GUEST);
-    
-    function handleInviteButtonClick() {
-        setShowInviteModal(true);
-    }
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
@@ -144,14 +139,6 @@ export default function HomeScreen() {
                                 onClick={() => navigate("/leaderboard")}
                                 text='Leaderboard'
                                 buttonSx={homeButtons}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                id='map-search-button'
-                                onClick={handleInviteButtonClick}
-                                buttonSx={[buttonStyle, {color: 'white', width: '25%'}]}
-                                text='Invite'
                             />
                         </Grid>
                         { role === UserRoleType.ADMIN &&

@@ -83,7 +83,7 @@ export const getRecentPlayers = async (req: Request, res: Response) => {
                 })
             }
         }));
-        return res.status(200).json({players: recentPlayers})
+        return res.status(200).json(recentPlayers)
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -237,7 +237,7 @@ export const viewOnlinePlayers = async (req: Request, res: Response) => {
                 })
             }
         }));
-        return res.status(200).json({players: onlinePlayers});
+        return res.status(200).json(onlinePlayers);
     } catch(err) {
         console.error(err);
         res.status(500).send();

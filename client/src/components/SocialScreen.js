@@ -57,9 +57,8 @@ export default function SocialScreen() {
 
     useEffect(() => {
         // Checking if store.profileInfo.friends exists fixes the error of the friends state being undefined upon load
-        setPlayerList(store.profileInfo.players ? store.profileInfo.players : [])
-        // eslint-disable-next-line
-    }, [store.profileInfo])
+        setPlayerList(store.playerList ? store.playerList : [])
+    }, [store.playerList])
 
     function handleFriendModalOpen() {
         setAddFriendUsername('');
@@ -133,7 +132,7 @@ export default function SocialScreen() {
     // Add friend
     const handleSubmit = (event) => {
         event.preventDefault();
-        store.sendFriend(addFriendUsername, handleFriendModalClose, setConfirmModal);
+        store.sendFriend(addFriendUsername, handleFriendModalClose, setConfirmModal, activeButton);
     };
 
     const handleAddFriendUsernameChange = (event) => {

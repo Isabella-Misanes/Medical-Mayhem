@@ -30,8 +30,9 @@ export default function MainLayout() {
 
 
     useEffect(() => {
-        setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST)
-    }, [auth])
+        console.log("PARTY: " + store.settings.toggles.party)
+        setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST && store.settings.toggles.party)
+    }, [auth, store.settings.toggles.party])
 
     return (
         <div id='main-content'>
