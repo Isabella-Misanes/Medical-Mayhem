@@ -5,7 +5,6 @@ import GlobalStoreContext from '../store';
 
 export default function CharacterInfo(props) {
     const {store} = useContext(GlobalStoreContext);
-    const [commentsList, setCommentsList] = useState([]);
     const [commentText, setCommentText] = useState("");
     const [view, setView] = useState([]);
     
@@ -13,13 +12,16 @@ export default function CharacterInfo(props) {
     const avatarPic = avatar.avatarSprite !== '' ? convertDataUrl(avatar.avatarSprite) : '';
 
     useEffect(() => {
+        store.loadAvatar(avatar._id);
+        return () => {
+            setView([]);
+        };
+    }, [avatar])
+
+    useEffect(() => {
         if (store.avatarView && store.avatarView && store.avatarView.comments.length > 0) {
-            // setCommentsList(store.commentsList.comments);
             setView(store.avatarView.comments);
         } else {
-            // store.getComments(avatar._id); // Un-comment after implementation
-            // setCommentsList([]);
-            store.loadAvatar(avatar._id);
             setView([]);
         }
         // eslint-disable-next-line
@@ -34,6 +36,8 @@ export default function CharacterInfo(props) {
 
     function handleSubmitComment() {
         store.addComment(commentText, avatar);
+        store.loadAvatar(avatar._id);
+        setCommentText("");
     }
 
     const showComments = (

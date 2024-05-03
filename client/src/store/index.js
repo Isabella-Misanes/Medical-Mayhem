@@ -918,6 +918,7 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.LOAD_AVATAR,
                     payload: response.data.existingAvatar
                 })
+                return response.data.existingAvatar;
             } catch (error) { console.log(error) }
         }
         asyncRetrieveAvatar();
