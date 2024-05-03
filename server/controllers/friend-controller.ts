@@ -33,7 +33,12 @@ export const sendFriend = async (req: Request, res: Response) => {
         // Successful friend request: New document in FriendRequest collection with sender ID and receiver ID
         const friendReq = new FriendRequest({sender: req.userId, receiver: targetUser._id})
         friendReq.save();
-        res.status(200).send();
+
+        // Send list of sent friend requests back to client
+        const friendRequests = await FriendRequest.find({sender: req.userId});
+        const receiverIds = friendRequests.map(req => req.receiver);
+        const senders = await User.find({_id: {$in: receiverIds}}, {username: 1, onlineStatus: 1, profilePicture: 1})
+        res.status(200).send(senders);
     } catch(err) {
         console.error(err);
         res.status(400).send();
@@ -42,7 +47,7 @@ export const sendFriend = async (req: Request, res: Response) => {
 
 export const removeFriend = async (req: Request, res: Response) => {
     try {
-        const currentUser = await User.findById(req.userId);
+        let currentUser = await User.findById(req.userId);
         if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
         const {username} = req.body;
         console.log('username:', username);
@@ -50,7 +55,21 @@ export const removeFriend = async (req: Request, res: Response) => {
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         await User.updateOne({_id: currentUser._id}, {$pull: {friendsIds: targetUser._id}});
         await User.updateOne({_id: targetUser._id}, {$pull: {friendsIds: currentUser._id}});
-        res.status(200).send();
+        
+        currentUser = await User.findById(req.userId);
+        if(!currentUser) return res.status(400).json({errorMessage: 'Current user not found.'});
+        const friends: {username: string, profilePicture: string, onlineStatus: boolean}[] = [];
+        await Promise.all(currentUser.friendsIds.map(async (friendId) => {
+            const friend = await User.findById(friendId);
+            if(friend) {
+                friends.push({
+                    username: friend.username,
+                    profilePicture: friend.profilePicture,
+                    onlineStatus: friend.onlineStatus
+                })
+            }
+        }));
+        return res.status(200).json(friends)
     } catch(err) {
         console.error(err);
         res.status(400).send();
@@ -72,7 +91,7 @@ export const viewFriends = async (req: Request, res: Response) => {
                 })
             }
         }));
-        return res.status(200).json({players: friends})
+        return res.status(200).json(friends)
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -94,7 +113,7 @@ export const viewSentFriendRequests = async (req: Request, res: Response) => {
                 })
             }
         }));
-        return res.status(200).json({players: receivers})
+        return res.status(200).json(receivers)
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -116,7 +135,7 @@ export const viewReceivedFriendRequests = async (req: Request, res: Response) =>
                 })
             }
         }));
-        return res.status(200).json({players: senders})
+        return res.status(200).json(senders)
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -130,7 +149,14 @@ export const cancelFriendRequest = async (req: Request, res: Response) => {
         const targetUser = await User.findOne({username: username});
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         console.log(req.userId, targetUser._id);
-        await FriendRequest.findOneAndDelete({$and: [{sender: req.userId}, {receiver: targetUser._id}]})
+        await FriendRequest.findOneAndDelete({$and: [{sender: req.userId}, {receiver: targetUser._id}]});
+
+        // Send list of sent friend requests back to client
+        const friendRequests = await FriendRequest.find({sender: req.userId});
+        const receiverIds = friendRequests.map(req => req.receiver);
+        console.log(receiverIds);
+        const senders = await User.find({_id: {$in: receiverIds}}, {username: 1, onlineStatus: 1, profilePicture: 1})
+        res.status(200).send(senders);
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -145,6 +171,13 @@ export const ignoreFriendRequest = async (req: Request, res: Response) => {
         if(!targetUser) return res.status(400).json({errorMessage: 'Target user not found.'});
         console.log(req.userId, targetUser._id);
         await FriendRequest.findOneAndDelete({$and: [{sender: targetUser._id}, {receiver: req.userId}]})
+
+        // Send updated list of receiver friend requests to client
+        const friendRequests = await FriendRequest.find({receiver: req.userId});
+        const senderIds = friendRequests.map(req => req.sender);
+        console.log(senderIds);
+        const senders = await User.find({_id: {$in: senderIds}})
+        res.status(200).send(senders);
     } catch(err) {
         console.error(err);
         res.status(500).send();
@@ -169,7 +202,12 @@ export const acceptFriendRequest = async (req: Request, res: Response) => {
         const updateReceiver = await User.updateOne({_id: targetUser._id}, {$push: {friendsIds: req.userId}}) // Add sender to receiver's friends list
         console.log('updateReceiver:', updateReceiver);
 
-        res.status(200).send();
+        // Send updated list of received friend requests to client
+        const friendRequests = await FriendRequest.find({receiver: req.userId});
+        const senderIds = friendRequests.map(req => req.sender);
+        console.log(senderIds);
+        const senders = await User.find({_id: {$in: friendRequests.map(req => req.sender)} })
+        res.status(200).send(senders);
     } catch(err) {
         console.error(err);
         res.status(500).send();
