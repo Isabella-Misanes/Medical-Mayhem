@@ -15,7 +15,7 @@ export default function CharacterInfo(props) {
         if (store.commentsList && store.commentsList.comments && store.commentsList.comments.length > 0) {
             setCommentsList(store.commentsList.comments);
         } else {
-            // store.getComments(avatar); // Un-comment after implementation
+            store.getComments(avatar._id); // Un-comment after implementation
             setCommentsList([]);
         }
         // eslint-disable-next-line
@@ -30,7 +30,7 @@ export default function CharacterInfo(props) {
 
     function handleSubmitComment() {
         store.addComment(commentText, avatar);
-        // console.log("comments", props.avatar.comments);
+
     }
 
     const showComments = (

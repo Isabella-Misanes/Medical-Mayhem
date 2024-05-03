@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { User } from '../models/user'
 import { Avatar } from '../models/avatar';
 import { Comment } from '../models/comment';
+import { ObjectId, Types } from 'mongoose';
 
 export const getAllAvatars = async (req: Request, res: Response) => {
     console.log("get all avatars");
@@ -70,18 +71,17 @@ export const updateAvatarList = async (req: Request, res: Response) => {
 }
 
 export const getComments = async (req: Request, res: Response) => {
-    console.log("Get comments");
-    const targetAvatar = req.body;
+    const { avatar } = req.params;
+    const targetId = new Types.ObjectId(avatar);
     
     try {
-        const avatar = await Avatar.findOne({_id: targetAvatar._id});
-
-        if(!avatar) {
+        const targetAvatar = await Avatar.findOne({_id: targetId}).populate('comments');
+        if(!targetAvatar) {
             console.log("No avatars found");
             return res.status(404).json({errorMessage: 'Avatar not found.'});
         }
         else {
-            const comments = avatar.comments;
+            const comments = targetAvatar.comments;
             return res.status(200).json({comments});
         }
     }
