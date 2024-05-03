@@ -1,7 +1,5 @@
 import { Box, Button, Grid, Modal, Typography } from '@mui/material';
-import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
-import InviteModal from './InviteModal';
 import { useContext, useState, useEffect } from 'react';
 import ReportModal from './ReportModal';
 import MessagesDrawer from './MessagesDrawer';
@@ -20,14 +18,9 @@ export default function HomeScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
-    const [showInviteModal, setShowInviteModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [queueingUp, setQueueingUp] = useState(false);
     const [role, setRole] = useState(UserRoleType.GUEST);
-    
-    function handleInviteButtonClick() {
-        setShowInviteModal(true);
-    }
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
@@ -147,14 +140,6 @@ export default function HomeScreen() {
                                 buttonSx={homeButtons}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                id='map-search-button'
-                                onClick={handleInviteButtonClick}
-                                buttonSx={[buttonStyle, {color: 'white', width: '25%'}]}
-                                text='Invite'
-                            />
-                        </Grid>
                         { role === UserRoleType.ADMIN &&
                             <Grid item xs={6}>
                                 <HomeButton
@@ -168,11 +153,9 @@ export default function HomeScreen() {
                         <Grid item xs={12}/>
                     </Grid>                
                 </Grid>
-                <Sidebar />
             </Grid>
             <MessagesDrawer />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
-            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
             <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )

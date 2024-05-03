@@ -1,9 +1,12 @@
 import { Avatar, Box, IconButton, Menu, MenuItem} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AuthContext, { UserRoleType } from '../auth';
+import AuthContext from '../auth';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import ReportModal from './ReportModal';
+import { api } from '../store/store-request-api';
+import SocketEvents from '../constants/socketEvents';
+import socket from '../constants/socket';
 
 export default function Sidebar() {
     const { auth } = useContext(AuthContext);
@@ -13,7 +16,7 @@ export default function Sidebar() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [clickedUser, setClickedUser] = useState('');
     if(clickedUser); // Will implement later
-    const [party, setParty] = useState(store.partyInfo);
+    const [party, setParty] = useState([]); // an array of json objects of the form {profilePicture: ..., _id: ...}
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -23,12 +26,26 @@ export default function Sidebar() {
         setAnchorEl(null);
     };
 
-    function handleLogout() {
-        if(auth.role === UserRoleType.GUEST) auth.logoutGuest();
-        else {
-            store.reset()
-            auth.logoutUser();
-        }
+    function handleLeaveParty() {
+        
+        // Filter out the current user from the party
+
+        console.log(store.partyInfo.users)
+        let newParty = store.partyInfo.users.filter(user => user !== auth.username)
+        
+        // .filter returns a single element without it being in an array if it's onyl one element
+        // filtered. So, I had to do this so that newParty is maintained as an array
+        if (!Array.isArray(newParty))
+            newParty = [newParty]
+
+        // Update everyone with the new party without the current user
+        socket.emit(SocketEvents.LEAVE_PARTY, {
+            partyUsers: newParty
+        })
+
+        // User is now in a party by himself sadge
+        store.updateParty([auth.username])
+        console.log(store.partyInfo.users)
     }
 
     function handlePrivateMessaging(event) {
@@ -57,12 +74,31 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        // if(auth.role !== UserRoleType.GUEST) store.getParty();
-        //eslint-disable-next-line
-    }, [])
 
-    useEffect(() => {
-        setParty(store.partyInfo);
+        console.log(store.partyInfo)
+
+        // Given the users in partyInfo.users, fetch each of their profile picture and _id and store them appropriately in
+        // this component's state
+        async function asyncUpdateParty() {
+            const partyUsers = []
+            for (let user of store.partyInfo.users) {
+                try {
+                    const response = await api.get(`/party/${user}`)
+                    
+                    if (response.status === 200) {
+                        console.log('PARTY USERS DATA: ' + JSON.stringify(response.data))
+                        partyUsers.push(response.data)
+                    }
+
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+
+            setParty(partyUsers)
+        }
+        asyncUpdateParty()
+        
     }, [store.partyInfo])
 
     const partyMenu = (
@@ -92,40 +128,43 @@ export default function Sidebar() {
         </Menu>
     );
 
-    const renderPartyMembers = () => {
-        const partyMembers = [];
-        if(party && party.users.length > 0) {
-            party.users.forEach((user, index) => {
-                partyMembers.push(
+    // const renderPartyMembers = () => {
+    //     const partyMembers = [];
+    //     if(party && party.length > 0) {
+    //         console.log(party)
+    //         party.forEach((user, index) => {
+    //             partyMembers.push(
+    //                 <PartyMember user={user} key={index} onClick={(event) => {
+    //                     setClickedUser(user);
+    //                     handleProfileMenuOpen(event);
+    //                 }} marginTop={(index * 50) + 10 + 'px'} />
+    //             )
+    //         })
+    //     }
+    //     return partyMembers;
+    // }
+
+    console.log(party)
+    return (
+            <Box id='sidebar' sx={{ 
+                backgroundColor: '#104c00',
+                flexGrow: 1,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                right: '0%'
+            }}
+            >
+                {party.map((user, index) => (
                     <PartyMember user={user} key={index} onClick={(event) => {
                         setClickedUser(user);
                         handleProfileMenuOpen(event);
                     }} marginTop={(index * 50) + 10 + 'px'} />
-                )
-            })
-        }
-        return partyMembers;
-    }
-
-    return (
-        auth.role !== UserRoleType.GUEST && 
-            <Box sx={{ 
-                backgroundColor: '#104c00',
-                position: 'fixed',
-                flexGrow: 1,
-                height: '100%',
-                width: '70px',
-                display: 'flex',
-                flexDirection: 'column',
-                right: '0%'
-            }}>
-                {renderPartyMembers()}
+                ))}
                 
-                <IconButton onClick={()=>{handleLogout()}} sx={{
+                <IconButton onClick={()=>{handleLeaveParty()}} sx={{
                     position: 'fixed',
-                    alignContent: 'center',
                     bottom: '2%',
-                    right: '15px',
                     color: 'white'
                 }}>
                     <LogoutIcon />
@@ -148,7 +187,6 @@ function PartyMember(props) {
                 onClick={props.onClick}
                 sx={{
                     position: 'absolute',
-                    right: '22.5px',
                     marginTop: props.marginTop,
                     color: 'white'
                 }}

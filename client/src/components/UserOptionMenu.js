@@ -1,9 +1,13 @@
 import { Menu, MenuItem } from "@mui/material";
 import GlobalStoreContext from "../store";
 import { useContext, useEffect, useState } from "react";
+import socket from "../constants/socket";
+import SocketEvents from "../constants/socketEvents";
+import AuthContext from "../auth";
 
 export default function UserOptionMenu(props) {
     const {targetUser, anchorEl, setAnchorEl, isMenuOpen, setShowReportModal, handleFriendModalClose, setConfirmModal} = props;
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [relationToUser, setRelationToUser] = useState(null);
 
@@ -21,7 +25,18 @@ export default function UserOptionMenu(props) {
         handleMenuClose();
     }
 
-    function handleInviteToParty() { handleMenuClose(); }
+    function handleInviteToParty(event) {
+
+        if (store.partyInfo.users.length === 4)
+            auth.error('The party is already at max 4 users.')
+        
+        socket.emit(SocketEvents.PARTY_INVITE, {
+            inviter: auth.username, // this user's username
+            receiver: targetUser // the friend's username
+        })
+
+        handleMenuClose();
+    }
 
     // TODO: Display modal to confirm user wants to remove friend
     // TODO: Handle friend list updating once user removes friend (i dread dealing with useEffect tho...)

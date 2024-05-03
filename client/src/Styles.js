@@ -19,6 +19,18 @@ export const homeButtons = {
     ":hover": {bgcolor: '#e5e5e5'}
 }
 
+export const resetButton = {
+    bgcolor: 'red',
+    color: 'white',
+    ":hover": {bgcolor: '#c20900'},
+}
+
+export const confirmButton = {
+    bgcolor: 'green',
+    color: 'white',
+    ":hover": {bgcolor: '#2d7044'},
+}
+
 export const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -31,9 +43,10 @@ export const modalStyle = {
 };
 
 export const buttonStyle = {
-bgcolor: '#3A9158',
-":hover": {
-    bgcolor: '#2d7044'},
+    color: 'white',
+    bgcolor: '#3A9158',
+    ":hover": {
+        bgcolor: '#2d7044'},
 };
 
 export const outerContentBox = {
@@ -80,6 +93,16 @@ export const characterCard = {
     bgcolor: 'white', 
     mt: 2, 
     mb: 2,
+}
+
+export const commList = {
+    width: '100%', 
+    maxHeight: '15vh',
+    overflow: 'scroll'
+}
+
+export const commentCard = {
+    bgcolor: 'white'
 }
 
 export const socialModal = {

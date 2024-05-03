@@ -12,6 +12,7 @@ export default function MessagesDrawer() {
     const { auth } = useContext(AuthContext);
     const [value, setValue] = useState('1');
     const [state, setState] = useState('bottom');
+    const [messageText, setMessageText] = useState('');
 
     const tabButton = {
         color: 'white',
@@ -20,20 +21,24 @@ export default function MessagesDrawer() {
         },
     }
 
-    const handleChange = (event, newValue) => {
+    const handleMessageTextChange = (event) => {
+        setMessageText(event.target.value)
+    }
+
+    const handleTabChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    function handleSendMessage(event) {
+    function handleSendMessage() {
         switch(value) {
-            case 1:
-                store.sendPublicMessage(event);
+            case '1':
+                store.sendPublicMessage(messageText);
                 break;
-            case 2:
-                store.sendPartyMessage(event);
+            case '2':
+                store.sendPartyMessage();
                 break;
-            case 3:
-                store.sendPrivateMessage(event);
+            case '3':
+                store.sendPrivateMessage();
                 break;
             default:
                 break;
@@ -80,7 +85,7 @@ export default function MessagesDrawer() {
                     }}>
                         <TabContext value={value}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                <TabList onChange={handleTabChange} aria-label="lab API tabs example">
                                     <Tab label="Public" value="1" sx={tabButton}/>
                                     {auth.role !== UserRoleType.GUEST && <Tab label="Party" value="2" sx={tabButton}/>}
                                     {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>}
@@ -192,14 +197,16 @@ export default function MessagesDrawer() {
                                 pb: 2
                             }}>
                                 <Grid item xs={10}>
-                                    <TextField fullWidth variant="standard" label="Send Message"/>
+                                    <TextField value={messageText} fullWidth variant="standard" label="Send message..." onChange={(event) => handleMessageTextChange(event)} />
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <Button onClick={(event) => {handleSendMessage(event)}}
-                                        sx={{
+                                    <Button type='button' id='send-message' onClick={() => {
+                                        handleSendMessage();
+                                        setMessageText('');
+                                    }} disabled={messageText===''} sx={{
                                             color: '#2d7044',
                                             top: '20%'
-                                        }}>
+                                    }}>
                                         <SendIcon />
                                     </Button>
                                 </Grid>
