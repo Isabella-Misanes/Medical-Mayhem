@@ -41,6 +41,7 @@ export const GlobalStoreActionType = {
     UPDATE_TOGGLES: "UPDATE_TOGGLES",
     GET_PARTY: "GET_PARTY",
     GET_RELATION: "GET_RELATION",
+    CHAT: "CHAT",
     ERROR: "ERROR",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
@@ -123,7 +124,12 @@ function GlobalStoreContextProvider(props) {
                 party: true,
             },
         },
-        playerList: []
+        playerList: [],
+        chat: {
+            public: [],
+            party: [],
+            private: []
+        }
     });
 
     console.log("inside useGlobalStore");
@@ -149,6 +155,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -162,6 +169,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -175,6 +183,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.RESET: {
@@ -210,11 +219,9 @@ function GlobalStoreContextProvider(props) {
                         },
                     },
                     commentsList: [],
-                    partyInfo: {
-                        users: [],
-                        partyLeader: ""
-                    },
+                    partyInfo: {users: [], partyLeader: ""},
                     playerList: [],
+                    chat: {public: [], party: [], private: []},
                 });
             }
 
@@ -229,6 +236,7 @@ function GlobalStoreContextProvider(props) {
                     settings: store.settings,
                     commentsList: store.commentsList,
                     playerList: payload,
+                    chat: store.chat,
                 });
             }
 
@@ -243,6 +251,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
 
@@ -257,6 +266,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
 
@@ -271,6 +281,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
@@ -285,6 +296,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
@@ -299,6 +311,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.GET_COMMENTS: {
@@ -312,6 +325,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: payload,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.ADD_COMMENT: {
@@ -325,6 +339,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: payload,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
@@ -338,6 +353,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
@@ -357,6 +373,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
@@ -376,6 +393,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
@@ -395,6 +413,7 @@ function GlobalStoreContextProvider(props) {
                     commentsList: store.commentsList,
                     partyInfo: store.partyInfo,
                     playerList: store.playerList,
+                    chat: store.chat,
                 })
             }
             case GlobalStoreActionType.GET_PARTY: {
@@ -408,6 +427,7 @@ function GlobalStoreContextProvider(props) {
                     settings: store.settings,
                     commentsList: store.commentsList,
                     playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.UPDATE_PARTY: {
@@ -423,7 +443,8 @@ function GlobalStoreContextProvider(props) {
                     },
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    playerList: store.playerList
+                    playerList: store.playerList,
+                    chat: store.chat,
                 });
             }
             case GlobalStoreActionType.GET_RELATION: {
@@ -438,6 +459,22 @@ function GlobalStoreContextProvider(props) {
                     settings: store.settings,
                     commentsList: store.commentsList,
                     playerList: store.playerList,
+                    chat: store.chat,
+                });
+            }
+            case GlobalStoreActionType.CHAT: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    CurrentScreen: store.CurrentScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    partyInfo: store.partyInfo,
+                    relation: store.relation,
+                    settings: store.settings,
+                    commentsList: store.commentsList,
+                    playerList: store.playerList,
+                    chat: payload,
                 });
             }
             default:
@@ -567,6 +604,22 @@ function GlobalStoreContextProvider(props) {
     // Messages
     store.getPublicMessages = function() {
         console.log('Get public messages in store.');
+        async function asyncGetPublicMessages() {
+            try {
+                let response = await apis.getPublicMessages();
+                storeReducer({
+                    type: GlobalStoreActionType.CHAT,
+                    payload: {public: response.data, party: store.chat.party, private: store.chat.private}
+                })
+            } catch(error) {
+                console.error(error.response.data.errorMessage);
+                storeReducer({
+                    type: GlobalStoreActionType.ERROR,
+                    payload: { errorMessage: error.response.data.errorMessage }
+                })
+            }
+        }
+        asyncGetPublicMessages();
     }
 
     store.getPartyMessages = function() {
@@ -581,7 +634,11 @@ function GlobalStoreContextProvider(props) {
         console.log("Send public message in store:", message);
         async function asyncSendPublicMessage() {
             try {
-                await apis.sendPublicMessage(message);
+                let response = await apis.sendPublicMessage(message);
+                storeReducer({
+                    type: GlobalStoreActionType.CHAT,
+                    payload: {public: response.data, party: store.chat.party, private: store.chat.private}
+                })
             } catch(err) { console.error(err) }
         }
         asyncSendPublicMessage();

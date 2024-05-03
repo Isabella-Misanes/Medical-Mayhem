@@ -102,7 +102,8 @@ export default function SettingsScreen() {
                 <Grid item xs={6}>
                     <Grid container sx={outerContentBox}>
                         <Grid item xs={10}>
-                            <Grid container sx={[innerContentBox, { overflow: 'scroll' }]}>
+                            <Grid container sx={innerContentBox}>
+                            {/* <Grid container sx={[innerContentBox, { overflow: 'scroll' }]}> */}
                                 <Grid item xs={1}/>
                                 <Grid item xs={10}>
                                     <Grid container sx={{ justifyContent: 'center' }}>

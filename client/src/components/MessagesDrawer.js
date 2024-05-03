@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { Box, Button, Divider, Drawer, Grid, List, ListItem, Tab, TextField } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import GlobalStoreContext from '../store';
 import { buttonStyle } from '../Styles';
 import SendIcon from '@mui/icons-material/Send';
@@ -13,6 +12,7 @@ export default function MessagesDrawer() {
     const [value, setValue] = useState('1');
     const [state, setState] = useState('bottom');
     const [messageText, setMessageText] = useState('');
+    const [chat, setChat] = useState({public: [], party: [], private: []});
 
     const tabButton = {
         color: 'white',
@@ -46,12 +46,27 @@ export default function MessagesDrawer() {
     }
 
     const toggleDrawer = (open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-        return;
-        }
-
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
         setState({ ...state, 'bottom' : open });
     };
+
+    const publicChatRender = () => {
+        const messageItems = [];
+        console.log(chat.public)
+        for(let i = 0; i < chat.public.length; i++) {
+            const publicChatMessage = chat.public[i];
+            console.log(publicChatMessage);
+            messageItems.push(
+                <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} />
+            )
+        }
+        return messageItems;
+    }
+
+    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat])
+
+    useEffect(() => store.getPublicMessages() //eslint-disable-next-line
+    , [])
 
     return (
         <div>
@@ -100,30 +115,7 @@ export default function MessagesDrawer() {
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: Hello World
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer</strong>: Hello!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>MedicalGamer</strong>: Hi Guys!
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User1</strong>: Yoooooooooo
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User2</strong>: World
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User3</strong>: Hi
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>User1</strong>: omg
-                                        </ListItem>
-                                        <ListItem>
-                                            <strong>ExamplePlayer</strong>: Wdym omg????
-                                        </ListItem>
+                                        {publicChatRender()}
                                     </List>
                                 </Box>
                             </TabPanel>
@@ -163,9 +155,8 @@ export default function MessagesDrawer() {
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <ListItem>
-                                            <strong>McKillaGorilla</strong>: Hello World
-                                        </ListItem>
+                                        <Message username='McKillaGorilla' messageText='Hello World' />
+                                        <Message username='ExamplePlayer (You)' messageText='Hello!' />
                                         <ListItem>
                                             <strong>ExamplePlayer (You)</strong>: Hello!
                                         </ListItem>
@@ -218,4 +209,13 @@ export default function MessagesDrawer() {
             </Drawer>
         </div>
     );
+}
+
+function Message(props) {
+    const {username, messageText} = props;
+    return (
+        <ListItem>
+            <strong>{username}</strong>: {messageText}
+        </ListItem>
+    )
 }
