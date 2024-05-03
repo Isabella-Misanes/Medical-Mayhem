@@ -1,9 +1,13 @@
 import { Menu, MenuItem } from "@mui/material";
 import GlobalStoreContext from "../store";
 import { useContext, useEffect, useState } from "react";
+import socket from "../constants/socket";
+import SocketEvents from "../constants/socketEvents";
+import AuthContext from "../auth";
 
 export default function UserOptionMenu(props) {
     const {targetUser, anchorEl, setAnchorEl, isMenuOpen, setShowReportModal, handleFriendModalClose, setConfirmModal} = props;
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [relationToUser, setRelationToUser] = useState(null);
 
@@ -21,8 +25,13 @@ export default function UserOptionMenu(props) {
         handleMenuClose();
     }
 
-    function handleInviteToParty() {
-        console.log('Party invite sent');
+    function handleInviteToParty(event) {
+        
+        socket.emit(SocketEvents.PARTY_INVITE, {
+            inviter: auth.username, // this user's username
+            receiver: targetUser // the friend's username
+        })
+
         handleMenuClose();
     }
 

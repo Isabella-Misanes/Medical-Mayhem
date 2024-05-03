@@ -170,7 +170,6 @@ export default function HomeScreen() {
             </Grid>
             <MessagesDrawer />
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
-            <InviteModal open={showInviteModal} onClose={() => setShowInviteModal(false)} />
             <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
     )

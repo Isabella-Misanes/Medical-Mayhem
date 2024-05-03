@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import AuthContext, { UserRoleType } from '../auth';
 import apis from './store-request-api';
 // import { useNavigate } from 'react-router-dom'
@@ -29,6 +29,7 @@ export const GlobalStoreActionType = {
     GET_PROFILE: "GET_PROFILE",
     UPDATE_PROFILE: "UPDATE_PROFILE",
     RESET: "RESET",
+    ADD_TO_PARTY: "ADD_TO_PARTY",
 
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY JARED RAAAAAAHHHH
     VIEW_FRIENDS: "VIEW_FRIENDS",
@@ -56,7 +57,6 @@ export const GlobalStoreActionType = {
 
 const CurrentModal = {
     NONE: "NONE",
-    DELETE_LIST: "DELETE_LIST",
 }
 
 const CurrentScreen = {
@@ -147,6 +147,7 @@ function GlobalStoreContextProvider(props) {
                     players: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.GET_PROFILE: {
@@ -158,6 +159,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -169,6 +171,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.RESET: {
@@ -204,6 +207,10 @@ function GlobalStoreContextProvider(props) {
                         },
                     },
                     commentsList: store.commentsList,
+                    partyInfo: {
+                        users: [],
+                        partyLeader: ""
+                    }
                 });
             }
 
@@ -229,6 +236,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
 
@@ -241,6 +249,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
 
@@ -253,6 +262,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
@@ -265,6 +275,7 @@ function GlobalStoreContextProvider(props) {
                     avatarList: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
@@ -277,6 +288,7 @@ function GlobalStoreContextProvider(props) {
                     avatarList: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.GET_COMMENTS: {
@@ -288,6 +300,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: payload,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.CREATE_COMMENT: {
@@ -299,6 +312,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: payload,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
@@ -310,6 +324,7 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: payload,
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 });
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
@@ -327,6 +342,7 @@ function GlobalStoreContextProvider(props) {
                         toggles: store.settings.toggles
                     },
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
@@ -344,6 +360,7 @@ function GlobalStoreContextProvider(props) {
                         toggles: store.settings.toggles,
                     },
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
@@ -361,6 +378,7 @@ function GlobalStoreContextProvider(props) {
                         toggles: payload
                     },
                     commentsList: store.commentsList,
+                    partyInfo: store.partyInfo
                 })
             }
             case GlobalStoreActionType.GET_PARTY: {
@@ -371,6 +389,23 @@ function GlobalStoreContextProvider(props) {
                     errorMessage: "",
                     avatar: store.avatar,
                     partyInfo: payload,
+                    settings: store.settings,
+                    commentsList: store.commentsList,
+                });
+            }
+            case GlobalStoreActionType.ADD_TO_PARTY: {
+                store.partyInfo.users.push(payload.accepter)
+                //console.log([...store.partyInfo.users, payload.accepter])
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    CurrentScreen: store.CurrentScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: store.avatar,
+                    partyInfo: {
+                        users: store.partyInfo.users,
+                        partyLeader: store.partyInfo.partyLeader
+                    },
                     settings: store.settings,
                     commentsList: store.commentsList,
                 });
@@ -482,6 +517,29 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncSendFriend();
+    }
+
+    // Party
+
+    // Adds the given user to the party array
+    store.addToParty = function (accepter) {
+
+        async function asyncAddToParty() {
+            try {
+                const response = await apis.getUserPartyInfo(accepter)
+                storeReducer({
+                    type: GlobalStoreActionType.ADD_TO_PARTY,
+                    payload: {accepter: response.data}
+                })
+            } catch(error) {
+                console.error(error);
+                storeReducer({
+                    type: GlobalStoreActionType.ERROR,
+                    payload: { errorMessage: error.response.data.errorMessage }
+                })
+            }
+        }
+        asyncAddToParty();
     }
 
     store.promoteToLeader = function (event) {

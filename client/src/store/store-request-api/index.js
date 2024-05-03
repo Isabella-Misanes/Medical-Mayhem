@@ -95,7 +95,9 @@ export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
     })
 }
 
-export const getParty = async() => { return api.get('/party'); }
+// export const getParty = async() => { return api.get('/party'); }
+
+export const getUserPartyInfo = async(accepter) => { return api.get(`/party/${accepter}`) }
 
 export const getRelationToUser = async(targetUsername) => {
     return api.post('/relationToUser', {targetUsername: targetUsername});
@@ -125,7 +127,7 @@ const apis = {
     updateAudioSettings,
     updateKeybinds,
     updateToggles,
-    getParty,
+    getUserPartyInfo,
     getRelationToUser,
     blockPlayer
 }
