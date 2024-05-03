@@ -36,6 +36,8 @@ export function handleConnection(socket: Socket) {
             queue.splice(queue.indexOf(socket), 1)
 
         socketInfos.delete(socket.id)
+
+        
     })
 
     socket.on(SocketEvents.SET_USERNAME, (data) => {
@@ -104,7 +106,6 @@ export function handleConnection(socket: Socket) {
         socket.to(receiverInfo.socket.id).emit(SocketEvents.PARTY_INVITE, {
             inviter: data.inviter
         })
-
     })
 
     socket.on(SocketEvents.PARTY_INVITE_ACCEPTED, async (data) => {
@@ -117,25 +118,23 @@ export function handleConnection(socket: Socket) {
             return
         }
 
-        // Create a party room for the accepter if no party exists
-        const accepterInfo = socketInfos.get(socket.id) as SocketInfo
-
-        if (accepterInfo.partyRoom == '') {
+        // Create a party room for the inviter if no party exists
+        if (inviterInfo.partyRoom == '') {
             let room = randomBytes(8).toString('hex')
-            socket.join(room)
-            accepterInfo.partyRoom = room
+            inviterInfo.socket.join(room)
+            inviterInfo.partyRoom = room
         }
 
-        // Add the inviter to the party room
-        let room = accepterInfo.partyRoom
-        inviterInfo.socket.join(room)
-        inviterInfo.partyRoom = room
+        // Add the accepter to the party room
+        const accepterInfo = socketInfos.get(socket.id) as SocketInfo
+        let room = inviterInfo.partyRoom
+        socket.join(room)
+        accepterInfo.partyRoom = room
 
+        // Get all users usernames that are in the current room as the accepter and the inviter
         const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
 
-
-        console.log(partyUsers)
-        // Let the inviter know that the accepter has accepted the invite
+        // Let the part members know that the accepter has accepted the invite
         io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: partyUsers
         })
@@ -145,8 +144,9 @@ export function handleConnection(socket: Socket) {
 
         const oldPartyRoom = (socketInfos.get(socket.id) as SocketInfo).partyRoom;
         (socketInfos.get(socket.id) as SocketInfo).partyRoom = ''
+        socket.leave(oldPartyRoom)
 
-        io.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+        socket.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: data.partyUsers
         })
     })
