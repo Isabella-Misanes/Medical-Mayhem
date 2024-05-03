@@ -2,7 +2,31 @@ import { Request, Response } from 'express';
 import { User } from '../models/user'
 import { Avatar } from '../models/avatar';
 import { Comment } from '../models/comment';
-import { ObjectId, Types } from 'mongoose';
+import { Types } from 'mongoose';
+
+export const loadAvatar = async (req: Request, res: Response) => {
+    console.log("load avatar")
+    const { avatar } = req.params;
+    const targetId = new Types.ObjectId(avatar);
+
+    try {
+        const existingAvatar = await Avatar.findById(targetId).populate('comments');
+        if (!existingAvatar) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "Avatar does not exist."
+                })
+        }
+
+        return res
+            .status(200)
+            .json({existingAvatar})
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
 
 export const getAllAvatars = async (req: Request, res: Response) => {
     console.log("get all avatars");

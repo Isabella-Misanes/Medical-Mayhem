@@ -61,6 +61,8 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
     });
 }
 
+export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${avatar}`) }
+
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
 export const getComments = async (avatar) => { return api.get(`/mapsearch/comments/${avatar}`) }
@@ -126,7 +128,7 @@ const apis = {
     viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
 
     // Avatars
-    getAvatar, updateAvatar, updateAvatarList, getAllAvatars,
+    getAvatar, updateAvatar, updateAvatarList, getAllAvatars, loadAvatar,
     getComments,
     addComment,
     getSettings,
