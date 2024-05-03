@@ -36,6 +36,8 @@ export function handleConnection(socket: Socket) {
             queue.splice(queue.indexOf(socket), 1)
 
         socketInfos.delete(socket.id)
+
+        
     })
 
     socket.on(SocketEvents.SET_USERNAME, (data) => {
@@ -129,11 +131,10 @@ export function handleConnection(socket: Socket) {
         socket.join(room)
         accepterInfo.partyRoom = room
 
+        // Get all users usernames that are in the current room as the accepter and the inviter
         const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
 
-        console.log("PARTYUSERES:" + partyUsers)
-        console.log(socketInfos)
-        // Let the inviter know that the accepter has accepted the invite
+        // Let the part members know that the accepter has accepted the invite
         io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: partyUsers
         })
@@ -143,8 +144,9 @@ export function handleConnection(socket: Socket) {
 
         const oldPartyRoom = (socketInfos.get(socket.id) as SocketInfo).partyRoom;
         (socketInfos.get(socket.id) as SocketInfo).partyRoom = ''
+        socket.leave(oldPartyRoom)
 
-        io.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+        socket.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: data.partyUsers
         })
     })
