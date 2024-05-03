@@ -27,7 +27,6 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
             console.log(store.settings.toggles.party)
 
             if (store.settings.toggles.party) {
-                console.log("ION")
                 setInviter(data.inviter)
                 setDisplayInviteModal(true)
             }
@@ -35,7 +34,16 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
 
         socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
             console.log('RECEIVED UPDATE PARTY INFO')
-            store.updateParty(data.partyUsers)
+            store.updateParty({
+                users: data.partyUsers,
+                partyLeader: data.partyLeader
+            })
+        })
+
+        socket.on(SocketEvents.LEADER_PROMOTION, (data) => {
+            console.log(data)
+            console.log(store.partyInfo)
+            store.promoteToLeader(data.leader)
         })
         //eslint-disable-next-line
     }, [])

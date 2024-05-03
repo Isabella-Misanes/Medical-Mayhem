@@ -44,7 +44,10 @@ export default function Sidebar() {
         })
 
         // User is now in a party by himself sadge
-        store.updateParty([auth.username])
+        store.updateParty({
+            users: [auth.username],
+            partyLeader: ''
+        })
         console.log(store.partyInfo.users)
     }
 
@@ -54,12 +57,15 @@ export default function Sidebar() {
     }
 
     function handleAddFriend(event) {
-        // store.sendFriend(event);
+        store.sendFriend(event);
         handleMenuClose();
     }
 
     function handlePromoteToLeader(event) {
-        store.promoteToLeader(event);
+        socket.emit(SocketEvents.LEADER_PROMOTION, {
+            leader: clickedUser.username
+        })
+        //store.promoteToLeader(event);
         handleMenuClose();
     }
 
@@ -145,6 +151,7 @@ export default function Sidebar() {
     // }
 
     console.log(party)
+    console.log(store.partyInfo)
     return (
             <Box id='sidebar' sx={{ 
                 backgroundColor: '#104c00',
@@ -171,7 +178,7 @@ export default function Sidebar() {
                         <LogoutIcon />
                     </IconButton>
                 }
-                {partyMenu}
+                {clickedUser.username !== auth.username && partyMenu}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
     );

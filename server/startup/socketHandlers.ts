@@ -35,9 +35,21 @@ export function handleConnection(socket: Socket) {
         if (queue.includes(socket))
             queue.splice(queue.indexOf(socket), 1)
 
+        const socketInfo = socketInfos.get(socket.id) as SocketInfo
+        const partyRoom = socketInfo.partyRoom
+
+        socket.leave(socketInfo.partyRoom)
+        socket.leave(socketInfo.gameRoom)
+
         socketInfos.delete(socket.id)
 
-        
+        // Get all users usernames that are in the current room as the disconnecter
+        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
+
+        // Let the part members know that the accepter has accepted the invite
+        io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+            partyUsers: partyUsers
+        })
     })
 
     socket.on(SocketEvents.SET_USERNAME, (data) => {
@@ -136,7 +148,8 @@ export function handleConnection(socket: Socket) {
 
         // Let the part members know that the accepter has accepted the invite
         io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
-            partyUsers: partyUsers
+            partyUsers: partyUsers,
+            partyLeader: data.inviter
         })
     })
 
@@ -149,6 +162,10 @@ export function handleConnection(socket: Socket) {
         socket.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: data.partyUsers
         })
+    })
+
+    socket.on(SocketEvents.LEADER_PROMOTION, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.LEADER_PROMOTION, data)
     })
 
     // GAMEPLAY
