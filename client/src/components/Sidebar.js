@@ -162,13 +162,15 @@ export default function Sidebar() {
                     }} marginTop={(index * 50) + 10 + 'px'} />
                 ))}
                 
-                <IconButton onClick={()=>{handleLeaveParty()}} sx={{
-                    position: 'fixed',
-                    bottom: '2%',
-                    color: 'white'
-                }}>
-                    <LogoutIcon />
-                </IconButton>
+                {store.partyInfo.users.length > 1 && 
+                    <IconButton onClick={()=>{handleLeaveParty()}} sx={{
+                        position: 'fixed',
+                        bottom: '2%',
+                        color: 'white'
+                    }}>
+                        <LogoutIcon />
+                    </IconButton>
+                }
                 {partyMenu}
                 <ReportModal open={showReportModal} onClose={() => setShowReportModal(false)} />
             </Box>
