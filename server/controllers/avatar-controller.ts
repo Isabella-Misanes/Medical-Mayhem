@@ -106,6 +106,7 @@ export const getComments = async (req: Request, res: Response) => {
         }
         else {
             const comments = targetAvatar.comments;
+            console.log('comments:', comments);
             return res.status(200).json({comments});
         }
     }
