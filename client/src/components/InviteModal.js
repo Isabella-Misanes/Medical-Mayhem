@@ -24,14 +24,20 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
     useEffect(() => {
         socket.on(SocketEvents.PARTY_INVITE, (data) => {
             console.log("PARTY INVITE RECEIVED")
-            setInviter(data.inviter)
-            setDisplayInviteModal(true)
+            console.log(store.settings.toggles.party)
+
+            if (store.settings.toggles.party) {
+                console.log("ION")
+                setInviter(data.inviter)
+                setDisplayInviteModal(true)
+            }
         })
 
         socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
             console.log('RECEIVED UPDATE PARTY INFO')
             store.updateParty(data.partyUsers)
         })
+
     //eslint-disable-next-line
     }, [])
 

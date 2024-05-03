@@ -141,21 +141,10 @@ export function handleConnection(socket: Socket) {
         })
     })
 
-    // data is the json containing newly updated party info with id, username, pfp for each user
-    // socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
-    //     console.log(socketInfos.get(socket.id) as SocketInfo)
-    //     console.log(data)
-    //     io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
-    //         partyUsers: data.partyUsers
-    //     })
-    // })
-
     socket.on(SocketEvents.LEAVE_PARTY, (data) => {
 
         const oldPartyRoom = (socketInfos.get(socket.id) as SocketInfo).partyRoom;
         (socketInfos.get(socket.id) as SocketInfo).partyRoom = ''
-
-        console.log(data)
 
         io.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyUsers: data.partyUsers
@@ -173,6 +162,5 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.STOP_FOLLOW, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
-
 }
 
