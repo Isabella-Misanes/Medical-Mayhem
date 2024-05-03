@@ -23,6 +23,13 @@ export default function MapSearchScreen() {
         // eslint-disable-next-line
     }, [store.avatarList])
 
+    useEffect(() => {
+        if(showCharacterList) {
+            store.getAllAvatars();
+        }
+        // eslint-disable-next-line
+    }, [showCharacterList])
+
     function handleOpenMap(event) {
         store.openMap(event);
     }
