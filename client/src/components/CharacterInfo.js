@@ -16,6 +16,7 @@ export default function CharacterInfo(props) {
         return () => {
             setView([]);
         };
+        // eslint-disable-next-line
     }, [avatar])
 
     useEffect(() => {

@@ -20,6 +20,11 @@ export default function UserOptionMenu(props) {
 
     const handleMenuClose = () => { setAnchorEl(null); };
 
+    function handleViewProfile(event) {
+        console.log('View Profile');
+        handleMenuClose();
+    }
+
     function handlePrivateMessaging(event) {
         store.openPrivateMessaging(event);
         handleMenuClose();
@@ -93,6 +98,9 @@ export default function UserOptionMenu(props) {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <MenuItem onClick={(event) => {handleViewProfile(event)}}>
+                View Profile
+            </MenuItem>
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
