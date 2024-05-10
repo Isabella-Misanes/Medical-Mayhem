@@ -1,22 +1,24 @@
 import { Box, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
-
-import { useEffect, useState } from 'react';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from './BackButton';
-import avatar from '../assets/default-avatar.jpg'
+import avatar from '../assets/default-avatar.jpg';
 import AuthContext from '../auth';
+import { useLocation } from 'react-router-dom';
 
 export default function ProfileScreen() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const {state} = useLocation();
+    const {currUsername} = state;
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
     const [username, setUsername] = useState("")
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
+    const [regDate, setRegDate] = useState("")
 
     // Handles switching between Profile screen and Achievements screen
     const handleToggleScreen = () => {
@@ -30,12 +32,12 @@ export default function ProfileScreen() {
             setUsername(auth.username)
             console.log(auth.username)
             console.log(username)
-            store.updateProfile(auth.username, bio, postImage)
+            store.updateProfile(auth.username, bio, postImage, regDate)
         }
 
         else if(editEnabled) {
             auth.updateUsername(username)
-            store.updateProfile(username, bio, postImage)
+            store.updateProfile(username, bio, postImage, regDate)
         }
 
         setEditEnabled(!editEnabled);
@@ -77,16 +79,28 @@ export default function ProfileScreen() {
         })
     }
 
+    // Helper function to convert JS date to readable string
+    function dateToString(date) {
+        if(!date) return;
+        const newDate = new Date(date);
+        // let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        console.log(newDate);
+        const month = newDate.toLocaleString('default', {month: 'long'});
+        // console.log(date.getMonth());
+        return `${month} ${newDate.getDate()}, ${newDate.getFullYear()}`;
+    }
+
     useEffect(() => {
-        store.getProfile()
+        store.getProfile(currUsername)
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        setUsername(auth.username)
+        setUsername(currUsername)
         if(store.profileInfo) {
             setBio(store.profileInfo.bio)
             setPostImage(store.profileInfo.pfp)
+            setRegDate(dateToString(store.profileInfo.regDate))
         }
 
         // eslint-disable-next-line
@@ -163,7 +177,7 @@ export default function ProfileScreen() {
                                         />
                                         <p>
                                             Last Seen: Now<br/>
-                                            Registered Since: Jan 22, 2024
+                                            Registered Since: {regDate}
                                         </p>
                                     </>
                                     :
@@ -173,7 +187,7 @@ export default function ProfileScreen() {
                                         </p>
                                         <p>
                                             Last Seen: Now<br/>
-                                            Registered Since: Jan 22, 2024
+                                            Registered Since: {regDate}
                                         </p>
                                     </>
                                 }
@@ -206,12 +220,13 @@ export default function ProfileScreen() {
                             <Grid item xs={12} sx={{
                                 bgcolor: '#4D9147',
                             }}>
-                                <IconButton id='edit-button' onClick={(event) => {handleEditProfile(event)}} 
-                                    sx={{
-                                        color: editEnabled ? 'red' : 'white'
-                                }}>
-                                    <EditIcon />
-                                </IconButton>
+                                {
+                                    // Edit button should only appear if user is on their own profile screen
+                                    auth.username === currUsername &&
+                                    <IconButton id='edit-button' onClick={(event) => {handleEditProfile(event)}} sx={{color: editEnabled ? 'red' : 'white'}}>
+                                        <EditIcon />
+                                    </IconButton>
+                                }
                             </Grid>
                         </Grid>
                     </Box>

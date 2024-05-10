@@ -4,15 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import socket from "../constants/socket";
 import SocketEvents from "../constants/socketEvents";
 import AuthContext from "../auth";
+import { useNavigate } from "react-router-dom";
 
 export default function UserOptionMenu(props) {
     const {targetUser, anchorEl, setAnchorEl, isMenuOpen, setShowReportModal, handleFriendModalClose, setConfirmModal} = props;
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const navigate = useNavigate();
     const [relationToUser, setRelationToUser] = useState(null);
 
-    useEffect(() => {
-        if(targetUser) store.getRelationToUser(targetUser); //eslint-disable-next-line
+    useEffect(() => { if(targetUser) store.getRelationToUser(targetUser); //eslint-disable-next-line
     }, [targetUser])
 
     useEffect(() => {setRelationToUser(store.relation)}, //eslint-disable-next-line
@@ -21,8 +22,8 @@ export default function UserOptionMenu(props) {
     const handleMenuClose = () => { setAnchorEl(null); };
 
     function handleViewProfile(event) {
-        console.log('View Profile');
         handleMenuClose();
+        navigate('/profile', {state: {currUsername: targetUser}});
     }
 
     function handlePrivateMessaging(event) {

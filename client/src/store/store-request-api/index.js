@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 
 export const api = axios.create({baseURL: `${rootDomain}/api`})
 
-export const getProfile = async () => { return await api.get(`/getProfile/`) }
+export const getProfile = async (username) => { return await api.post(`/profile/:username`, {username: username}) }
 
 export const updateProfile = async (username, bio, pfp) => {
     return api.post(`/updateProfile/`, {

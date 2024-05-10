@@ -109,7 +109,7 @@ export default function HomeScreen() {
                             <HomeButton
                                 gridSx={{textAlign: 'center'}}
                                 id='profile-button'
-                                onClick={() => navigate('/profile')}
+                                onClick={() => navigate('/profile', {state: {currUsername: auth.username}})}
                                 buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                                 text='Profile'
                                 disable={auth.role === UserRoleType.GUEST}

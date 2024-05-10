@@ -577,10 +577,11 @@ function GlobalStoreContextProvider(props) {
 
     // Profile Screen
 
-    store.getProfile = function() {
+    store.getProfile = function(username) {
+        console.log(username);
         async function asyncGetProfile() {
             try {
-                let response = await apis.getProfile()
+                let response = await apis.getProfile(username)
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.GET_PROFILE,
@@ -594,7 +595,7 @@ function GlobalStoreContextProvider(props) {
         asyncGetProfile()
     }
 
-    store.updateProfile = function(username, bio, pfp) {
+    store.updateProfile = function(username, bio, pfp, regDate) {
         async function asyncUpdateProfile() {
             try{
                 let response = await apis.updateProfile(username, bio, pfp)
@@ -604,7 +605,8 @@ function GlobalStoreContextProvider(props) {
                     payload: {
                         username: username,
                         bio: bio,
-                        pfp: pfp
+                        pfp: pfp,
+                        regDate: regDate,
                     }
                 })
             } catch (error) { console.error(error) }

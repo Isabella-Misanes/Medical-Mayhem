@@ -10,7 +10,8 @@ export const getProfile = async (req: Request, res: Response) => {
     console.log("getProfile")
     try {
         console.log(req.userId)
-        const existingUser = await User.findById(req.userId);
+        const {username} = req.body;
+        const existingUser = await User.findOne({username: username});
         console.log("existingUser: " + existingUser);
         if (!existingUser) {
             return res
@@ -19,12 +20,15 @@ export const getProfile = async (req: Request, res: Response) => {
                     errorMessage: "User does not exist."
                 })
         }
+        console.log('month:', existingUser.dateRegistered.getMonth())
 
         return res
             .status(200)
             .json({
                 bio: existingUser.bio,
-                pfp: existingUser.profilePicture
+                pfp: existingUser.profilePicture,
+                regDate: existingUser.dateRegistered,
+                // regDate: {month: existingUser.dateRegistered.getMonth(), date: existingUser.dateRegistered.getFullYear(), day: existingUser.dateRegistered.getDay()},
             })
     } catch (err) {
         console.error(err);
