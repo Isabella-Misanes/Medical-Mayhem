@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Drawer, Grid, List, ListItem, Tab, TextField } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import GlobalStoreContext from '../store';
 import { buttonStyle } from '../Styles';
 import SendIcon from '@mui/icons-material/Send';
@@ -13,6 +13,7 @@ export default function MessagesDrawer() {
     const [state, setState] = useState('bottom');
     const [messageText, setMessageText] = useState('');
     const [chat, setChat] = useState({public: [], party: [], private: []});
+    const publicChatRef = useRef(null);
 
     const tabButton = {
         color: 'white',
@@ -55,7 +56,6 @@ export default function MessagesDrawer() {
         console.log(chat.public)
         for(let i = 0; i < chat.public.length; i++) {
             const publicChatMessage = chat.public[i];
-            console.log(publicChatMessage);
             messageItems.push(
                 <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} auth={auth} />
             )
@@ -67,6 +67,10 @@ export default function MessagesDrawer() {
 
     useEffect(() => store.getPublicMessages() //eslint-disable-next-line
     , [])
+
+    useEffect(() => {
+        if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
+    }, [chat.public])
 
     return (
         <div>
@@ -108,7 +112,7 @@ export default function MessagesDrawer() {
                             </Box>
                             <TabPanel value="1">
                                 <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
+                                    <List ref={publicChatRef} sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
                                         height: '300px'

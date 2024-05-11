@@ -8,6 +8,7 @@ import { PublicChat } from '../models/public-chat';
 //TODO: might have to add additional middleware that check if the user still exists
 
 export const getPublicMessages = async (req: Request, res: Response) => {
+    console.log('get public messages');
     const publicChat = await PublicChat.find();
     if(!publicChat) return res.status(400).json({error: 'Public chat could not be retrieved.'});
     const publicMessages = publicChat[0].messages;

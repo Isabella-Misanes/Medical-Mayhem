@@ -113,7 +113,10 @@ export const getRelationToUser = async(targetUsername) => {
 
 export const blockPlayer = async (targetUsername) => { return api.post('/blockPlayer', {targetUsername: targetUsername}); }
 
-export const getPublicMessages = async() => { return api.get('/messages/public/get')};
+export const getPublicMessages = async() => {
+    console.log('get public messages');
+    return api.get('/messages/public/get')
+};
 export const getPartyMessages = async() => { return api.get('/messages/party/get')};
 export const getPrivateMessages = async() => { return api.get('/messages/private/get')};
 export const sendPublicMessage = async (message) => { return api.post('/messages/public/send', {message: message}); }

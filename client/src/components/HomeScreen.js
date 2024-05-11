@@ -97,14 +97,14 @@ export default function HomeScreen() {
                                 disable={auth.role === UserRoleType.GUEST}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <HomeButton
                                 id='forums-button'
                                 onClick={() => navigate('/forum')}
                                 text='Forums'
                                 buttonSx={homeButtons}
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={6}>
                             <HomeButton
                                 gridSx={{textAlign: 'center'}}
@@ -154,7 +154,7 @@ export default function HomeScreen() {
                     </Grid>                
                 </Grid>
             </Grid>
-            <MessagesDrawer />
+            {role !== UserRoleType.GUEST && <MessagesDrawer />}
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
             <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
