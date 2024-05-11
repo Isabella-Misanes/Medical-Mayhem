@@ -99,14 +99,6 @@ export default function HomeScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <HomeButton
-                                id='forums-button'
-                                onClick={() => navigate('/forum')}
-                                text='Forums'
-                                buttonSx={homeButtons}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
                                 gridSx={{textAlign: 'center'}}
                                 id='profile-button'
                                 onClick={() => navigate('/profile', {state: {currUsername: auth.username}})}
