@@ -44,14 +44,27 @@ export default function HomeScreen() {
 
             // If everyone is ready, tell everyone in the party that we are all ready,
             // sending back usernames of everyone in the party
-            if (members.every(member => member.isReady === true))
+            if (members.every(member => member.isReady === true)) {
+
                 socket.emit(SocketEvents.MATCH_FOUND, {
                     players: members.map(member => member.username)
                 })
 
-            socket.emit(SocketEvents.CHANGE_READY, {
-                partyMembers: members
-            })
+                // Unready everyone after they join game
+                socket.emit(SocketEvents.CHANGE_READY, {
+                    partyMembers: members.map(member => {
+                        member.unready()
+                        return member
+                    })
+                })
+            }
+
+            // Otherwise, send the new party structure with the current user ready
+            else {
+                socket.emit(SocketEvents.CHANGE_READY, {
+                    partyMembers: members
+                })
+            }
         }
 
         else

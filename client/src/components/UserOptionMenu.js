@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Typography } from "@mui/material";
 import GlobalStoreContext from "../store";
 import { useContext, useEffect, useState } from "react";
 import socket from "../constants/socket";
@@ -93,6 +93,9 @@ export default function UserOptionMenu(props) {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <Typography variant="h6" align="center" component="div" sx={{ fontWeight: 'medium'}}>
+                {targetUser}
+            </Typography>
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>

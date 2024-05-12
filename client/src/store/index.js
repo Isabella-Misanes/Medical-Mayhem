@@ -114,8 +114,8 @@ function GlobalStoreContextProvider(props) {
             favoredMinigame: "",
             isPublic: false,
         },
-        players: [], // an array of usernames for players matched with
-        partyMembers: [],
+        players: [], // an array of usernames for players currently in game with this user (including this user)
+        partyMembers: [], // an array of Member objects used for sidebar and ready statuses
         relation: '',
         avatarList: [], // the list of avatars in the Character Search
         commentsList: [],
@@ -172,7 +172,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.UPDATE_PROFILE: {
@@ -184,15 +185,22 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
+            // essentially a copy paste of the store at the start
+            // this is done when logging out, unauthorized, and deleting the account
             case GlobalStoreActionType.RESET: {
                 console.log("RESETTING.....")
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: CurrentScreen.HOME,
-                    profileInfo: {},
+                    profileInfo: {
+                        username: "",
+                        bio: "",
+                        pfp: ""
+                    },
                     errorMessage: "",
                     avatar: {
                         pic: "",
@@ -203,6 +211,11 @@ function GlobalStoreContextProvider(props) {
                         favoredMinigame: "",
                         isPublic: false,
                     },
+                    players: [],
+                    partyMembers: [],
+                    relation: '',
+                    avatarList: [],
+                    commentsList: [],
                     settings: {
                         masterVolume: 100,
                         musicVolume: 100,
@@ -219,9 +232,7 @@ function GlobalStoreContextProvider(props) {
                             messages: true,
                             party: true,
                         },
-                    },
-                    commentsList: store.commentsList,
-                    partyMembers: []
+                    }
                 });
             }
 
@@ -235,6 +246,7 @@ function GlobalStoreContextProvider(props) {
                     partyMembers: store.partyMembers,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    players: store.players
                 });
             }
 
@@ -248,7 +260,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
 
@@ -261,7 +274,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
 
@@ -274,7 +288,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.GET_AVATAR_LIST: {
@@ -287,7 +302,8 @@ function GlobalStoreContextProvider(props) {
                     avatarList: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
@@ -300,7 +316,8 @@ function GlobalStoreContextProvider(props) {
                     avatarList: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.GET_COMMENTS: {
@@ -312,7 +329,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: payload,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.CREATE_COMMENT: {
@@ -324,7 +342,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: store.settings,
                     commentsList: payload,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.GET_SETTINGS: {
@@ -336,7 +355,8 @@ function GlobalStoreContextProvider(props) {
                     avatar: store.avatar,
                     settings: payload,
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
@@ -354,7 +374,8 @@ function GlobalStoreContextProvider(props) {
                         toggles: store.settings.toggles
                     },
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 })
             }
             case GlobalStoreActionType.UPDATE_KEYBINDS: {
@@ -372,7 +393,8 @@ function GlobalStoreContextProvider(props) {
                         toggles: store.settings.toggles,
                     },
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 })
             }
             case GlobalStoreActionType.UPDATE_TOGGLES: {
@@ -390,7 +412,8 @@ function GlobalStoreContextProvider(props) {
                         toggles: payload
                     },
                     commentsList: store.commentsList,
-                    partyMembers: store.partyMembers
+                    partyMembers: store.partyMembers,
+                    players: store.players
                 })
             }
             case GlobalStoreActionType.UPDATE_PARTY: {
@@ -404,6 +427,7 @@ function GlobalStoreContextProvider(props) {
                     partyMembers: payload.partyMembers,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.CHANGE_READY: {
@@ -416,6 +440,7 @@ function GlobalStoreContextProvider(props) {
                     partyMembers: payload.partyMembers,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    players: store.players
                 });
             }
             case GlobalStoreActionType.GET_RELATION: {
@@ -429,6 +454,7 @@ function GlobalStoreContextProvider(props) {
                     relation: payload,
                     settings: store.settings,
                     commentsList: store.commentsList,
+                    players: store.players
                 });
             }
             default:
@@ -567,6 +593,8 @@ function GlobalStoreContextProvider(props) {
 
     // Sets a member to be "readied up", meaning that they've pressed the Play button and are waiting for other
     // users to press it as well.
+    // data is a list of JSONs, each of the format of Member class. They are converted to Member objects after 
+    // receiving CHANGE_READY and stored in the store.
     store.changeReady = function (data) {
         storeReducer({
             type: GlobalStoreActionType.CHANGE_READY,

@@ -103,6 +103,8 @@ export default function Sidebar() {
     }, [store.partyMembers])
 
     useEffect(() => {
+
+        // When a member of the party says he's ready, update the party with data, the new party structure 
         socket.on(SocketEvents.CHANGE_READY, (data) => {
             store.changeReady(data)
         })
