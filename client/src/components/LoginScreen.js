@@ -5,6 +5,7 @@ import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
 import { useNavigate } from 'react-router-dom';
+import { buttonStyle } from '../Styles';
 
 export default function LoginScreen() {
     const {auth} = useContext(AuthContext);
@@ -91,7 +92,7 @@ export default function LoginScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={[buttonStyle, { mt: 3, mb: 2 }]}
                         >
                             Login
                         </Button>

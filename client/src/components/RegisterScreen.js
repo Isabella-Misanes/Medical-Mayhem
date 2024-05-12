@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
+import { buttonStyle } from '../Styles';
 
 export default function RegisterScreen() {
     const {auth} = useContext(AuthContext);
@@ -117,7 +118,7 @@ export default function RegisterScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2, width: '50%' }}
+                            sx={[buttonStyle, { mt: 3, mb: 2, width: '50%' }]}
                         >
                             Sign Up
                         </Button>
