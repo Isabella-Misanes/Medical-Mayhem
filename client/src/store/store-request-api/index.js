@@ -65,10 +65,10 @@ export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${av
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
-export const getComments = async (avatar) => { return api.get(`/mapsearch/comments/${avatar}`) }
+export const getComments = async (avatar) => { return api.get(`/charactersearch/comments/${avatar}`) }
 
 export const addComment = async(text, targetAvatar) => {
-    return api.post('/mapsearch/addComment/', {
+    return api.post('/charactersearch/addComment/', {
         text: text,
         targetAvatar: targetAvatar,
     })

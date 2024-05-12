@@ -70,8 +70,8 @@ export default function HomeScreen() {
                         <Grid item xs={6}>
                             <HomeButton
                                 gridSx={{textAlign: 'center'}}
-                                id='map-search-button'
-                                onClick={() => navigate('/mapsearch')}
+                                id='character-search-button'
+                                onClick={() => navigate('/charactersearch')}
                                 text='Character Search'
                                 buttonSx={homeButtons}
                                 disable={auth.role === UserRoleType.GUEST}
@@ -79,8 +79,8 @@ export default function HomeScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <HomeButton
-                                id='map-builder-button'
-                                onClick={() => navigate('/mapbuilder')}
+                                id='character-builder-button'
+                                onClick={() => navigate('/characterbuilder')}
                                 backgroundColor='transparent'
                                 buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                                 text='Character Builder'
@@ -129,14 +129,6 @@ export default function HomeScreen() {
                                 id='about-button'
                                 onClick={() => navigate('/about')}
                                 text='About'
-                                buttonSx={homeButtons}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                id="leaderboard-button"
-                                onClick={() => navigate("/leaderboard")}
-                                text='Leaderboard'
                                 buttonSx={homeButtons}
                             />
                         </Grid>

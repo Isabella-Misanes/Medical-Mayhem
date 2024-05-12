@@ -7,7 +7,7 @@ import { charList, characterCard, outerContentBox, innerContentBox, sortButton }
 import CharacterInfo from './CharacterInfo';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export default function MapSearchScreen() {
+export default function CharacterSearchScreen() {
     const {store} = useContext(GlobalStoreContext);
     const [showCharacterList, setCharacterList] = useState(true);
     const [avatarList, setAvatarList] = useState([]);

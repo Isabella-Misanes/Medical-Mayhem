@@ -13,7 +13,7 @@ import player5 from '../assets/Player-5.png.png';
 import player6 from '../assets/Player-6.png.png';
 import addPlayer from '../assets/Add-Player.png.png';
 
-export default function MapBuilderScreen() {
+export default function CharacterBuilderScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [selectedCharacter, setCharacter] = useState(0);
     const [selectedSprite, setSelectedSprite] = useState("");
