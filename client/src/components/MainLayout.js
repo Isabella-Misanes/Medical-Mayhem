@@ -7,8 +7,8 @@ import {
     SettingsScreen,
     SocialScreen,
     ForumScreen,
-    MapSearchScreen,
-    MapBuilderScreen,
+    CharacterSearchScreen,
+    CharacterBuilderScreen,
     ProfileScreen,
     GameScreen,
     PostScreen,
@@ -45,8 +45,8 @@ export default function MainLayout() {
                     <Route path="/settings/" exact element={<SettingsScreen />} />
                     <Route path="/social/" exact element={<SocialScreen />} />
                     <Route path="/forum/" exact element={<ForumScreen />} />
-                    <Route path="/mapsearch/" exact element={<MapSearchScreen />} />
-                    <Route path="/mapbuilder/" exact element={<MapBuilderScreen />} />
+                    <Route path="/charactersearch/" exact element={<CharacterSearchScreen />} />
+                    <Route path="/characterbuilder/" exact element={<CharacterBuilderScreen />} />
                     <Route path="/profile/" exact element={<ProfileScreen />} />
                     <Route path="/game/" exact element={<GameScreen />} />
                     <Route path="/post/" exact element={<PostScreen />} />

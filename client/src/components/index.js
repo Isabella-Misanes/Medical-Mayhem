@@ -11,8 +11,8 @@ import ForumScreen from "./ForumScreen";
 import PostScreen from "./PostScreen";
 import NewThreadScreen from "./NewThreadScreen";
 import ProfileScreen from "./ProfileScreen";
-import MapSearchScreen from "./MapSearchScreen";
-import MapBuilderScreen from "./MapBuilderScreen";
+import CharacterSearchScreen from "./CharacterSearchScreen";
+import CharacterBuilderScreen from "./CharacterBuilderScreen";
 import ReportsScreen from "./ReportsScreen";
 import GameScreen from "./GameScreen";
 import BackButton from "./BackButton";
@@ -36,8 +36,8 @@ export {
     PostScreen,
     NewThreadScreen,
     ProfileScreen,
-    MapSearchScreen,
-    MapBuilderScreen,
+    CharacterSearchScreen,
+    CharacterBuilderScreen,
     ReportModal,
     ReportsScreen,
     GameScreen,
