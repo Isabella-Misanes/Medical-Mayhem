@@ -121,6 +121,7 @@ function AuthContextProvider(props) {
                 })
             }
             case AuthActionType.ERROR: {
+                console.log("AUTH ERROR")
                 return setAuth({
                     username: '',
                     email: '',

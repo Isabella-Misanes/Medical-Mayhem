@@ -4,9 +4,11 @@ import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterScreen() {
     const {auth} = useContext(AuthContext);
+    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         username: '',
@@ -30,8 +32,8 @@ export default function RegisterScreen() {
         setFormData({ ...formData, [name]: value })
     }
 
-   let modal = "";
-   if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
+//    let modal = "";
+//    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
 
     return (
             <Box sx={{
@@ -123,13 +125,13 @@ export default function RegisterScreen() {
                         </Button>
                         <Grid container justifyContent="center">
                             <Grid item>
-                                <Link href="/login/" variant="body2">
+                                <Link onClick={() => navigate('/login')} variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
                         </Grid>
                     </Box>
-                    {modal}
+                    {/* {modal} */}
                 </Box>
                 <BackButton />
             </Box>

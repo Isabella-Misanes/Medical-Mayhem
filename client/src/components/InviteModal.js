@@ -10,7 +10,6 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
     const [inviter, setInviter] = useState('')
 
     function handleAcceptInvite(event) {
-        console.log(store.partyInfo)
         socket.emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
             inviter: inviter
         })
@@ -35,15 +34,8 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
         socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
             console.log('RECEIVED UPDATE PARTY INFO')
             store.updateParty({
-                users: data.partyUsers,
-                partyLeader: data.partyLeader
+                partyMembers: data.partyMembers,
             })
-        })
-
-        socket.on(SocketEvents.LEADER_PROMOTION, (data) => {
-            console.log(data)
-            console.log(store.partyInfo)
-            store.promoteToLeader(data.leader)
         })
 
     //eslint-disable-next-line

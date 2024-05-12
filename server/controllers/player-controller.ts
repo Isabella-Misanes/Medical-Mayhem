@@ -36,6 +36,18 @@ export const updateProfile = async (req: Request, res: Response) => {
     try {
         const {username, bio, pfp} = req.body
 
+        let existingUser = await User.findOne({ username: username });
+        console.log("existingUser: " + existingUser);
+        if (existingUser && !existingUser._id.equals(req.userId)) {
+            console.log("EXISTING IN UPDATEPROFILE")
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "Username is already taken."
+                })
+        }
+
         let updatedUser
 
         if (pfp) {

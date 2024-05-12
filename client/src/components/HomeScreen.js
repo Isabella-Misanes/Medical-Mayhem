@@ -25,7 +25,37 @@ export default function HomeScreen() {
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP, auth.username)
+
+        // The user will queue up by themselves if they're alone
+        if (store.partyMembers.length === 1)
+            socket.emit(SocketEvents.QUEUE_UP, auth.username)
+
+        // The user will ready up with the party, received in Sidebar.js
+        else if (store.partyMembers.length > 1) {
+            console.log(store.partyMembers)
+
+            // Ready up the current user
+            const members = store.partyMembers.map(member => {
+                if (member.username === auth.username)
+                    member.readyUp()
+
+                return member
+            })
+
+            // If everyone is ready, tell everyone in the party that we are all ready,
+            // sending back usernames of everyone in the party
+            if (members.every(member => member.isReady === true))
+                socket.emit(SocketEvents.MATCH_FOUND, {
+                    players: members.map(member => member.username)
+                })
+
+            socket.emit(SocketEvents.CHANGE_READY, {
+                partyMembers: members
+            })
+        }
+
+        else
+            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     useEffect(() => {
@@ -37,6 +67,9 @@ export default function HomeScreen() {
             // screens in order to avoid unexpected behaviors
             console.log(data)
             socket.off(SocketEvents.MATCH_FOUND)
+
+            // TODO: UNREADY EVERYONE IN THE PARTY AFTER THE MATCH IS FOUND
+
             store.updatePlayers(data)
             console.log(store.players)
             navigate('/game')
@@ -174,15 +207,36 @@ function HomeButton(props) {
 }
 
 function QueueModal(props) {
-    // const { auth } = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
-    const modalText = "Waiting for another player..."
+    const modalText = store.partyMembers.length > 1 ? "Waiting for party to play..." : "Searching for other players..."
     // const [modalText, setModalText] = useState("Waiting for another player...")
     // const [matchFound, setMatchFound] = useState(false)
 
     function handleXButtonClick() {
         props.setQueueingUp(false)
-        socket.emit(SocketEvents.LEAVE_QUEUE)
+
+        if (store.partyMembers.length === 1)
+            socket.emit(SocketEvents.LEAVE_QUEUE)
+
+        // The user will stop being ready, received in Sidebar.js
+        else if (store.partyMembers.length > 1) {
+            
+            const members = store.partyMembers.map(member => {
+                if (member.username === auth.username)
+                    member.unready()
+
+                return member
+            })
+
+            socket.emit(SocketEvents.CHANGE_READY, {
+                partyMembers: members
+            })
+        }
+
+        else
+            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     return (

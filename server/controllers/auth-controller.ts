@@ -104,6 +104,16 @@ export const registerUser = async (req: Request, res: Response) => {
         }
         console.log("all fields provided");
 
+        let existingUser = await User.findOne({ username: username });
+        console.log("existingUser: " + existingUser);
+        if (existingUser) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "Username is already taken."
+                })
+        }
         // Password verification
         if (password.length < 8) {
             return res
@@ -123,7 +133,7 @@ export const registerUser = async (req: Request, res: Response) => {
         console.log("password and password verify match");
 
         // Existing user
-        const existingUser = await User.findOne({ email: email });
+        existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (existingUser) {
             return res

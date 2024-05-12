@@ -20,19 +20,22 @@ import {
     InviteModal
 } from '.'
 import GlobalStoreContext from "../store";
+import MUIErrorModal from "./MUIErrorModal";
 
 export default function MainLayout() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
     const [displayInviteModal, setDisplayInviteModal] = useState(false)
+    const [displayErrorModal, setDisplayErrorModal] = useState(false)
     const [displaySidebar, setDisplaySidebar] = useState(false)
 
-
     useEffect(() => {
-        console.log("PARTY: " + store.settings.toggles.party)
         setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST && store.settings.toggles.party)
-    }, [auth, store.settings.toggles.party])
+
+        if (auth.errorMessage !== "" || store.errorMessage !== "")
+            setDisplayErrorModal(true)
+    }, [auth, store])
 
     return (
         <div id='main-content'>
@@ -54,6 +57,7 @@ export default function MainLayout() {
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
+                <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>
             {displaySidebar && <Sidebar />}
         </div>

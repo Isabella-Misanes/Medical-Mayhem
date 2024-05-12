@@ -24,21 +24,22 @@ export default function ProfileScreen() {
     };
 
     // Handles submitting the profile info once editing is turned off
-    function handleEditProfile(event) {
+    async function handleEditProfile(event) {
+        try {
+            if(username.length === 0)
+                await store.updateProfile(auth.username, bio, postImage)
+    
+            else if(editEnabled)
+                await store.updateProfile(username, bio, postImage)
 
-        if(username.length === 0) {
-            setUsername(auth.username)
-            console.log(auth.username)
-            console.log(username)
-            store.updateProfile(auth.username, bio, postImage)
+            // If, after editing, the username wasn't actually updated successfully, revert user changes back to original username
+            if (username !== auth.username)
+                setUsername(auth.username)
+
+            setEditEnabled(!editEnabled);
+        } catch (error) {
+            console.log(error)
         }
-
-        else if(editEnabled) {
-            auth.updateUsername(username)
-            store.updateProfile(username, bio, postImage)
-        }
-
-        setEditEnabled(!editEnabled);
     }
 
     // Handles changing the bio state value
@@ -83,6 +84,7 @@ export default function ProfileScreen() {
     }, [])
 
     useEffect(() => {
+        console.log("AUTH USERNAME " + auth.username)
         setUsername(auth.username)
         if(store.profileInfo) {
             setBio(store.profileInfo.bio)
@@ -215,7 +217,7 @@ export default function ProfileScreen() {
                             </Grid>
                         </Grid>
                     </Box>
-                </CardActions>            
+                </CardActions>          
             </Card>
     );
 
