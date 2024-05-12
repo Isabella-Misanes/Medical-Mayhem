@@ -5,7 +5,7 @@ import socket from '../constants/socket';
 import SocketEvents from "../constants/socketEvents";
 import GlobalStoreContext from '../store';
 
-export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
+export default function InviteModal({displayInviteModal, setDisplayInviteModal, playerList}) {
     const { store } = useContext(GlobalStoreContext);
     const [inviter, setInviter] = useState('')
 
@@ -34,9 +34,13 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
 
         socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
             console.log('RECEIVED UPDATE PARTY INFO')
-            store.updateParty({
+            store.updateParty(playerList ? {
                 users: data.partyUsers,
-                partyLeader: data.partyLeader
+                partyLeader: data.partyLeader,
+                playerList: playerList
+            } : {
+                users: data.partyUsers,
+                partyLeader: data.partyLeader,
             })
         })
 
@@ -46,7 +50,7 @@ export default function InviteModal({displayInviteModal, setDisplayInviteModal})
             store.promoteToLeader(data.leader)
         })
         //eslint-disable-next-line
-    }, [])
+    }, [store.playerList])
 
     return (
         <Modal

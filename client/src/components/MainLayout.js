@@ -32,7 +32,7 @@ export default function MainLayout() {
     useEffect(() => {
         console.log("PARTY: " + store.settings.toggles.party)
         setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST && store.settings.toggles.party)
-    }, [auth, store.settings.toggles.party])
+    }, [auth, store.settings.toggles.party, store.playerList])
 
     return (
         <div id='main-content'>
@@ -53,7 +53,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
-                <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
+                <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} playerList={store.playerList} />
             </div>
             {displaySidebar && <Sidebar />}
         </div>

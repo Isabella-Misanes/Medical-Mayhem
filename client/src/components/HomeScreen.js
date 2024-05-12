@@ -154,8 +154,8 @@ export default function HomeScreen() {
                     </Grid>                
                 </Grid>
             </Grid>
-            <MessagesDrawer />
-            {/* {role !== UserRoleType.GUEST && <MessagesDrawer />} */}
+            {/* <MessagesDrawer /> */}
+            {role !== UserRoleType.GUEST && <MessagesDrawer />}
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
             <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>

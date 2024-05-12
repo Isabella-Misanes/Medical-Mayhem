@@ -53,7 +53,6 @@ export default function MessagesDrawer() {
 
     const publicChatRender = () => {
         const messageItems = [];
-        console.log(chat.public)
         for(let i = 0; i < chat.public.length; i++) {
             const publicChatMessage = chat.public[i];
             messageItems.push(
