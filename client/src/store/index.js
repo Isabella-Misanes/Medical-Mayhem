@@ -180,7 +180,11 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     CurrentScreen: store.CurrentScreen,
-                    profileInfo: payload,
+                    profileInfo: {
+                        username: auth.username,
+                        bio: payload.bio,
+                        pfp: payload.pfp
+                    },
                     errorMessage: "",
                     avatar: store.avatar,
                     settings: store.settings,
@@ -507,16 +511,14 @@ function GlobalStoreContextProvider(props) {
         asyncGetProfile()
     }
 
-    store.updateProfile = function(username, bio, pfp) {
+    store.updateProfile = function(bio, pfp) {
         async function asyncUpdateProfile() {
             try{
-                let response = await apis.updateProfile(username, bio, pfp)
-                auth.updateUsername(username)
+                let response = await apis.updateProfile(bio, pfp)
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_PROFILE,
                     payload: {
-                        username: username,
                         bio: bio,
                         pfp: pfp
                     }
