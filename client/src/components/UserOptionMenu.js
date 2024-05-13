@@ -35,11 +35,13 @@ export default function UserOptionMenu(props) {
 
         if (store.partyMembers.length === 4)
             auth.error('The party is already at max 4 users.')
-        
-        socket.emit(SocketEvents.PARTY_INVITE, {
-            inviter: auth.username, // this user's username
-            receiver: targetUser // the friend's username
-        })
+
+        else {
+            socket.emit(SocketEvents.PARTY_INVITE, {
+                inviter: auth.username, // this user's username
+                receiver: targetUser // the friend's username
+            })
+        }
 
         handleMenuClose();
     }
@@ -108,9 +110,12 @@ export default function UserOptionMenu(props) {
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
-            <MenuItem onClick={(event) => {handleInviteToParty(event)}}>
-                Invite to Party
-            </MenuItem>
+            { 
+                !store.partyMembers.find(member => member.username === targetUser) &&
+                <MenuItem onClick={(event) => {handleInviteToParty(event)}}>
+                    Invite to Party
+                </MenuItem>
+            }
             {relationToUser === 'RECEIVED' && acceptRequestItem}
             <MenuItem onClick={() => {
                 if(relationToUser === 'FRIENDS') handleRemoveFriend();

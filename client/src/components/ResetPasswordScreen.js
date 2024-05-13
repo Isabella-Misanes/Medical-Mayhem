@@ -4,25 +4,24 @@ import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
-import { useNavigate } from 'react-router-dom';
-import { buttonStyle } from '../Styles';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function LoginScreen() {
+export default function ResetPasswordScreen(props) {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
+        token: useParams().token,
         password: '',
         passwordVerify: ''
     })
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        auth.loginUser(
-            formData.email,
-            formData.password
+
+        auth.resetPassword(
+            formData.token,
+            formData.password,
+            formData.passwordVerify
         );
     };
 
@@ -56,22 +55,11 @@ export default function LoginScreen() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Login
+                        Reset Password
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
@@ -81,32 +69,34 @@ export default function LoginScreen() {
                                     id="password"
                                     autoComplete="new-password"
                                     onChange={handleChange}
+                                    sx={{width: '50%'}}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="passwordVerify"
+                                    label="Verify Password"
+                                    type="password"
+                                    id="passwordVerify"
+                                    autoComplete="new-password"
+                                    onChange={handleChange}
+                                    sx={{width: '50%'}}
                                 />
                             </Grid>
                         </Grid>
                         <Button
                             id="loginSubmit"
                             type="submit"
-                            fullWidth
                             variant="contained"
-                            sx={[buttonStyle, { mt: 3, mb: 2 }]}
+                            sx={{ mt: 3, mb: 2 }}
                         >
-                            Login
+                            Reset Password
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item container direction='column'>
-                                <Link onClick={() => navigate('/register')} variant="body2">
-                                    Don't have an account? Sign Up
-                                </Link>
-                                <Link onClick={() => navigate('/forgotPassword')} variant="body2">
-                                    Forgot Password?
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                     {/* {modal} */}
                 </Box>
-                <BackButton />
             </Box>
     );
 }

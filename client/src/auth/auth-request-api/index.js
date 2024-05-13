@@ -38,12 +38,29 @@ export const registerUser = async (username, email, password, passwordVerify) =>
         passwordVerify : passwordVerify
     })
 }
+
+export const forgotPassword = async (email) => {
+    console.log(email)
+    return await api.post(`/forgotPassword/`, {email: email})
+}
+
+export const resetPassword = async (token, password, passwordVerify) => {
+    return await api.post(`/resetPassword/`, {
+        token: token,
+        password : password,
+        passwordVerify : passwordVerify
+    })
+}
+
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
-    deleteUser
+    deleteUser,
+    forgotPassword,
+    resetPassword
 }
 
 export default apis
