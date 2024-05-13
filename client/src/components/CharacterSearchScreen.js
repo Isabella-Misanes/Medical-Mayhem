@@ -30,8 +30,8 @@ export default function CharacterSearchScreen() {
         // eslint-disable-next-line
     }, [showCharacterList])
 
-    function handleOpenMap(event) {
-        store.openMap(event);
+    function handleSortBy(event) {
+        store.sortBy(event);
     }
 
     function handleCharacterClick(avatar) {
@@ -39,8 +39,16 @@ export default function CharacterSearchScreen() {
         setCharacterList(false);
     }
 
-    function handleSearch(query) {
-        console.log("Query", query);
+    function handleSearch(event) {
+        if(event.key === "Enter") {
+            if(event.target.value !== "") {
+                console.log("Not Empty")
+                // store.searchAvatars(event.target.value);
+            }
+            else {
+                store.getAllAvatars();
+            }
+        }
     }
 
     const characterList = (
@@ -50,15 +58,15 @@ export default function CharacterSearchScreen() {
             </Grid>
             <Grid item xs={1}/>
             <Grid item xs={6}>
-                <TextField fullWidth label="Search" size="small" onKeyDown={(event) => {handleSearch(event.target.value)}}/>
+                <TextField fullWidth label="Search" size="small" onKeyDown={(event) => {handleSearch(event)}}/>
             </Grid>
             <Grid item xs={4}>
                 <Button variant='outlined' sx={sortButton}
-                    onClick={(event) => {handleOpenMap(event)}}>
+                    onClick={(event) => {handleSortBy(event)}}>
                     Newest
                 </Button>
                 <Button variant='outlined' sx={sortButton}
-                    onClick={(event) => {handleOpenMap(event)}}>
+                    onClick={(event) => {handleSortBy(event)}}>
                     Top
                 </Button>
             </Grid>
@@ -85,7 +93,7 @@ export default function CharacterSearchScreen() {
                 
                 <List sx={charList}>
                     {avatarList.length === 0 ? (
-                        <div>Loading...</div>
+                        <div>No characters match your search.</div>
                     ) : (
                         avatarList.map((avatar, index) => (
                             <div key={index} id={"character-card-" + index}>
