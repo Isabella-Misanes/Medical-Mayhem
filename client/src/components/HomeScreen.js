@@ -87,8 +87,6 @@ export default function HomeScreen() {
             navigate('/game')
         })
 
-        if(auth.role !== UserRoleType.GUEST) store.getSettings();
-
         // eslint-disable-next-line
     }, [])
 

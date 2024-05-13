@@ -154,8 +154,7 @@ function AuthContextProvider(props) {
                 })
 
             // Take them back to the welcome screen
-            if (!window.location.href.includes('resetPassword'))
-                navigate("/");
+            navigate("/");
         }
     }
 

@@ -204,6 +204,11 @@ export function handleConnection(socket: Socket) {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
 
+    // data is a player username and a patient
+    socket.on(SocketEvents.TREAT_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.TREAT_PATIENT, data)
+    })
+
     // MESSAGES
     socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, (data) => {
         io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data);

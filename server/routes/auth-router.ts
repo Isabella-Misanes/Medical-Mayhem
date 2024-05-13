@@ -13,7 +13,5 @@ router.post('/login', AuthController.loginUser)
 router.post('/logout', AuthController.logoutUser)
 router.get('/loggedIn', AuthController.getLoggedIn)
 router.post('/deleteUser', AuthController.deleteUser)
-router.post('/forgotPassword', AuthController.forgotPassword)
-router.post('/resetPassword', AuthController.resetPassword)
 
 export default router

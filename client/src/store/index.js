@@ -972,9 +972,9 @@ function GlobalStoreContextProvider(props) {
         console.log("Post thread in store.");
     }
 
-    // Map Search Screen
-    store.openMap = function (event) {
-        console.log("Opening map in store.");
+    // Character Search Screen
+    store.sortBy = function (event) {
+        console.log("SortBy in store called.");
     }
 
     store.getAllAvatars = function () {
@@ -989,6 +989,20 @@ function GlobalStoreContextProvider(props) {
             } catch (error) { console.log(error) }
         }
         asyncGetAllAvatars();
+    }
+
+    store.searchAvatars = function(query) {
+        async function asyncSearchAvatars() {
+            try {
+                let response = await apis.getAllAvatars()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_AVATAR_LIST,
+                    payload: response.data
+                })
+            } catch (error) { console.log(error) }
+        }
+        asyncSearchAvatars();
     }
 
     // Character Select Screen
