@@ -108,6 +108,7 @@ export default function Sidebar() {
         socket.on(SocketEvents.CHANGE_READY, (data) => {
             store.changeReady(data)
         })
+        //eslint-disable-next-line
     }, [])
 
     const partyMenu = (

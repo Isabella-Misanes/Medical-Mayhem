@@ -205,7 +205,7 @@ export function handleConnection(socket: Socket) {
     })
 
     // MESSAGES
-    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, (data) => {
-        io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data);
-    })
+    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
+    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => { });
+    socket.on(SocketEvents.SEND_PRIVATE_MESSAGE, data => { })
 }
