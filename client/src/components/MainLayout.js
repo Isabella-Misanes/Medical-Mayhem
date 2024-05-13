@@ -17,7 +17,8 @@ import {
     RegisterScreen,
     HomeWrapper,
     Sidebar,
-    InviteModal
+    InviteModal,
+    ForgotPasswordScreen
 } from '.'
 import GlobalStoreContext from "../store";
 import MUIErrorModal from "./MUIErrorModal";
@@ -57,6 +58,8 @@ export default function MainLayout() {
                     <Route path="/" exact element={<HomeWrapper />} />
                     <Route path="/login/" exact element={<LoginScreen />} />
                     <Route path="/register/" exact element={<RegisterScreen />} />
+                    <Route path="/forgotPassword/" exact element={<ForgotPasswordScreen />} />
+                    <Route path="/resetPassword/:token" exact element={<LoginScreen />} />
                     <Route path="/about/" exact element={<AboutScreen />} />
                     <Route path="/settings/" exact element={<SettingsScreen />} />
                     <Route path="/social/" exact element={<SocialScreen />} />
