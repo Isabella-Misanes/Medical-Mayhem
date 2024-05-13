@@ -5,6 +5,8 @@ import GlobalStoreContext from '../store';
 import { buttonStyle } from '../Styles';
 import SendIcon from '@mui/icons-material/Send';
 import AuthContext, { UserRoleType } from '../auth';
+import socket from '../constants/socket';
+import SocketEvents from '../constants/socketEvents';
 
 export default function MessagesDrawer() {
     const { store } = useContext(GlobalStoreContext);
@@ -33,7 +35,8 @@ export default function MessagesDrawer() {
     function handleSendMessage() {
         switch(value) {
             case '1':
-                store.sendPublicMessage(messageText);
+                // store.sendPublicMessage(messageText);
+                socket.emit(SocketEvents.SEND_PUBLIC_MESSAGE, {username: auth.username, message: messageText});
                 break;
             case '2':
                 store.sendPartyMessage();
@@ -70,6 +73,16 @@ export default function MessagesDrawer() {
     useEffect(() => {
         if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
     }, [chat.public])
+
+    useEffect(() => {
+        const handleMessage = (data) => {
+            console.log(data);
+            store.sendPublicMessage(data.username, data.message)
+        }
+        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage)
+        return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
+        //eslint-disable-next-line
+    }, [])
 
     return (
         <div>

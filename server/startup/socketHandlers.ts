@@ -167,8 +167,7 @@ export function handleConnection(socket: Socket) {
         for (const player of data.players) {
             const userInfo = [...socketInfos.values()].find(socketInfo => socketInfo.username === player)
             
-            if (userInfo === undefined)
-                throw new Error("ayo wtf " + player + " is supposed to exist in socketInfos")
+            if (userInfo === undefined) throw new Error("ayo wtf " + player + " is supposed to exist in socketInfos")
 
             console.log(userInfo)
             userInfo.gameRoom = room
@@ -205,9 +204,8 @@ export function handleConnection(socket: Socket) {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
 
-    // data is a player username and a patient
-    socket.on(SocketEvents.TREAT_PATIENT, (data) => {
-        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.TREAT_PATIENT, data)
+    // MESSAGES
+    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, (data) => {
+        io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data);
     })
 }
-
