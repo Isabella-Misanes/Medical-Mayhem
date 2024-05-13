@@ -29,7 +29,7 @@ export default function ProfileScreen() {
         console.log("EDITING")
         if (editEnabled) {
             try {
-                await store.updateProfile(bio, postImage)
+                await store.updateProfile(bio, postImage, regDate)
             } catch (error) {
                 console.log(error)
             }
@@ -73,10 +73,7 @@ export default function ProfileScreen() {
     function dateToString(date) {
         if(!date) return;
         const newDate = new Date(date);
-        // let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        console.log(newDate);
         const month = newDate.toLocaleString('default', {month: 'long'});
-        // console.log(date.getMonth());
         return `${month} ${newDate.getDate()}, ${newDate.getFullYear()}`;
     }
 
@@ -92,7 +89,6 @@ export default function ProfileScreen() {
             setPostImage(store.profileInfo.pfp)
             setRegDate(dateToString(store.profileInfo.regDate))
         }
-
         // eslint-disable-next-line
     }, [store.profileInfo])
 
@@ -107,7 +103,7 @@ export default function ProfileScreen() {
                 borderRadius: '16px',
                 color: 'white', 
             }}>
-                <CardActionArea>
+                <Card>
                     <Divider />
                     <Box sx={{
                         bgcolor: '#e3e3e3',
@@ -116,7 +112,7 @@ export default function ProfileScreen() {
                         color: 'black',
                     }}>
                         <Grid container spacing={4} sx={{textAlign: 'left'}}>
-                            <Grid item xs={12} onClick={handleToggleScreen} sx={{
+                            <Grid item xs={12} sx={{
                                 bgcolor: '#4D9147',
                                 color: 'white',
                                 textAlign: 'center'
@@ -166,7 +162,7 @@ export default function ProfileScreen() {
                                     </p>
                                     <p>
                                         Last Seen: Now<br/>
-                                        Registered Since: Jan 22, 2024
+                                        Registered Since: {regDate}
                                     </p>
                                 </>
                             </Grid>
@@ -174,7 +170,7 @@ export default function ProfileScreen() {
                             <Grid item xs={12} />
                         </Grid>   
                     </Box>
-                </CardActionArea>
+                </Card>
                 <CardActions>
                     <Box sx={{
                         width: '100%',

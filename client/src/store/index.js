@@ -209,7 +209,8 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: {
                         username: auth.username,
                         bio: payload.bio,
-                        pfp: payload.pfp
+                        pfp: payload.pfp,
+                        regDate: payload.regDate,
                     },
                     errorMessage: "",
                     avatar: store.avatar,

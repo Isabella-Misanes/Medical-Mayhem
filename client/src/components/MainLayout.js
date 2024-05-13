@@ -43,6 +43,7 @@ export default function MainLayout() {
 
         if (auth.errorMessage !== "" || store.errorMessage !== "")
             setDisplayErrorModal(true)
+        //eslint-disable-next-line
     }, [auth, store.settings.toggles.party, store.playerList])
 
     useEffect(() => {
@@ -69,7 +70,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
-                <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} playerList={store.playerList} />
+                <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
                 <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>
             {displaySidebar && <Sidebar />}

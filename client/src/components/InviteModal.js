@@ -5,7 +5,7 @@ import socket from '../constants/socket';
 import SocketEvents from "../constants/socketEvents";
 import GlobalStoreContext from '../store';
 
-export default function InviteModal({displayInviteModal, setDisplayInviteModal, playerList}) {
+export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
     const { store } = useContext(GlobalStoreContext);
     const [inviter, setInviter] = useState('')
 
