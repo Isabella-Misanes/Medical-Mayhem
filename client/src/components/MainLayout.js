@@ -18,7 +18,8 @@ import {
     HomeWrapper,
     Sidebar,
     InviteModal,
-    ForgotPasswordScreen
+    ForgotPasswordScreen,
+    ResetPasswordScreen
 } from '.'
 import GlobalStoreContext from "../store";
 import MUIErrorModal from "./MUIErrorModal";
@@ -39,7 +40,8 @@ export default function MainLayout() {
             auth.loggedIn && // must be logged in
             auth.role !== UserRoleType.GUEST && // can't be a guest
             store.settings.toggles.party && // has the party toggled on
-            !inGame // is not in a game with other players (assumes that once we leave a game this will be cleared)
+            !inGame && // is not in a game with other players (assumes that once we leave a game this will be cleared)
+            !window.location.href.includes('resetPassword')
         )
 
         if (auth.errorMessage !== "" || store.errorMessage !== "")
@@ -59,7 +61,7 @@ export default function MainLayout() {
                     <Route path="/login/" exact element={<LoginScreen />} />
                     <Route path="/register/" exact element={<RegisterScreen />} />
                     <Route path="/forgotPassword/" exact element={<ForgotPasswordScreen />} />
-                    <Route path="/resetPassword/:token" exact element={<LoginScreen />} />
+                    <Route path="/resetPassword/:token" exact element={<ResetPasswordScreen />} />
                     <Route path="/about/" exact element={<AboutScreen />} />
                     <Route path="/settings/" exact element={<SettingsScreen />} />
                     <Route path="/social/" exact element={<SocialScreen />} />

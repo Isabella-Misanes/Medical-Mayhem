@@ -268,6 +268,20 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.resetPassword = async function (token, password, passwordVerify) {
+        try {
+            const response = await api.resetPassword(token, password, passwordVerify)
+            alert(response.data.message)
+        } catch(error) {
+            console.log(error)
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
+        }
+    }
+
     auth.hideModal = () => {
         authReducer({
             type: AuthActionType.ERROR,
