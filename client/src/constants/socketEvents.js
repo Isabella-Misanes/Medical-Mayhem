@@ -14,7 +14,8 @@ const SocketEvents = {
     ERROR: "ERROR",
 
     PLAYER_MOVED: "PLAYER_MOVED",
-    STOP_FOLLOW: "STOP_FOLLOW"
+    STOP_FOLLOW: "STOP_FOLLOW",
+    TREAT_PATIENT: "TREAT_PATIENT"
 }
 
 export default SocketEvents

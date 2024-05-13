@@ -92,5 +92,10 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.STOP_FOLLOW, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
+
+    // data is a player username and a patient
+    socket.on(SocketEvents.TREAT_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.TREAT_PATIENT, data)
+    })
 }
 
