@@ -996,6 +996,13 @@ function GlobalStoreContextProvider(props) {
         })
     }
 
+    store.error = (message) => {
+        storeReducer({
+            type: GlobalStoreActionType.ERROR,
+            payload: { errorMessage: message }
+        })
+    }
+
     store.isErrorModalOpen = () => {
         return auth.errorMessage !== "";
     }
