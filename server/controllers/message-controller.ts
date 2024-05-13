@@ -32,18 +32,20 @@ export const getPrivateMessages = async (req: Request, res: Response) => {
 }
 
 export const sendPublicMessage = async (req: Request, res: Response) => {
-    const {message} = req.body;
+    const {username, message} = req.body;
+    console.log('username:', username, 'message:', message);
     if(!message) return res.status(400).json({error: 'Message is required'});
-    const msg = new Message({senderId: req.userId, text: message});
+    const sender = await User.findOne({username: username}, {_id: 1});
+    if(!sender) return res.status(400).json({error: 'User not found.'});
+    const msg = new Message({senderId: sender._id, text: message});
     msg.save();
-    let publicChat = await PublicChat.find();
+    let publicChat = await PublicChat.findOne();
     console.log(publicChat);
-    if(publicChat.length !== 1) {
+    if(!publicChat) {
         const pc = new PublicChat({messages: []});
         pc.save();
     }
     await PublicChat.updateOne({}, {$push: {messages: msg}});
-
     return getPublicMessages(req, res);
 }
 

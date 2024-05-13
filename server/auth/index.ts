@@ -25,7 +25,7 @@ function authManager() {
     const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         try {
             const token = req.cookies.token;
-            console.log(token)
+            // console.log(token)
             if (!token) {
                 console.log("TOKEN DOESNT EXIST")
                 return res.status(401).json({

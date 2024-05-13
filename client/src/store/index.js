@@ -783,11 +783,11 @@ function GlobalStoreContextProvider(props) {
         console.log('Get private messages in store.');
     }
 
-    store.sendPublicMessage = function(message) {
-        console.log("Send public message in store:", message);
+    store.sendPublicMessage = function(username, message) {
+        console.log("Send public message in store:", message, "by", username);
         async function asyncSendPublicMessage() {
             try {
-                let response = await apis.sendPublicMessage(message);
+                let response = await apis.sendPublicMessage(username, message);
                 storeReducer({
                     type: GlobalStoreActionType.CHAT,
                     payload: {public: response.data, party: store.chat.party, private: store.chat.private}

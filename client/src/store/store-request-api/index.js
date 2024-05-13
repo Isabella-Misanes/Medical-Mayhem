@@ -118,7 +118,10 @@ export const getPublicMessages = async() => {
 };
 export const getPartyMessages = async() => { return api.get('/messages/party/get')};
 export const getPrivateMessages = async() => { return api.get('/messages/private/get')};
-export const sendPublicMessage = async (message) => { return api.post('/messages/public/send', {message: message}); }
+export const sendPublicMessage = async (username, message) => {
+    console.log('send public message in store API:', username, message);
+    return api.post('/messages/public/send', {username: username, message: message});
+}
 export const sendPartyMessage = async (message) => { return api.post('/messages/party/send', {message: message}); }
 export const sendPrivateMessage = async (message) => { return api.post('/messages/private/send', {message: message}); }
 
