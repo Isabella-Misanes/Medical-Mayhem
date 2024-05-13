@@ -39,6 +39,10 @@ export default function CharacterSearchScreen() {
         setCharacterList(false);
     }
 
+    function handleSearch(query) {
+        console.log("Query", query);
+    }
+
     const characterList = (
         <Grid container sx={innerContentBox}>
             <Grid item xs={12}>
@@ -46,7 +50,7 @@ export default function CharacterSearchScreen() {
             </Grid>
             <Grid item xs={1}/>
             <Grid item xs={6}>
-                <TextField fullWidth label="Search" size="small" />
+                <TextField fullWidth label="Search" size="small" onKeyDown={(event) => {handleSearch(event.target.value)}}/>
             </Grid>
             <Grid item xs={4}>
                 <Button variant='outlined' sx={sortButton}
