@@ -19,7 +19,8 @@ import {
     Sidebar,
     InviteModal,
     ForgotPasswordScreen,
-    ResetPasswordScreen
+    ResetPasswordScreen,
+    MessagesDrawer
 } from '.'
 import GlobalStoreContext from "../store";
 import MUIErrorModal from "./MUIErrorModal";
@@ -31,6 +32,7 @@ export default function MainLayout() {
     const [displayInviteModal, setDisplayInviteModal] = useState(false)
     const [displayErrorModal, setDisplayErrorModal] = useState(false)
     const [displaySidebar, setDisplaySidebar] = useState(false)
+    const [displayMessages, setDisplayMessages] = useState(false)
     const [inGame, setInGame] = useState(false)
 
     useEffect(() => {
@@ -40,6 +42,13 @@ export default function MainLayout() {
             auth.loggedIn && // must be logged in
             auth.role !== UserRoleType.GUEST && // can't be a guest
             store.settings.toggles.party && // has the party toggled on
+            !inGame && // is not in a game with other players (assumes that once we leave a game this will be cleared)
+            !window.location.href.includes('resetPassword')
+        )
+        setDisplayMessages(
+            auth.loggedIn && // must be logged in
+            auth.role !== UserRoleType.GUEST && // can't be a guest
+            store.settings.toggles.messages && // has the party toggled on
             !inGame && // is not in a game with other players (assumes that once we leave a game this will be cleared)
             !window.location.href.includes('resetPassword')
         )
@@ -75,6 +84,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
+                {displayMessages && <MessagesDrawer />}
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
                 <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>

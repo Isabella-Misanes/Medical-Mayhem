@@ -36,10 +36,10 @@ export default function MessagesDrawer() {
         switch(value) {
             case '1':
                 // store.sendPublicMessage(messageText);
-                socket.emit(SocketEvents.SEND_PUBLIC_MESSAGE, {username: auth.username, message: messageText});
+                socket.emit(SocketEvents.SEND_PUBLIC_MESSAGE, {username: auth.username, text: messageText});
                 break;
             case '2':
-                store.sendPartyMessage();
+                socket.emit(SocketEvents.SEND_PARTY_MESSAGE, {username: auth.username, text: messageText});
                 break;
             case '3':
                 store.sendPrivateMessage();
@@ -65,10 +65,7 @@ export default function MessagesDrawer() {
         return messageItems;
     }
 
-    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat])
-
-    useEffect(() => store.getPublicMessages() //eslint-disable-next-line
-    , [])
+    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat]);
 
     useEffect(() => {
         if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
@@ -76,12 +73,15 @@ export default function MessagesDrawer() {
 
     useEffect(() => {
         const handleMessage = (data) => {
-            console.log(data);
-            store.sendPublicMessage(data.username, data.message)
+            setChat({
+                public: [...chat.public, {username: data.username, text: data.text}],
+                party: chat.party,
+                private: chat.private,
+            })
         }
-        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage)
+        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage);
         return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
-        //eslint-disable-next-line
+        // eslint-disable-next-line
     }, [])
 
     return (
