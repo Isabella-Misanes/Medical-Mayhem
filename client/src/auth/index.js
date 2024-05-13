@@ -154,8 +154,7 @@ function AuthContextProvider(props) {
                 })
 
             // Take them back to the welcome screen
-            if (!window.location.href.includes('resetPassword'))
-                navigate("/");
+            navigate("/");
         }
     }
 
@@ -246,20 +245,6 @@ function AuthContextProvider(props) {
                 navigate("/");
             } 
         } catch(error) {
-            console.log(error.response.data.errorMessage);
-            authReducer({
-                type: AuthActionType.ERROR,
-                payload: { errorMessage: error.response.data.errorMessage }
-            })
-        }
-    }
-
-    auth.forgotPassword = async function (email) {
-        try {
-            console.log(email)
-            await api.forgotPassword(email)
-        } catch(error) {
-            console.log(error)
             console.log(error.response.data.errorMessage);
             authReducer({
                 type: AuthActionType.ERROR,

@@ -21,7 +21,6 @@ import ReportModal from "./ReportModal";
 import MessagesDrawer from "./MessagesDrawer";
 import HomeWrapper from "./HomeWrapper";
 import MainLayout from "./MainLayout"
-import ForgotPasswordScreen from "./ForgotPasswordScreen";
 
 export {
     Sidebar,
@@ -46,6 +45,5 @@ export {
     InviteModal,
     MessagesDrawer,
     HomeWrapper,
-    MainLayout,
-    ForgotPasswordScreen
+    MainLayout
 }

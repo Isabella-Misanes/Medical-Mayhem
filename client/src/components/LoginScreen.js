@@ -30,7 +30,10 @@ export default function LoginScreen() {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value })
     }
-    
+
+//    let modal = "";
+//    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
+
     return (
             <Box sx={{
                 height: '90%',
@@ -94,11 +97,11 @@ export default function LoginScreen() {
                             Login
                         </Button>
                         <Grid container justifyContent="flex-end">
-                            <Grid item container direction='column'>
+                            <Grid item>
                                 <Link onClick={() => navigate('/register')} variant="body2">
                                     Don't have an account? Sign Up
                                 </Link>
-                                <Link onClick={() => navigate('/forgotPassword')} variant="body2">
+                                <Link onClick={() => navigate('/register')} variant="body2">
                                     Forgot Password?
                                 </Link>
                             </Grid>
