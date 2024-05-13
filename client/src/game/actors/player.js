@@ -114,7 +114,7 @@ export default class Player extends Actor {
                     setTimeout(() => {
                         socket.emit(SocketEvents.TREAT_PATIENT, {
                             username: this.username,
-                            patient: this.treatingPatient.id
+                            patient: this.treatingPatient.patientId
                         })
                     }, 16000);
                 }

@@ -5,7 +5,7 @@ import * as ex from 'excalibur'
 import { Resources } from "../resources";
 
 export default class Patient extends Actor {
-    constructor(pos) {
+    constructor(patientId) {
         super({
             z: 100,
             pos: ex.vec(20, 540),
@@ -15,6 +15,7 @@ export default class Patient extends Actor {
             color: Color.Chartreuse
         })
         this.following = false
+        this.patientId = patientId
     }
 
     onInitialize(engine) {
