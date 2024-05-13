@@ -38,10 +38,11 @@ export class MedicationMatchingScene extends Scene {
         this.opponentPoints = context.data.opponentScore;
         this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
 
+        console.log(context.data.prevScene);
+        let prev = context.data.prevScene;
+
         setTimeout(() => {
-            context.data.games.splice(0,1);
-            let games = context.data.games;
-            this.engine.goToScene(context.data.games[0], {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, games: games}});
+            this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
         }, 15000);
     }
 
