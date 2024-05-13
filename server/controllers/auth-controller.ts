@@ -3,6 +3,13 @@ import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { User } from '../models/user'
 import * as EmailValidator from 'email-validator';
+import nodemailer from "nodemailer";
+import dotenv from 'dotenv';
+import path from 'path';
+import { PasswordResetToken } from '../models/password-reset-token';
+import { randomBytes } from 'crypto';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {
@@ -198,6 +205,58 @@ export const deleteUser = async (req: Request, res: Response) => {
         console.error(err);
         res.status(500).send();
     }
+}
+
+export const forgotPassword = async (req: Request, res: Response) => {
+
+    // https://medium.com/@raoufslv09/simplifying-forget-reset-password-in-your-mern-stack-web-app-a56845bfa33c
+
+    console.log(process.env.EMAIL)
+    console.log(process.env.PASSWORD_APP_EMAIL)
+
+    try {
+        const token = randomBytes(8).toString('hex')
+        const passwordResetToken = new PasswordResetToken({ 
+            token: token 
+        })
+        await passwordResetToken.save()
+
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+              user: process.env.EMAIL,
+              pass: process.env.PASSWORD_APP_EMAIL,
+            },
+        });
+    
+        // Email configuration
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: req.body.email,
+            subject: "Reset Password",
+            html: `<h1>Reset Your Password</h1>
+          <p>Click on the following link to reset your password:</p>
+          <a href="http://localhost:3000/resetPassword/${token}">http://localhost:3000/resetPassword/${token}</a>
+          <p>The link will expire in 10 minutes.</p>
+          <p>If you didn't request a password reset, please ignore this email.</p>`,
+        };
+      
+        // Send the email
+        transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).send({ message: err.message });
+        }
+        res.status(200).send({ message: "Email sent" });
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const resetPassword = async (req: Request, res: Response) => { 
+
+
 }
 
 export * as AuthController from './auth-controller'
