@@ -2,6 +2,7 @@ import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { User } from '../models/user'
+import * as EmailValidator from 'email-validator';
 
 // Determines and returns if the user is logged in or not
 export const getLoggedIn = async (req: Request, res: Response) => {
@@ -104,6 +105,25 @@ export const registerUser = async (req: Request, res: Response) => {
         }
         console.log("all fields provided");
 
+        if (!EmailValidator.validate(email)) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "Invalid email address."
+                })
+        }
+
+        let existingUser = await User.findOne({ username: username });
+        console.log("existingUser: " + existingUser);
+        if (existingUser) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "Username is already taken."
+                })
+        }
         // Password verification
         if (password.length < 8) {
             return res
@@ -123,7 +143,7 @@ export const registerUser = async (req: Request, res: Response) => {
         console.log("password and password verify match");
 
         // Existing user
-        const existingUser = await User.findOne({ email: email });
+        existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (existingUser) {
             return res

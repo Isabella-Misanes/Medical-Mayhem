@@ -31,8 +31,8 @@ export default function LoginScreen() {
         setFormData({ ...formData, [name]: value })
     }
 
-   let modal = "";
-   if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
+//    let modal = "";
+//    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
 
     return (
             <Box sx={{
@@ -101,10 +101,13 @@ export default function LoginScreen() {
                                 <Link onClick={() => navigate('/register')} variant="body2">
                                     Don't have an account? Sign Up
                                 </Link>
+                                <Link onClick={() => navigate('/register')} variant="body2">
+                                    Forgot Password?
+                                </Link>
                             </Grid>
                         </Grid>
                     </Box>
-                    {modal}
+                    {/* {modal} */}
                 </Box>
                 <BackButton />
             </Box>

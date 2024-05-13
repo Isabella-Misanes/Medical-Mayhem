@@ -1,4 +1,5 @@
-import { Avatar, Box, IconButton, Menu, MenuItem} from '@mui/material';
+import { Avatar, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AuthContext from '../auth';
 import { useContext, useEffect, useState } from 'react';
@@ -8,6 +9,15 @@ import { api } from '../store/store-request-api';
 import SocketEvents from '../constants/socketEvents';
 import socket from '../constants/socket';
 
+// This defines the structure of a user being rendered in the sidebar. - Torin
+class Member {
+    constructor(id, username, profilePicture) {
+        this.id = id
+        this.username = username
+        this.profilePicture = profilePicture
+    }
+}
+
 export default function Sidebar() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -16,7 +26,7 @@ export default function Sidebar() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [clickedUser, setClickedUser] = useState('');
     if(clickedUser); // Will implement later
-    const [party, setParty] = useState([]); // an array of json objects of the form {profilePicture: ..., _id: ...}
+    const [party, setParty] = useState([]); // an array of Member objects
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -29,26 +39,22 @@ export default function Sidebar() {
     function handleLeaveParty() {
         
         // Filter out the current user from the party
-
-        console.log(store.partyInfo.users)
-        let newParty = store.partyInfo.users.filter(user => user !== auth.username)
+        let newParty = store.partyMembers.filter(user => user.username !== auth.username).map(user => user.username);
         
-        // .filter returns a single element without it being in an array if it's onyl one element
+        // .filter returns a single element without it being in an array if it's only one element
         // filtered. So, I had to do this so that newParty is maintained as an array
         if (!Array.isArray(newParty))
             newParty = [newParty]
 
         // Update everyone with the new party without the current user
         socket.emit(SocketEvents.LEAVE_PARTY, {
-            partyUsers: newParty
+            partyMembers: newParty
         })
 
         // User is now in a party by himself sadge
         store.updateParty({
-            users: [auth.username],
-            partyLeader: ''
+            partyMembers: [auth.username],
         })
-        console.log(store.partyInfo.users)
     }
 
     function handlePrivateMessaging(event) {
@@ -58,14 +64,6 @@ export default function Sidebar() {
 
     function handleAddFriend(event) {
         store.sendFriend(event);
-        handleMenuClose();
-    }
-
-    function handlePromoteToLeader(event) {
-        socket.emit(SocketEvents.LEADER_PROMOTION, {
-            leader: clickedUser.username
-        })
-        //store.promoteToLeader(event);
         handleMenuClose();
     }
 
@@ -80,32 +78,37 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-
-        console.log(store.partyInfo)
-
-        // Given the users in partyInfo.users, fetch each of their profile picture and _id and store them appropriately in
+        // Given the users in partyMembers, fetch each of their profile picture and _id and store them appropriately in
         // this component's state
+        console.log(store.partyMembers)
         async function asyncUpdateParty() {
-            const partyUsers = []
-            for (let user of store.partyInfo.users) {
+            const members = []
+            for (let member of store.partyMembers) {
                 try {
-                    const response = await api.get(`/party/${user}`)
+                    const response = await api.get(`/party/${member.username}`)
+                    const {id, username, profilePicture} = response.data
                     
-                    if (response.status === 200) {
-                        console.log('PARTY USERS DATA: ' + JSON.stringify(response.data))
-                        partyUsers.push(response.data)
-                    }
+                    if (response.status === 200)
+                        members.push(new Member(id, username, profilePicture))
 
                 } catch (err) {
                     console.log(err)
                 }
             }
 
-            setParty(partyUsers)
+            setParty(members)
         }
         asyncUpdateParty()
         
-    }, [store.partyInfo])
+    }, [store.partyMembers])
+
+    useEffect(() => {
+
+        // When a member of the party says he's ready, update the party with data, the new party structure 
+        socket.on(SocketEvents.CHANGE_READY, (data) => {
+            store.changeReady(data)
+        })
+    }, [])
 
     const partyMenu = (
         <Menu
@@ -122,9 +125,6 @@ export default function Sidebar() {
             <MenuItem onClick={(event) => {handleAddFriend(event)}}>
                 Add Friend
             </MenuItem>
-            <MenuItem onClick={(event) => {handlePromoteToLeader(event)}}>
-                Promote to Leader
-            </MenuItem>
             <MenuItem onClick={(event) => {handleRemoveFromParty(event)}}>
                 Remove From Party
             </MenuItem>
@@ -134,24 +134,6 @@ export default function Sidebar() {
         </Menu>
     );
 
-    // const renderPartyMembers = () => {
-    //     const partyMembers = [];
-    //     if(party && party.length > 0) {
-    //         console.log(party)
-    //         party.forEach((user, index) => {
-    //             partyMembers.push(
-    //                 <PartyMember user={user} key={index} onClick={(event) => {
-    //                     setClickedUser(user);
-    //                     handleProfileMenuOpen(event);
-    //                 }} marginTop={(index * 50) + 10 + 'px'} />
-    //             )
-    //         })
-    //     }
-    //     return partyMembers;
-    // }
-
-    console.log(party)
-    console.log(store.partyInfo)
     return (
             <Box id='sidebar' sx={{ 
                 backgroundColor: '#104c00',
@@ -169,7 +151,7 @@ export default function Sidebar() {
                     }} marginTop={(index * 50) + 10 + 'px'} />
                 ))}
                 
-                {store.partyInfo.users.length > 1 && 
+                {store.partyMembers.length > 1 && 
                     <IconButton onClick={()=>{handleLeaveParty()}} sx={{
                         position: 'fixed',
                         bottom: '2%',
@@ -185,7 +167,11 @@ export default function Sidebar() {
 }
 
 function PartyMember(props) {
-    const {user} = props;
+    const { store } = useContext(GlobalStoreContext);
+
+    const { user } = props;
+    console.log(user)
+    const member = store.partyMembers.find(member => member.username === user.username)
     if(user) {
         return (
             <IconButton
@@ -201,6 +187,7 @@ function PartyMember(props) {
                 }}
             >
                 <Avatar src={user.profilePicture} />
+                { member ? member.isReady && <CheckCircleIcon style={{ color: 'green', position: 'absolute', bottom: '0', right: '0' }} /> : null}
             </IconButton>
         );
     }

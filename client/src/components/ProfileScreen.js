@@ -15,7 +15,6 @@ export default function ProfileScreen() {
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [username, setUsername] = useState("")
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
     const [regDate, setRegDate] = useState("")
@@ -26,18 +25,14 @@ export default function ProfileScreen() {
     };
 
     // Handles submitting the profile info once editing is turned off
-    function handleEditProfile(event) {
-
-        if(username.length === 0) {
-            setUsername(auth.username)
-            console.log(auth.username)
-            console.log(username)
-            store.updateProfile(auth.username, bio, postImage, regDate)
-        }
-
-        else if(editEnabled) {
-            auth.updateUsername(username)
-            store.updateProfile(username, bio, postImage, regDate)
+    async function handleEditProfile(event) {
+        console.log("EDITING")
+        if (editEnabled) {
+            try {
+                await store.updateProfile(bio, postImage)
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         setEditEnabled(!editEnabled);
@@ -46,11 +41,6 @@ export default function ProfileScreen() {
     // Handles changing the bio state value
     function handleBioChange(event) {
         setBio(event.target.value)
-    }
-
-    // Handles changing the username state value
-    function handleUsernameChange(event) {
-        setUsername(event.target.value)
     }
 
     // When a pfp is uploaded, it's converted to base 64 and sent to the server
@@ -96,7 +86,7 @@ export default function ProfileScreen() {
     }, [])
 
     useEffect(() => {
-        setUsername(currUsername)
+        console.log(store)
         if(store.profileInfo) {
             setBio(store.profileInfo.bio)
             setPostImage(store.profileInfo.pfp)
@@ -104,7 +94,7 @@ export default function ProfileScreen() {
         }
 
         // eslint-disable-next-line
-    }, [auth, store.profileInfo])
+    }, [store.profileInfo])
 
     const profileScreen = (
             <Card sx={{
@@ -149,7 +139,12 @@ export default function ProfileScreen() {
                                                 src={postImage || avatar}
                                                 width={140}
                                                 height={140}
-                                                alt=''/>
+                                                alt=''
+                                                style = {{
+                                                    filter: editEnabled ? "brightness(.4)" : "brightness(1)",
+                                                    cursor: editEnabled ? "pointer" : "auto"
+                                                }}>
+                                            </img>
                                         </label>
                                         <input
                                             type="file"
@@ -165,32 +160,15 @@ export default function ProfileScreen() {
                                 </Box>
                             </Grid>
                             <Grid item xs={6} sx={{fontSize: '12pt'}}>
-                                {editEnabled ?
-                                    <>
-                                        <TextField
-                                            id='username-input'
-                                            size='small'
-                                            value={username}
-                                            fullWidth
-                                            variant="outlined"
-                                            onChange={handleUsernameChange}
-                                        />
-                                        <p>
-                                            Last Seen: Now<br/>
-                                            Registered Since: {regDate}
-                                        </p>
-                                    </>
-                                    :
-                                    <>
-                                        <p id='username-text'>
-                                            {username}
-                                        </p>
-                                        <p>
-                                            Last Seen: Now<br/>
-                                            Registered Since: {regDate}
-                                        </p>
-                                    </>
-                                }
+                                <>
+                                    <p id='username-text'>
+                                        {auth.username}
+                                    </p>
+                                    <p>
+                                        Last Seen: Now<br/>
+                                        Registered Since: Jan 22, 2024
+                                    </p>
+                                </>
                             </Grid>
                             <Grid item xs={1} />
                             <Grid item xs={12} />
@@ -230,7 +208,7 @@ export default function ProfileScreen() {
                             </Grid>
                         </Grid>
                     </Box>
-                </CardActions>            
+                </CardActions>          
             </Card>
     );
 

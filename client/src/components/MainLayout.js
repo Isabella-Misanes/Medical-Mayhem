@@ -20,20 +20,36 @@ import {
     InviteModal
 } from '.'
 import GlobalStoreContext from "../store";
+import MUIErrorModal from "./MUIErrorModal";
 
 export default function MainLayout() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
     const [displayInviteModal, setDisplayInviteModal] = useState(false)
+    const [displayErrorModal, setDisplayErrorModal] = useState(false)
     const [displaySidebar, setDisplaySidebar] = useState(false)
-
+    const [inGame, setInGame] = useState(false)
 
     useEffect(() => {
-        console.log("PARTY: " + store.settings.toggles.party)
-        setDisplaySidebar(auth.loggedIn && auth.role !== UserRoleType.GUEST && store.settings.toggles.party)
+        console.log(store)
+        console.log(store.players)
+        setDisplaySidebar(
+            auth.loggedIn && // must be logged in
+            auth.role !== UserRoleType.GUEST && // can't be a guest
+            store.settings.toggles.party && // has the party toggled on
+            !inGame // is not in a game with other players (assumes that once we leave a game this will be cleared)
+        )
+
+        if (auth.errorMessage !== "" || store.errorMessage !== "")
+            setDisplayErrorModal(true)
     }, [auth, store.settings.toggles.party, store.playerList])
 
+    useEffect(() => {
+        setInGame(store.players.length > 0)
+    }, [store.players])
+
+    console.log(store)
     return (
         <div id='main-content'>
             <div id='body'>
@@ -54,6 +70,7 @@ export default function MainLayout() {
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} playerList={store.playerList} />
+                <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>
             {displaySidebar && <Sidebar />}
         </div>

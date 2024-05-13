@@ -38,21 +38,25 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
-        const {username, bio, pfp} = req.body
+        const { bio, pfp} = req.body
+
+        console.log("BIO: " + bio)
+        console.log("PFP: " + pfp)
 
         let updatedUser
 
         if (pfp) {
+            console.log("UPDATIN USER")
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {username: username, bio: bio, profilePicture: pfp}}
+                {$set: {bio: bio, profilePicture: pfp}}
             );
         }
 
         else {
             updatedUser = await User.updateOne(
                 {_id: req.userId},
-                {$set: {username: username, bio: bio}}
+                {$set: {bio: bio}}
             );
         }
 

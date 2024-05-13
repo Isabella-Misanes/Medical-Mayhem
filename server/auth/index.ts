@@ -31,22 +31,21 @@ function authManager() {
                 return res.status(401).json({
                     loggedIn: false,
                     user: null,
-                    errorMessage: "Unauthorized"
+                    errorMessage: "Session expired. Please log in again."
                 }).send()
             }
 
             const verified = jwt.verify(token, process.env.JWT_SECRET)
-            console.log("VERIFIED: " + verified)
-            console.log("verified.userId: " + (verified as JwtPayload).userId);
+            // console.log("VERIFIED: " + verified)
+            // console.log("verified.userId: " + (verified as JwtPayload).userId);
             req.userId = (verified as JwtPayload).userId;
-            console.log("PASSED")
             next();
         } catch (err) {
             console.error(err);
             return res.status(401).json({
                 loggedIn: false,
                 user: null,
-                errorMessage: "Unauthorized"
+                errorMessage: "Session expired. Please log in again."
             });
         }
     }
