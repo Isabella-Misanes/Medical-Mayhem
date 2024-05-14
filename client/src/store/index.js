@@ -1007,10 +1007,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetAllAvatars();
     }
 
-    store.searchAvatars = function(query) {
+    store.searchAvatars = function(params) {
         async function asyncSearchAvatars() {
             try {
-                let response = await apis.getAllAvatars()
+                let response = await apis.searchAvatars(params)
                 console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.GET_AVATAR_LIST,

@@ -51,9 +51,15 @@ export const getAllAvatars = async (req: Request, res: Response) => {
 
 export const searchAvatars = async (req: Request, res: Response) => {
     console.log("search avatars");
+
+    const { params } = req.params;
+    const searchRegex = new RegExp(params, 'i');
     
     try {
-        const avatars = await Avatar.find({isPublic: true});
+        const avatars = await Avatar.find({
+            isPublic: true,
+            avatarName: { $regex: searchRegex }
+        });
 
         if(!avatars) {
             console.log("No avatars found");

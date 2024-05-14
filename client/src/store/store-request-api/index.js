@@ -64,7 +64,7 @@ export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${av
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
-export const searchAvatars = async (params) => { return api.get(`/avatar/search=${params}`) }
+export const searchAvatars = async (params) => { return api.get(`/avatars/search/${params}`) }
 
 export const getComments = async (avatar) => { return api.get(`/charactersearch/comments/${avatar}`) }
 

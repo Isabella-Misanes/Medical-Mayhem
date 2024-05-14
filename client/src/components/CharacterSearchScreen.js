@@ -25,7 +25,12 @@ export default function CharacterSearchScreen() {
 
     useEffect(() => {
         if(showCharacterList) {
-            store.getAllAvatars();
+            if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+                setAvatarList(store.avatarList.avatars);
+            } else {
+                store.getAllAvatars();
+                setAvatarList([]);
+            }
         }
         // eslint-disable-next-line
     }, [showCharacterList])
@@ -42,8 +47,7 @@ export default function CharacterSearchScreen() {
     function handleSearch(event) {
         if(event.key === "Enter") {
             if(event.target.value !== "") {
-                console.log("Not Empty")
-                // store.searchAvatars(event.target.value);
+                store.searchAvatars(event.target.value);
             }
             else {
                 store.getAllAvatars();
