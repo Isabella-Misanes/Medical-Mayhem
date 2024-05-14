@@ -62,6 +62,8 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
 
 export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${avatar}`) }
 
+export const deleteAvatar = async(id) => { return api.delete(`/deleteAvatar/${id}`) }
+
 export const getMyAvatars = async () => { return await api.get(`/myAvatars/`) }
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
@@ -127,7 +129,7 @@ const apis = {
     viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
 
     // Avatars
-    getAvatar, updateAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
+    getAvatar, updateAvatar, deleteAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
     getComments,
     addComment,
     getSettings,

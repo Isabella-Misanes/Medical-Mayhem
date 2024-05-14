@@ -12,6 +12,7 @@ router.get('/recentPlayers', PlayerController.getRecentPlayers);
 router.get('/getAvatar', PlayerController.getAvatar);
 router.get('/myAvatars', PlayerController.getMyAvatars);
 router.post('/updateAvatar', PlayerController.updateAvatar);
+router.delete('/deleteAvatar/:id', PlayerController.deleteAvatar);
 router.get('/settings/get', PlayerController.getSettings);
 router.post('/settings/audio/update', PlayerController.updateAudioSettings);
 router.post('/settings/keybinds/update', PlayerController.updateKeybinds);

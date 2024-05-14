@@ -2,6 +2,7 @@ import { auth } from '../auth/index'
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express';
 import { User } from '../models/user'
+import { Avatar } from '../models/avatar';
 import { FriendRequest } from '../models/friend-request';
 
 //TODO: might have to add additional middleware that check if the user still exists
@@ -188,6 +189,26 @@ export const updateAvatar = async (req: Request, res: Response) => {
     } catch (err) {
         console.error(err);
         res.status(500).send();
+    }
+}
+
+export const deleteAvatar = async (req: Request, res: Response) => {
+    const avatarId = req.params.id; 
+    
+    try {
+        // Check if the avatar exists
+        const avatar = await Avatar.findById(avatarId);
+        if (!avatar) {
+            return res.status(404).json({ message: 'Avatar not found' });
+        }
+
+        // Delete the avatar
+        await Avatar.findByIdAndDelete(avatarId);
+
+        return res.status(200).json({ message: 'Avatar deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting avatar:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 }
 

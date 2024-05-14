@@ -48,6 +48,7 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
+    DELETE_AVATAR: "DELETE_AVATAR",
     LOAD_AVATAR: "LOAD_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
@@ -338,7 +339,23 @@ function GlobalStoreContextProvider(props) {
                     players: store.players
                 });
             }
-
+            case GlobalStoreActionType.DELETE_AVATAR: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    CurrentScreen: store.CurrentScreen,
+                    profileInfo: store.profileInfo,
+                    errorMessage: "",
+                    avatar: [],
+                    avatarList: store.avatarList,
+                    avatarView: store.avatarView,
+                    settings: store.settings,
+                    commentsList: store.commentsList,
+                    playerList: store.playerList,
+                    chat: store.chat,
+                    partyMembers: store.partyMembers,
+                    players: store.players
+                });
+            }
             case GlobalStoreActionType.UPDATE_AVATAR: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
@@ -1034,18 +1051,18 @@ function GlobalStoreContextProvider(props) {
         asyncGetAvatar();
     }
 
-    store.deleteAvatar = function() {
+    store.deleteAvatar = function(id) {
         async function asyncDeleteAvatar() {
-            // try {
-            //     let response = await apis.getAvatar()
-            //     console.log(response)
-            //     storeReducer({
-            //         type: GlobalStoreActionType.GET_AVATAR,
-            //         payload: response.data
-            //     })
-            // } catch (error) {
-            //     console.log(error);
-            // }
+            try {
+                let response = await apis.deleteAvatar(id)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.DELETE_AVATAR,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
         }
         asyncDeleteAvatar();
     }

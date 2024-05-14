@@ -16,7 +16,7 @@ import addPlayer from '../assets/Add-Player.png.png';
 export default function CharacterBuilderScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [selectedCharacter, setCharacter] = useState(0);
-    const [customAvatar, setCustomAvatar] = useState();
+    const [customAvatar, setCustomAvatar] = useState(null);
     const [selectedSprite, setSelectedSprite] = useState("");
     const [postSprite, setSprite] = useState("");
     const [speed, setSpeed] = useState(0);
@@ -69,14 +69,10 @@ export default function CharacterBuilderScreen() {
     }
 
     useEffect(() => {
-        store.getAvatar();
-        // eslint-disable-next-line
-    }, [])
-
-    useEffect(() => {
-        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length >= 0) {
             setAvatarList(store.avatarList.avatars);
-        } else {
+        } 
+        else {
             store.getMyAvatars();
             setAvatarList([]);
         }
@@ -107,6 +103,15 @@ export default function CharacterBuilderScreen() {
             setMinigame(customCharacter.favoredMinigame);
             setIsPublic(customCharacter.isPublic);
         }
+        else {
+            setAvatarName("");
+            setSprite("");
+            setSpeed(0);
+            setStrength(0);
+            setDefense(0);
+            setMinigame("");
+            setIsPublic(false);
+        }
     }
 
     function handleUpdateCharacter() {
@@ -124,9 +129,20 @@ export default function CharacterBuilderScreen() {
     }
 
     function handleDeleteCharacter(avatar) {
-        if(avatar) {
-            store.deleteAvatar(avatar);
+        store.deleteAvatar(avatar._id);
+
+        const index = avatarList.indexOf(avatar);
+        if (index > -1) { 
+            avatarList.splice(index, 1);
         }
+        setCustomAvatar(null);
+        setAvatarName("");
+        setSprite("");
+        setSpeed(0);
+        setStrength(0);
+        setDefense(0);
+        setMinigame("");
+        setIsPublic(false);
     }
 
     return (
@@ -174,7 +190,7 @@ export default function CharacterBuilderScreen() {
                             </Grid>
                         ))}
                         {avatarList.length === 0 ? (
-                            <div>No characters match your search.</div>
+                            <div/>
                         ) : (
                             avatarList.map((avatar, index) => (
                             <Grid key={index+7} item xs={4}>
