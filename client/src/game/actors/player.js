@@ -110,6 +110,7 @@ export default class Player extends Actor {
             // console.log(data)
             if (data.username === this.username) {
                 this.vel = ex.vec(data.vel._x, data.vel._y)
+                this.posCorrection = data.pos
                 if (data.vel._x == 0 && data.vel._y == 0) {
                     this.graphics.use('down-idle');
                 } else if (data.vel._x == Config.PlayerSpeed && data.vel._y == 0) {
@@ -159,10 +160,7 @@ export default class Player extends Actor {
     onPreUpdate(engine, elapsedMs) {
         if (this.isMyPlayer) {
             this.graphics.use('down-idle');
-
-            const lastVel = this.vel
             this.vel = ex.Vector.Zero;
-
             if (engine.input.keyboard.isHeld(ex.Keys.D)) {
                 this.vel = ex.vec(Config.PlayerSpeed, 0);
                 
@@ -195,7 +193,9 @@ export default class Player extends Actor {
                     // this.engine.currentScene.add(patient)
                     const rand = new ex.Random()
                     if (rand.integer(0,1) === 0) {
-                        this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, teamScore: 0}});
+                        socket.emit(SocketEvents.SWITCH_TO_MEDICATION_MATCHING, {
+                            username: this.username,
+                        })
                         this.treatingPatient = this.guidingPatient;
                         this.treatingPatient.setTreating(true);
                         socket.emit(SocketEvents.START_TREAT_PATIENT, {
@@ -205,11 +205,13 @@ export default class Player extends Actor {
                         setTimeout(() => {
                             socket.emit(SocketEvents.TREAT_PATIENT, {
                                 username: this.username,
-                                patient: this.treatingPatient.patientId
                             })
                         }, 15000);
                     } else {
-                        this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: 0, teamScore: 0}});
+                        socket.emit(SocketEvents.SWITCH_TO_HEARTBEAT, {
+                            username: this.username,
+                            patient: this.treatingPatient.patientId
+                        })
                         this.treatingPatient = this.guidingPatient;
                         this.treatingPatient.setTreating(true);
                         socket.emit(SocketEvents.START_TREAT_PATIENT, {
@@ -231,11 +233,11 @@ export default class Player extends Actor {
                 this.guidingPatient = null;
             }
 
-            if (!this.vel.equals(lastVel))
-                socket.emit(SocketEvents.PLAYER_MOVED, {
-                    username: this.username,
-                    vel: this.vel,
-                })
+            socket.emit(SocketEvents.PLAYER_MOVED, {
+                username: this.username,
+                vel: this.vel,
+                pos: this.pos.clone().add(this.vel.clone().scale(elapsedMs / 1000)),
+            })
         }
     }
 

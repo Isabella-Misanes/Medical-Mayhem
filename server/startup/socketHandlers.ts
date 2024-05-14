@@ -241,4 +241,12 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SPAWN_PATIENT, data)
     })
+
+    // data is the username of the player going to the minigame
+    socket.on(SocketEvents.SWITCH_TO_HEARTBEAT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SWITCH_TO_HEARTBEAT, data)
+    })
+    socket.on(SocketEvents.SWITCH_TO_MEDICATION_MATCHING, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SWITCH_TO_MEDICATION_MATCHING, data)
+    })
 }

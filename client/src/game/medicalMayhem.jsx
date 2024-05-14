@@ -49,7 +49,7 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
     let medicalMayhemScene = engine.add("medicalMayhem", new MedicalMayhemScene());
     engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
     engine.add("medicationmatching", new MedicationMatchingScene());
-    engine.goToScene("medicalMayhem");
+    engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: 0, teamScore: 0, username: username}});
     engine.add("gameresults", new GameResultsScene());
 
     engine.start(loader).then(() => {

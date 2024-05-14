@@ -57,6 +57,14 @@ export class MedicalMayhemScene extends Scene {
         socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
             this.spawnPatient();
         })
+        
+        socket.on(SocketEvents.SWITCH_TO_MEDICATION_MATCHING, (data) => {
+            if (data == this.username) this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
+        })
+
+        socket.on(SocketEvents.SWITCH_TO_HEARTBEAT, (data) => {
+            if (data == this.username) this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
+        })
     
         const timer = new Timer({
             fcn: () => {
@@ -72,8 +80,9 @@ export class MedicalMayhemScene extends Scene {
     }
     onActivate(context) {
         // Set personal and team scores and update the ui text
-        // context.data.yourScore
-        // context.data.teamScore
+        this.score.val = context.data.yourScore
+        this.teamScore.val = context.data.teamScore
+        this.username = context.data.username
     }
 
     onDeactivate() {
