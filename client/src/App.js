@@ -1,6 +1,6 @@
 import './App.css';
 import { React } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
 import ErrorHandler from './components/ErrorHandler';
@@ -38,7 +38,7 @@ export const buttonStyle = {
 const App = () => {
 
     return (
-        <BrowserRouter>
+        <HashRouter>
           <AuthContextProvider>
             <GlobalStoreContextProvider>
               <ErrorHandler>
@@ -46,7 +46,7 @@ const App = () => {
               </ErrorHandler>
             </GlobalStoreContextProvider>
           </AuthContextProvider>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 
