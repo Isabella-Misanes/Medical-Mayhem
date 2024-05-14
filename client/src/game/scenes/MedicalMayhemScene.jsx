@@ -7,6 +7,7 @@ export class MedicalMayhemScene extends Scene {
 
     patients = [];
     patientCount = 0;
+    patientCounter = 3;
 
     onInitialize(engine) {
         console.log("INIT MEDICAL MAYHEM");
@@ -25,14 +26,12 @@ export class MedicalMayhemScene extends Scene {
         socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
             this.spawnPatient();
         })
-        const random = new Random(1337)
         const timer = new Timer({
             fcn: () => {
                 socket.emit(SocketEvents.SPAWN_PATIENT)
             },
-            random,
-            randomRange: [0, 5000],
-            interval: 500,
+            randomRange: [5000, 10000],
+            interval: 4000,
             repeats: true,
         })
         this.engine.currentScene.add(timer)
@@ -44,11 +43,15 @@ export class MedicalMayhemScene extends Scene {
     }
 
     spawnPatient() {
-        console.log("SPAWN PATIENT");
-        this.patientCount++;
-        const patient = new Patient(this.patientCount)
-        this.engine.add(patient)
-        this.patients.push(patient)
+        this.patientCounter++;
+        if (this.patientCounter == 4) {
+            this.patientCounter = 0;
+            console.log("SPAWN PATIENT");
+            this.patientCount++;
+            const patient = new Patient(this.patientCount)
+            this.engine.add(patient)
+            this.patients.push(patient)
+        }
     }
 
     killPatient(id) {
