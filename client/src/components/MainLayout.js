@@ -46,7 +46,7 @@ export default function MainLayout() {
 
         if (auth.errorMessage !== "" || store.errorMessage !== "")
             setDisplayErrorModal(true)
-    }, [auth, store])
+    }, [auth, store, inGame])
 
     useEffect(() => {
         setInGame(store.players.length > 0)

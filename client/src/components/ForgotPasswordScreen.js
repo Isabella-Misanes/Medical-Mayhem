@@ -1,13 +1,11 @@
-import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import BackButton from './BackButton';
-import { useNavigate } from 'react-router-dom';
 
 export default function ForgotPasswordScreen() {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         email: '',
