@@ -24,6 +24,9 @@ import {
 } from '.'
 import GlobalStoreContext from "../store";
 import MUIErrorModal from "./MUIErrorModal";
+import homeMusic from "../assets/Close_To_Gray.mp3";
+
+export const audio = new Audio(homeMusic);
 
 export default function MainLayout() {
     const { auth } = useContext(AuthContext);
@@ -34,8 +37,6 @@ export default function MainLayout() {
     const [displaySidebar, setDisplaySidebar] = useState(false)
     const [displayMessages, setDisplayMessages] = useState(false)
     const [inGame, setInGame] = useState(false)
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const toggleDrawer = open => setIsDrawerOpen(open);
 
     useEffect(() => {
         console.log(store)
@@ -64,10 +65,21 @@ export default function MainLayout() {
         setInGame(store.players.length > 0)
     }, [store.players])
 
+    useEffect(() => {
+        audio.volume = 0.1;
+        const playAudio = () => { audio.play(); };
+        document.addEventListener('click', playAudio);
+
+        return () => {
+            document.removeEventListener('click', playAudio);
+        };
+    }, []);
+
     console.log(store)
     return (
         <div id='main-content'>
             <div id='body'>
+                <audio loop src={homeMusic}/>
                 <Routes>
                     <Route path="/" exact element={<HomeWrapper />} />
                     <Route path="/login/" exact element={<LoginScreen />} />
@@ -76,7 +88,7 @@ export default function MainLayout() {
                     <Route path="/resetPassword/:token" exact element={<ResetPasswordScreen />} />
                     <Route path="/about/" exact element={<AboutScreen />} />
                     <Route path="/settings/" exact element={<SettingsScreen />} />
-                    <Route path="/social/" exact element={<SocialScreen toggleDrawer={toggleDrawer} />} />
+                    <Route path="/social/" exact element={<SocialScreen />} />
                     <Route path="/forum/" exact element={<ForumScreen />} />
                     <Route path="/charactersearch/" exact element={<CharacterSearchScreen />} />
                     <Route path="/characterbuilder/" exact element={<CharacterBuilderScreen />} />
@@ -86,7 +98,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
-                {displayMessages && <MessagesDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />}
+                {displayMessages && <MessagesDrawer />}
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
                 <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>

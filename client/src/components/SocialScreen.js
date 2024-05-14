@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
@@ -264,7 +264,6 @@ export default function SocialScreen({toggleDrawer}) {
                     username={isModalOpen ? addFriendUsername : currFriend}
                 />
                 {isMenuOpen && <UserOptionMenu
-                    toggleDrawer={toggleDrawer}
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
                     isMenuOpen={isMenuOpen}

@@ -8,6 +8,8 @@ Your objective is to diagnose and treat all patients that come into the hospital
 
 ## Setup
 
+We have deployed and are currently hosting this website on [Heroku](https://medical-mayhem-c0832c3f548e.herokuapp.com/). However, if you would like to access the website on your local machine, please follow the below instructions.
+
 ### Prerequisities
 
 - Node.js and npm (npm comes with Node.js)
@@ -43,19 +45,24 @@ $ cd ../server
 $ npm install
 ```
 
-5. While in the `server` folder, initialize the database and populate it with dummy data.
+5. In the `server` folder, start the server.
 ```shell
-# In the medical-mayhem/server folder
-$ ts-node db/populate.ts
+$ npm start
 ```
 
-6. In the `server` folder, start the server.
-```shell
-$ ts-node server.ts
-```
-
-7. In another terminal, navigate to the client folder and run the client.
+6. In another terminal, navigate to the client folder and run the client.
 ```shell
 # In the medical-mayhem/client folder
 $ npm start
 ```
+
+## Credits
+**Programmers:**  
+Thomas Aloi  
+Torin McNally  
+Isabella Misanes  
+Jared Tjahjadi
+
+**Special Thanks:**  
+Excalibur.js Discord
+Richard McKenna

@@ -48,11 +48,13 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
+    DELETE_AVATAR: "DELETE_AVATAR",
     LOAD_AVATAR: "LOAD_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
     GET_COMMENTS: "GET_COMMENTS",
     ADD_COMMENT: "ADD_COMMENT",
+    TOGGLE_DRAWER: "TOGGLE_DRAWER",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -101,60 +103,23 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         CurrentScreen: CurrentScreen.HOME,
-        profileInfo: {
-            username: "",
-            bio: "",
-            pfp: ""
-        },
+        profileInfo: {username: "", bio: "", pfp: ""},
         errorMessage: "",
-        avatar: {
-            pic: "",
-            name: "",
-            speed: 0,
-            strength: 0,
-            defense: 0,
-            favoredMinigame: "",
-            isPublic: false,
-        },
+        avatar: {pic: "", name: "", speed: 0, strength: 0, defense: 0, favoredMinigame: "", isPublic: false},
         players: [], // an array of usernames for players currently in game with this user (including this user)
         partyMembers: [], // an array of Member objects used for sidebar and ready statuses
         relation: '',
         avatarList: [], // the list of avatars in the Character Search
-        avatarView: {
-            avatarSprite: "",
-            avatarName: "",
-            speed: 0,
-            strength: 0,
-            defense: 0,
-            favoredMinigame: "",
-            author: "",
-            comments: [],
-            isPublic: true,
-        },
+        avatarView: {avatarSprite: "", avatarName: "", speed: 0, strength: 0, defense: 0, favoredMinigame: "", author: "", comments: [], isPublic: true},
         commentsList: [],
         settings: {
-            masterVolume: 100,
-            musicVolume: 100,
-            sfxVolume: 100,
-            keybinds: {
-                UP: 'W',
-                LEFT: 'A',
-                DOWN: 'S',
-                RIGHT: 'D',
-                INTERACT: 'E'
-            },
-            toggles: {
-                privateProfile: false,
-                messages: true,
-                party: true,
-            },
+            masterVolume: 100, musicVolume: 100, sfxVolume: 100,
+            keybinds: {UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'},
+            toggles: {privateProfile: false, messages: true, party: true,},
         },
         playerList: [],
-        chat: {
-            public: [],
-            party: [],
-            private: []
-        }
+        privateChat: [],
+        messageDrawerOpen: false,
     });
 
     console.log("inside useGlobalStore");
@@ -168,435 +133,87 @@ function GlobalStoreContextProvider(props) {
         console.log('store:', store);
         switch (type) {
             // UPDATES
-            case GlobalStoreActionType.UPDATE_TEAMMATES: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    players: payload,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers
+            case GlobalStoreActionType.UPDATE_TEAMMATES:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", players: payload});
+            case GlobalStoreActionType.GET_PROFILE:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", profileInfo: payload});
+            case GlobalStoreActionType.UPDATE_PROFILE:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "",
+                    profileInfo: {username: auth.username,bio: payload.bio, pfp: payload.pfp, regDate: payload.regDate}
                 });
-            }
-            case GlobalStoreActionType.GET_PROFILE: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: payload,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.UPDATE_PROFILE: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: {
-                        username: auth.username,
-                        bio: payload.bio,
-                        pfp: payload.pfp,
-                        regDate: payload.regDate,
-                    },
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
             // essentially a copy paste of the store at the start
             // this is done when logging out, unauthorized, and deleting the account
-            case GlobalStoreActionType.RESET: {
+            case GlobalStoreActionType.RESET:
                 console.log("RESETTING.....")
                 return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: CurrentScreen.HOME,
-                    profileInfo: {
-                        username: "",
-                        bio: "",
-                        pfp: ""
+                    currentModal: CurrentModal.NONE, CurrentScreen: CurrentScreen.HOME, profileInfo: {username: "", bio: "", pfp: ""},
+                    errorMessage: "", avatar: {pic: "", name: "", speed: 0, strength: 0, defense: 0, favoredMinigame: "", isPublic: false},
+                    avatarView: {avatarSprite: "", avatarName: "", speed: 0, strength: 0, defense: 0, favoredMinigame: "", author: "", comments: [], isPublic: true},
+                    players: [], partyMembers: [], relation: '', avatarList: [], commentsList: [], settings: {
+                        masterVolume: 100, musicVolume: 100, sfxVolume: 100,
+                        keybinds: {UP: 'W', LEFT: 'A', DOWN: 'S', RIGHT: 'D', INTERACT: 'E'},
+                        toggles: {privateProfile: false, messages: true, party: true},
                     },
-                    errorMessage: "",
-                    avatar: {
-                        pic: "",
-                        name: "",
-                        speed: 0,
-                        strength: 0,
-                        defense: 0,
-                        favoredMinigame: "",
-                        isPublic: false,
-                    },
-                    avatarView: {
-                        avatarSprite: "",
-                        avatarName: "",
-                        speed: 0,
-                        strength: 0,
-                        defense: 0,
-                        favoredMinigame: "",
-                        author: "",
-                        comments: [],
-                        isPublic: true,
-                    },
-                    players: [],
-                    partyMembers: [],
-                    relation: '',
-                    avatarList: [],
-                    commentsList: [],
-                    settings: {
-                        masterVolume: 100,
-                        musicVolume: 100,
-                        sfxVolume: 100,
-                        keybinds: {
-                            UP: 'W',
-                            LEFT: 'A',
-                            DOWN: 'S',
-                            RIGHT: 'D',
-                            INTERACT: 'E'
-                        },
-                        toggles: {
-                            privateProfile: false,
-                            messages: true,
-                            party: true,
-                        },
-                    },
-                    playerList: [],
-                    chat: {public: [], party: [], private: []},
+                    playerList: [], privateChat: [], messageDrawerOpen: false,
                 });
-            }
-
-            case GlobalStoreActionType.VIEW_FRIENDS: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    playerList: payload,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    players: store.players
-                });
-            }
-
-            case GlobalStoreActionType.ERROR: {
+            case GlobalStoreActionType.VIEW_FRIENDS:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", playerList: payload});
+            case GlobalStoreActionType.ERROR:
                 console.log(payload.errorMessage)
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: payload.errorMessage,
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-
-            case GlobalStoreActionType.GET_AVATAR: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: payload,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-
-            case GlobalStoreActionType.UPDATE_AVATAR: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: payload,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    partyInfo: store.partyInfo,
-                    playerList: store.playerList,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.LOAD_AVATAR: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: payload,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    partyInfo: store.partyInfo,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.GET_AVATAR_LIST: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: payload,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.UPDATE_AVATAR_LIST: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: payload,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.GET_COMMENTS: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: payload,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.ADD_COMMENT: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    currentHomeScreen: store.currentHomeScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: payload,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.GET_SETTINGS: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: payload,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: {
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: payload.errorMessage});
+            case GlobalStoreActionType.GET_AVATAR:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: payload});
+            case GlobalStoreActionType.UPDATE_AVATAR: 
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: payload});
+            case GlobalStoreActionType.DELETE_AVATAR: 
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: [] });
+            case GlobalStoreActionType.LOAD_AVATAR:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatarView: payload});
+            case GlobalStoreActionType.GET_AVATAR_LIST:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatarList: payload});
+            case GlobalStoreActionType.UPDATE_AVATAR_LIST:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatarList: payload});
+            case GlobalStoreActionType.GET_COMMENTS:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", commentsList: payload});
+            case GlobalStoreActionType.ADD_COMMENT:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", commentsList: payload});
+            case GlobalStoreActionType.GET_SETTINGS:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", settings: payload});
+            case GlobalStoreActionType.UPDATE_AUDIO_SETTINGS:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", settings: {
                         masterVolume: payload.masterVolume,
                         musicVolume: payload.musicVolume,
                         sfxVolume: payload.sfxVolume,
                         keybinds: store.settings.keybinds,
                         toggles: store.settings.toggles
-                    },
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                })
-            }
-            case GlobalStoreActionType.UPDATE_KEYBINDS: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: {
+                }})
+            case GlobalStoreActionType.UPDATE_KEYBINDS:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", settings: {
                         masterVolume: store.settings.masterVolume,
                         musicVolume: store.settings.musicVolume,
                         sfxVolume: store.settings.sfxVolume,
                         keybinds: payload,
                         toggles: store.settings.toggles,
-                    },
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                })
-            }
-            case GlobalStoreActionType.UPDATE_TOGGLES: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: {
+                }})
+            case GlobalStoreActionType.UPDATE_TOGGLES:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", settings: {
                         masterVolume: store.settings.masterVolume,
                         musicVolume: store.settings.musicVolume,
                         sfxVolume: store.settings.sfxVolume,
                         keybinds: store.settings.keybinds,
                         toggles: payload
-                    },
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                })
-            }
-            case GlobalStoreActionType.UPDATE_PARTY: {
+                }})
+            case GlobalStoreActionType.UPDATE_PARTY:
                 console.log("UPDATING PARTY...")
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: payload.partyMembers,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.CHANGE_READY: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: store.avatarList,
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: payload.partyMembers,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.GET_RELATION: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    avatarList: [],
-                    avatarView: store.avatarView,
-                    settings: store.settings,
-                    playerList: store.playerList,
-                    chat: store.chat,
-                    partyMembers: store.partyMembers,
-                    relation: payload,
-                    commentsList: store.commentsList,
-                    players: store.players
-                });
-            }
-            case GlobalStoreActionType.CHAT: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    CurrentScreen: store.CurrentScreen,
-                    profileInfo: store.profileInfo,
-                    errorMessage: "",
-                    avatar: store.avatar,
-                    relation: store.relation,
-                    settings: store.settings,
-                    commentsList: store.commentsList,
-                    playerList: store.playerList,
-                    chat: payload,
-                    partyMembers: store.partyMembers,
-                    players: store.players
-                });
-            }
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partymembers: payload.partyMembers});
+            case GlobalStoreActionType.CHANGE_READY:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partymembers: payload.partyMembers});
+            case GlobalStoreActionType.GET_RELATION:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", relation: payload});
+            case GlobalStoreActionType.CHAT:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", privateChat: payload});
+            case GlobalStoreActionType.TOGGLE_DRAWER:
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", messageDrawerOpen: payload});
             default:
                 return store;
         }
@@ -650,7 +267,7 @@ function GlobalStoreContextProvider(props) {
 
     store.updateProfile = function(bio, pfp, regDate) {
         async function asyncUpdateProfile() {
-            try{
+            try {
                 let response = await apis.updateProfile(bio, pfp)
                 console.log(response)
                 storeReducer({
@@ -712,28 +329,18 @@ function GlobalStoreContextProvider(props) {
     // Adds the given user to the party array
     // where data is an array of usernames for the new users in the party
     store.updateParty = function (data) {
-
         // For each user received in the data that isn't in the party, create a new Member object for them
         // before sending it as the payload
-
         const members = []
 
         for (const username of data.partyMembers) {
-
             const member = store.partyMembers.find(member => member.username === username)
-
-            if (member)
-                members.push(member)
-
-            else
-                members.push(new Member(username))   
+            members.push(member ? member : new Member(username))
         }
 
         storeReducer({
             type: GlobalStoreActionType.UPDATE_PARTY,
-            payload:{
-                partyMembers: members
-            }
+            payload: { partyMembers: members }
         })
     }
 
@@ -748,10 +355,6 @@ function GlobalStoreContextProvider(props) {
                 partyMembers: data.partyMembers.map(member => new Member(member.username, member.isReady))
             }
         })
-    }
-
-    store.reportPlayer = function (event) {
-        console.log("Report player in store");
     }
 
     // Messages
@@ -775,9 +378,9 @@ function GlobalStoreContextProvider(props) {
     //     asyncGetPublicMessages();
     // }
 
-    store.getPartyMessages = function() {
-        console.log('Get party messages in store.');
-    }
+    // store.getPartyMessages = function() {
+    //     console.log('Get party messages in store.');
+    // }
 
     store.getPrivateMessages = function() {
         console.log('Get private messages in store.');
@@ -797,30 +400,6 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncGetPrivateMessages();
-    }
-
-    // store.sendPublicMessage = function(username, message) {
-    //     console.log("Send public message in store:", message, "by", username);
-    //     async function asyncSendPublicMessage() {
-    //         try {
-    //             let response = await apis.sendPublicMessage(username, message);
-    //             storeReducer({
-    //                 type: GlobalStoreActionType.CHAT,
-    //                 payload: {public: response.data, party: store.chat.party, private: store.chat.private}
-    //             })
-    //         } catch(err) { console.error(err) }
-    //     }
-    //     asyncSendPublicMessage();
-    // }
-
-    store.sendPartyMessage = function(message) {
-        console.log("Send party message in store.");
-        async function asyncSendPartyMessage() {
-            try {
-                await apis.sendPartyMessage(message);
-            } catch(err) { console.error(err) }
-        }
-        asyncSendPartyMessage();
     }
 
     store.sendPrivateMessage = function(message) {
@@ -1034,10 +613,26 @@ function GlobalStoreContextProvider(props) {
         asyncGetAvatar();
     }
 
-    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.deleteAvatar = function(id) {
+        async function asyncDeleteAvatar() {
+            try {
+                let response = await apis.deleteAvatar(id)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.DELETE_AVATAR,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncDeleteAvatar();
+    }
+
+    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatar() {
             try{
-                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR,
@@ -1071,10 +666,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetMyAvatars();
     }
 
-    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatarList() {
             try {
-                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR_LIST,
@@ -1088,9 +683,7 @@ function GlobalStoreContextProvider(props) {
                         isPublic: isPublic,
                     }
                 })
-            } catch(error) {
-                console.error(error);
-            }
+            } catch(error) { console.error(error); }
         }
         asyncUpdateAvatarList();
     }
@@ -1120,9 +713,7 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.GET_COMMENTS,
                     payload: response.data
                 })
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) { console.log(error); }
         }
         asyncGetComments();
     }
@@ -1136,26 +727,24 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.ADD_COMMENT,
                     payload: response.data
                 })
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) { console.log(error); }
         }
         asyncAddComment();
     }
 
     // Leaderboard Screen
-    store.sortHighestScore = function(event) {
-        console.log("Sort by highest score in store.");
-    }
-    store.sortTotalScore = function(event) {
-        console.log("Sort by total score in store.");
-    }
-    store.sortGamesPlayed = function(event) {
-        console.log("Sort by games played in store.");
-    }
-    store.sortMinigamesPlayed = function(event) {
-        console.log("Sort by minigames played in store.");
-    }
+    // store.sortHighestScore = function(event) {
+    //     console.log("Sort by highest score in store.");
+    // }
+    // store.sortTotalScore = function(event) {
+    //     console.log("Sort by total score in store.");
+    // }
+    // store.sortGamesPlayed = function(event) {
+    //     console.log("Sort by games played in store.");
+    // }
+    // store.sortMinigamesPlayed = function(event) {
+    //     console.log("Sort by minigames played in store.");
+    // }
 
     // Settings Screen
     store.getSettings = () => {
@@ -1178,11 +767,7 @@ function GlobalStoreContextProvider(props) {
                 await apis.updateAudioSettings(masterVolume, musicVolume, sfxVolume);
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AUDIO_SETTINGS,
-                    payload: {
-                        masterVolume: masterVolume,
-                        musicVolume: musicVolume,
-                        sfxVolume: sfxVolume
-                    }
+                    payload: {masterVolume: masterVolume, musicVolume: musicVolume, sfxVolume: sfxVolume}
                 })
             } catch(error) { console.error(error); }
         }
@@ -1195,13 +780,7 @@ function GlobalStoreContextProvider(props) {
                 await apis.updateKeybinds({UP, LEFT, DOWN, RIGHT, INTERACT});
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_KEYBINDS,
-                    payload: {
-                        UP: UP,
-                        LEFT: LEFT,
-                        DOWN: DOWN,
-                        RIGHT: RIGHT,
-                        INTERACT: INTERACT
-                    }
+                    payload: {UP: UP, LEFT: LEFT, DOWN: DOWN, RIGHT: RIGHT, INTERACT: INTERACT}
                 })
             } catch(error) { console.error(error); }
         }
@@ -1214,11 +793,7 @@ function GlobalStoreContextProvider(props) {
                 await apis.updateToggles(privateProfile, toggleChat, toggleParty);
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_TOGGLES,
-                    payload: {
-                        privateProfile: privateProfile,
-                        messages: toggleChat,
-                        party: toggleParty,
-                    }
+                    payload: {privateProfile: privateProfile, messages: toggleChat, party: toggleParty}
                 })
             } catch(error) { console.error(error); }
         }
@@ -1227,19 +802,19 @@ function GlobalStoreContextProvider(props) {
 
     // Report Modal
 
-    store.submitReport = function(event) {
-        console.log("Submit report in store.");
-    }
+    // store.submitReport = function(event) {
+    //     console.log("Submit report in store.");
+    // }
 
     // Report Screen
 
-    store.ignoreReport = function(event) {
-        console.log("Ignored report in store.");
-    }
+    // store.ignoreReport = function(event) {
+    //     console.log("Ignored report in store.");
+    // }
 
-    store.completeReport = function(event) {
-        console.log("Completed report in store.");
-    }
+    // store.completeReport = function(event) {
+    //     console.log("Completed report in store.");
+    // }
 
     // Misc
     store.getRelationToUser = function(targetUsername) {
@@ -1256,6 +831,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetRelationToUser();
     }
 
+    store.toggleDrawer = function(open) {
+        storeReducer({ type:GlobalStoreActionType.TOGGLE_DRAWER, payload: open })
+    }
+
     store.hideModal = () => {
         storeReducer({
             type: GlobalStoreActionType.ERROR,
@@ -1270,22 +849,15 @@ function GlobalStoreContextProvider(props) {
         })
     }
 
-    store.isErrorModalOpen = () => {
-        return auth.errorMessage !== "";
-    }
+    store.isErrorModalOpen = () => { return auth.errorMessage !== ""; }
 
     useEffect(() => {
-        if (store.partyMembers.length === 0 && 
-            auth.loggedIn &&
-            auth.role !== UserRoleType.GUEST) {
+        if (store.partyMembers.length === 0 && auth.loggedIn && auth.role !== UserRoleType.GUEST)
                 store.partyMembers.push(new Member(auth.username))
-            }
     //eslint-disable-next-line
     }, [store.partyMembers, auth.loggedIn])
 
-    useEffect(() => {
-        console.log(store.partyMembers)
-    })
+    useEffect(() => { console.log(store.partyMembers) })
 
     return (
         <GlobalStoreContext.Provider value={{store}}>

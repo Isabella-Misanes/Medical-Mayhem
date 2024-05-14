@@ -36,7 +36,7 @@ export const getOnlinePlayers = async() => { return api.get('/onlinePlayers'); }
 
 export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
 
-export const updateAvatar = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
+export const updateAvatar = async (pic, name, speed, strength, defense, favoredMinigame, isPublic, id) => {
     return api.post(`/updateAvatar/`, {
         pic: pic,
         name: name,
@@ -44,11 +44,12 @@ export const updateAvatar = async (pic, name, speed, strength, defense, favoredM
         strength: strength,
         defense: defense,
         favoredMinigame: favoredMinigame,
-        isPublic: isPublic
+        isPublic: isPublic,
+        id: id
     });
 }
 
-export const updateAvatarList = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
+export const updateAvatarList = async (pic, name, speed, strength, defense, favoredMinigame, isPublic, id) => {
     return api.post(`/updateAvatarList/`, {
         pic: pic,
         name: name,
@@ -56,11 +57,14 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
         strength: strength,
         defense: defense,
         favoredMinigame: favoredMinigame,
-        isPublic: isPublic
+        isPublic: isPublic,
+        id: id
     });
 }
 
 export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${avatar}`) }
+
+export const deleteAvatar = async(id) => { return api.delete(`/deleteAvatar/${id}`) }
 
 export const getMyAvatars = async () => { return await api.get(`/myAvatars/`) }
 
@@ -127,7 +131,7 @@ const apis = {
     viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
 
     // Avatars
-    getAvatar, updateAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
+    getAvatar, updateAvatar, deleteAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
     getComments,
     addComment,
     getSettings,

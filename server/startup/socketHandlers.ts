@@ -227,10 +227,10 @@ export function handleConnection(socket: Socket) {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
 
-    // MESSAGES
-    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
-    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.RECEIVE_PARTY_MESSAGE, data));
-    socket.on(SocketEvents.SEND_PRIVATE_MESSAGE, data => { })
+    // data is a player username and a patient
+    socket.on(SocketEvents.TREAT_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.TREAT_PATIENT, data)
+    })
 
     // data is a patient id
     socket.on(SocketEvents.START_TREAT_PATIENT, (data) => {
@@ -241,4 +241,9 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SPAWN_PATIENT, data)
     })
+
+    // MESSAGES
+    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
+    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.RECEIVE_PARTY_MESSAGE, data));
+    socket.on(SocketEvents.SEND_PRIVATE_MESSAGE, data => { })
 }
