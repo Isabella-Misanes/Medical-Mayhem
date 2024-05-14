@@ -27,6 +27,8 @@ export class GameResultsScene extends Scene {
         this.opponentScore.val = context.data.opponentScore;
         this.yourScore.text.text = 'Score: ' + this.yourScore.val;
         this.opponentScore.text.text = 'Opponent Score: ' + this.opponentScore.val;
+
+        // SEND GAME DATA TO DB
     }
 
     onDeactivate() {

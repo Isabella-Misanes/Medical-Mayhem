@@ -67,6 +67,18 @@ function handleConnection(socket) {
     socket.on(socketEvents_1.default.PLAYER_MOVED, (data) => {
         index_1.io.to(socketInfos.get(socket.id).gameRoom).emit(socketEvents_1.default.PLAYER_MOVED, data);
     });
+    // data is a player username
+    socket.on(socketEvents_1.default.STOP_FOLLOW, (data) => {
+        index_1.io.to(socketInfos.get(socket.id).gameRoom).emit(socketEvents_1.default.STOP_FOLLOW, data);
+    });
+    // data is a player username and a patient
+    socket.on(socketEvents_1.default.TREAT_PATIENT, (data) => {
+        index_1.io.to(socketInfos.get(socket.id).gameRoom).emit(socketEvents_1.default.TREAT_PATIENT, data);
+    });
+    // data is a patient id
+    socket.on(socketEvents_1.default.SPAWN_PATIENT, (data) => {
+        index_1.io.to(socketInfos.get(socket.id).gameRoom).emit(socketEvents_1.default.SPAWN_PATIENT, data);
+    });
 }
 exports.handleConnection = handleConnection;
 //# sourceMappingURL=socketHandlers.js.map
