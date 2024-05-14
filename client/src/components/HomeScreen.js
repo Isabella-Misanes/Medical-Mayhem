@@ -10,9 +10,6 @@ import socket from '../constants/socket';
 import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
 import { homeButtons, modalStyle } from '../Styles';
-// import { buttonStyle, homeButtons, modalStyle } from '../Styles';
-
-// Styling
 
 export default function HomeScreen() {
     const navigate = useNavigate();

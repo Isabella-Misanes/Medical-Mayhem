@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Modal, Typography, TextField } from '@mui/material';
-import { buttonStyle } from '../App';
+import { buttonStyle } from '../Styles';
 
 import GlobalStoreContext from '../store';
 import { useEffect, useState } from 'react';
