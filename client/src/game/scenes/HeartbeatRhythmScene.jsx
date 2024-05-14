@@ -41,10 +41,10 @@ export class HeartbeatRhythmScene extends Scene {
         this.yourScore.val = context.data.yourScore;
         this.opponentScore.val = context.data.opponentScore;
   
+        let prev = context.data.prevScene;
+
         setTimeout(() => {
-            context.data.games.splice(0,1);
-            let games = context.data.games;
-            this.engine.goToScene(context.data.games[0], {sceneActivationData: {yourScore: this.yourScore.val, opponentScore: this.opponentScore.val, games: games}});
+            this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
         }, 30000);
     }
 

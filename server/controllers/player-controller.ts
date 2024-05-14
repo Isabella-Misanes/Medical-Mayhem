@@ -127,6 +127,33 @@ export const getAvatar = async (req: Request, res: Response) => {
     }
 }
 
+export const getMyAvatars = async (req: Request, res: Response) => {    
+    try {
+        const currentUser = await User.findById(req.userId).populate('avatars');
+
+        if(currentUser) {
+            const avatars = currentUser.avatars;
+
+            if(!avatars) {
+                console.log("No avatars found");
+                return res.status(404).json({errorMessage: 'Avatars not found.'});
+            }
+            else {
+                console.log("Avatars found:", avatars);
+                return res.status(200).json({avatars})
+            }
+        }
+        else {
+            console.log("No user found");
+            return res.status(404).json({errorMessage: 'Current user not found.'});
+        }
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 export const updateAvatar = async (req: Request, res: Response) => {
     try {
         const {pic, name, speed, strength, defense, favoredMinigame, isPublic} = req.body

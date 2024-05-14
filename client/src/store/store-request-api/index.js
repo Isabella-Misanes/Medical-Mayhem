@@ -62,6 +62,8 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
 
 export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${avatar}`) }
 
+export const getMyAvatars = async () => { return await api.get(`/myAvatars/`) }
+
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
 export const searchAvatars = async (params) => { return api.get(`/avatars/search/${params}`) }
@@ -114,11 +116,7 @@ export const getRelationToUser = async(targetUsername) => {
 
 export const blockPlayer = async (targetUsername) => { return api.post('/blockPlayer', {targetUsername: targetUsername}); }
 
-// export const getPublicMessages = async() => {return api.get('/messages/public/get')};
-export const getPartyMessages = async() => { return api.get('/messages/party/get')};
 export const getPrivateMessages = async() => { return api.get('/messages/private/get')};
-// export const sendPublicMessage = async (username, message) => {return api.post('/messages/public/send', {username: username, message: message})}
-export const sendPartyMessage = async (message) => { return api.post('/messages/party/send', {message: message}); }
 export const sendPrivateMessage = async (message) => { return api.post('/messages/private/send', {message: message}); }
 
 const apis = {
@@ -129,7 +127,7 @@ const apis = {
     viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
 
     // Avatars
-    getAvatar, updateAvatar, updateAvatarList, getAllAvatars, searchAvatars, loadAvatar,
+    getAvatar, updateAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
     getComments,
     addComment,
     getSettings,

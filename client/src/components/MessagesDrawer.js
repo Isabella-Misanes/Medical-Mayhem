@@ -8,6 +8,7 @@ import AuthContext, { UserRoleType } from '../auth';
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
 
+// export default function MessagesDrawer({toggleDrawer}) {
 export default function MessagesDrawer() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -16,6 +17,8 @@ export default function MessagesDrawer() {
     const [messageText, setMessageText] = useState('');
     const [chat, setChat] = useState({public: [], party: [], private: []});
     const publicChatRef = useRef(null);
+    const partyChatRef = useRef(null);
+    const privateChatRef = useRef(null);
 
     const tabButton = {
         color: 'white',
@@ -33,6 +36,8 @@ export default function MessagesDrawer() {
     };
 
     function handleSendMessage() {
+        if(messageText === '') return;
+        console.log(store.partyMembers);
         switch(value) {
             case '1':
                 // store.sendPublicMessage(messageText);
@@ -47,6 +52,7 @@ export default function MessagesDrawer() {
             default:
                 break;
         }
+        setMessageText('');
     }
 
     const toggleDrawer = (open) => (event) => {
@@ -54,33 +60,27 @@ export default function MessagesDrawer() {
         setState({ ...state, 'bottom' : open });
     };
 
-    const publicChatRender = () => {
+    const chatRender = (messageArr) => {
         const messageItems = [];
-        for(let i = 0; i < chat.public.length; i++) {
-            const publicChatMessage = chat.public[i];
-            messageItems.push(
-                <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} auth={auth} />
-            )
+        for(let i = 0; i < messageArr.length; i++) {
+            const chatMessage = messageArr[i];
+            messageItems.push(<Message key={i} username={chatMessage.username} messageText={chatMessage.text} auth={auth} />)
         }
         return messageItems;
     }
 
-    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat]);
+    useEffect(() => {if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight}, [chat.public]);
+    useEffect(() => {if(partyChatRef.current) partyChatRef.current.scrollTop = partyChatRef.current.scrollHeight}, [chat.party]);
 
     useEffect(() => {
-        if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
-    }, [chat.public])
-
-    useEffect(() => {
-        const handleMessage = (data) => {
-            setChat({
-                public: [...chat.public, {username: data.username, text: data.text}],
-                party: chat.party,
-                private: chat.private,
-            })
+        const handlePublicMessage = data => setChat(prevChat => ({...prevChat, public: [...prevChat.public, {username: data.username, text: data.text}]}));
+        const handlePartyMessage = data => setChat(prevChat => ({...prevChat, party: [...prevChat.party, {username: data.username, text: data.text}]}));
+        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
+        socket.on(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
+        return () => {
+            socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
+            socket.off(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
         }
-        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage);
-        return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
         // eslint-disable-next-line
     }, [])
 
@@ -101,19 +101,9 @@ export default function MessagesDrawer() {
                 anchor={'bottom'}
                 open={state['bottom']}
                 onClose={toggleDrawer(false)} 
-                sx={{
-                    width: '40%',
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: '40%'
-                    }
-                }}>
-                <Box sx={{ 
-                    bgcolor: '#34732F' 
-                }}>
-                    <Box sx={{ 
-                        typography: 'body1',
-                    }}>
+                sx={{width: '40%', flexShrink: 0, '& .MuiDrawer-paper': {width: '40%'}}}>
+                <Box sx={{bgcolor: '#34732F'}}>
+                    <Box sx={{typography: 'body1'}}>
                         <TabContext value={value}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <TabList onChange={handleTabChange} aria-label="lab API tabs example">
@@ -122,70 +112,22 @@ export default function MessagesDrawer() {
                                     {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>}
                                 </TabList>
                             </Box>
-                            <TabPanel value="1">
-                                <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List ref={publicChatRef} sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        {publicChatRender()}
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <TabPanel value="2">
-                            <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
-                                        <Message username='MedicalGamer' messageText='Hi!' auth={auth} />
-                                        <Message username='User1' messageText='lololol' auth={auth} />
-                                        <Message username='User1' messageText='omg' auth={auth} />
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <TabPanel value="3">
-                            <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='Hi Guys!' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Yoooooooooo' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hi' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='omg' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='testingggg' auth={auth} />
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <Grid container spacing={1} sx={{
-                                bgcolor: '#E7E7E7',
-                                pl: 2,
-                                pr: 2,
-                                pb: 2
-                            }}>
+                            <ChatTab i={1} chat={chat.public} chatRender={chatRender} chatRef={publicChatRef} />
+                            <ChatTab i={2} chat={chat.party} chatRender={chatRender} chatRef={partyChatRef} />
+                            <ChatTab i={3} chat={chat.private} chatRender={chatRender} chatRef={privateChatRef} />
+                            <Grid container spacing={1} sx={{bgcolor: '#E7E7E7', pl: 2, pr: 2, pb: 2}}>
                                 <Grid item xs={10}>
                                     <TextField
+                                        onKeyDown={ev => {if(ev.key === 'Enter') handleSendMessage();}}
                                         value={messageText} fullWidth variant="standard" label="Send message..."
+                                        disabled={(value === '2' && store.partyMembers.length === 1)}
                                         onChange={(event) => handleMessageTextChange(event)}
                                     />
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <Button type='button' id='send-message' onClick={() => {
-                                        handleSendMessage();
-                                        setMessageText('');
-                                    }} disabled={messageText===''} sx={{
-                                            color: '#2d7044',
-                                            top: '20%'
-                                    }}>
+                                    <Button type='button' id='send-message' onClick={handleSendMessage} sx={{color: '#2d7044', top: '20%'}}
+                                        disabled={messageText === '' || (value === '2' && store.partyMembers.length === 1)}
+                                    >
                                         <SendIcon />
                                     </Button>
                                 </Grid>
@@ -199,9 +141,18 @@ export default function MessagesDrawer() {
     );
 }
 
-function Message(props) {
-    const {username, messageText, auth} = props;
+function ChatTab({i, chat, chatRef, chatRender}) {
     return (
-        <ListItem><strong>{username}{auth.username === username && ' (You)'}</strong>: {messageText}</ListItem>
+        <TabPanel value={`${i}`}>
+            <Box sx={{bgcolor: '#E7E7E7'}}>
+                <List ref={chatRef} sx={{overflow: 'scroll', overflowX: 'hidden', height: '300px'}}>
+                    {chatRender(chat)}
+                </List>
+            </Box>
+        </TabPanel>
     )
+}
+
+function Message({username, messageText, auth}) {
+    return <ListItem><strong>{username}{auth.username === username && ' (You)'}</strong>: {messageText}</ListItem>
 }

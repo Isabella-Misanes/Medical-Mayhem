@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AuthContext from '../auth';
@@ -67,11 +67,6 @@ export default function Sidebar() {
         handleMenuClose();
     }
 
-    function handleRemoveFromParty(event) {
-        store.removeFromParty(event);
-        handleMenuClose();
-    }
-
     function handleReportPlayer(event) {
         setShowReportModal(true);
         handleMenuClose();
@@ -121,14 +116,14 @@ export default function Sidebar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <Typography variant="h6" align="center" component="div" sx={{ fontWeight: 'medium'}}>
+                {clickedUser.username}
+            </Typography>
             <MenuItem onClick={(event) => {handlePrivateMessaging(event)}}>
                 Private Message
             </MenuItem>
             <MenuItem onClick={(event) => {handleAddFriend(event)}}>
                 Add Friend
-            </MenuItem>
-            <MenuItem onClick={(event) => {handleRemoveFromParty(event)}}>
-                Remove From Party
             </MenuItem>
             <MenuItem onClick={(event) => {handleReportPlayer(event)}}>
                 Report Player

@@ -27,7 +27,6 @@ export function handleConnection(socket: Socket) {
 
     // Maps the newly connected socket to an object holding its rooms
     socketInfos.set(socket.id, new SocketInfo(socket))
-    console.log(socketInfos)
 
     socket.on('disconnect', () => {
 
@@ -45,8 +44,6 @@ export function handleConnection(socket: Socket) {
         // Get all users usernames that are in the current room as the disconnecter
         const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
 
-        console.log(socketInfos)
-
         // Let the part members know that the accepter has accepted the invite
         io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
             partyMembers: partyMembers
@@ -60,7 +57,7 @@ export function handleConnection(socket: Socket) {
 
         const socketInfo = socketInfos.get(socket.id) as SocketInfo
         const partyRoom = socketInfo.partyRoom
-
+        
         socket.leave(socketInfo.partyRoom)
         socket.leave(socketInfo.gameRoom)
 
@@ -69,8 +66,6 @@ export function handleConnection(socket: Socket) {
 
         // Get all users usernames that are in the current room as the disconnecter
         const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
-
-        console.log(socketInfos)
 
         // Let the part members know that the accepter has accepted the invite
         io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
@@ -234,6 +229,16 @@ export function handleConnection(socket: Socket) {
 
     // MESSAGES
     socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
-    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => { });
+    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.RECEIVE_PARTY_MESSAGE, data));
     socket.on(SocketEvents.SEND_PRIVATE_MESSAGE, data => { })
+
+    // data is a patient id
+    socket.on(SocketEvents.START_TREAT_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.START_TREAT_PATIENT, data)
+    })
+
+    // data is a patient id
+    socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SPAWN_PATIENT, data)
+    })
 }

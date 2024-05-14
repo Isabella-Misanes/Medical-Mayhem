@@ -3,6 +3,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import BackButton from './BackButton';
+import { buttonStyle } from '../Styles';
 
 export default function ForgotPasswordScreen() {
     const {auth} = useContext(AuthContext);
@@ -69,7 +70,7 @@ export default function ForgotPasswordScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={[buttonStyle, { mt: 3, mb: 2 }]}
                         >
                             Reset Password
                         </Button>
