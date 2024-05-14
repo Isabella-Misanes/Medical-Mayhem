@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user'
 
-// Updates game stats of the user after game finishes
+// Updates game stats of the user after the game finishes
 export const updateStats = async (req: Request, res: Response) => {
     const {username, yourScore, patientsSaved} = req.body;
     try {
