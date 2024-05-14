@@ -1,27 +1,20 @@
-import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
 import BackButton from './BackButton';
-import { useNavigate } from 'react-router-dom';
-import { buttonStyle } from '../Styles';
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
-        username: '',
         email: '',
-        password: '',
-        passwordVerify: ''
     })
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        auth.loginUser(
-            formData.email,
-            formData.password
+        auth.forgotPassword(
+            formData.email
         );
     };
 
@@ -55,7 +48,7 @@ export default function LoginScreen() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Login
+                        Forgot Password
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
@@ -70,38 +63,16 @@ export default function LoginScreen() {
                                     onChange={handleChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
                         </Grid>
                         <Button
                             id="loginSubmit"
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={[buttonStyle, { mt: 3, mb: 2 }]}
+                            sx={{ mt: 3, mb: 2 }}
                         >
-                            Login
+                            Reset Password
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item container direction='column'>
-                                <Link onClick={() => navigate('/register')} variant="body2">
-                                    Don't have an account? Sign Up
-                                </Link>
-                                <Link onClick={() => navigate('/forgotPassword')} variant="body2">
-                                    Forgot Password?
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                     {/* {modal} */}
                 </Box>

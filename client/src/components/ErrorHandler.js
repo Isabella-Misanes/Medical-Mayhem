@@ -16,13 +16,8 @@ const ErrorHandler = ({ children }) => {
         error => {
             let response = error.response
     
-            if (response.status === 404) {
-                store.reset()
-                navigate('/')
-                auth.error(response.data.errorMessage)
-            }
-    
-            else if (response.status === 401) {
+            console.log(window.location.href)
+            if ( response.status === 404 || response.status === 401 ) {
                 store.reset()
                 navigate('/')
                 auth.error(response.data.errorMessage)

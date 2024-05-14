@@ -24,7 +24,50 @@ export default function HomeScreen() {
 
     function handlePlayButtonClick() {
         setQueueingUp(true)
-        socket.emit(SocketEvents.QUEUE_UP, auth.username)
+
+        // The user will queue up by themselves if they're alone
+        if (store.partyMembers.length === 1)
+            socket.emit(SocketEvents.QUEUE_UP, auth.username)
+
+        // The user will ready up with the party, received in Sidebar.js
+        else if (store.partyMembers.length > 1) {
+            console.log(store.partyMembers)
+
+            // Ready up the current user
+            const members = store.partyMembers.map(member => {
+                if (member.username === auth.username)
+                    member.readyUp()
+
+                return member
+            })
+
+            // If everyone is ready, tell everyone in the party that we are all ready,
+            // sending back usernames of everyone in the party
+            if (members.every(member => member.isReady === true)) {
+
+                socket.emit(SocketEvents.MATCH_FOUND, {
+                    players: members.map(member => member.username)
+                })
+
+                // Unready everyone after they join game
+                socket.emit(SocketEvents.CHANGE_READY, {
+                    partyMembers: members.map(member => {
+                        member.unready()
+                        return member
+                    })
+                })
+            }
+
+            // Otherwise, send the new party structure with the current user ready
+            else {
+                socket.emit(SocketEvents.CHANGE_READY, {
+                    partyMembers: members
+                })
+            }
+        }
+
+        else
+            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     useEffect(() => {
@@ -36,10 +79,15 @@ export default function HomeScreen() {
             // screens in order to avoid unexpected behaviors
             console.log(data)
             socket.off(SocketEvents.MATCH_FOUND)
+
+            // TODO: UNREADY EVERYONE IN THE PARTY AFTER THE MATCH IS FOUND
+
             store.updatePlayers(data)
             console.log(store.players)
             navigate('/game')
         })
+
+        if(auth.role !== UserRoleType.GUEST) store.getSettings();
 
         // eslint-disable-next-line
     }, [])
@@ -70,8 +118,8 @@ export default function HomeScreen() {
                         <Grid item xs={6}>
                             <HomeButton
                                 gridSx={{textAlign: 'center'}}
-                                id='map-search-button'
-                                onClick={() => navigate('/mapsearch')}
+                                id='character-search-button'
+                                onClick={() => navigate('/charactersearch')}
                                 text='Character Search'
                                 buttonSx={homeButtons}
                                 disable={auth.role === UserRoleType.GUEST}
@@ -79,8 +127,8 @@ export default function HomeScreen() {
                         </Grid>
                         <Grid item xs={6}>
                             <HomeButton
-                                id='map-builder-button'
-                                onClick={() => navigate('/mapbuilder')}
+                                id='character-builder-button'
+                                onClick={() => navigate('/characterbuilder')}
                                 backgroundColor='transparent'
                                 buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                                 text='Character Builder'
@@ -97,19 +145,19 @@ export default function HomeScreen() {
                                 disable={auth.role === UserRoleType.GUEST}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <HomeButton
                                 id='forums-button'
                                 onClick={() => navigate('/forum')}
                                 text='Forums'
                                 buttonSx={homeButtons}
                             />
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={6}>
                             <HomeButton
                                 gridSx={{textAlign: 'center'}}
                                 id='profile-button'
-                                onClick={() => navigate('/profile')}
+                                onClick={() => navigate('/profile', {state: {currUsername: auth.username}})}
                                 buttonSx={{color: auth.role === UserRoleType.GUEST ? 'grey.300' : 'black'}}
                                 text='Profile'
                                 disable={auth.role === UserRoleType.GUEST}
@@ -132,14 +180,6 @@ export default function HomeScreen() {
                                 buttonSx={homeButtons}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <HomeButton
-                                id="leaderboard-button"
-                                onClick={() => navigate("/leaderboard")}
-                                text='Leaderboard'
-                                buttonSx={homeButtons}
-                            />
-                        </Grid>
                         { role === UserRoleType.ADMIN &&
                             <Grid item xs={6}>
                                 <HomeButton
@@ -154,7 +194,8 @@ export default function HomeScreen() {
                     </Grid>                
                 </Grid>
             </Grid>
-            <MessagesDrawer />
+            {/* <MessagesDrawer /> */}
+            {role !== UserRoleType.GUEST && <MessagesDrawer />}
             {queueingUp && <QueueModal queuingUp={queueingUp} setQueueingUp={setQueueingUp}/>}
             <ReportModal reportedUser={''} open={showReportModal} onClose={() => setShowReportModal(false)} />
         </div>
@@ -173,15 +214,36 @@ function HomeButton(props) {
 }
 
 function QueueModal(props) {
-    // const { auth } = useContext(AuthContext);
+    const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
-    const modalText = "Waiting for another player..."
+    const modalText = store.partyMembers.length > 1 ? "Waiting for party to play..." : "Searching for other players..."
     // const [modalText, setModalText] = useState("Waiting for another player...")
     // const [matchFound, setMatchFound] = useState(false)
 
     function handleXButtonClick() {
         props.setQueueingUp(false)
-        socket.emit(SocketEvents.LEAVE_QUEUE)
+
+        if (store.partyMembers.length === 1)
+            socket.emit(SocketEvents.LEAVE_QUEUE)
+
+        // The user will stop being ready, received in Sidebar.js
+        else if (store.partyMembers.length > 1) {
+            
+            const members = store.partyMembers.map(member => {
+                if (member.username === auth.username)
+                    member.unready()
+
+                return member
+            })
+
+            socket.emit(SocketEvents.CHANGE_READY, {
+                partyMembers: members
+            })
+        }
+
+        else
+            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     return (

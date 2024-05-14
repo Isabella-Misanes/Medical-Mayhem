@@ -1,6 +1,6 @@
 // import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
-// import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
-// import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
+import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
+import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
 // import { GameResultsScene } from "./scenes/GameResultsScene";
 // import { Loader, DisplayMode, Camera } from "excalibur";
 // import { TiledResource } from "@excaliburjs/plugin-tiled";
@@ -15,6 +15,7 @@ import { DisplayMode, Camera } from "excalibur";
 import Player from "./actors/player";
 import { Resources, loader } from "./resources";
 import Patient from "./actors/patient";
+import { MedicalMayhemScene } from "./scenes/MedicalMayhemScene";
 
 // const gameWidth = 1820;
 // const gameHeight = 950;
@@ -40,35 +41,15 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
     });
     const engine = gameRef.current;
 
-    //var gameplayScene = new ex.Scene();
-
     console.log(players)
     console.log(username)
     
-    for (let i in players) {
-        let player
+    
+    let medicalMayhemScene = engine.add("medicalMayhem", new MedicalMayhemScene());
+    engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
+    engine.add("medicationmatching", new MedicationMatchingScene());
+    engine.goToScene("medicalMayhem");
 
-        if (players[i] === username) {
-            player = new Player(players[i], true)
-            const camera = new Camera()
-            camera.strategy.lockToActor(player)
-            camera.zoom = 2.5
-            camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
-            engine.currentScene.camera = camera
-        }
-
-        else
-            player = new Player(players[i])
-
-        engine.add(player)
-        
-    }
-
-    const patient = new Patient()
-    engine.add(patient)
-
-    // engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
-    // engine.add("medicationmatching", new MedicationMatchingScene());
     // engine.add("gameresults", new GameResultsScene());
 
     // let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
@@ -77,6 +58,21 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
 
     engine.start(loader).then(() => {
         Resources.tiledMap.addToScene(engine.currentScene)
+    
+        for (let i in players) {
+            let player
+    
+            if (players[i] === username) {
+                player = new Player(players[i], true)
+                engine.currentScene.camera.strategy.lockToActor(player)
+                engine.currentScene.camera.zoom = 2.5
+                engine.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 8, 985, 640))
+            }
+            else player = new Player(players[i])
+    
+            engine.currentScene.add(player)
+            
+        }
     });
 
   };

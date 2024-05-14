@@ -49,6 +49,33 @@ export const getAllAvatars = async (req: Request, res: Response) => {
     }
 }
 
+export const searchAvatars = async (req: Request, res: Response) => {
+    console.log("search avatars");
+
+    const { params } = req.params;
+    const searchRegex = new RegExp(params, 'i');
+    
+    try {
+        const avatars = await Avatar.find({
+            isPublic: true,
+            avatarName: { $regex: searchRegex }
+        });
+
+        if(!avatars) {
+            console.log("No avatars found");
+            return res.status(404).json({errorMessage: 'Avatars not found.'});
+        }
+        else {
+            console.log("Avatars found:", avatars);
+            return res.status(200).json({avatars})
+        }
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).send();
+    }
+}
+
 export const updateAvatarList = async (req: Request, res: Response) => {
     console.log("Updating Avatar list");
     try {

@@ -5,6 +5,7 @@ import{ Config } from './config'
 import { Resources } from "../resources";
 import socket from "../../constants/socket";
 import SocketEvents from "../../constants/socketEvents";
+import Patient from "./patient";
 
 export const PlayerCollisionGroup = ex.CollisionGroupManager.create('player')
 
@@ -22,10 +23,13 @@ export default class Player extends Actor {
         this.isMyPlayer = isMyPlayer // is this a teammate, or the player that the user is currently controlling?
         this.username = username // string
         this.guidingPatient = null // a reference to the patient being guided by the player
+        this.treatingPatient = null;
         this.posCorrection = null
+        this.engine = null;
     }
 
     onInitialize(engine) {
+        this.engine = engine;
         const sprite = Resources.PlayerPng.toSprite()
         sprite.scale.setTo(1.5, 1.5)
 
@@ -49,6 +53,15 @@ export default class Player extends Actor {
                 if (this.guidingPatient !== null) {
                     this.guidingPatient.actions.clearActions();
                     this.guidingPatient = null;
+                }
+            }
+        })
+
+        socket.on(SocketEvents.TREAT_PATIENT, (data) => {
+            console.log(data)
+            if (data.username === this.username) {
+                if (this.treatingPatient !== null) {
+                    this.treatingPatient = null;
                 }
             }
         })
@@ -94,6 +107,16 @@ export default class Player extends Actor {
                 // 17, 18, 19, 20, 21
                 if (tilePath === "/static/media/Hospital_Tiles-17.png" || tilePath === "/static/media/Hospital_Tiles-18.png" || tilePath === "/static/media/Hospital_Tiles-19.png" || tilePath === "/static/media/Hospital_Tiles-20.png" || tilePath === "/static/media/Hospital_Tiles-21.png") {
                     console.log("START MINIGAME");
+                    // const patient = new Patient()
+                    // this.engine.currentScene.add(patient)
+                    this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
+                    this.treatingPatient = this.guidingPatient;
+                    setTimeout(() => {
+                        socket.emit(SocketEvents.TREAT_PATIENT, {
+                            username: this.username,
+                            patient: this.treatingPatient.id
+                        })
+                    }, 16000);
                 }
                 socket.emit(SocketEvents.STOP_FOLLOW, {
                     username: this.username,

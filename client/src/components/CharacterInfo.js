@@ -1,12 +1,13 @@
 import { Button, Divider, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
 import { buttonStyle, commList, commentCard } from '../Styles';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import GlobalStoreContext from '../store';
 
 export default function CharacterInfo(props) {
     const {store} = useContext(GlobalStoreContext);
     const [commentText, setCommentText] = useState("");
     const [view, setView] = useState([]);
+    const commentRef = useRef(null);
     
     const avatar = props.avatar;
     const avatarPic = avatar.avatarSprite !== '' ? convertDataUrl(avatar.avatarSprite) : '';
@@ -16,6 +17,7 @@ export default function CharacterInfo(props) {
         return () => {
             setView([]);
         };
+        // eslint-disable-next-line
     }, [avatar])
 
     useEffect(() => {
@@ -26,6 +28,10 @@ export default function CharacterInfo(props) {
         }
         // eslint-disable-next-line
     }, [store.avatarView])
+
+    useEffect(() => {
+        if(commentRef.current) commentRef.current.scrollTop = commentRef.current.scrollHeight;
+    }, [view])
 
     function convertDataUrl(dataUrl) {
         var arr = dataUrl.split(','),
@@ -81,7 +87,7 @@ export default function CharacterInfo(props) {
 
                 <Grid item xs={1}/>
                 <Grid item xs={10}>
-                    <List sx={commList}>
+                    <List ref={commentRef} sx={commList}>
                         {view.length === 0 ? (
                             <div>No comments.</div>
                         ) : showComments}

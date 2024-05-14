@@ -18,7 +18,7 @@ describe('Home Navigation', () => {
         it('should not be able to click Character Search as a guest', () => {
             cy.visit('/')
             cy.get('#continue-as-guest').should('be.visible').click()
-            cy.get('#map-search-button').should('be.visible').should('be.disabled')
+            cy.get('#character-search-button').should('be.visible').should('be.disabled')
         })
 
         it('should display a queue modal successfully', () => {
@@ -95,10 +95,10 @@ describe('Home Navigation', () => {
             cy.get('#queue-modal').should('be.visible')
         })
         
-        it('should navigate to the map search screen successfully', () => {
+        it('should navigate to the character search screen successfully', () => {
             cy.visit('/')
-            cy.get('#map-search-button').should('be.visible').click()
-            cy.url().should('eq', `${baseUrl}/mapsearch`)
+            cy.get('#character-search-button').should('be.visible').click()
+            cy.url().should('eq', `${baseUrl}/charactersearch`)
         })
     
         it('should navigate to the forums screen successfully', () => {
@@ -117,12 +117,6 @@ describe('Home Navigation', () => {
             cy.visit('/')
             cy.get('#about-button').should('be.visible').click()
             cy.url().should('eq', `${baseUrl}/about`)
-        })
-    
-        it('should navigate to the leaderboard screen successfully', () => {
-            cy.visit('/')
-            cy.get('#leaderboard-button').should('be.visible').click()
-            cy.url().should('eq', `${baseUrl}/leaderboard`)
         })
     })
 })

@@ -37,6 +37,7 @@ code {
 }
 
 #body {
+  background-color: #AFD9AE;
   flex: 95;
   height: 100vh;
 }

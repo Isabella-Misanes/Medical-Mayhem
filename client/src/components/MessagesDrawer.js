@@ -1,10 +1,12 @@
 import { Box, Button, Divider, Drawer, Grid, List, ListItem, Tab, TextField } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import GlobalStoreContext from '../store';
 import { buttonStyle } from '../Styles';
 import SendIcon from '@mui/icons-material/Send';
 import AuthContext, { UserRoleType } from '../auth';
+import socket from '../constants/socket';
+import SocketEvents from '../constants/socketEvents';
 
 export default function MessagesDrawer() {
     const { store } = useContext(GlobalStoreContext);
@@ -13,6 +15,7 @@ export default function MessagesDrawer() {
     const [state, setState] = useState('bottom');
     const [messageText, setMessageText] = useState('');
     const [chat, setChat] = useState({public: [], party: [], private: []});
+    const publicChatRef = useRef(null);
 
     const tabButton = {
         color: 'white',
@@ -32,10 +35,11 @@ export default function MessagesDrawer() {
     function handleSendMessage() {
         switch(value) {
             case '1':
-                store.sendPublicMessage(messageText);
+                // store.sendPublicMessage(messageText);
+                socket.emit(SocketEvents.SEND_PUBLIC_MESSAGE, {username: auth.username, text: messageText});
                 break;
             case '2':
-                store.sendPartyMessage();
+                socket.emit(SocketEvents.SEND_PARTY_MESSAGE, {username: auth.username, text: messageText});
                 break;
             case '3':
                 store.sendPrivateMessage();
@@ -52,10 +56,8 @@ export default function MessagesDrawer() {
 
     const publicChatRender = () => {
         const messageItems = [];
-        console.log(chat.public)
         for(let i = 0; i < chat.public.length; i++) {
             const publicChatMessage = chat.public[i];
-            console.log(publicChatMessage);
             messageItems.push(
                 <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} auth={auth} />
             )
@@ -63,10 +65,24 @@ export default function MessagesDrawer() {
         return messageItems;
     }
 
-    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat])
+    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat]);
 
-    useEffect(() => store.getPublicMessages() //eslint-disable-next-line
-    , [])
+    useEffect(() => {
+        if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
+    }, [chat.public])
+
+    useEffect(() => {
+        const handleMessage = (data) => {
+            setChat({
+                public: [...chat.public, {username: data.username, text: data.text}],
+                party: chat.party,
+                private: chat.private,
+            })
+        }
+        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage);
+        return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div>
@@ -108,7 +124,7 @@ export default function MessagesDrawer() {
                             </Box>
                             <TabPanel value="1">
                                 <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
+                                    <List ref={publicChatRef} sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
                                         height: '300px'

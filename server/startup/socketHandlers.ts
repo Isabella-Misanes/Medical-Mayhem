@@ -23,12 +23,11 @@ export const queue : Socket[] = []
 // Maps socket ids to an object holding info about their state in the app
 const socketInfos = new Map<string, SocketInfo>()
 
-// TODO: ADD NAMESPACES SUCH AS /game, /message, etc.
-
 export function handleConnection(socket: Socket) {
 
     // Maps the newly connected socket to an object holding its rooms
     socketInfos.set(socket.id, new SocketInfo(socket))
+    console.log(socketInfos)
 
     socket.on('disconnect', () => {
 
@@ -44,17 +43,43 @@ export function handleConnection(socket: Socket) {
         socketInfos.delete(socket.id)
 
         // Get all users usernames that are in the current room as the disconnecter
-        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
+        const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
+
+        console.log(socketInfos)
 
         // Let the part members know that the accepter has accepted the invite
         io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
-            partyUsers: partyUsers
+            partyMembers: partyMembers
+        })
+    })
+
+    socket.on(SocketEvents.LOGOUT, () => {
+        
+        if (queue.includes(socket))
+            queue.splice(queue.indexOf(socket), 1)
+
+        const socketInfo = socketInfos.get(socket.id) as SocketInfo
+        const partyRoom = socketInfo.partyRoom
+
+        socket.leave(socketInfo.partyRoom)
+        socket.leave(socketInfo.gameRoom)
+
+        socketInfos.delete(socket.id)
+        socketInfos.set(socket.id, new SocketInfo(socket))
+
+        // Get all users usernames that are in the current room as the disconnecter
+        const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
+
+        console.log(socketInfos)
+
+        // Let the part members know that the accepter has accepted the invite
+        io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+            partyMembers: partyMembers
         })
     })
 
     socket.on(SocketEvents.SET_USERNAME, (data) => {
         (socketInfos.get(socket.id) as SocketInfo).username = data
-        console.log(data)
     })
 
     socket.on(SocketEvents.QUEUE_UP, (data) => {
@@ -103,7 +128,6 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.PARTY_INVITE, (data) => {
 
         console.log(data)
-        console.log(socketInfos)
         console.log("PARTY INVITE")
 
         const receiverInfo = [...socketInfos.values()].find(socketInfo => socketInfo.username == data.receiver)
@@ -144,28 +168,56 @@ export function handleConnection(socket: Socket) {
         accepterInfo.partyRoom = room
 
         // Get all users usernames that are in the current room as the accepter and the inviter
-        const partyUsers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
+        const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == room)?.map(user => user.username)
 
-        // Let the part members know that the accepter has accepted the invite
+        // Let the party members know that the accepter has accepted the invite
         io.to(room).emit(SocketEvents.UPDATE_PARTY_INFO, {
-            partyUsers: partyUsers,
-            partyLeader: data.inviter
+            partyMembers: partyMembers,
         })
+    })
+
+    // data is an array of usernames
+    socket.on(SocketEvents.CHANGE_READY, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.CHANGE_READY, data)
+    })
+
+    // data is an array of usernames that will be matched up to play.
+    // This event listener gets executed when a user tells the server everyone in the party is ready.
+    // This listener assumes that all users received in the data actually exist in the socketInfos map.
+    socket.on(SocketEvents.MATCH_FOUND, (data) => {
+
+        // console.log("socketInfos: " + JSON.stringify(socketInfos))
+        console.log("data: " + JSON.stringify(data))
+        
+        // For each player, set their game room to the same
+        let room = randomBytes(8).toString('hex')
+
+        for (const player of data.players) {
+            const userInfo = [...socketInfos.values()].find(socketInfo => socketInfo.username === player)
+            
+            if (userInfo === undefined) throw new Error("ayo wtf " + player + " is supposed to exist in socketInfos")
+
+            console.log(userInfo)
+            userInfo.gameRoom = room
+            userInfo.socket.join(room)
+        }
+
+        io.to(room).emit(SocketEvents.MATCH_FOUND, data)
     })
 
     socket.on(SocketEvents.LEAVE_PARTY, (data) => {
 
+        // Clear the old party room id
         const oldPartyRoom = (socketInfos.get(socket.id) as SocketInfo).partyRoom;
         (socketInfos.get(socket.id) as SocketInfo).partyRoom = ''
+
+        // Leave the party
         socket.leave(oldPartyRoom)
 
+        // Let everyone know in the old party that the user left with the new members structure
         socket.to(oldPartyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
-            partyUsers: data.partyUsers
+            partyMembers: data.partyMembers
         })
-    })
-
-    socket.on(SocketEvents.LEADER_PROMOTION, (data) => {
-        io.to((socketInfos.get(socket.id) as SocketInfo).partyRoom).emit(SocketEvents.LEADER_PROMOTION, data)
     })
 
     // GAMEPLAY
@@ -179,5 +231,9 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.STOP_FOLLOW, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.STOP_FOLLOW, data)
     })
-}
 
+    // MESSAGES
+    socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
+    socket.on(SocketEvents.SEND_PARTY_MESSAGE, data => { });
+    socket.on(SocketEvents.SEND_PRIVATE_MESSAGE, data => { })
+}

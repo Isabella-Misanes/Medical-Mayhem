@@ -6,11 +6,7 @@ export default function BackButton() {
     const navigate = useNavigate();
     return (
         <Button id='back-button' variant="contained"
-            sx={[buttonStyle, {
-                left: '2%',
-                bottom: '2%',
-                position: 'absolute'
-            }]}
+            sx={[buttonStyle, {left: '2%', bottom: '7%', position: 'absolute'}]}
             onClick={()=>{navigate("/")}}>
             Back
         </Button>

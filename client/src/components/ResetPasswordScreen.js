@@ -1,27 +1,23 @@
-import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
-import BackButton from './BackButton';
-import { buttonStyle } from '../Styles';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-export default function RegisterScreen() {
+export default function ResetPasswordScreen(props) {
     const {auth} = useContext(AuthContext);
-    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
+        token: useParams().token,
         password: '',
         passwordVerify: ''
     })
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        auth.registerUser(
-            formData.username,
-            formData.email,
+
+        auth.resetPassword(
+            formData.token,
             formData.password,
             formData.passwordVerify
         );
@@ -31,10 +27,7 @@ export default function RegisterScreen() {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value })
     }
-
-//    let modal = "";
-//    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
-
+    
     return (
             <Box sx={{
                 height: '90%',
@@ -60,34 +53,11 @@ export default function RegisterScreen() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign up
+                        Reset Password
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    id="username"
-                                    label="Username"
-                                    name="username"
-                                    autoComplete="username"
-                                    onChange={handleChange} 
-                                    sx={{width: '50%'}}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    onChange={handleChange}
-                                    sx={{width: '50%'}}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
@@ -115,25 +85,16 @@ export default function RegisterScreen() {
                             </Grid>
                         </Grid>
                         <Button
-                            id="signUp"
+                            id="loginSubmit"
                             type="submit"
-                            fullWidth
                             variant="contained"
-                            sx={[buttonStyle, { mt: 3, mb: 2, width: '50%' }]}
+                            sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign Up
+                            Reset Password
                         </Button>
-                        <Grid container justifyContent="center">
-                            <Grid item>
-                                <Link onClick={() => navigate('/login')} variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                     {/* {modal} */}
                 </Box>
-                <BackButton />
             </Box>
     );
 }

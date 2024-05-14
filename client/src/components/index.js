@@ -11,8 +11,8 @@ import ForumScreen from "./ForumScreen";
 import PostScreen from "./PostScreen";
 import NewThreadScreen from "./NewThreadScreen";
 import ProfileScreen from "./ProfileScreen";
-import MapSearchScreen from "./MapSearchScreen";
-import MapBuilderScreen from "./MapBuilderScreen";
+import CharacterSearchScreen from "./CharacterSearchScreen";
+import CharacterBuilderScreen from "./CharacterBuilderScreen";
 import ReportsScreen from "./ReportsScreen";
 import GameScreen from "./GameScreen";
 import BackButton from "./BackButton";
@@ -21,6 +21,8 @@ import ReportModal from "./ReportModal";
 import MessagesDrawer from "./MessagesDrawer";
 import HomeWrapper from "./HomeWrapper";
 import MainLayout from "./MainLayout"
+import ForgotPasswordScreen from "./ForgotPasswordScreen";
+import ResetPasswordScreen from "./ResetPasswordScreen";
 
 export {
     Sidebar,
@@ -36,8 +38,8 @@ export {
     PostScreen,
     NewThreadScreen,
     ProfileScreen,
-    MapSearchScreen,
-    MapBuilderScreen,
+    CharacterSearchScreen,
+    CharacterBuilderScreen,
     ReportModal,
     ReportsScreen,
     GameScreen,
@@ -45,5 +47,7 @@ export {
     InviteModal,
     MessagesDrawer,
     HomeWrapper,
-    MainLayout
+    MainLayout,
+    ForgotPasswordScreen,
+    ResetPasswordScreen
 }

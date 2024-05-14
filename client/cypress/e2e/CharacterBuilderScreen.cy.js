@@ -20,8 +20,8 @@ describe('Character Builder Screen', () => {
 
   it('should be able to select all premade characters', () => {
         cy.visit('/')
-        cy.get('#map-builder-button').should('be.visible').should('be.enabled')
-        cy.get('#map-builder-button').should('be.visible').click()
+        cy.get('#character-builder-button').should('be.visible').should('be.enabled')
+        cy.get('#character-builder-button').should('be.visible').click()
         for(let i=0; i<6; i++) {
             cy.get('#character-'+(i)).should('be.visible').click()
         }
@@ -29,16 +29,16 @@ describe('Character Builder Screen', () => {
 
     it('should be able to confirm changes', () => {
         cy.visit('/')
-        cy.get('#map-builder-button').should('be.visible').should('be.enabled')
-        cy.get('#map-builder-button').should('be.visible').click()
+        cy.get('#character-builder-button').should('be.visible').should('be.enabled')
+        cy.get('#character-builder-button').should('be.visible').click()
         cy.get('#confirm-changes').should('be.visible').click()
         cy.get('#confirm-changes').should('be.visible').should('be.enabled')
     })
 
     it('should be able to move sliders', () => {
         cy.visit('/')
-        cy.get('#map-builder-button').should('be.visible').should('be.enabled')
-        cy.get('#map-builder-button').should('be.visible').click()
+        cy.get('#character-builder-button').should('be.visible').should('be.enabled')
+        cy.get('#character-builder-button').should('be.visible').click()
         for(let i=0; i<3; i++) {
             cy.get('#slider-speed').should('be.visible').invoke('val', i).trigger('change')
             cy.get('#slider-strength').should('be.visible').invoke('val', i).trigger('change')
