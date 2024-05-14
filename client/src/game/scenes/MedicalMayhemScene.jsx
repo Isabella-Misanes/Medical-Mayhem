@@ -18,7 +18,25 @@ export class MedicalMayhemScene extends Scene {
         })
 
         socket.on(SocketEvents.TREAT_PATIENT, (data) => {
-            this.killPatient(data.id)
+            this.killPatient(data.patient)
+        })
+
+        socket.on(SocketEvents.STOP_FOLLOW, (data) => {
+            // console.log(data)
+            for (let i = 0; i < this.patients.length; i++) {
+                if (this.patients[i].patientId === data.id) {
+                    this.patients[i].setFollowing(false);
+                }
+            }
+        })
+
+        socket.on(SocketEvents.START_TREAT_PATIENT, (data) => {
+            console.log(data)
+            for (let i = 0; i < this.patients.length; i++) {
+                if (this.patients[i].patientId === data.patient) {
+                    this.patients[i].setTreating(true);
+                }
+            }
         })
     }
 
@@ -55,6 +73,7 @@ export class MedicalMayhemScene extends Scene {
     }
 
     killPatient(id) {
+        console.log("KILLING: " + id);
         for (let i = 0; i < this.patients.length; i++) {
             if (this.patients[i].patientId == id) {
                 this.patients[i].kill()

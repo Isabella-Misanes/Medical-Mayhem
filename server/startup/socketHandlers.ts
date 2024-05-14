@@ -99,6 +99,11 @@ export function handleConnection(socket: Socket) {
     })
 
     // data is a patient id
+    socket.on(SocketEvents.START_TREAT_PATIENT, (data) => {
+        io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.START_TREAT_PATIENT, data)
+    })
+
+    // data is a patient id
     socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SPAWN_PATIENT, data)
     })

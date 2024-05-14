@@ -14,8 +14,9 @@ export default class Patient extends Actor {
             collisionType: ex.CollisionType.Passive,
             color: Color.Chartreuse
         })
-        this.following = false
+        this.followingDoctor = false
         this.patientId = patientId
+        this.treating = false
     }
 
     onInitialize(engine) {
@@ -24,5 +25,13 @@ export default class Patient extends Actor {
 
         this.graphics.use(sprite)
 
+    }
+
+    setFollowing(state) {
+        this.followingDoctor = state;
+    }
+
+    setTreating(state) {
+        this.treating = state;
     }
 }
