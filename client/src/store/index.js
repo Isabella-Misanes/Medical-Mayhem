@@ -1034,6 +1034,22 @@ function GlobalStoreContextProvider(props) {
         asyncGetAvatar();
     }
 
+    store.deleteAvatar = function() {
+        async function asyncDeleteAvatar() {
+            // try {
+            //     let response = await apis.getAvatar()
+            //     console.log(response)
+            //     storeReducer({
+            //         type: GlobalStoreActionType.GET_AVATAR,
+            //         payload: response.data
+            //     })
+            // } catch (error) {
+            //     console.log(error);
+            // }
+        }
+        asyncDeleteAvatar();
+    }
+
     store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
         async function asyncUpdateAvatar() {
             try{

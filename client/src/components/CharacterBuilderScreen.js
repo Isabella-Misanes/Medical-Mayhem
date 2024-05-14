@@ -1,10 +1,9 @@
-import { Button, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, Slider, Switch, TextField } from '@mui/material';
+import { Button, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Paper, Select, Slider, Switch, TextField } from '@mui/material';
 import {FormControl} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import { useNavigate } from 'react-router-dom';
-
-import BackButton from './BackButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { buttonStyle, splashButtonStyle } from '../Styles';
 import player1 from '../assets/Player-1.png.png';
 import player2 from '../assets/Player-2.png.png';
@@ -17,6 +16,7 @@ import addPlayer from '../assets/Add-Player.png.png';
 export default function CharacterBuilderScreen() {
     const { store } = useContext(GlobalStoreContext);
     const [selectedCharacter, setCharacter] = useState(0);
+    const [customAvatar, setCustomAvatar] = useState();
     const [selectedSprite, setSelectedSprite] = useState("");
     const [postSprite, setSprite] = useState("");
     const [speed, setSpeed] = useState(0);
@@ -54,7 +54,7 @@ export default function CharacterBuilderScreen() {
         if (file) {
             const base64 = await convertToBase64(file);
             setSprite(base64);
-            setCharacter(6);
+            setCharacter(7+avatarList.length);
             setSelectedSprite(base64);
         }
     }
@@ -94,18 +94,39 @@ export default function CharacterBuilderScreen() {
         setIsPublic(store.avatar.isPublic);
     }, [store.avatar])
 
-    function handleCharacterClick(imageLink, index) {
+    function handleCharacterClick(imageLink, index, customCharacter) {
         setSelectedSprite(imageLink);
         setCharacter(index);
+        if(customCharacter) {
+            setCustomAvatar(customCharacter);
+            setAvatarName(customCharacter.avatarName);
+            setSprite(customCharacter.avatarSprite);
+            setSpeed(customCharacter.speed);
+            setStrength(customCharacter.strength);
+            setDefense(customCharacter.defense);
+            setMinigame(customCharacter.favoredMinigame);
+            setIsPublic(customCharacter.isPublic);
+        }
     }
 
     function handleUpdateCharacter() {
-        store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
-        store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+        if(selectedSprite) {
+            store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+            store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+        }
+        else {
+            alert("Please upload an image or select a premade one.")
+        }
     }
 
     function handleUpdateName(event) {
         setAvatarName(event.target.value);
+    }
+
+    function handleDeleteCharacter(avatar) {
+        if(avatar) {
+            store.deleteAvatar(avatar);
+        }
     }
 
     return (
@@ -125,7 +146,7 @@ export default function CharacterBuilderScreen() {
                         <Grid item xs={12} sx={{
                             textAlign: 'center',
                         }}>
-                            <strong>Select a premade character or upload your own sprite!</strong>
+                            <strong>Select a premade character or upload your own spritesheet!</strong>
                         </Grid>
                         {players.map((image, index) => (
                             <Grid key={index} item xs={4}>
@@ -138,7 +159,7 @@ export default function CharacterBuilderScreen() {
                                         backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
                                         border: selectedCharacter === index ? 1 : 0,
                                     }}
-                                    onClick={() => handleCharacterClick(image, index)}
+                                    onClick={() => handleCharacterClick(image, index, null)}
                                 >
                                     <img
                                     src={image}
@@ -166,7 +187,7 @@ export default function CharacterBuilderScreen() {
                                         backgroundColor: selectedCharacter === index+7 ? 'lightblue' : 'white',
                                         border: selectedCharacter === index+7 ? 1 : 0,
                                     }}
-                                    onClick={() => handleCharacterClick(avatar.avatarSprite, index+7)}
+                                    onClick={() => handleCharacterClick(avatar.avatarSprite, index+7, avatar)}
                                 >
                                     <img
                                     src={avatar.avatarSprite}
@@ -183,17 +204,17 @@ export default function CharacterBuilderScreen() {
                         }
                         <Grid item xs={4}>
                             <Paper elevation={3} 
-                                id='character-6'
+                                id='character-upload'
                                 sx={{
                                     height: '100%',
                                     width: '100%',
                                     maxHeight: '50vh',
                                     mb: 2,
                                     alignContent: 'center', 
-                                    backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
-                                    border: selectedCharacter === 6 ? 1 : 0,
+                                    backgroundColor: selectedCharacter === 7+avatarList.length ? 'lightblue' : '#ffffff',
+                                    border: selectedCharacter === 7+avatarList.length ? 1 : 0,
                                 }}
-                                onClick={() => {handleCharacterClick(7+avatarList.length)}}
+                                onClick={() => {handleCharacterClick(null, 7+avatarList.length, null)}}
                             >
                                 <form
                                     onSubmit={handleSubmit}>
@@ -228,7 +249,6 @@ export default function CharacterBuilderScreen() {
                         alignItems: 'center',
                         backgroundColor: 'white',
                         p: 2,
-                        mt: 1,
                         boxShadow: 4
                     }}>
                         <Grid item xs={12}>
@@ -363,11 +383,17 @@ export default function CharacterBuilderScreen() {
                                 onChange={(event) => {handleUpdateName(event)}}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button id='confirm-changes' sx={[buttonStyle, {color: 'white'}]}
+                        <Grid item xs={10}>
+                            <Button id='confirm-changes' fullWidth sx={[buttonStyle, {color: 'white'}]}
                             onClick={() => {handleUpdateCharacter()}}>
                                 Confirm Changes
                             </Button>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <IconButton disabled={selectedCharacter < 6 || selectedCharacter >= 7+avatarList.length}
+                            onClick={() => {handleDeleteCharacter(customAvatar)}} >
+                                <DeleteIcon/>
+                            </IconButton>
                         </Grid>
 
                     </Grid>
