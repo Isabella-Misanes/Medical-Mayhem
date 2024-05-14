@@ -85,9 +85,9 @@ export class MedicalMayhemScene extends Scene {
         // Set personal and team scores and update the ui text
         console.log("HEREEE");
         console.log(context);
-        this.score.val = context.data.yourScore
-        this.teamScore.val = context.data.teamScore
-        this.username = context.data.username
+        if (context.data.yourScore) this.score.val = context.data.yourScore
+        if (context.data.teamScore) this.teamScore.val = context.data.teamScore
+        if (context.data.username) this.username = context.data.username
     }
 
     onDeactivate() {
@@ -117,7 +117,7 @@ export class MedicalMayhemScene extends Scene {
     }
 
     initializeScore = (game) => {
-        const score = new Actor({anchor: vec(500, 30), z: 10000});
+        const score = new Actor({pos: vec(500, 30), anchor: vec(0, 0), z: 10000});
         score.val = 0;
         score.text = new Text({
             text: 'Score: ' + score.val,
