@@ -7,7 +7,7 @@ import AuthContext from "../auth";
 import { useNavigate } from "react-router-dom";
 
 export default function UserOptionMenu(props) {
-    const {targetUser, anchorEl, setAnchorEl, isMenuOpen, setShowReportModal, handleFriendModalClose, setConfirmModal} = props;
+    const {toggleDrawer, targetUser, anchorEl, setAnchorEl, isMenuOpen, setShowReportModal, handleFriendModalClose, setConfirmModal} = props;
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ export default function UserOptionMenu(props) {
     }
 
     function handlePrivateMessaging(event) {
+        toggleDrawer(true)
         store.openPrivateMessaging(event);
         handleMenuClose();
     }

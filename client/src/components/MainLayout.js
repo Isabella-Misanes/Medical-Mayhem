@@ -34,6 +34,8 @@ export default function MainLayout() {
     const [displaySidebar, setDisplaySidebar] = useState(false)
     const [displayMessages, setDisplayMessages] = useState(false)
     const [inGame, setInGame] = useState(false)
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const toggleDrawer = open => setIsDrawerOpen(open);
 
     useEffect(() => {
         console.log(store)
@@ -53,8 +55,7 @@ export default function MainLayout() {
             !window.location.href.includes('resetPassword')
         )
 
-        if (auth.errorMessage !== "" || store.errorMessage !== "")
-            setDisplayErrorModal(true)
+        if (auth.errorMessage !== "" || store.errorMessage !== "") setDisplayErrorModal(true)
         //eslint-disable-next-line
     }, [auth, store.settings.toggles.party, store.playerList])
 
@@ -74,7 +75,7 @@ export default function MainLayout() {
                     <Route path="/resetPassword/:token" exact element={<ResetPasswordScreen />} />
                     <Route path="/about/" exact element={<AboutScreen />} />
                     <Route path="/settings/" exact element={<SettingsScreen />} />
-                    <Route path="/social/" exact element={<SocialScreen />} />
+                    <Route path="/social/" exact element={<SocialScreen toggleDrawer={toggleDrawer} />} />
                     <Route path="/forum/" exact element={<ForumScreen />} />
                     <Route path="/charactersearch/" exact element={<CharacterSearchScreen />} />
                     <Route path="/characterbuilder/" exact element={<CharacterBuilderScreen />} />
@@ -84,7 +85,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
-                {displayMessages && <MessagesDrawer />}
+                {displayMessages && <MessagesDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />}
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
                 <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>
