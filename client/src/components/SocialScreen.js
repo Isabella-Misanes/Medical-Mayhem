@@ -9,7 +9,7 @@ import SocialCard from './SocialCard';
 import MUIErrorModal from './MUIErrorModal';
 import UserOptionMenu from './UserOptionMenu';
 
-export default function SocialScreen() {
+export default function SocialScreen({toggleDrawer}) {
     const { store } = useContext(GlobalStoreContext);
     const [isModalOpen, setModalOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(0);
@@ -264,6 +264,7 @@ export default function SocialScreen() {
                     username={isModalOpen ? addFriendUsername : currFriend}
                 />
                 {isMenuOpen && <UserOptionMenu
+                    toggleDrawer={toggleDrawer}
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
                     isMenuOpen={isMenuOpen}

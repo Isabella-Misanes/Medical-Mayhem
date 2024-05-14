@@ -8,6 +8,7 @@ import AuthContext, { UserRoleType } from '../auth';
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
 
+// export default function MessagesDrawer({toggleDrawer}) {
 export default function MessagesDrawer() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -36,6 +37,7 @@ export default function MessagesDrawer() {
 
     function handleSendMessage() {
         if(messageText === '') return;
+        console.log(store.partyMembers);
         switch(value) {
             case '1':
                 // store.sendPublicMessage(messageText);
@@ -99,11 +101,7 @@ export default function MessagesDrawer() {
                 anchor={'bottom'}
                 open={state['bottom']}
                 onClose={toggleDrawer(false)} 
-                sx={{
-                    width: '40%',
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {width: '40%'}
-                }}>
+                sx={{width: '40%', flexShrink: 0, '& .MuiDrawer-paper': {width: '40%'}}}>
                 <Box sx={{bgcolor: '#34732F'}}>
                     <Box sx={{typography: 'body1'}}>
                         <TabContext value={value}>
@@ -114,62 +112,22 @@ export default function MessagesDrawer() {
                                     {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>}
                                 </TabList>
                             </Box>
-                            <TabPanel value="1">
-                                <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List ref={publicChatRef} sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        {chatRender(chat.public)}
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <TabPanel value="2">
-                                <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List ref={partyChatRef} sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        {chatRender(chat.party)}
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <TabPanel value="3">
-                                <Box ref={privateChatRef} sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
-                                        overflow: 'scroll',
-                                        overflowX: 'hidden',
-                                        height: '300px'
-                                    }}>
-                                        {chatRender(chat.private)}
-                                    </List>
-                                </Box>
-                            </TabPanel>
-                            <Grid container spacing={1} sx={{
-                                bgcolor: '#E7E7E7',
-                                pl: 2,
-                                pr: 2,
-                                pb: 2
-                            }}>
+                            <ChatTab i={1} chat={chat.public} chatRender={chatRender} chatRef={publicChatRef} />
+                            <ChatTab i={2} chat={chat.party} chatRender={chatRender} chatRef={partyChatRef} />
+                            <ChatTab i={3} chat={chat.private} chatRender={chatRender} chatRef={privateChatRef} />
+                            <Grid container spacing={1} sx={{bgcolor: '#E7E7E7', pl: 2, pr: 2, pb: 2}}>
                                 <Grid item xs={10}>
                                     <TextField
-                                        onKeyDown={ev => {
-                                            if(ev.key === 'Enter') handleSendMessage();
-                                        }}
+                                        onKeyDown={ev => {if(ev.key === 'Enter') handleSendMessage();}}
                                         value={messageText} fullWidth variant="standard" label="Send message..."
+                                        disabled={(value === '2' && store.partyMembers.length === 1)}
                                         onChange={(event) => handleMessageTextChange(event)}
                                     />
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <Button type='button' id='send-message' onClick={() => {
-                                        handleSendMessage();
-                                        setMessageText('');
-                                    }} disabled={messageText===''} sx={{
-                                            color: '#2d7044',
-                                            top: '20%'
-                                    }}>
+                                    <Button type='button' id='send-message' onClick={handleSendMessage} sx={{color: '#2d7044', top: '20%'}}
+                                        disabled={messageText === '' || (value === '2' && store.partyMembers.length === 1)}
+                                    >
                                         <SendIcon />
                                     </Button>
                                 </Grid>
@@ -183,9 +141,18 @@ export default function MessagesDrawer() {
     );
 }
 
-function Message(props) {
-    const {username, messageText, auth} = props;
+function ChatTab({i, chat, chatRef, chatRender}) {
     return (
-        <ListItem><strong>{username}{auth.username === username && ' (You)'}</strong>: {messageText}</ListItem>
+        <TabPanel value={`${i}`}>
+            <Box sx={{bgcolor: '#E7E7E7'}}>
+                <List ref={chatRef} sx={{overflow: 'scroll', overflowX: 'hidden', height: '300px'}}>
+                    {chatRender(chat)}
+                </List>
+            </Box>
+        </TabPanel>
     )
+}
+
+function Message({username, messageText, auth}) {
+    return <ListItem><strong>{username}{auth.username === username && ' (You)'}</strong>: {messageText}</ListItem>
 }
