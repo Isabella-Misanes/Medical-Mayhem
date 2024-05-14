@@ -64,6 +64,8 @@ export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${av
 
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
+export const searchAvatars = async (params) => { return api.get(`/avatar/search=${params}`) }
+
 export const getComments = async (avatar) => { return api.get(`/charactersearch/comments/${avatar}`) }
 
 export const addComment = async(text, targetAvatar) => {
@@ -127,7 +129,7 @@ const apis = {
     viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
 
     // Avatars
-    getAvatar, updateAvatar, updateAvatarList, getAllAvatars, loadAvatar,
+    getAvatar, updateAvatar, updateAvatarList, getAllAvatars, searchAvatars, loadAvatar,
     getComments,
     addComment,
     getSettings,
