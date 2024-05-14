@@ -56,10 +56,11 @@ io.on('connection', handleConnection)
 
 // If the app is in Heroku, use and serve the generated build, and route requests to index.html
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static( 'client/build' ))
+    const root = path.join(__dirname, 'client', 'build');
+    app.use(express.static(root));
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+      res.sendFile('index.html', { root });
     })
-}
+  }
 
 export default server;
