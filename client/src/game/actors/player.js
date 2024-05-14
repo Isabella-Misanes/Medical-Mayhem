@@ -229,6 +229,7 @@ export default class Player extends Actor {
                 this.guidingPatient = null;
             }
 
+            // updates velocity for other player's referene to this player if it isn't the same as last frame
             if (!this.vel.equals(lastVel))
                 socket.emit(SocketEvents.PLAYER_MOVED, {
                     username: this.username,
