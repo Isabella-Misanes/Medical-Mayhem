@@ -47,6 +47,7 @@ export default function MessagesDrawer() {
             default:
                 break;
         }
+        setMessageText('');
     }
 
     const toggleDrawer = (open) => (event) => {
@@ -54,18 +55,16 @@ export default function MessagesDrawer() {
         setState({ ...state, 'bottom' : open });
     };
 
-    const publicChatRender = () => {
+    const chatRender = (messageArr) => {
         const messageItems = [];
-        for(let i = 0; i < chat.public.length; i++) {
-            const publicChatMessage = chat.public[i];
+        for(let i = 0; i < messageArr.length; i++) {
+            const chatMessage = messageArr[i];
             messageItems.push(
-                <Message key={i} username={publicChatMessage.username} messageText={publicChatMessage.text} auth={auth} />
+                <Message key={i} username={chatMessage.username} messageText={chatMessage.text} auth={auth} />
             )
         }
         return messageItems;
     }
-
-    useEffect(() => {if(store.chat) setChat(store.chat)}, [store.chat]);
 
     useEffect(() => {
         if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
@@ -73,11 +72,10 @@ export default function MessagesDrawer() {
 
     useEffect(() => {
         const handleMessage = (data) => {
-            setChat({
-                public: [...chat.public, {username: data.username, text: data.text}],
-                party: chat.party,
-                private: chat.private,
-            })
+            setChat(prevChat => ({
+                ...prevChat,
+                public: [...prevChat.public, {username: data.username, text: data.text}]
+            }))
         }
         socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage);
         return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
@@ -104,16 +102,10 @@ export default function MessagesDrawer() {
                 sx={{
                     width: '40%',
                     flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: '40%'
-                    }
+                    '& .MuiDrawer-paper': {width: '40%'}
                 }}>
-                <Box sx={{ 
-                    bgcolor: '#34732F' 
-                }}>
-                    <Box sx={{ 
-                        typography: 'body1',
-                    }}>
+                <Box sx={{bgcolor: '#34732F'}}>
+                    <Box sx={{typography: 'body1'}}>
                         <TabContext value={value}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <TabList onChange={handleTabChange} aria-label="lab API tabs example">
@@ -129,7 +121,7 @@ export default function MessagesDrawer() {
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        {publicChatRender()}
+                                        {chatRender(chat.public)}
                                     </List>
                                 </Box>
                             </TabPanel>
@@ -140,11 +132,7 @@ export default function MessagesDrawer() {
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
-                                        <Message username='MedicalGamer' messageText='Hi!' auth={auth} />
-                                        <Message username='User1' messageText='lololol' auth={auth} />
-                                        <Message username='User1' messageText='omg' auth={auth} />
+                                        {chatRender(chat.party)}
                                     </List>
                                 </Box>
                             </TabPanel>
@@ -155,14 +143,7 @@ export default function MessagesDrawer() {
                                         overflowX: 'hidden',
                                         height: '300px'
                                     }}>
-                                        <Message username='McKillaGorilla' messageText='Hello World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hello!' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='Hi Guys!' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Yoooooooooo' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='World' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='Hi' auth={auth} />
-                                        <Message username='McKillaGorilla' messageText='omg' auth={auth} />
-                                        <Message username='ExamplePlayer' messageText='testingggg' auth={auth} />
+                                        {chatRender(chat.private)}
                                     </List>
                                 </Box>
                             </TabPanel>
@@ -174,6 +155,9 @@ export default function MessagesDrawer() {
                             }}>
                                 <Grid item xs={10}>
                                     <TextField
+                                        onKeyDown={ev => {
+                                            if(ev.key === 'Enter') handleSendMessage();
+                                        }}
                                         value={messageText} fullWidth variant="standard" label="Send message..."
                                         onChange={(event) => handleMessageTextChange(event)}
                                     />
