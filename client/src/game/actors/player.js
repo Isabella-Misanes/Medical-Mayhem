@@ -108,7 +108,6 @@ export default class Player extends Actor {
             // console.log(data)
             if (data.username === this.username) {
                 this.vel = ex.vec(data.vel._x, data.vel._y)
-                this.posCorrection = data.pos
                 if (data.vel._x == 0 && data.vel._y == 0) {
                     this.graphics.use('down-idle');
                 } else if (data.vel._x == Config.PlayerSpeed && data.vel._y == 0) {
@@ -158,7 +157,10 @@ export default class Player extends Actor {
     onPreUpdate(engine, elapsedMs) {
         if (this.isMyPlayer) {
             this.graphics.use('down-idle');
+
+            const lastVel = this.vel
             this.vel = ex.Vector.Zero;
+
             if (engine.input.keyboard.isHeld(ex.Keys.D)) {
                 this.vel = ex.vec(Config.PlayerSpeed, 0);
                 
@@ -227,11 +229,11 @@ export default class Player extends Actor {
                 this.guidingPatient = null;
             }
 
-            socket.emit(SocketEvents.PLAYER_MOVED, {
-                username: this.username,
-                vel: this.vel,
-                pos: this.pos.clone().add(this.vel.clone().scale(elapsedMs / 1000)),
-            })
+            if (!this.vel.equals(lastVel))
+                socket.emit(SocketEvents.PLAYER_MOVED, {
+                    username: this.username,
+                    vel: this.vel,
+                })
         }
     }
 
