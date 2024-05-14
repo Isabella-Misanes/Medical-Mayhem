@@ -37,12 +37,8 @@ export class MedicationMatchingScene extends Scene {
         this.pointText.text = "Score: " + this.points;
         this.opponentPoints = context.data.opponentScore;
         this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
-
-        console.log(context.data.prevScene);
-        let prev = context.data.prevScene;
-
         setTimeout(() => {
-            this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
+            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints}});
             // socket.emit(SocketEvents.SPAWN_PATIENT, this.points)
         }, 15000);
     }
@@ -229,11 +225,11 @@ export class MedicationMatchingScene extends Scene {
                 if(this.currColor === this.boxesInfo[this.row][this.col].color) {
                     this.points += 100;
                     this.pointText.text = "Score: " + this.points;
-                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.points)
+                    socket.emit(SocketEvents.SCORE_CHANGE, this.points)
                 } else {
                     this.points -= 50;
                     this.pointText.text = "Score: " + this.points;
-                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.points)
+                    socket.emit(SocketEvents.SCORE_CHANGE, this.points)
                 }
 
                 // Bring currColor circle back to original position

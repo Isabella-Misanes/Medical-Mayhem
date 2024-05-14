@@ -12,11 +12,11 @@ export class GameResultsScene extends Scene {
         this.engine = engine;
         this.initializeText(engine);
         this.yourScore = this.initializeScore(this.engine);
-        this.opponentScore = this.initializeOpponentScore(this.engine);
+        this.teamScore = this.initializeTeamScore(this.engine);
     }
 
     yourScore;
-    opponentScore;
+    teamScore;
     engine;
     gameWidth = 1000;
     gameHeight = 750;
@@ -24,9 +24,9 @@ export class GameResultsScene extends Scene {
     onActivate(context) {
         console.log(context);
         this.yourScore.val = context.data.yourScore;
-        this.opponentScore.val = context.data.opponentScore;
-        this.yourScore.text.text = 'Score: ' + this.yourScore.val;
-        this.opponentScore.text.text = 'Opponent Score: ' + this.opponentScore.val;
+        this.teamScore.val = context.data.teamScore;
+        this.yourScore.text.text = 'Team Score: ' + this.teamScore.val;
+        this.teamScore.text.text = 'Your Score: ' + this.yourScore.val;
 
         // SEND GAME DATA TO DB
     }
@@ -59,17 +59,17 @@ export class GameResultsScene extends Scene {
         return score;
     }
 
-    initializeOpponentScore = (game) => {
-        const opponentScore = new Actor({pos: vec(this.gameWidth/2, this.gameHeight/2 + 85)});
-        opponentScore.val = 0;
-        opponentScore.text = new Text({
-            text: 'Opponent Score: ' + opponentScore.val,
+    initializeTeamScore = (game) => {
+        const teamScore = new Actor({pos: vec(this.gameWidth/2, this.gameHeight/2 + 85)});
+        teamScore.val = 0;
+        teamScore.text = new Text({
+            text: 'Opponent Score: ' + teamScore.val,
             color: Color.White,
             font: new Font({size: 30, textAlign: TextAlign.Left})
         });
-        opponentScore.graphics.use(opponentScore.text);
-        game.currentScene.add(opponentScore);
-        return opponentScore;
+        teamScore.graphics.use(teamScore.text);
+        game.currentScene.add(teamScore);
+        return teamScore;
     }
 
 }

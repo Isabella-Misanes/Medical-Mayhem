@@ -52,10 +52,6 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
     engine.goToScene("medicalMayhem");
     engine.add("gameresults", new GameResultsScene());
 
-    // let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
-
-    // engine.goToScene(gameSequence[0], {sceneActivationData: {yourScore: 0, opponentScore: 0, games: gameSequence}});
-
     engine.start(loader).then(() => {
         Resources.tiledMap.addToScene(engine.currentScene)
     
