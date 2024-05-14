@@ -7,7 +7,8 @@ import nodemailer from "nodemailer";
 import dotenv from 'dotenv';
 import path from 'path';
 import { PasswordResetToken } from '../models/password-reset-token';
-import { randomBytes } from 'crypto';
+import crypto, {randomBytes} from 'crypto';
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 dotenv.config({ path: path.resolve(__dirname, '../.env')}); // ty DavidP on SO
 
@@ -215,11 +216,26 @@ export const forgotPassword = async (req: Request, res: Response) => {
     console.log(process.env.PASSWORD_APP_EMAIL)
 
     try {
-        const token = randomBytes(8).toString('hex')
-        const passwordResetToken = new PasswordResetToken({ 
-            token: token 
-        })
-        await passwordResetToken.save()
+
+        const email = req.body.email
+        const existingUser = await User.findOne({ email: email });
+
+        console.log("existingUser: " + existingUser);
+        if (!existingUser) {
+            return res
+                .status(401)
+                .json({
+                    errorMessage: "No account is associated with this email."
+                })
+        }
+
+        // Create the reset token for the reset password link
+        const token = await jwt.sign({
+            email: email
+        }, process.env.JWT_SECRET, {
+            expiresIn: '10m'
+        });
+
 
         const transporter = nodemailer.createTransport({
             service: "Gmail",
@@ -232,7 +248,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         // Email configuration
         const mailOptions = {
             from: process.env.EMAIL,
-            to: req.body.email,
+            to: email,
             subject: "Reset Password",
             html: `<h1>Reset Your Password</h1>
           <p>Click on the following link to reset your password:</p>
@@ -242,7 +258,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         };
       
         // Send the email
-        transporter.sendMail(mailOptions, (err, info) => {
+        transporter.sendMail(mailOptions, (err) => {
         if (err) {
             console.log(err)
             return res.status(500).send({ message: err.message });
@@ -256,7 +272,77 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => { 
 
+    // Everything here is simply a copy-paste of registerUser, except we're updating
+    // the password of a user instead of creating a new user. - Torin
 
+    try {
+        const {token, password, passwordVerify} = req.body
+
+        if (!token || !password || !passwordVerify) {
+            return res
+                .status(400)
+                .json({ errorMessage: "Please enter all required fields." });
+        }
+        console.log("all fields provided");
+
+        // Password verification
+        if (password.length < 8) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "Please enter a password of at least 8 characters."
+                });
+        }
+        console.log("password long enough");
+        if (password !== passwordVerify) {
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "Please enter the same password twice."
+                })
+        }
+        console.log("password and password verify match");
+
+        // Verify token
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+        const email = (verified as JwtPayload).email;
+
+        const existingUser = await User.findOne({ email: email });
+
+        console.log("existingUser: " + existingUser);
+        if (!existingUser) {
+            return res
+                .status(401)
+                .json({
+                    errorMessage: "No account is associated with your email."
+                })
+        }
+
+        // Hash new password
+        const saltRounds = 10;
+        const salt = await bcrypt.genSalt(saltRounds);
+        const passwordHash = await bcrypt.hash(password, salt);
+        console.log("passwordHash: " + passwordHash);
+
+        try {
+            await User.findOneAndUpdate({email: email}, { passwordHash: passwordHash });
+            res.status(200).send({ message: "Password reset successfully! You may now close this tab." });
+        } catch (err) {
+            return res.status(404).json({
+                loggedIn: false,
+                user: null,
+                errorMessage: "User no longer exists."
+            });
+        }
+
+    } catch (err) {
+        console.error(err);
+        return res.status(401).json({
+            loggedIn: false,
+            user: null,
+            errorMessage: "Password reset link expired."
+        });
+    }
 }
 
 export * as AuthController from './auth-controller'

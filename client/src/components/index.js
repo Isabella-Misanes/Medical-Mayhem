@@ -22,6 +22,7 @@ import MessagesDrawer from "./MessagesDrawer";
 import HomeWrapper from "./HomeWrapper";
 import MainLayout from "./MainLayout"
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
+import ResetPasswordScreen from "./ResetPasswordScreen";
 
 export {
     Sidebar,
@@ -47,5 +48,6 @@ export {
     MessagesDrawer,
     HomeWrapper,
     MainLayout,
-    ForgotPasswordScreen
+    ForgotPasswordScreen,
+    ResetPasswordScreen
 }
