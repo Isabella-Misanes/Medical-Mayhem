@@ -270,7 +270,8 @@ export default function CharacterBuilderScreen() {
                         alignItems: 'center',
                         backgroundColor: 'white',
                         p: 2,
-                        boxShadow: 4
+                        boxShadow: 4,
+                        mt: 1
                     }}>
                         <Grid item xs={12}>
                             <img
@@ -286,7 +287,7 @@ export default function CharacterBuilderScreen() {
                             <h3>Character Stats</h3>
                         </Grid>
 
-                        <Grid item xs={2}>
+                        {/* <Grid item xs={2}>
                             Speed
                         </Grid>
                         <Grid item xs={1}>
@@ -372,8 +373,8 @@ export default function CharacterBuilderScreen() {
                         </Grid>
                         <Grid item xs={1}>
                             3
-                        </Grid>
-                        <Grid item xs={1}/>
+                        </Grid> 
+                        <Grid item xs={1}/>*/}
                         <Grid item xs={8}>
                             <FormControl fullWidth>
                                 <InputLabel id="favorite-minigame">Favorite Minigame</InputLabel>
