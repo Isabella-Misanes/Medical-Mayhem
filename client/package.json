@@ -1,13 +1,13 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "proxy": "https://medical-mayhem-c0832c3f548e.herokuapp.com/",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@excaliburjs/plugin-tiled": "^0.29.0",
+    "@excaliburjs/plugin-tiled": "^0.29.2",
     "@mui/icons-material": "^5.15.14",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.14",
@@ -23,11 +23,12 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5"
+    "socket.io-client": "^4.7.5",
+    "webpack-ignore-dynamic-require": "^1.0.0"
   },
   "scripts": {
-    "start": "DISABLE_ES_LINT_PLUGIN=true react-scripts start",
-    "build": "DISABLE_ES_LINT_PLUGIN=true react-scripts build",
+    "start": "set DISABLE_ESLINT_PLUGIN=true && react-scripts start",
+    "build": "set DISABLE_ESLINT_PLUGIN=true && react-scripts build",
     "test": "npx cypress open",
     "eject": "react-scripts eject"
   },

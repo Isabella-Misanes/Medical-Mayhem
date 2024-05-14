@@ -14,11 +14,12 @@ const UserSchema = new Schema(
         friendsIds: [{ type: ObjectId, ref: 'User' }],
         blockedIds: [{type: ObjectId, ref: 'User'}],
         recentPlayers: [{type: ObjectId, ref: 'User'}],
+
+
         gamesPlayed: {type: Number, default: 0},
-        gamesWon: {type: Number, default: 0},
+        totalScore: {type: Number, default: 0},
         highScore: {type: Number, default: 0},
         patientsSaved: {type: Number, default: 0},
-        winPercent: {type: Number, default: 0},
         // achievements : [Achievement],
         // featuredAchievements : [Achievement],
         onlineStatus: {type: Boolean, default: true},

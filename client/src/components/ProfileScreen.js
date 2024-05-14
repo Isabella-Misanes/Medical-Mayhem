@@ -1,22 +1,23 @@
 import { Box, Card, CardActionArea, CardActions, CardMedia, Divider, Grid, IconButton, LinearProgress, TextField } from '@mui/material';
-import Sidebar from './Sidebar';
-import { useEffect, useState } from 'react';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import EditIcon from '@mui/icons-material/Edit';
 import BackButton from './BackButton';
-import avatar from '../assets/default-avatar.jpg'
+import avatar from '../assets/default-avatar.jpg';
 import AuthContext from '../auth';
+import { useLocation } from 'react-router-dom';
 
 export default function ProfileScreen() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const {state} = useLocation();
+    const {currUsername} = state;
 
     const [showProfileScreen, setShowProfileScreen] = useState(true);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [username, setUsername] = useState("")
     const [bio, setBio] = useState("")
     const [postImage, setPostImage] = useState("")
+    const [regDate, setRegDate] = useState("")
 
     // Handles switching between Profile screen and Achievements screen
     const handleToggleScreen = () => {
@@ -24,18 +25,14 @@ export default function ProfileScreen() {
     };
 
     // Handles submitting the profile info once editing is turned off
-    function handleEditProfile(event) {
-
-        if(username.length === 0) {
-            setUsername(auth.username)
-            console.log(auth.username)
-            console.log(username)
-            store.updateProfile(auth.username, bio, postImage)
-        }
-
-        else if(editEnabled) {
-            auth.updateUsername(username)
-            store.updateProfile(username, bio, postImage)
+    async function handleEditProfile(event) {
+        console.log("EDITING")
+        if (editEnabled) {
+            try {
+                await store.updateProfile(bio, postImage, regDate)
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         setEditEnabled(!editEnabled);
@@ -44,11 +41,6 @@ export default function ProfileScreen() {
     // Handles changing the bio state value
     function handleBioChange(event) {
         setBio(event.target.value)
-    }
-
-    // Handles changing the username state value
-    function handleUsernameChange(event) {
-        setUsername(event.target.value)
     }
 
     // When a pfp is uploaded, it's converted to base 64 and sent to the server
@@ -77,20 +69,28 @@ export default function ProfileScreen() {
         })
     }
 
+    // Helper function to convert JS date to readable string
+    function dateToString(date) {
+        if(!date) return;
+        const newDate = new Date(date);
+        const month = newDate.toLocaleString('default', {month: 'long'});
+        return `${month} ${newDate.getDate()}, ${newDate.getFullYear()}`;
+    }
+
     useEffect(() => {
-        store.getProfile()
+        store.getProfile(currUsername)
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        setUsername(auth.username)
+        console.log(store)
         if(store.profileInfo) {
             setBio(store.profileInfo.bio)
             setPostImage(store.profileInfo.pfp)
+            setRegDate(dateToString(store.profileInfo.regDate))
         }
-
         // eslint-disable-next-line
-    }, [auth, store.profileInfo])
+    }, [store.profileInfo])
 
     const profileScreen = (
             <Card sx={{
@@ -103,7 +103,7 @@ export default function ProfileScreen() {
                 borderRadius: '16px',
                 color: 'white', 
             }}>
-                <CardActionArea>
+                <Card>
                     <Divider />
                     <Box sx={{
                         bgcolor: '#e3e3e3',
@@ -112,7 +112,7 @@ export default function ProfileScreen() {
                         color: 'black',
                     }}>
                         <Grid container spacing={4} sx={{textAlign: 'left'}}>
-                            <Grid item xs={12} onClick={handleToggleScreen} sx={{
+                            <Grid item xs={12} sx={{
                                 bgcolor: '#4D9147',
                                 color: 'white',
                                 textAlign: 'center'
@@ -135,7 +135,12 @@ export default function ProfileScreen() {
                                                 src={postImage || avatar}
                                                 width={140}
                                                 height={140}
-                                                alt=''/>
+                                                alt=''
+                                                style = {{
+                                                    filter: editEnabled ? "brightness(.4)" : "brightness(1)",
+                                                    cursor: editEnabled ? "pointer" : "auto"
+                                                }}>
+                                            </img>
                                         </label>
                                         <input
                                             type="file"
@@ -151,38 +156,21 @@ export default function ProfileScreen() {
                                 </Box>
                             </Grid>
                             <Grid item xs={6} sx={{fontSize: '12pt'}}>
-                                {editEnabled ?
-                                    <>
-                                        <TextField
-                                            id='username-input'
-                                            size='small'
-                                            value={username}
-                                            fullWidth
-                                            variant="outlined"
-                                            onChange={handleUsernameChange}
-                                        />
-                                        <p>
-                                            Last Seen: Now<br/>
-                                            Registered Since: Jan 22, 2024
-                                        </p>
-                                    </>
-                                    :
-                                    <>
-                                        <p id='username-text'>
-                                            {username}
-                                        </p>
-                                        <p>
-                                            Last Seen: Now<br/>
-                                            Registered Since: Jan 22, 2024
-                                        </p>
-                                    </>
-                                }
+                                <>
+                                    <p id='username-text'>
+                                        {auth.username}
+                                    </p>
+                                    <p>
+                                        Last Seen: Now<br/>
+                                        Registered Since: {regDate}
+                                    </p>
+                                </>
                             </Grid>
                             <Grid item xs={1} />
                             <Grid item xs={12} />
                         </Grid>   
                     </Box>
-                </CardActionArea>
+                </Card>
                 <CardActions>
                     <Box sx={{
                         width: '100%',
@@ -206,16 +194,17 @@ export default function ProfileScreen() {
                             <Grid item xs={12} sx={{
                                 bgcolor: '#4D9147',
                             }}>
-                                <IconButton id='edit-button' onClick={(event) => {handleEditProfile(event)}} 
-                                    sx={{
-                                        color: editEnabled ? 'red' : 'white'
-                                }}>
-                                    <EditIcon />
-                                </IconButton>
+                                {
+                                    // Edit button should only appear if user is on their own profile screen
+                                    auth.username === currUsername &&
+                                    <IconButton id='edit-button' onClick={(event) => {handleEditProfile(event)}} sx={{color: editEnabled ? 'red' : 'white'}}>
+                                        <EditIcon />
+                                    </IconButton>
+                                }
                             </Grid>
                         </Grid>
                     </Box>
-                </CardActions>            
+                </CardActions>          
             </Card>
     );
 
@@ -360,7 +349,7 @@ export default function ProfileScreen() {
     return (
         <div id="profile-screen">
             {showProfileScreen ? profileScreen : achievementsScreen}
-            <Sidebar />
+            
             <BackButton />
         </div>
     );

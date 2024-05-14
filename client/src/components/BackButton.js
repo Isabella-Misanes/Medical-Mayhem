@@ -5,12 +5,8 @@ import { useNavigate } from 'react-router-dom';
 export default function BackButton() {
     const navigate = useNavigate();
     return (
-        <Button variant="contained"
-            sx={[buttonStyle, {
-                left: '2%',
-                bottom: '2%',
-                position: 'absolute'
-            }]}
+        <Button id='back-button' variant="contained"
+            sx={[buttonStyle, {left: '2%', bottom: '7%', position: 'absolute'}]}
             onClick={()=>{navigate("/")}}>
             Back
         </Button>

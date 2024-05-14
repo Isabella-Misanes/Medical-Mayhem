@@ -5,12 +5,11 @@ axios.defaults.withCredentials = true;
 
 export const api = axios.create({baseURL: `${rootDomain}/api`})
 
-export const getProfile = async () => { return await api.get(`/getProfile/`) }
+export const getProfile = async (username) => { return await api.post(`/profile/:username`, {username: username}) }
 
-export const updateProfile = async (username, bio, pfp) => {
+export const updateProfile = async (bio, pfp) => {
     return api.post(`/updateProfile/`, {
         // SPECIFY THE PAYLOAD
-        username: username,
         bio: bio,
         pfp: pfp
     })
@@ -61,8 +60,22 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
     });
 }
 
+export const loadAvatar = async (avatar) => { return await api.get(`/avatar/${avatar}`) }
+
+export const getMyAvatars = async () => { return await api.get(`/myAvatars/`) }
+
 export const getAllAvatars = async () => { return await api.get(`/avatars/`) }
 
+export const searchAvatars = async (params) => { return api.get(`/avatars/search/${params}`) }
+
+export const getComments = async (avatar) => { return api.get(`/charactersearch/comments/${avatar}`) }
+
+export const addComment = async(text, targetAvatar) => {
+    return api.post('/charactersearch/addComment/', {
+        text: text,
+        targetAvatar: targetAvatar,
+    })
+}
 export const getSettings = async() => {
     return api.get('/settings/get');
 }
@@ -93,7 +106,17 @@ export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
     })
 }
 
-export const getParty = async() => { return api.get('/party'); }
+export const updateStats = async(username, yourScore, patientsSaved) => {
+    return api.post('/updateStats', {
+        username: username,
+        yourScore: yourScore,
+        patientsSaved: patientsSaved
+    })
+}
+
+// export const getParty = async() => { return api.get('/party'); }
+
+export const getUserPartyInfo = async(accepter) => { return api.get(`/party/${accepter}`) }
 
 export const getRelationToUser = async(targetUsername) => {
     return api.post('/relationToUser', {targetUsername: targetUsername});
@@ -101,30 +124,31 @@ export const getRelationToUser = async(targetUsername) => {
 
 export const blockPlayer = async (targetUsername) => { return api.post('/blockPlayer', {targetUsername: targetUsername}); }
 
+export const getPrivateMessages = async() => { return api.get('/messages/private/get')};
+export const sendPrivateMessage = async (message) => { return api.post('/messages/private/send', {message: message}); }
+
 const apis = {
-    getProfile,
-    updateProfile,
-    removeFriend,
-    viewFriends,
-    sendFriendRequest,
-    getRecentPlayers,
-    viewSentRequests,
-    viewReceivedRequests,
-    cancelFriendRequest,
-    ignoreFriendRequest,
-    acceptFriendRequest,
-    getOnlinePlayers,
-    getAvatar,
-    updateAvatar,
-    updateAvatarList,
-    getAllAvatars,
+    getProfile, updateProfile, // Profile screen
+
+    // Social screen
+    removeFriend, viewFriends, sendFriendRequest, getRecentPlayers, viewSentRequests,
+    viewReceivedRequests, cancelFriendRequest, ignoreFriendRequest, acceptFriendRequest, getOnlinePlayers,
+
+    // Avatars
+    getAvatar, updateAvatar, updateAvatarList, getMyAvatars, getAllAvatars, searchAvatars, loadAvatar,
+    getComments,
+    addComment,
     getSettings,
     updateAudioSettings,
     updateKeybinds,
     updateToggles,
-    getParty,
+    getUserPartyInfo,
     getRelationToUser,
-    blockPlayer
+    blockPlayer,
+
+    // Messages
+    getPrivateMessages,
+    sendPrivateMessage
 }
 
 export default apis

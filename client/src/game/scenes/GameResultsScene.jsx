@@ -29,6 +29,7 @@ export class GameResultsScene extends Scene {
         this.teamScore.text.text = 'Your Score: ' + this.yourScore.val;
 
         // SEND GAME DATA TO DB
+        
     }
 
     onDeactivate() {
