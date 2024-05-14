@@ -16,6 +16,8 @@ export default function MessagesDrawer() {
     const [messageText, setMessageText] = useState('');
     const [chat, setChat] = useState({public: [], party: [], private: []});
     const publicChatRef = useRef(null);
+    const partyChatRef = useRef(null);
+    const privateChatRef = useRef(null);
 
     const tabButton = {
         color: 'white',
@@ -33,6 +35,7 @@ export default function MessagesDrawer() {
     };
 
     function handleSendMessage() {
+        if(messageText === '') return;
         switch(value) {
             case '1':
                 // store.sendPublicMessage(messageText);
@@ -59,26 +62,23 @@ export default function MessagesDrawer() {
         const messageItems = [];
         for(let i = 0; i < messageArr.length; i++) {
             const chatMessage = messageArr[i];
-            messageItems.push(
-                <Message key={i} username={chatMessage.username} messageText={chatMessage.text} auth={auth} />
-            )
+            messageItems.push(<Message key={i} username={chatMessage.username} messageText={chatMessage.text} auth={auth} />)
         }
         return messageItems;
     }
 
-    useEffect(() => {
-        if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight;
-    }, [chat.public])
+    useEffect(() => {if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight}, [chat.public]);
+    useEffect(() => {if(partyChatRef.current) partyChatRef.current.scrollTop = partyChatRef.current.scrollHeight}, [chat.party]);
 
     useEffect(() => {
-        const handleMessage = (data) => {
-            setChat(prevChat => ({
-                ...prevChat,
-                public: [...prevChat.public, {username: data.username, text: data.text}]
-            }))
+        const handlePublicMessage = data => setChat(prevChat => ({...prevChat, public: [...prevChat.public, {username: data.username, text: data.text}]}));
+        const handlePartyMessage = data => setChat(prevChat => ({...prevChat, party: [...prevChat.party, {username: data.username, text: data.text}]}));
+        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
+        socket.on(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
+        return () => {
+            socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
+            socket.off(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
         }
-        socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage);
-        return () => { socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handleMessage) }
         // eslint-disable-next-line
     }, [])
 
@@ -126,8 +126,8 @@ export default function MessagesDrawer() {
                                 </Box>
                             </TabPanel>
                             <TabPanel value="2">
-                            <Box sx={{bgcolor: '#E7E7E7'}}>
-                                    <List sx={{
+                                <Box sx={{bgcolor: '#E7E7E7'}}>
+                                    <List ref={partyChatRef} sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
                                         height: '300px'
@@ -137,7 +137,7 @@ export default function MessagesDrawer() {
                                 </Box>
                             </TabPanel>
                             <TabPanel value="3">
-                            <Box sx={{bgcolor: '#E7E7E7'}}>
+                                <Box ref={privateChatRef} sx={{bgcolor: '#E7E7E7'}}>
                                     <List sx={{
                                         overflow: 'scroll',
                                         overflowX: 'hidden',
