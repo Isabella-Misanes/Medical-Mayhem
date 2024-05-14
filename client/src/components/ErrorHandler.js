@@ -3,6 +3,8 @@ import { api } from "../store/store-request-api";
 import AuthContext from "../auth";
 import { useNavigate } from 'react-router-dom';
 import GlobalStoreContext from "../store";
+import socket from "../constants/socket";
+import SocketEvents from "../constants/socketEvents";
 
 // Idea from https://stackoverflow.com/questions/64296505/usecontext-inside-axios-interceptor
 
@@ -16,8 +18,8 @@ const ErrorHandler = ({ children }) => {
         error => {
             let response = error.response
     
-            console.log(window.location.href)
             if ( response.status === 404 || response.status === 401 ) {
+                socket.emit(SocketEvents.LOGOUT)
                 store.reset()
                 navigate('/')
                 auth.error(response.data.errorMessage)
