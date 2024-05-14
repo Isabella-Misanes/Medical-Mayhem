@@ -36,7 +36,7 @@ export const getOnlinePlayers = async() => { return api.get('/onlinePlayers'); }
 
 export const getAvatar = async () => { return await api.get(`/getAvatar/`) }
 
-export const updateAvatar = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
+export const updateAvatar = async (pic, name, speed, strength, defense, favoredMinigame, isPublic, id) => {
     return api.post(`/updateAvatar/`, {
         pic: pic,
         name: name,
@@ -44,11 +44,12 @@ export const updateAvatar = async (pic, name, speed, strength, defense, favoredM
         strength: strength,
         defense: defense,
         favoredMinigame: favoredMinigame,
-        isPublic: isPublic
+        isPublic: isPublic,
+        id: id
     });
 }
 
-export const updateAvatarList = async (pic, name, speed, strength, defense, favoredMinigame, isPublic) => {
+export const updateAvatarList = async (pic, name, speed, strength, defense, favoredMinigame, isPublic, id) => {
     return api.post(`/updateAvatarList/`, {
         pic: pic,
         name: name,
@@ -56,7 +57,8 @@ export const updateAvatarList = async (pic, name, speed, strength, defense, favo
         strength: strength,
         defense: defense,
         favoredMinigame: favoredMinigame,
-        isPublic: isPublic
+        isPublic: isPublic,
+        id: id
     });
 }
 

@@ -104,6 +104,7 @@ export default function CharacterBuilderScreen() {
             setIsPublic(customCharacter.isPublic);
         }
         else {
+            setCustomAvatar(null);
             setAvatarName("");
             setSprite("");
             setSpeed(0);
@@ -115,9 +116,13 @@ export default function CharacterBuilderScreen() {
     }
 
     function handleUpdateCharacter() {
-        if(selectedSprite) {
-            store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
-            store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic);
+        if(selectedSprite && customAvatar) {
+            store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic, customAvatar._id);
+            store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic, customAvatar._id);
+        }
+        else if(selectedSprite) {
+            store.updateAvatar(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic, null);
+            store.updateAvatarList(selectedSprite, avatarName, speed, strength, defense, favoredMinigame, isPublic, null);
         }
         else {
             alert("Please upload an image or select a premade one.")

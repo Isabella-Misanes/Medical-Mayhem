@@ -1067,10 +1067,10 @@ function GlobalStoreContextProvider(props) {
         asyncDeleteAvatar();
     }
 
-    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatar() {
             try{
-                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR,
@@ -1104,10 +1104,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetMyAvatars();
     }
 
-    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatarList() {
             try {
-                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR_LIST,

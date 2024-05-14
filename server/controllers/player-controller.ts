@@ -157,38 +157,55 @@ export const getMyAvatars = async (req: Request, res: Response) => {
 
 export const updateAvatar = async (req: Request, res: Response) => {
     try {
-        const {pic, name, speed, strength, defense, favoredMinigame, isPublic} = req.body
+        const { pic, name, speed, strength, defense, favoredMinigame, isPublic, id } = req.body;
 
-        let updatedUser
+        const updatedUser = await User.updateOne(
+            { _id: req.userId },
+            {
+                $set: {
+                    avatarSprite: pic,
+                    avatarName: name,
+                    speed: speed,
+                    strength: strength,
+                    defense: defense,
+                    favoredMinigame: favoredMinigame,
+                    isPublic: isPublic
+                }
+            }
+        );
 
-        if (pic) {
-            updatedUser = await User.updateOne(
-                {_id: req.userId},
-                {$set: {avatarSprite: pic, avatarName: name, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame, isPublic: isPublic}}
+        console.log("updatedUser: ", updatedUser);
+
+        if(!updatedUser) {
+            return res.status(400).json({ errorMessage: "User cannot be updated." });
+        }
+
+        if(id) {
+            const updatedAvatar = await Avatar.findByIdAndUpdate(
+                id,
+                {
+                    avatarSprite: pic,
+                    avatarName: name,
+                    speed: speed,
+                    strength: strength,
+                    defense: defense,
+                    favoredMinigame: favoredMinigame,
+                    isPublic: isPublic
+                },
+                { new: true } // Return the updated document
             );
+
+            console.log("updatedAvatar: ", updatedAvatar);
+
+            if (!updatedAvatar) {
+                return res.status(400).json({ errorMessage: "Avatar cannot be updated." });
+            }
         }
 
-        else {
-            updatedUser = await User.updateOne(
-                {_id: req.userId},
-                {$set: {avatarName: name, speed: speed, strength: strength, defense: defense, favoredMinigame: favoredMinigame, isPublic: isPublic}}
-            );
-        }
-
-        console.log("updatedUser: " + updatedUser);
-        if (!updatedUser) {
-            return res
-                .status(400)
-                .json({
-                    errorMessage: "User cannot be updated."
-                })
-        }
-
-        return res.status(200).send()
-
+        return res.status(200).send();
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
