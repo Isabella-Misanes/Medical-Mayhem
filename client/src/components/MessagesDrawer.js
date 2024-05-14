@@ -112,12 +112,12 @@ export default function MessagesDrawer() {
                                 <TabList onChange={handleTabChange} aria-label="lab API tabs example">
                                     <Tab label="Public" value="1" sx={tabButton}/>
                                     {auth.role !== UserRoleType.GUEST && <Tab label="Party" value="2" sx={tabButton}/>}
-                                    {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>}
+                                    {/* {auth.role !== UserRoleType.GUEST && <Tab label="Private" value="3" sx={tabButton}/>} */}
                                 </TabList>
                             </Box>
                             <ChatTab i={1} chat={chat.public} chatRender={chatRender} chatRef={publicChatRef} />
                             <ChatTab i={2} chat={chat.party} chatRender={chatRender} chatRef={partyChatRef} />
-                            <ChatTab i={3} chat={chat.private} chatRender={chatRender} chatRef={privateChatRef} />
+                            {/* <ChatTab i={3} chat={chat.private} chatRender={chatRender} chatRef={privateChatRef} /> */}
                             <Grid container spacing={1} sx={{bgcolor: '#E7E7E7', pl: 2, pr: 2, pb: 2}}>
                                 <Grid item xs={10}>
                                     <TextField
