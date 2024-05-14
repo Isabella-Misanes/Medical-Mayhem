@@ -15,7 +15,7 @@ export class MedicalMayhemScene extends Scene {
     onInitialize(engine) {
 
         setTimeout(() => {
-            this.engine.goToScene("gameresults", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, prevScene: null}});
+            this.engine.goToScene("gameresults", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val}});
         }, 180000);
 
         console.log("INIT MEDICAL MAYHEM");
