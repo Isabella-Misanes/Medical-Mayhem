@@ -139,7 +139,7 @@ export class HeartbeatRhythmScene extends Scene {
     initializeText (game) {
         const actor = new Actor({pos: vec(this.gameWidth/2, this.gameHeight-30)});
         const instrText = new Text({
-            text: 'Press the Space bar when the circle reaches the vertical line.',
+            text: 'Press E when the circle reaches the vertical line.',
             color: Color.White,
             font: new Font({size: 24, textAlign: TextAlign.Left})
         });
