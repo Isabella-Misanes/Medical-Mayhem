@@ -9,8 +9,8 @@ export default function WelcomeScreen() {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
 
-    let modal = "";
-    if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
+    // let modal = "";
+    // if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
 
     return (
         <div id="welcome-screen">
@@ -76,7 +76,7 @@ export default function WelcomeScreen() {
                     </Button>
                 </Grid>
             </Grid>
-            {modal}
+            {/* {modal} */}
         </div>
     );
 }

@@ -1,13 +1,13 @@
 import { Box, Button, Typography } from '@mui/material';
 import { buttonStyle } from '../Styles';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
+
 
 export default function PostScreen({setCurrScreen}) {
     const navigate = useNavigate();
     return (
         <div id="post-screen">
-            <Sidebar/>
+            
             <Box
                 sx={{
                     height: '90%',

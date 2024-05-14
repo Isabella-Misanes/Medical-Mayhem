@@ -13,7 +13,6 @@ export const AuthActionType = {
     LOGOUT_GUEST: "LOGOUT_GUEST",
     REGISTER_USER: "REGISTER_USER",
     DELETE_USER: "DELETE_USER",
-    UPDATE_USERNAME: "UPDATE_USERNAME",
     ERROR: "ERROR"
 }
 
@@ -110,17 +109,8 @@ function AuthContextProvider(props) {
                     errorMessage: ""
                 })
             }
-            case AuthActionType.UPDATE_USERNAME: {
-                console.log("UPDATING USERNAME")
-                return setAuth({
-                    username: payload.username,
-                    email: auth.email,
-                    role: auth.role,
-                    loggedIn: auth.loggedIn,
-                    errorMessage: ""
-                })
-            }
             case AuthActionType.ERROR: {
+                console.log("AUTH ERROR")
                 return setAuth({
                     username: '',
                     email: '',
@@ -164,7 +154,8 @@ function AuthContextProvider(props) {
                 })
 
             // Take them back to the welcome screen
-            navigate("/");
+            if (!window.location.href.includes('resetPassword'))
+                navigate("/");
         }
     }
 
@@ -263,11 +254,32 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.updateUsername = (username) => {
-        authReducer({
-            type: AuthActionType.UPDATE_USERNAME,
-            payload: { username: username}
-        })
+    auth.forgotPassword = async function (email) {
+        try {
+            console.log(email)
+            await api.forgotPassword(email)
+        } catch(error) {
+            console.log(error)
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
+        }
+    }
+
+    auth.resetPassword = async function (token, password, passwordVerify) {
+        try {
+            const response = await api.resetPassword(token, password, passwordVerify)
+            alert(response.data.message)
+        } catch(error) {
+            console.log(error)
+            console.log(error.response.data.errorMessage);
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload: { errorMessage: error.response.data.errorMessage }
+            })
+        }
     }
 
     auth.hideModal = () => {

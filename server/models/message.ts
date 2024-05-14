@@ -7,7 +7,7 @@ const MessageSchema = new Schema(
     {
         senderId: {type: ObjectId, ref: 'User'},
         text: {type: String, required: true},
-        sendDate: {type: Date, default: new Date()},
+        sendDate: {type: Date, required: true, default: new Date()},
     },
     { timestamps: true },
 )

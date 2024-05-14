@@ -2,9 +2,9 @@ import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } f
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
-import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
 import { useNavigate } from 'react-router-dom';
+import { buttonStyle } from '../Styles';
 
 export default function LoginScreen() {
     const {auth} = useContext(AuthContext);
@@ -29,10 +29,7 @@ export default function LoginScreen() {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value })
     }
-
-   let modal = "";
-   if(auth.errorMessage !== "") modal = <MUIErrorModal auth={auth} />;
-
+    
     return (
             <Box sx={{
                 height: '90%',
@@ -91,19 +88,22 @@ export default function LoginScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={[buttonStyle, { mt: 3, mb: 2 }]}
                         >
                             Login
                         </Button>
                         <Grid container justifyContent="flex-end">
-                            <Grid item>
+                            <Grid item container direction='column'>
                                 <Link onClick={() => navigate('/register')} variant="body2">
                                     Don't have an account? Sign Up
+                                </Link>
+                                <Link onClick={() => navigate('/forgotPassword')} variant="body2">
+                                    Forgot Password?
                                 </Link>
                             </Grid>
                         </Grid>
                     </Box>
-                    {modal}
+                    {/* {modal} */}
                 </Box>
                 <BackButton />
             </Box>

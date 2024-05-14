@@ -1,25 +1,51 @@
 import { Box, Button, Divider, Grid, Modal } from '@mui/material';
 import { buttonStyle } from '../Styles';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import socket from '../constants/socket';
+import SocketEvents from "../constants/socketEvents";
 import GlobalStoreContext from '../store';
 
-export default function InviteModal({open, onClose}) {
+export default function InviteModal({displayInviteModal, setDisplayInviteModal}) {
     const { store } = useContext(GlobalStoreContext);
+    const [inviter, setInviter] = useState('')
 
     function handleAcceptInvite(event) {
-        store.acceptInvite(event);
-        onClose();
-    }
+        socket.emit(SocketEvents.PARTY_INVITE_ACCEPTED, {
+            inviter: inviter
+        })
+        setDisplayInviteModal(false)
+    }  
 
     function handleRejectInvite(event) {
-        store.rejectInvite(event);
-        onClose();
+        setDisplayInviteModal(false)
     }
+
+    useEffect(() => {
+        socket.on(SocketEvents.PARTY_INVITE, (data) => {
+            console.log("PARTY INVITE RECEIVED")
+            console.log(store.settings.toggles.party)
+
+            if (store.settings.toggles.party) {
+                setInviter(data.inviter)
+                setDisplayInviteModal(true)
+            }
+        })
+
+        socket.on(SocketEvents.UPDATE_PARTY_INFO, (data) => {
+            console.log('RECEIVED UPDATE PARTY INFO')
+            store.updateParty({
+                partyMembers: data.partyMembers,
+                playerList: store.playerList
+            })
+        })
+
+    //eslint-disable-next-line
+    }, [store.playerList])
 
     return (
         <Modal
-            open={open}
-            onClose={onClose}
+            open={displayInviteModal}
+            onClose={() => setDisplayInviteModal(false)}
         >
             <Box sx={{
                 width: '30%',
@@ -43,7 +69,7 @@ export default function InviteModal({open, onClose}) {
                     textAlign: 'center',
                     color: 'black'
                 }}>
-                    <p><strong>McKillaGorilla</strong> has invited you to their party.</p>
+                    <p><strong>{inviter}</strong> has invited you to their party.</p>
                     <Grid container spacing={0}>
                         <Grid item xs={6}>
                             <Button sx={[buttonStyle, {color: 'white'}]}
