@@ -1,5 +1,5 @@
 name: Heroku Deployment
-on:
+on: # Only deploys when pushing to main branch
   push:
     branches:
       - main

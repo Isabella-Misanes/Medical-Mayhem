@@ -205,9 +205,9 @@ function GlobalStoreContextProvider(props) {
                 }})
             case GlobalStoreActionType.UPDATE_PARTY:
                 console.log("UPDATING PARTY...")
-                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partymembers: payload.partyMembers});
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partyMembers: payload.partyMembers});
             case GlobalStoreActionType.CHANGE_READY:
-                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partymembers: payload.partyMembers});
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", partyMembers: payload.partyMembers});
             case GlobalStoreActionType.GET_RELATION:
                 return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", relation: payload});
             case GlobalStoreActionType.CHAT:
