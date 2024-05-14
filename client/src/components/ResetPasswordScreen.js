@@ -1,10 +1,8 @@
-import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
-import MUIErrorModal from './MUIErrorModal';
-import BackButton from './BackButton';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export default function ResetPasswordScreen(props) {
     const {auth} = useContext(AuthContext);

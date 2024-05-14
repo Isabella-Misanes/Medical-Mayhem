@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext, { UserRoleType } from '../auth';
 import { useNavigate } from 'react-router-dom';
+import socket from '../constants/socket';
+import SocketEvents from '../constants/socketEvents';
 
 export default function SettingsScreen() {
     const { store } = useContext(GlobalStoreContext);
@@ -27,19 +29,28 @@ export default function SettingsScreen() {
         messages: true,
         party: true,
     });
-
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false)
+    const [deleteButtonText, setDeleteButtonText] = useState("Delete Account")
     
-
     function handleLogout() {
         navigate('/');
         store.reset();
         auth.logoutUser(auth.username);
+        socket.emit(SocketEvents.LOGOUT)
     }
 
     function handleDeleteAcc() {
-        store.reset()
-        auth.deleteUser()
-        auth.logoutUser();
+
+        if (isDeletingAccount) {
+            store.reset()
+            auth.deleteUser()
+            auth.logoutUser();
+        }
+
+        else {
+            setIsDeletingAccount(true)
+            setDeleteButtonText("Are you sure?")
+        }
     }
 
     function handleResetAudio() {
@@ -282,8 +293,8 @@ export default function SettingsScreen() {
                                                                 </Button>
                                                             </Grid>
                                                             <Grid item xs={6}>
-                                                                <Button id='delete-account' onClick={() => handleDeleteAcc()} sx={[resetButton, {color: 'white', mt: 2}]}>
-                                                                    Delete Account
+                                                                <Button id='delete-account' onClick={() => {handleDeleteAcc()}} sx={[resetButton, {color: 'white', mt: 2}]}>
+                                                                    { deleteButtonText }
                                                                 </Button>
                                                             </Grid>
                                                         </Grid> :

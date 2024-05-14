@@ -55,8 +55,7 @@ export default function MainLayout() {
 
         if (auth.errorMessage !== "" || store.errorMessage !== "")
             setDisplayErrorModal(true)
-        //eslint-disable-next-line
-    }, [auth, store.settings.toggles.party, store.playerList])
+    }, [auth, store, inGame])
 
     useEffect(() => {
         setInGame(store.players.length > 0)
