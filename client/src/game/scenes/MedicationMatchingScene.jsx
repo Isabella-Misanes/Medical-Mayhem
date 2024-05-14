@@ -43,6 +43,7 @@ export class MedicationMatchingScene extends Scene {
 
         setTimeout(() => {
             this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
+            // socket.emit(SocketEvents.SPAWN_PATIENT, this.points)
         }, 15000);
     }
 

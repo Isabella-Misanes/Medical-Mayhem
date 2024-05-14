@@ -47,29 +47,33 @@ export default class Player extends Actor {
         })
 
         socket.on(SocketEvents.STOP_FOLLOW, (data) => {
-
             // console.log(data)
             if (data.username === this.username) {
                 if (this.guidingPatient !== null) {
                     this.guidingPatient.actions.clearActions();
+                    this.guidingPatient.setFollowing(false);
                     this.guidingPatient = null;
                 }
             }
         })
 
-        socket.on(SocketEvents.TREAT_PATIENT, (data) => {
-            console.log(data)
-            if (data.username === this.username) {
-                if (this.treatingPatient !== null) {
-                    this.treatingPatient = null;
-                }
-            }
-        })
+        // socket.on(SocketEvents.TREAT_PATIENT, (data) => {
+        //     console.log(data)
+        //     if (data.username === this.username) {
+        //         if (this.treatingPatient !== null) {
+        //             this.treatingPatient = null;
+        //         }
+        //     }
+        // })
 
         this.on('collisionstart', (event) => {
             if (event.other.name !== "Tile Layer 2") {
-                this.guidingPatient = event.other
-                this.guidingPatient.actions.follow(this, 50)
+                console.log(event.other);
+                if (event.other.followingDoctor == false && this.guidingPatient == null && event.other.treating == false) {
+                    event.other.setFollowing(true);
+                    this.guidingPatient = event.other
+                    this.guidingPatient.actions.follow(this, 50)
+                }
             }
         })
     }
@@ -109,16 +113,39 @@ export default class Player extends Actor {
                     console.log("START MINIGAME");
                     // const patient = new Patient()
                     // this.engine.currentScene.add(patient)
-                    this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
-                    this.treatingPatient = this.guidingPatient;
-                    setTimeout(() => {
-                        socket.emit(SocketEvents.TREAT_PATIENT, {
+                    const rand = new ex.Random()
+                    if (rand.integer(0,1) === 0) {
+                        this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
+                        this.treatingPatient = this.guidingPatient;
+                        this.treatingPatient.setTreating(true);
+                        socket.emit(SocketEvents.START_TREAT_PATIENT, {
                             username: this.username,
-                            patient: this.treatingPatient.id
+                            patient: this.treatingPatient.patientId
                         })
-                    }, 16000);
+                        setTimeout(() => {
+                            socket.emit(SocketEvents.TREAT_PATIENT, {
+                                username: this.username,
+                                patient: this.treatingPatient.patientId
+                            })
+                        }, 15000);
+                    } else {
+                        this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
+                        this.treatingPatient = this.guidingPatient;
+                        this.treatingPatient.setTreating(true);
+                        socket.emit(SocketEvents.START_TREAT_PATIENT, {
+                            username: this.username,
+                            patient: this.treatingPatient.patientId
+                        })
+                        setTimeout(() => {
+                            socket.emit(SocketEvents.TREAT_PATIENT, {
+                                username: this.username,
+                                patient: this.treatingPatient.patientId
+                            })
+                        }, 30000);
+                    }
                 }
                 socket.emit(SocketEvents.STOP_FOLLOW, {
+                    id: this.guidingPatient.patientId,
                     username: this.username,
                 })
                 this.guidingPatient = null;
