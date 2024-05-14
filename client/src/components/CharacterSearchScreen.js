@@ -12,6 +12,7 @@ export default function CharacterSearchScreen() {
     const [showCharacterList, setCharacterList] = useState(true);
     const [avatarList, setAvatarList] = useState([]);
     const [currAvatar, setCurrAvatar] = useState(null);
+    const [isSorting, setIsSorting] = useState(false);
 
     useEffect(() => {
         if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
@@ -25,13 +26,64 @@ export default function CharacterSearchScreen() {
 
     useEffect(() => {
         if(showCharacterList) {
-            store.getAllAvatars();
+            if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+                setAvatarList(store.avatarList.avatars);
+            } else {
+                store.getAllAvatars();
+                setAvatarList([]);
+            }
         }
         // eslint-disable-next-line
     }, [showCharacterList])
 
-    function handleSortBy(event) {
-        store.sortBy(event);
+    useEffect(() => {
+        if(isSorting) {
+            setIsSorting(false);
+            setAvatarList(avatarList);
+        }
+        // eslint-disable-next-line
+    }, [isSorting])
+
+    const compareCreatedAt = (a, b) => {
+        const createdAtA = new Date(a.createdAt);
+        const createdAtB = new Date(b.createdAt);
+      
+        if(createdAtA > createdAtB) {
+            return -1;
+        }
+        if(createdAtA < createdAtB) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const compareComments = (a, b) => {
+        const numCommentsA = a.comments.length;
+        const numCommentsB = b.comments.length;
+      
+        // Compare the number of comments
+        if (numCommentsA > numCommentsB) {
+            return -1; // Return -1 to sort in descending order (most comments first)
+        }
+        if (numCommentsA < numCommentsB) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function handleSortBy(num) {
+        switch(num) {
+            case 1:
+                avatarList.sort(compareCreatedAt);
+                setIsSorting(true);
+                break;
+            case 2:
+                avatarList.sort(compareComments);
+                setIsSorting(true);
+                break;
+            default:
+                break;
+        }
     }
 
     function handleCharacterClick(avatar) {
@@ -42,8 +94,7 @@ export default function CharacterSearchScreen() {
     function handleSearch(event) {
         if(event.key === "Enter") {
             if(event.target.value !== "") {
-                console.log("Not Empty")
-                // store.searchAvatars(event.target.value);
+                store.searchAvatars(event.target.value);
             }
             else {
                 store.getAllAvatars();
@@ -62,11 +113,11 @@ export default function CharacterSearchScreen() {
             </Grid>
             <Grid item xs={4}>
                 <Button variant='outlined' sx={sortButton}
-                    onClick={(event) => {handleSortBy(event)}}>
+                    onClick={() => {handleSortBy(1)}}>
                     Newest
                 </Button>
                 <Button variant='outlined' sx={sortButton}
-                    onClick={(event) => {handleSortBy(event)}}>
+                    onClick={() => {handleSortBy(2)}}>
                     Top
                 </Button>
             </Grid>

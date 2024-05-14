@@ -50,6 +50,29 @@ export function handleConnection(socket: Socket) {
         })
     })
 
+    socket.on(SocketEvents.LOGOUT, () => {
+        
+        if (queue.includes(socket))
+            queue.splice(queue.indexOf(socket), 1)
+
+        const socketInfo = socketInfos.get(socket.id) as SocketInfo
+        const partyRoom = socketInfo.partyRoom
+        
+        socket.leave(socketInfo.partyRoom)
+        socket.leave(socketInfo.gameRoom)
+
+        socketInfos.delete(socket.id)
+        socketInfos.set(socket.id, new SocketInfo(socket))
+
+        // Get all users usernames that are in the current room as the disconnecter
+        const partyMembers = [...socketInfos.values()].filter(socketInfo => socketInfo.partyRoom == partyRoom)?.map(user => user.username)
+
+        // Let the part members know that the accepter has accepted the invite
+        io.to(partyRoom).emit(SocketEvents.UPDATE_PARTY_INFO, {
+            partyMembers: partyMembers
+        })
+    })
+
     socket.on(SocketEvents.SET_USERNAME, (data) => {
         (socketInfos.get(socket.id) as SocketInfo).username = data
     })

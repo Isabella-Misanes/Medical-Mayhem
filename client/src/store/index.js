@@ -192,7 +192,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: payload,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -214,7 +214,7 @@ function GlobalStoreContextProvider(props) {
                     },
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -291,7 +291,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     playerList: payload,
                     chat: store.chat,
@@ -310,7 +310,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: payload.errorMessage,
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -328,7 +328,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: payload,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: store.settings,
                     commentsList: store.commentsList,
@@ -449,7 +449,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: payload,
                     commentsList: store.commentsList,
@@ -466,7 +466,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: {
                         masterVolume: payload.masterVolume,
@@ -489,7 +489,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: {
                         masterVolume: store.settings.masterVolume,
@@ -512,7 +512,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: {
                         masterVolume: store.settings.masterVolume,
@@ -570,7 +570,7 @@ function GlobalStoreContextProvider(props) {
                     profileInfo: store.profileInfo,
                     errorMessage: "",
                     avatar: store.avatar,
-                    avatarList: store.avatarList,
+                    avatarList: [],
                     avatarView: store.avatarView,
                     settings: store.settings,
                     playerList: store.playerList,
@@ -989,10 +989,6 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Character Search Screen
-    store.sortBy = function (event) {
-        console.log("SortBy in store called.");
-    }
-
     store.getAllAvatars = function () {
         async function asyncGetAllAvatars() {
             try {
@@ -1007,10 +1003,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetAllAvatars();
     }
 
-    store.searchAvatars = function(query) {
+    store.searchAvatars = function(params) {
         async function asyncSearchAvatars() {
             try {
-                let response = await apis.getAllAvatars()
+                let response = await apis.searchAvatars(params)
                 console.log(response);
                 storeReducer({
                     type: GlobalStoreActionType.GET_AVATAR_LIST,
@@ -1059,6 +1055,20 @@ function GlobalStoreContextProvider(props) {
             } catch (error) { alert("Please choose an image below 50 KB.") }
         }
         asyncUpdateAvatar();
+    }
+
+    store.getMyAvatars = function() {
+        async function asyncGetMyAvatars() {
+            try {
+                let response = await apis.getMyAvatars()
+                console.log(response);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_AVATAR_LIST,
+                    payload: response.data
+                })
+            } catch (error) { console.log(error) }
+        }
+        asyncGetMyAvatars();
     }
 
     store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
@@ -1250,6 +1260,13 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.ERROR,
             payload: { errorMessage: "" }
+        })
+    }
+
+    store.error = (message) => {
+        storeReducer({
+            type: GlobalStoreActionType.ERROR,
+            payload: { errorMessage: message }
         })
     }
 

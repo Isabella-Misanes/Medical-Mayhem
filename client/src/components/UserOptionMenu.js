@@ -35,12 +35,14 @@ export default function UserOptionMenu(props) {
     function handleInviteToParty(event) {
 
         if (store.partyMembers.length === 4)
-            auth.error('The party is already at max 4 users.')
-        
-        socket.emit(SocketEvents.PARTY_INVITE, {
-            inviter: auth.username, // this user's username
-            receiver: targetUser // the friend's username
-        })
+            store.error('The party is already at max 4 users.')
+
+        else {
+            socket.emit(SocketEvents.PARTY_INVITE, {
+                inviter: auth.username, // this user's username
+                receiver: targetUser // the friend's username
+            })
+        }
 
         handleMenuClose();
     }

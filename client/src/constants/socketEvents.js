@@ -12,6 +12,7 @@ const SocketEvents = {
     UPDATE_PARTY_INFO: "UPDATE_PARTY_INFO", // when a user is added to a party, the inviter will send current party members
     LEAVE_PARTY: "LEAVE_PARTY",
     CHANGE_READY: "CHANGE_READY",
+    LOGOUT: "LOGOUT",
     SEND_PUBLIC_MESSAGE: "SEND_PUBLIC_MESSAGE",
     RECEIVE_PUBLIC_MESSAGE: "RECEIVE_PUBLIC_MESSAGE",
     SEND_PARTY_MESSAGE: "SEND_PARTY_MESSAGE",

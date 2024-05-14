@@ -2,9 +2,10 @@ import { Button, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, Sl
 import {FormControl} from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import GlobalStoreContext from '../store';
+import { useNavigate } from 'react-router-dom';
 
 import BackButton from './BackButton';
-import { buttonStyle } from '../Styles';
+import { buttonStyle, splashButtonStyle } from '../Styles';
 import player1 from '../assets/Player-1.png.png';
 import player2 from '../assets/Player-2.png.png';
 import player3 from '../assets/Player-3.png.png';
@@ -24,6 +25,10 @@ export default function CharacterBuilderScreen() {
     const [favoredMinigame, setMinigame] = useState("");
     const [isPublic, setIsPublic] = useState(false);
     const [avatarName, setAvatarName] = useState("");
+    // List variables
+    const [avatarList, setAvatarList] = useState([]);
+    const navigate = useNavigate();
+
 
     const players = [
         player1,
@@ -68,6 +73,16 @@ export default function CharacterBuilderScreen() {
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+            setAvatarList(store.avatarList.avatars);
+        } else {
+            store.getMyAvatars();
+            setAvatarList([]);
+        }
+        // eslint-disable-next-line
+    }, [store.avatarList])
+
     useEffect(() => {     
         setSelectedSprite(store.avatar.pic);
         setAvatarName(store.avatar.name);
@@ -83,6 +98,7 @@ export default function CharacterBuilderScreen() {
         switch(index) {
             case 0:
                 setSelectedSprite(player1);
+                console.log(avatarList);
                 break;
             case 1:
                 setSelectedSprite(player2);
@@ -120,7 +136,7 @@ export default function CharacterBuilderScreen() {
     return (
         <div id="map-builder-screen">
             <Grid container spacing={2}>
-                <Grid item xs={11} sx={{
+                <Grid item xs={12} sx={{
                     bgcolor: '#3A9158',
                     color: 'white',
                 }}>
@@ -129,11 +145,10 @@ export default function CharacterBuilderScreen() {
                 <Grid item xs={1}>
                     
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={4} sx={{ height: '80vh', overflowY: 'scroll', overflowX: 'hidden' }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sx={{
                             textAlign: 'center',
-                            ml: 3
                         }}>
                             <strong>Select a premade character or upload your own sprite!</strong>
                         </Grid>
@@ -145,7 +160,6 @@ export default function CharacterBuilderScreen() {
                                         height: '100%',
                                         width: '100%',
                                         mb: 2,
-                                        ml: 3,
                                         backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
                                         border: selectedCharacter === index ? 1 : 0,
                                     }}
@@ -163,6 +177,35 @@ export default function CharacterBuilderScreen() {
                                 </Paper>
                             </Grid>
                         ))}
+                        {avatarList.length === 0 ? (
+                            <div>No characters match your search.</div>
+                        ) : (
+                            avatarList.map((avatar, index) => (
+                            <Grid key={index+7} item xs={4}>
+                                <Paper elevation={3}
+                                    id={'avatar-'+ (index+7)}
+                                    sx={{ 
+                                        height: '100%',
+                                        width: '100%',
+                                        mb: 2,
+                                        backgroundColor: selectedCharacter === index+7 ? 'lightblue' : 'white',
+                                        border: selectedCharacter === index+7 ? 1 : 0,
+                                    }}
+                                    onClick={() => handleCharacterClick(index+7)}
+                                >
+                                    <img
+                                    src={avatar.avatarSprite}
+                                    alt={`${index+1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover'
+                                    }}
+                                    />
+                                </Paper>
+                            </Grid>
+                        )))
+                        }
                         <Grid item xs={4}>
                             <Paper elevation={3} 
                                 id='character-6'
@@ -171,7 +214,6 @@ export default function CharacterBuilderScreen() {
                                     width: '100%',
                                     maxHeight: '50vh',
                                     mb: 2,
-                                    ml: 3,
                                     alignContent: 'center', 
                                     backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
                                     border: selectedCharacter === 6 ? 1 : 0,
@@ -206,7 +248,7 @@ export default function CharacterBuilderScreen() {
                 </Grid>
                 <Grid item xs={1}/>
                 
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                     <Grid container spacing={2} sx={{
                         alignItems: 'center',
                         backgroundColor: 'white',
@@ -355,9 +397,14 @@ export default function CharacterBuilderScreen() {
 
                     </Grid>
                 </Grid>
-                
+                <Grid item xs={1}/>
             </Grid>
-            <BackButton/>
+            {/* <BackButton/> */}
+            <Button id='back-button' variant="contained"
+                sx={[splashButtonStyle, {left: '2%', top: '3%', position: 'absolute'}]}
+                onClick={()=>{navigate("/")}}>
+                Back
+            </Button>
         </div>
     );
 }

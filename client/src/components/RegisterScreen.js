@@ -2,7 +2,6 @@ import { Avatar, Box, Button, CssBaseline, Grid, Link, TextField, Typography } f
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useContext, useState } from 'react';
 import AuthContext from '../auth';
-// import MUIErrorModal from './MUIErrorModal';
 import BackButton from './BackButton';
 import { buttonStyle } from '../Styles';
 import { useNavigate } from 'react-router-dom';
