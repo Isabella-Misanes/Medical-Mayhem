@@ -94,33 +94,8 @@ export default function CharacterBuilderScreen() {
         setIsPublic(store.avatar.isPublic);
     }, [store.avatar])
 
-    function handleCharacterClick(index) {
-        switch(index) {
-            case 0:
-                setSelectedSprite(player1);
-                console.log(avatarList);
-                break;
-            case 1:
-                setSelectedSprite(player2);
-                break;
-            case 2:
-                setSelectedSprite(player3);
-                break;
-            case 3:
-                setSelectedSprite(player4);
-                break;
-            case 4:
-                setSelectedSprite(player5);
-                break;
-            case 5:
-                setSelectedSprite(player6);
-                break;
-            case 6:
-                setSelectedSprite(postSprite);
-                break;
-            default:
-                break;
-        }
+    function handleCharacterClick(imageLink, index) {
+        setSelectedSprite(imageLink);
         setCharacter(index);
     }
 
@@ -163,7 +138,7 @@ export default function CharacterBuilderScreen() {
                                         backgroundColor: selectedCharacter === index ? 'lightblue' : 'white',
                                         border: selectedCharacter === index ? 1 : 0,
                                     }}
-                                    onClick={() => handleCharacterClick(index)}
+                                    onClick={() => handleCharacterClick(image, index)}
                                 >
                                     <img
                                     src={image}
@@ -191,7 +166,7 @@ export default function CharacterBuilderScreen() {
                                         backgroundColor: selectedCharacter === index+7 ? 'lightblue' : 'white',
                                         border: selectedCharacter === index+7 ? 1 : 0,
                                     }}
-                                    onClick={() => handleCharacterClick(index+7)}
+                                    onClick={() => handleCharacterClick(avatar.avatarSprite, index+7)}
                                 >
                                     <img
                                     src={avatar.avatarSprite}
@@ -218,7 +193,7 @@ export default function CharacterBuilderScreen() {
                                     backgroundColor: selectedCharacter === 6 ? 'lightblue' : '#ffffff',
                                     border: selectedCharacter === 6 ? 1 : 0,
                                 }}
-                                onClick={() => {handleCharacterClick(6)}}
+                                onClick={() => {handleCharacterClick(7+avatarList.length)}}
                             >
                                 <form
                                     onSubmit={handleSubmit}>
