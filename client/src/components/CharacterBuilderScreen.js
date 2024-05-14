@@ -24,6 +24,8 @@ export default function CharacterBuilderScreen() {
     const [favoredMinigame, setMinigame] = useState("");
     const [isPublic, setIsPublic] = useState(false);
     const [avatarName, setAvatarName] = useState("");
+    // List variables
+    const [avatarList, setAvatarList] = useState([]);
 
     const players = [
         player1,
@@ -68,6 +70,16 @@ export default function CharacterBuilderScreen() {
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+            setAvatarList(store.avatarList.avatars);
+        } else {
+            store.getMyAvatars();
+            setAvatarList([]);
+        }
+        // eslint-disable-next-line
+    }, [store.avatarList])
+
     useEffect(() => {     
         setSelectedSprite(store.avatar.pic);
         setAvatarName(store.avatar.name);
@@ -83,6 +95,7 @@ export default function CharacterBuilderScreen() {
         switch(index) {
             case 0:
                 setSelectedSprite(player1);
+                console.log(avatarList);
                 break;
             case 1:
                 setSelectedSprite(player2);
