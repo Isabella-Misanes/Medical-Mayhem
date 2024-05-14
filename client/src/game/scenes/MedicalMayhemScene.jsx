@@ -11,6 +11,7 @@ export class MedicalMayhemScene extends Scene {
 
     score;
     teamScore;
+    username;
 
     onInitialize(engine) {
 
@@ -59,11 +60,13 @@ export class MedicalMayhemScene extends Scene {
         })
         
         socket.on(SocketEvents.SWITCH_TO_MEDICATION_MATCHING, (data) => {
-            if (data == this.username) this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
+            console.log("MED MATCHING");
+            console.log(this.username);
+            if (data.username == this.username) this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
         })
 
         socket.on(SocketEvents.SWITCH_TO_HEARTBEAT, (data) => {
-            if (data == this.username) this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
+            if (data.username == this.username) this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, username: this.username}});
         })
     
         const timer = new Timer({
@@ -80,6 +83,8 @@ export class MedicalMayhemScene extends Scene {
     }
     onActivate(context) {
         // Set personal and team scores and update the ui text
+        console.log("HEREEE");
+        console.log(context);
         this.score.val = context.data.yourScore
         this.teamScore.val = context.data.teamScore
         this.username = context.data.username

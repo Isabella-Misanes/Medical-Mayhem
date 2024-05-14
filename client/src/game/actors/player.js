@@ -200,7 +200,6 @@ export default class Player extends Actor {
                         this.treatingPatient.setTreating(true);
                         socket.emit(SocketEvents.START_TREAT_PATIENT, {
                             username: this.username,
-                            patient: this.treatingPatient.patientId
                         })
                         setTimeout(() => {
                             socket.emit(SocketEvents.TREAT_PATIENT, {
@@ -210,7 +209,6 @@ export default class Player extends Actor {
                     } else {
                         socket.emit(SocketEvents.SWITCH_TO_HEARTBEAT, {
                             username: this.username,
-                            patient: this.treatingPatient.patientId
                         })
                         this.treatingPatient = this.guidingPatient;
                         this.treatingPatient.setTreating(true);
@@ -223,7 +221,7 @@ export default class Player extends Actor {
                                 username: this.username,
                                 patient: this.treatingPatient.patientId
                             })
-                        }, 30000);
+                        }, 20000);
                     }
                 }
                 socket.emit(SocketEvents.STOP_FOLLOW, {

@@ -41,12 +41,13 @@ export class HeartbeatRhythmScene extends Scene {
     onActivate(context) {
         console.log("CONTEXT");
         console.log(context);
-        this.timeText.time = 0;
+        this.timeText.time = 20;
         this.yourScore.val = context.data.yourScore;
-        this.opponentScore.val = context.data.opponentScore;
+        this.opponentScore.val = context.data.teamScore;
+        let username = context.data.username
 
         setTimeout(() => {
-            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, teamScore: this.opponentPoints}});
+            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, teamScore: this.opponentPoints, username: username}});
         }, 20000);
     }
 
@@ -141,7 +142,7 @@ export class HeartbeatRhythmScene extends Scene {
     initializeText (game) {
         const actor = new Actor({pos: vec(this.gameWidth/2, this.gameHeight-30)});
         const instrText = new Text({
-            text: 'Press the Space bar when the circle reaches the vertical line.',
+            text: 'Press the E when the circle reaches the vertical line.',
             color: Color.White,
             font: new Font({size: 24, textAlign: TextAlign.Left})
         });

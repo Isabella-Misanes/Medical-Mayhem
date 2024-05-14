@@ -37,8 +37,9 @@ export class MedicationMatchingScene extends Scene {
         this.pointText.text = "Score: " + this.points;
         this.opponentPoints = context.data.opponentScore;
         this.opponentPointText.text = "Opponent Score: " + this.opponentPoints;
+        let username = context.data.username
         setTimeout(() => {
-            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints}});
+            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, teamScore: this.opponentPoints, username: username}});
             // socket.emit(SocketEvents.SPAWN_PATIENT, this.points)
         }, 15000);
     }

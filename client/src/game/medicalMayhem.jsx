@@ -68,6 +68,8 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
     
             engine.currentScene.add(player)
         }
+        engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: 0, teamScore: 0, username: username}});
+
     });
 
   };
