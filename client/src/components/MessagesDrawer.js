@@ -37,7 +37,6 @@ export default function MessagesDrawer() {
 
     function handleSendMessage() {
         if(messageText === '') return;
-        console.log(store.partyMembers);
         switch(value) {
             case '1':
                 // store.sendPublicMessage(messageText);
@@ -71,15 +70,19 @@ export default function MessagesDrawer() {
 
     useEffect(() => {if(publicChatRef.current) publicChatRef.current.scrollTop = publicChatRef.current.scrollHeight}, [chat.public]);
     useEffect(() => {if(partyChatRef.current) partyChatRef.current.scrollTop = partyChatRef.current.scrollHeight}, [chat.party]);
+    useEffect(() => {if(privateChatRef.current) privateChatRef.current.scrollTop = privateChatRef.current.scrollHeight}, [chat.private])
 
     useEffect(() => {
         const handlePublicMessage = data => setChat(prevChat => ({...prevChat, public: [...prevChat.public, {username: data.username, text: data.text}]}));
         const handlePartyMessage = data => setChat(prevChat => ({...prevChat, party: [...prevChat.party, {username: data.username, text: data.text}]}));
+        const handlePrivateMessage = data => setChat(prevChat => ({...prevChat, private: [...prevChat.private, {username: data.username, text: data.text}]}));
         socket.on(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
         socket.on(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
+        socket.on(SocketEvents.RECEIVE_PRIVATE_MESSAGE, handlePrivateMessage);
         return () => {
             socket.off(SocketEvents.RECEIVE_PUBLIC_MESSAGE, handlePublicMessage);
             socket.off(SocketEvents.RECEIVE_PARTY_MESSAGE, handlePartyMessage);
+            socket.off(SocketEvents.RECEIVE_PRIVATE_MESSAGE, handlePrivateMessage);
         }
         // eslint-disable-next-line
     }, [])
