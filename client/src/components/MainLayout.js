@@ -79,7 +79,7 @@ export default function MainLayout() {
     return (
         <div id='main-content'>
             <div id='body'>
-                <audio src={homeMusic}/>
+                <audio loop src={homeMusic}/>
                 <Routes>
                     <Route path="/" exact element={<HomeWrapper />} />
                     <Route path="/login/" exact element={<LoginScreen />} />

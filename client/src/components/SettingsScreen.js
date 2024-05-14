@@ -7,6 +7,7 @@ import AuthContext, { UserRoleType } from '../auth';
 import { useNavigate } from 'react-router-dom';
 import socket from '../constants/socket';
 import SocketEvents from '../constants/socketEvents';
+import { audio } from './MainLayout';
 
 export default function SettingsScreen() {
     const { store } = useContext(GlobalStoreContext);
@@ -63,6 +64,8 @@ export default function SettingsScreen() {
     function handleConfirmAudio() {
         if(auth.role === UserRoleType.GUEST) return;
         store.updateAudioSettings(masterValue, musicValue, sfxValue);
+        audio.volume = musicValue/1000.0;
+        audio.play();
     }
 
     function handleResetControls() {
@@ -75,15 +78,15 @@ export default function SettingsScreen() {
         store.updateKeybinds(keybinds);
     }
 
-    const handleMasterSliderChange = (event, newValue) => {
-        setMasterValue(newValue);
-    }
+    // const handleMasterSliderChange = (event, newValue) => {
+    //     setMasterValue(newValue);
+    // }
     const handleMusicSliderChange = (event, newValue) => {
         setMusicValue(newValue);
     }
-    const handleSfxSliderChange = (event, newValue) => {
-        setSfxValue(newValue);
-    }
+    // const handleSfxSliderChange = (event, newValue) => {
+    //     setSfxValue(newValue);
+    // }
 
     // State change causes modal to open or close
     const toggleModal = () => setModal(!modal);
@@ -126,7 +129,7 @@ export default function SettingsScreen() {
                                             <Grid item xs={12}>
                                                 <h4>Audio</h4>
                                             </Grid>
-                                            <Grid item xs={3}>Master</Grid>
+                                            {/* <Grid item xs={3}>Master</Grid>
                                             <Grid item xs={7}>
                                                 <Slider
                                                     id='master-slider'
@@ -139,7 +142,7 @@ export default function SettingsScreen() {
                                                     disabled={auth.role === UserRoleType.GUEST}
                                                 />
                                             </Grid>
-                                            <Grid id='master-volume' item xs={2}>{masterValue}</Grid>
+                                            <Grid id='master-volume' item xs={2}>{masterValue}</Grid> */}
 
                                             <Grid item xs={3}>Music</Grid>
                                             <Grid item xs={7}>
@@ -155,7 +158,7 @@ export default function SettingsScreen() {
                                             </Grid>
                                             <Grid id='music-volume' item xs={2}>{musicValue}</Grid>
 
-                                            <Grid item xs={3}>SFX</Grid>
+                                            {/* <Grid item xs={3}>SFX</Grid>
                                             <Grid item xs={7}>
                                                 <Slider
                                                     id='sfx-slider'
@@ -167,7 +170,7 @@ export default function SettingsScreen() {
                                                     disabled={auth.role === UserRoleType.GUEST}
                                                 />
                                             </Grid>
-                                            <Grid id='sfx-volume' item xs={2}>{sfxValue}</Grid>
+                                            <Grid id='sfx-volume' item xs={2}>{sfxValue}</Grid> */}
                                         </Grid>
                                         
                                         <Grid container>
