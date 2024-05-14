@@ -831,6 +831,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetRelationToUser();
     }
 
+    store.toggleDrawer = function(open) {
+        storeReducer({ type:GlobalStoreActionType.TOGGLE_DRAWER, payload: open })
+    }
+
     store.hideModal = () => {
         storeReducer({
             type: GlobalStoreActionType.ERROR,
