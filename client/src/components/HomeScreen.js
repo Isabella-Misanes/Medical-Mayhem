@@ -9,7 +9,8 @@ import loading from '../assets/loading.gif'
 import socket from '../constants/socket';
 import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
-import { buttonStyle, homeButtons, modalStyle } from '../Styles';
+import { homeButtons, modalStyle } from '../Styles';
+// import { buttonStyle, homeButtons, modalStyle } from '../Styles';
 
 // Styling
 
@@ -178,7 +179,7 @@ export default function HomeScreen() {
                                 buttonSx={homeButtons}
                             />
                         </Grid>
-                        { role === UserRoleType.ADMIN &&
+                        {/* { role === UserRoleType.ADMIN &&
                             <Grid item xs={6}>
                                 <HomeButton
                                     onClick={() => navigate("/reports")}
@@ -186,7 +187,7 @@ export default function HomeScreen() {
                                     text='Reports'
                                 />
                             </Grid>
-                        }
+                        } */}
                         <Grid item xs={12}/>
                         <Grid item xs={12}/>
                     </Grid>                

@@ -34,8 +34,6 @@ export default function MainLayout() {
     const [displaySidebar, setDisplaySidebar] = useState(false)
     const [displayMessages, setDisplayMessages] = useState(false)
     const [inGame, setInGame] = useState(false)
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const toggleDrawer = open => setIsDrawerOpen(open);
 
     useEffect(() => {
         console.log(store)
@@ -75,7 +73,7 @@ export default function MainLayout() {
                     <Route path="/resetPassword/:token" exact element={<ResetPasswordScreen />} />
                     <Route path="/about/" exact element={<AboutScreen />} />
                     <Route path="/settings/" exact element={<SettingsScreen />} />
-                    <Route path="/social/" exact element={<SocialScreen toggleDrawer={toggleDrawer} />} />
+                    <Route path="/social/" exact element={<SocialScreen />} />
                     <Route path="/forum/" exact element={<ForumScreen />} />
                     <Route path="/charactersearch/" exact element={<CharacterSearchScreen />} />
                     <Route path="/characterbuilder/" exact element={<CharacterBuilderScreen />} />
@@ -85,7 +83,7 @@ export default function MainLayout() {
                     <Route path="/newthread/" exact element={<NewThreadScreen />} />
                     <Route path="/leaderboard/" exact element={<LeaderboardScreen />} />
                 </Routes>
-                {displayMessages && <MessagesDrawer isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />}
+                {displayMessages && <MessagesDrawer />}
                 <InviteModal displayInviteModal={displayInviteModal} setDisplayInviteModal= {setDisplayInviteModal} inviter={store.inviter} />
                 <MUIErrorModal displayErrorModal={displayErrorModal} setDisplayErrorModal= {setDisplayErrorModal} />
             </div>

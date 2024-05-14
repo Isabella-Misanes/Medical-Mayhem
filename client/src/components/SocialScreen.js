@@ -264,7 +264,6 @@ export default function SocialScreen({toggleDrawer}) {
                     username={isModalOpen ? addFriendUsername : currFriend}
                 />
                 {isMenuOpen && <UserOptionMenu
-                    toggleDrawer={toggleDrawer}
                     anchorEl={anchorEl}
                     setAnchorEl={setAnchorEl}
                     isMenuOpen={isMenuOpen}
