@@ -5,12 +5,12 @@ import GlobalStoreContext from '../store';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { buttonStyle, splashButtonStyle } from '../Styles';
-import player1 from '../assets/Player-1.png.png';
-import player2 from '../assets/Player-2.png.png';
-import player3 from '../assets/Player-3.png.png';
-import player4 from '../assets/Player-4.png.png';
-import player5 from '../assets/Player-5.png.png';
-import player6 from '../assets/Player-6.png.png';
+import player1 from '../assets/Player-1.png';
+import player2 from '../assets/Player-2.png';
+import player3 from '../assets/Player-3.png';
+import player4 from '../assets/Player-4.png';
+import player5 from '../assets/Player-5.png';
+import player6 from '../assets/Player-6.png';
 import addPlayer from '../assets/Add-Player.png.png';
 
 export default function CharacterBuilderScreen() {
