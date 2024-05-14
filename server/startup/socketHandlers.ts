@@ -241,7 +241,6 @@ export function handleConnection(socket: Socket) {
     socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
         io.to((socketInfos.get(socket.id) as SocketInfo).gameRoom).emit(SocketEvents.SPAWN_PATIENT, data)
     })
-}
 
     // MESSAGES
     socket.on(SocketEvents.SEND_PUBLIC_MESSAGE, data => io.emit(SocketEvents.RECEIVE_PUBLIC_MESSAGE, data));
