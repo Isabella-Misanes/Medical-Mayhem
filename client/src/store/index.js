@@ -989,10 +989,6 @@ function GlobalStoreContextProvider(props) {
     }
 
     // Character Search Screen
-    store.sortBy = function (event) {
-        console.log("SortBy in store called.");
-    }
-
     store.getAllAvatars = function () {
         async function asyncGetAllAvatars() {
             try {
