@@ -1,6 +1,7 @@
 // import { BoundingBox, CollisionType, Engine, Vector, vec } from "excalibur";
 import { MedicationMatchingScene } from "./scenes/MedicationMatchingScene";
 import { HeartbeatRhythmScene } from "./scenes/HeartbeatRhythmScene";
+import { GameResultsScene } from "./scenes/GameResultsScene"
 // import { GameResultsScene } from "./scenes/GameResultsScene";
 // import { Loader, DisplayMode, Camera } from "excalibur";
 // import { TiledResource } from "@excaliburjs/plugin-tiled";
@@ -49,8 +50,7 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
     engine.add("heartbeatrhythm", new HeartbeatRhythmScene());
     engine.add("medicationmatching", new MedicationMatchingScene());
     engine.goToScene("medicalMayhem");
-
-    // engine.add("gameresults", new GameResultsScene());
+    engine.add("gameresults", new GameResultsScene());
 
     // let gameSequence = ["heartbeatrhythm", "medicationmatching", "heartbeatrhythm", "gameresults"];
 
@@ -71,7 +71,6 @@ export const MedicalMayhem = (gameRef, gameCanvasRef, players, username) => {
             else player = new Player(players[i])
     
             engine.currentScene.add(player)
-            
         }
     });
 

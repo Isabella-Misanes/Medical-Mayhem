@@ -19,7 +19,7 @@ export class HeartbeatRhythmScene extends Scene {
         this.initializeText(engine);
         this.initializeTimeText(engine);
         this.yourScore = this.initializeScore(this.engine);
-        this.opponentScore = this.initializeOpponentScore(this.engine);
+        this.opponentScore = this.initializeTeamScore(this.engine);
         this.initializeBar(engine, this.yourScore);
         const createRandomProjectile = () => {
             const interval = Math.floor(Math.random() * (1500 - 300 + 1)) + 300;
@@ -37,7 +37,7 @@ export class HeartbeatRhythmScene extends Scene {
     onActivate(context) {
         console.log("CONTEXT");
         console.log(context);
-        this.timeText.time = 30;
+        this.timeText.time = 20;
         this.yourScore.val = context.data.yourScore;
         this.opponentScore.val = context.data.opponentScore;
   
@@ -45,7 +45,7 @@ export class HeartbeatRhythmScene extends Scene {
 
         setTimeout(() => {
             this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
-        }, 30000);
+        }, 20000);
     }
 
     onDeactivate() {
@@ -73,7 +73,7 @@ export class HeartbeatRhythmScene extends Scene {
         game.add(bar);
 
         game.input.keyboard.on('press', (event) => {
-            if(event.key === Keys.Space) {
+            if(event.key === Keys.E) {
                 bar.color = Color.Green;
                 tapped = true;
                 setTimeout(() => {
@@ -179,11 +179,11 @@ export class HeartbeatRhythmScene extends Scene {
         return score;
     }
 
-    initializeOpponentScore = (game) => {
+    initializeTeamScore = (game) => {
         const opponentScore = new Actor({pos: vec(this.gameWidth/2, 60)});
         opponentScore.val = 0;
         opponentScore.text = new Text({
-            text: 'Opponent Score: ' + opponentScore.val,
+            text: 'Team Score: ' + opponentScore.val,
             color: Color.White,
             font: new Font({size: 24, textAlign: TextAlign.Left})
         });

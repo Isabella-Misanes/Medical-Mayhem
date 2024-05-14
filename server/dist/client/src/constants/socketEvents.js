@@ -11,7 +11,10 @@ const SocketEvents = {
     MATCH_FOUND: "MATCH_FOUND",
     OPPONENT_SCORE_CHANGE: "OPPONENT_SCORE_CHANGE",
     ERROR: "ERROR",
-    PLAYER_MOVED: "PLAYER_MOVED"
+    PLAYER_MOVED: "PLAYER_MOVED",
+    STOP_FOLLOW: "STOP_FOLLOW",
+    TREAT_PATIENT: "TREAT_PATIENT",
+    SPAWN_PATIENT: "SPAWN_PATIENT"
 };
 exports.default = SocketEvents;
 //# sourceMappingURL=socketEvents.js.map
