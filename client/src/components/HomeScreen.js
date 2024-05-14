@@ -224,7 +224,7 @@ function QueueModal(props) {
         if (store.partyMembers.length <= 1)
             socket.emit(SocketEvents.LEAVE_QUEUE)
 
-        // The user will stop being ready, received in Sidebar.js
+        // The user will stop being ready, received in Sidebar.js if in party
         else {
             
             const members = store.partyMembers.map(member => {
