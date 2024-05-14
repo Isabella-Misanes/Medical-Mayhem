@@ -48,6 +48,7 @@ export const GlobalStoreActionType = {
     // NEW ACTION TYPES FOR MEDICAL MAYHEM ADDED BY ISABELLA
     GET_AVATAR: "GET_AVATAR",
     UPDATE_AVATAR: "UPDATE_AVATAR",
+    DELETE_AVATAR: "DELETE_AVATAR",
     LOAD_AVATAR: "LOAD_AVATAR",
     GET_AVATAR_LIST: "GET_AVATAR_LIST",
     UPDATE_AVATAR_LIST: "UPDATE_AVATAR_LIST",
@@ -164,6 +165,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: payload});
             case GlobalStoreActionType.UPDATE_AVATAR: 
                 return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: payload});
+            case GlobalStoreActionType.DELETE_AVATAR: 
+                return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatar: [] });
             case GlobalStoreActionType.LOAD_AVATAR:
                 return setStore({...store, currentModal: CurrentModal.NONE, errorMessage: "", avatarView: payload});
             case GlobalStoreActionType.GET_AVATAR_LIST:
@@ -610,10 +613,26 @@ function GlobalStoreContextProvider(props) {
         asyncGetAvatar();
     }
 
-    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.deleteAvatar = function(id) {
+        async function asyncDeleteAvatar() {
+            try {
+                let response = await apis.deleteAvatar(id)
+                console.log(response)
+                storeReducer({
+                    type: GlobalStoreActionType.DELETE_AVATAR,
+                    payload: response.data
+                })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        asyncDeleteAvatar();
+    }
+
+    store.updateAvatar = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatar() {
             try{
-                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatar(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR,
@@ -647,10 +666,10 @@ function GlobalStoreContextProvider(props) {
         asyncGetMyAvatars();
     }
 
-    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic) {
+    store.updateAvatarList = function(pic, name, speed, strength, defense, favoredMinigame, isPublic, id) {
         async function asyncUpdateAvatarList() {
             try {
-                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic);
+                let response = await apis.updateAvatarList(pic, name, speed, strength, defense, favoredMinigame, isPublic, id);
                 console.log(response)
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_AVATAR_LIST,

@@ -10,9 +10,6 @@ import socket from '../constants/socket';
 import { homeScreen } from '../Styles';
 import GlobalStoreContext from '../store';
 import { homeButtons, modalStyle } from '../Styles';
-// import { buttonStyle, homeButtons, modalStyle } from '../Styles';
-
-// Styling
 
 export default function HomeScreen() {
     const navigate = useNavigate();
@@ -27,11 +24,11 @@ export default function HomeScreen() {
         setQueueingUp(true)
 
         // The user will queue up by themselves if they're alone
-        if (store.partyMembers.length === 1)
+        if (store.partyMembers.length <= 1)
             socket.emit(SocketEvents.QUEUE_UP, auth.username)
 
         // The user will ready up with the party, received in Sidebar.js
-        else if (store.partyMembers.length > 1) {
+        else {
             console.log(store.partyMembers)
 
             // Ready up the current user
@@ -66,9 +63,6 @@ export default function HomeScreen() {
                 })
             }
         }
-
-        else
-            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     useEffect(() => {
@@ -223,11 +217,11 @@ function QueueModal(props) {
     function handleXButtonClick() {
         props.setQueueingUp(false)
 
-        if (store.partyMembers.length === 1)
+        if (store.partyMembers.length <= 1)
             socket.emit(SocketEvents.LEAVE_QUEUE)
 
         // The user will stop being ready, received in Sidebar.js
-        else if (store.partyMembers.length > 1) {
+        else {
             
             const members = store.partyMembers.map(member => {
                 if (member.username === auth.username)
@@ -240,9 +234,6 @@ function QueueModal(props) {
                 partyMembers: members
             })
         }
-
-        else
-            throw new Error("STORE PARTY SIZE EQUALS 0")
     }
 
     return (

@@ -38,7 +38,7 @@ const avatar_1 = require("../models/avatar");
 const getAllAvatars = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("get all avatars");
     try {
-        const avatars = yield avatar_1.Avatar.find();
+        const avatars = yield avatar_1.Avatar.find({ isPublic: true });
         if (!avatars) {
             console.log("No avatars found");
             return res.status(404).json({ errorMessage: 'Avatars not found.' });
@@ -67,7 +67,7 @@ const updateAvatarList = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 strength: strength,
                 defense: defense,
                 favoredMinigame: favoredMinigame,
-                author: targetUser === null || targetUser === void 0 ? void 0 : targetUser._id,
+                author: targetUser.username,
                 comments: [],
                 isPublic: isPublic,
             });

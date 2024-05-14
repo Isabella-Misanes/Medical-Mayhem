@@ -96,8 +96,8 @@ export class MedicationMatchingScene extends Scene {
         const rows = 3;
 
         // Individual medicine width with padding factored in
-        const boxWidth = game.drawWidth / columns - padding - padding / columns; // px
-        const boxHeight = game.drawWidth / columns - padding - padding / columns; // px
+        const boxWidth = this.gameWidth / columns - padding - padding / columns; // px
+        const boxHeight = this.gameWidth / columns - padding - padding / columns; // px
         const boxes = [];
         for (let j = 0; j < rows; j++) {
             const colCoords = [];
@@ -133,8 +133,8 @@ export class MedicationMatchingScene extends Scene {
         const yoffset = 60; // y-offset
         const columns = 5;
         const rows = 3;
-        const boxWidth = game.drawWidth / columns - padding - padding / columns; // px
-        const boxHeight = game.drawWidth / columns - padding - padding / columns; // px
+        const boxWidth = this.gameWidth / columns - padding - padding / columns; // px
+        const boxHeight = this.gameWidth / columns - padding - padding / columns; // px
 
         // Sides of the selector square
         const selectorSides = [];

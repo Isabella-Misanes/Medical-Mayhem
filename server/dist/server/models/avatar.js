@@ -14,7 +14,7 @@ const AvatarSchema = new Schema({
     strength: { type: Number, default: 0 },
     defense: { type: Number, default: 0 },
     favoredMinigame: { type: String, default: "" },
-    author: { type: ObjectId, ref: 'User' },
+    author: { type: String, default: "" },
     comments: [{ type: ObjectId, ref: 'Message' }],
     isPublic: { type: Boolean, default: true },
 }, { timestamps: true });

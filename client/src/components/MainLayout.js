@@ -24,6 +24,9 @@ import {
 } from '.'
 import GlobalStoreContext from "../store";
 import MUIErrorModal from "./MUIErrorModal";
+import homeMusic from "../assets/Close_To_Gray.mp3";
+
+export const audio = new Audio(homeMusic);
 
 export default function MainLayout() {
     const { auth } = useContext(AuthContext);
@@ -61,10 +64,21 @@ export default function MainLayout() {
         setInGame(store.players.length > 0)
     }, [store.players])
 
+    useEffect(() => {
+        audio.volume = 0.1;
+        const playAudio = () => { audio.play(); };
+        document.addEventListener('click', playAudio);
+
+        return () => {
+            document.removeEventListener('click', playAudio);
+        };
+    }, []);
+
     console.log(store)
     return (
         <div id='main-content'>
             <div id='body'>
+                <audio loop src={homeMusic}/>
                 <Routes>
                     <Route path="/" exact element={<HomeWrapper />} />
                     <Route path="/login/" exact element={<LoginScreen />} />

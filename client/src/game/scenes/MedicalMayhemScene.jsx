@@ -9,9 +9,20 @@ export class MedicalMayhemScene extends Scene {
     patientCount = 0;
     patientCounter = 3;
 
+    score = 0;
+    teamScore = 0;
+
     onInitialize(engine) {
+
+        setTimeout(() => {
+            this.engine.goToScene("gameresults", {sceneActivationData: {yourScore: 100, opponentScore: 200, prevScene: null}});
+        }, 180000);
+
         console.log("INIT MEDICAL MAYHEM");
         this.spawnPatient();
+
+        this.score = this.initializeScore(engine);
+        this.teamScore = this.initializeTeamScore(engine);
 
         socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
             this.spawnPatient();
@@ -48,8 +59,8 @@ export class MedicalMayhemScene extends Scene {
             fcn: () => {
                 socket.emit(SocketEvents.SPAWN_PATIENT)
             },
-            randomRange: [5000, 10000],
-            interval: 4000,
+            randomRange: [5000, 15000],
+            interval: 10000,
             repeats: true,
         })
         this.engine.currentScene.add(timer)
@@ -80,6 +91,33 @@ export class MedicalMayhemScene extends Scene {
                 this.patients.splice(i, 1);
             }
         }
+    }
+
+    initializeScore = (game) => {
+        const score = new Actor({anchor: vec(500, 30), z: 10000});
+        score.val = 0;
+        score.text = new Text({
+            text: 'Score: ' + score.val,
+            color: Color.Black,
+            font: new Font({size: 24, textAlign: TextAlign.Left})
+        });
+        score.graphics.use(score.text);
+        game.currentScene.add(score);
+        return score;
+    }
+
+    initializeTeamScore = (game) => {
+        console.log("TEAM SCORE");
+        const teamScore = new Actor({pos: vec(500, 60), anchor: vec(0, 0), z: 10000});
+        teamScore.val = 0;
+        teamScore.text = new Text({
+            text: 'Team Score: ' + teamScore.val,
+            color: Color.Black,
+            font: new Font({size: 24, textAlign: TextAlign.Left})
+        });
+        teamScore.graphics.use(teamScore.text);
+        game.currentScene.add(teamScore);
+        return teamScore;
     }
 
 }

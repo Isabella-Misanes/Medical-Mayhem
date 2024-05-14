@@ -15,7 +15,7 @@ export default function CharacterSearchScreen() {
     const [isSorting, setIsSorting] = useState(false);
 
     useEffect(() => {
-        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+        if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length >= 0) {
             setAvatarList(store.avatarList.avatars);
         } else {
             store.getAllAvatars();
@@ -26,7 +26,7 @@ export default function CharacterSearchScreen() {
 
     useEffect(() => {
         if(showCharacterList) {
-            if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length > 0) {
+            if (store.avatarList && store.avatarList.avatars && store.avatarList.avatars.length >= 0) {
                 setAvatarList(store.avatarList.avatars);
             } else {
                 store.getAllAvatars();
