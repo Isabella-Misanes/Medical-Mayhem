@@ -9,13 +9,13 @@ export class MedicalMayhemScene extends Scene {
     patientCount = 0;
     patientCounter = 3;
 
-    score = 0;
-    teamScore = 0;
+    score;
+    teamScore;
 
     onInitialize(engine) {
 
         setTimeout(() => {
-            this.engine.goToScene("gameresults", {sceneActivationData: {yourScore: 100, opponentScore: 200, prevScene: null}});
+            this.engine.goToScene("gameresults", {sceneActivationData: {yourScore: this.score.val, teamScore: this.teamScore.val, prevScene: null}});
         }, 180000);
 
         console.log("INIT MEDICAL MAYHEM");
@@ -30,6 +30,10 @@ export class MedicalMayhemScene extends Scene {
 
         socket.on(SocketEvents.TREAT_PATIENT, (data) => {
             this.killPatient(data.patient)
+        })
+
+        socket.on(SocketEvents.SCORE_CHANGE, (data) => {
+            this.teamScore.val = data
         })
 
         socket.on(SocketEvents.STOP_FOLLOW, (data) => {
@@ -49,12 +53,11 @@ export class MedicalMayhemScene extends Scene {
                 }
             }
         })
-    }
 
-    onActivate(context) {
         socket.on(SocketEvents.SPAWN_PATIENT, (data) => {
             this.spawnPatient();
         })
+    
         const timer = new Timer({
             fcn: () => {
                 socket.emit(SocketEvents.SPAWN_PATIENT)
@@ -63,8 +66,14 @@ export class MedicalMayhemScene extends Scene {
             interval: 10000,
             repeats: true,
         })
+
         this.engine.currentScene.add(timer)
         timer.start()
+    }
+    onActivate(context) {
+        // Set personal and team scores and update the ui text
+        // context.data.yourScore
+        // context.data.teamScore
     }
 
     onDeactivate() {

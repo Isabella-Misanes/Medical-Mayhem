@@ -101,6 +101,8 @@ export default class Player extends Actor {
         });
         this.graphics.add('down-walk', downWalk);
 
+        this.graphics.use('down-idle');
+
         // EVENT HANDLING
 
         socket.on(SocketEvents.PLAYER_MOVED, (data) => {
@@ -193,7 +195,7 @@ export default class Player extends Actor {
                     // this.engine.currentScene.add(patient)
                     const rand = new ex.Random()
                     if (rand.integer(0,1) === 0) {
-                        this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
+                        this.engine.goToScene("medicationmatching", {sceneActivationData: {yourScore: 0, teamScore: 0}});
                         this.treatingPatient = this.guidingPatient;
                         this.treatingPatient.setTreating(true);
                         socket.emit(SocketEvents.START_TREAT_PATIENT, {
@@ -207,7 +209,7 @@ export default class Player extends Actor {
                             })
                         }, 15000);
                     } else {
-                        this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: 0, opponentScore: 0, prevScene: this.engine.currentSceneName}});
+                        this.engine.goToScene("heartbeatrhythm", {sceneActivationData: {yourScore: 0, teamScore: 0}});
                         this.treatingPatient = this.guidingPatient;
                         this.treatingPatient.setTreating(true);
                         socket.emit(SocketEvents.START_TREAT_PATIENT, {

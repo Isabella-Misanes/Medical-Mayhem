@@ -32,19 +32,21 @@ export class HeartbeatRhythmScene extends Scene {
         };
         createRandomProjectile();
         this.engine = engine;
+
+        socket.on(SocketEvents.SCORE_CHANGE, (data) => {
+            this.teamScore.val = data
+        })
     }
 
     onActivate(context) {
         console.log("CONTEXT");
         console.log(context);
-        this.timeText.time = 20;
+        this.timeText.time = 0;
         this.yourScore.val = context.data.yourScore;
         this.opponentScore.val = context.data.opponentScore;
-  
-        let prev = context.data.prevScene;
 
         setTimeout(() => {
-            this.engine.goToScene(prev, {sceneActivationData: {yourScore: this.points, opponentScore: this.opponentPoints, prevScene: null}});
+            this.engine.goToScene("medicalMayhem", {sceneActivationData: {yourScore: this.points, teamScore: this.opponentPoints}});
         }, 20000);
     }
 
@@ -96,7 +98,7 @@ export class HeartbeatRhythmScene extends Scene {
                 if(ball) {
                     ball.kill();
                     this.yourScore.val += 100;
-                    //socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
+                    //socket.emit(SocketEvents.SCORE_CHANGE, this.yourScore.val)
                     this.yourScore.text.text = 'Score: ' + this.yourScore.val;
                 }
             }
@@ -129,7 +131,7 @@ export class HeartbeatRhythmScene extends Scene {
                 projectile.kill();
                 if(this.yourScore.val > 0) {
                     this.yourScore.val -= 50
-                    socket.emit(SocketEvents.MY_SCORE_CHANGE, this.yourScore.val)
+                    socket.emit(SocketEvents.SCORE_CHANGE, this.yourScore.val)
                     this.yourScore.text.text = 'Score: ' + this.yourScore.val;
                 }
             }

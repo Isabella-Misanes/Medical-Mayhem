@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const SocketEvents = {
     // SENT BY CLIENT
     QUEUE_UP: "QUEUE_UP",
-    MY_SCORE_CHANGE: "MY_SCORE_CHANGE",
+    SCORE_CHANGE: "SCORE_CHANGE",
     LEAVE_QUEUE: "LEAVE_QUEUE",
     SET_USERNAME: "SET_USERNAME",
     // SENT BY SERVER
