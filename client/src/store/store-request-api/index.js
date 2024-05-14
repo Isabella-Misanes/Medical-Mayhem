@@ -106,6 +106,14 @@ export const updateToggles = async(privateProfile, toggleChat, toggleParty) => {
     })
 }
 
+export const updateStats = async(username, yourScore, patientsSaved) => {
+    return api.post('/updateStats', {
+        username: username,
+        yourScore: yourScore,
+        patientsSaved: patientsSaved
+    })
+}
+
 // export const getParty = async() => { return api.get('/party'); }
 
 export const getUserPartyInfo = async(accepter) => { return api.get(`/party/${accepter}`) }
