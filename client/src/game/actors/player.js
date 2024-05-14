@@ -30,10 +30,76 @@ export default class Player extends Actor {
 
     onInitialize(engine) {
         this.engine = engine;
-        const sprite = Resources.PlayerPng.toSprite()
-        sprite.scale.setTo(1.5, 1.5)
+        const playerSpriteSheet = ex.SpriteSheet.fromImageSource({
+            image: Resources.PlayerPng,
+            grid: {
+                spriteWidth: 64,
+                spriteHeight: 64,
+                rows: 2,
+                columns: 2
+            }
+        })
+        this.scale = ex.vec(.75,.75)
+        const leftIdle = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        })
+        this.graphics.add('left-idle', leftIdle);
 
-        this.graphics.use(sprite)
+        const rightIdle = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        })
+        this.graphics.add('right-idle', rightIdle);
+
+
+        const upIdle = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(1, 1), duration: Config.PlayerFrameSpeed},
+            ]
+        })
+        this.graphics.add('up-idle', upIdle);
+
+        const downIdle = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        })
+        this.graphics.add('down-idle', downIdle);
+
+        const leftWalk = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+                {graphic: playerSpriteSheet.getSprite(1, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        })
+        this.graphics.add('left-walk', leftWalk);
+
+        const rightWalk = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+                {graphic: playerSpriteSheet.getSprite(1, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        });
+        this.graphics.add('right-walk', rightWalk);
+
+        const upWalk = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 1), duration: Config.PlayerFrameSpeed},
+                {graphic: playerSpriteSheet.getSprite(1, 1), duration: Config.PlayerFrameSpeed},
+            ]
+        });
+        this.graphics.add('up-walk', upWalk);
+
+        const downWalk = new ex.Animation({
+            frames: [
+                {graphic: playerSpriteSheet.getSprite(0, 0), duration: Config.PlayerFrameSpeed},
+                {graphic: playerSpriteSheet.getSprite(1, 0), duration: Config.PlayerFrameSpeed},
+            ]
+        });
+        this.graphics.add('down-walk', downWalk);
 
         // EVENT HANDLING
 
@@ -43,6 +109,17 @@ export default class Player extends Actor {
             if (data.username === this.username) {
                 this.vel = ex.vec(data.vel._x, data.vel._y)
                 this.posCorrection = data.pos
+                if (data.vel._x == 0 && data.vel._y == 0) {
+                    this.graphics.use('down-idle');
+                } else if (data.vel._x == Config.PlayerSpeed && data.vel._y == 0) {
+                    this.graphics.use('right-walk');
+                } else if (data.vel._x == -Config.PlayerSpeed && data.vel._y == 0) {
+                    this.graphics.use('left-walk');
+                } else if (data.vel._x == 0 && data.vel._y == Config.PlayerSpeed) {
+                    this.graphics.use('down-walk');
+                } else if (data.vel._x == 0 && data.vel._y == -Config.PlayerSpeed) {
+                    this.graphics.use('up-walk');
+                }
             }
         })
 
@@ -79,29 +156,28 @@ export default class Player extends Actor {
     }
 
     onPreUpdate(engine, elapsedMs) {
-
         if (this.isMyPlayer) {
+            this.graphics.use('down-idle');
             this.vel = ex.Vector.Zero;
-
             if (engine.input.keyboard.isHeld(ex.Keys.D)) {
                 this.vel = ex.vec(Config.PlayerSpeed, 0);
                 
-                //this.graphics.use('right-walk');
+                this.graphics.use('right-walk');
             }
             if (engine.input.keyboard.isHeld(ex.Keys.A)) {
                 this.vel = ex.vec(-Config.PlayerSpeed, 0);
 
-                //this.graphics.use('left-walk');
+                this.graphics.use('left-walk');
             }
             if (engine.input.keyboard.isHeld(ex.Keys.W)) {
                 this.vel = ex.vec(0, -Config.PlayerSpeed);
 
-                //this.graphics.use('up-walk');
+                this.graphics.use('up-walk');
             }
             if (engine.input.keyboard.isHeld(ex.Keys.S)) {
                 this.vel = ex.vec(0, Config.PlayerSpeed);
 
-                //this.graphics.use('down-walk');
+                this.graphics.use('down-walk');
             }
             if (engine.input.keyboard.wasPressed(ex.Keys.E) && this.guidingPatient !== null) {
                 this.guidingPatient.actions.clearActions();
